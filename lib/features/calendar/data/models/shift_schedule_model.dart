@@ -6,6 +6,8 @@ class ShiftScheduleModel {
   final String date;
   final String shiftStart;
   final String shiftEnd;
+  final String? startDate;
+  final String? endDate;
 
   ShiftScheduleModel({
     required this.id,
@@ -15,6 +17,8 @@ class ShiftScheduleModel {
     required this.date,
     required this.shiftStart,
     required this.shiftEnd,
+     this.startDate,
+     this.endDate,
   });
 
   factory ShiftScheduleModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +30,8 @@ class ShiftScheduleModel {
       date: json['date'],
       shiftStart: json['shift_start'],
       shiftEnd: json['shift_end'],
+      startDate: json['start_date'] ?? json['date'] ?? '',
+      endDate: json['end_date'] ?? json['date'] ?? '',
     );
   }
 }

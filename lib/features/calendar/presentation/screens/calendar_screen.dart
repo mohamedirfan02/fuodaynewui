@@ -20,6 +20,73 @@ class _CalendarScreenState extends State<CalendarScreen> {
   late String selectedMonth;
   DateTime? _currentViewDate;
 
+
+  // default holiday for sunday
+  List<Appointment> _getSundayHolidays(DateTime monthDate) {
+    final List<Appointment> sundays = [];
+
+    // Start from the first day of the month
+    DateTime firstDay = DateTime(monthDate.year, monthDate.month, 1);
+
+    // Find the first Sunday in the month
+    DateTime firstSunday =
+    firstDay.add(Duration(days: (DateTime.sunday - firstDay.weekday) % 7));
+
+    // Loop through all Sundays in the month
+    for (DateTime d = firstSunday;
+    d.month == monthDate.month;
+    d = d.add(const Duration(days: 7))) {
+      sundays.add(
+        Appointment(
+          startTime: DateTime(d.year, d.month, d.day, 0, 0),
+          endTime: DateTime(d.year, d.month, d.day, 23, 59),
+          subject: "Holiday (Sunday)",
+          color: Colors.redAccent, // 🔴 Highlighted holiday color
+        ),
+      );
+    }
+
+    return sundays;
+  }
+
+  List<Appointment> _buildAppointments(List shifts, DateTime monthDate) {
+    final List<Appointment> appointments = [];
+
+    for (var shift in shifts) {
+      final startDate = DateTime.tryParse(shift.startDate ?? shift.date ?? '');
+      final endDate = DateTime.tryParse(shift.endDate ?? shift.date ?? '');
+      final shiftStart = shift.shiftStart ?? '09:00';
+      final shiftEnd = shift.shiftEnd ?? '18:00';
+
+      if (startDate != null && endDate != null) {
+        for (DateTime d = startDate;
+        !d.isAfter(endDate);
+        d = d.add(const Duration(days: 1))) {
+          appointments.add(
+            Appointment(
+              startTime: parseShiftDate(
+                DateFormat('yyyy-MM-dd').format(d),
+                shiftStart,
+              ),
+              endTime: parseShiftDate(
+                DateFormat('yyyy-MM-dd').format(d),
+                shiftEnd,
+              ),
+              subject: '${shift.empName} ($shiftStart - $shiftEnd)',
+              color: AppColors.primaryColor,
+              isAllDay: false,
+            ),
+          );
+        }
+      }
+    }
+
+    // Add default Sunday holidays
+    appointments.addAll(_getSundayHolidays(monthDate));
+
+    return appointments;
+  }
+
   DateTime parseShiftDate(String date, String time) {
     // Ensure time has seconds
     final normalizedTime = time.length == 5 ? '$time:00' : time;
@@ -104,33 +171,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
         padding: const EdgeInsets.all(12.0),
         child: provider.isLoading
             ? const Center(child: CircularProgressIndicator())
-            : SfCalendar(
-                view: CalendarView.month,
-                dataSource: ShiftAppointmentDataSource(
-                  (provider.shifts ?? []).map((shift) {
-                    return Appointment(
-                      startTime: parseShiftDate(shift.date, shift.shiftStart),
-                      endTime: parseShiftDate(shift.date, shift.shiftEnd),
-                      subject: 'Shift',
-                      color: AppColors.primaryColor,
-                    );
-                  }).toList(),
-                ),
-                initialDisplayDate: _currentViewDate,
-                onViewChanged: _onViewChanged,
-                showNavigationArrow: true,
-                showWeekNumber: true,
-                showTodayButton: true,
-                showCurrentTimeIndicator: true,
-                showDatePickerButton: true,
-                todayHighlightColor: AppColors.primaryColor,
-                monthViewSettings: const MonthViewSettings(
-                  showAgenda: true,
-                  appointmentDisplayMode:
-                      MonthAppointmentDisplayMode.appointment,
-                ),
-              ),
+            :  SfCalendar(
+          view: CalendarView.month,
+          dataSource: ShiftAppointmentDataSource(
+            _buildAppointments(
+              provider.shifts,
+              _currentViewDate ?? DateTime.now(),
+            ),
+          ),
+        initialDisplayDate: _currentViewDate,
+        onViewChanged: _onViewChanged,
+        showNavigationArrow: true,
+        showWeekNumber: true,
+        showTodayButton: true,
+        showCurrentTimeIndicator: true,
+        showDatePickerButton: true,
+        todayHighlightColor: AppColors.primaryColor,
+        monthViewSettings: const MonthViewSettings(
+          showAgenda: true,
+          appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+        ),
       ),
+
+    ),
     );
   }
 }

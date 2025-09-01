@@ -8,9 +8,9 @@ class ShiftScheduleRemoteDataSource {
   ShiftScheduleRemoteDataSource({required this.dioService});
 
   Future<List<ShiftScheduleModel>> fetchMonthlyShifts(
-      String webUserId,
-      String month,
-      ) async {
+    String webUserId,
+    String month,
+  ) async {
     final response = await dioService.post(
       AppApiEndpointConstants.getSchedules(webUserId),
       data: {'month': month},
@@ -28,21 +28,47 @@ class ShiftScheduleRemoteDataSource {
 
       final employees = schedule['employees'] as List<dynamic>? ?? [];
 
+
+      // ✅ Normal shifts
       for (var emp in employees) {
-        shifts.add(ShiftScheduleModel(
-          id: emp['id'],
-          webUserId: emp['id'],
-          empName: emp['name'],
-          empId: emp['emp_id'].toString(),
-          date: date,
-          shiftStart: shiftStart,
-          shiftEnd: shiftEnd,
-        ));
+        shifts.add(
+          ShiftScheduleModel(
+            id: emp['id'],
+            webUserId: emp['id'],
+            empName: emp['name'],
+            empId: emp['emp_id'].toString(),
+            date: date,
+            shiftStart: shiftStart,
+            shiftEnd: shiftEnd,
+            startDate: schedule['start_date'] ?? '',
+            endDate: schedule['end_date'] ?? '',
+          ),
+        );
+      }
+      // ✅ Saturday shifts
+      final saturdayDates = schedule['saturday_dates'] as List<dynamic>? ?? [];
+      if (saturdayDates.isNotEmpty) {
+        for (var satDate in saturdayDates) {
+          for (var emp in employees) {
+            shifts.add(
+              ShiftScheduleModel(
+                id: emp['id'],
+                webUserId: emp['id'],
+                empName: emp['name'],
+                empId: emp['emp_id'].toString(),
+                date: satDate.toString(),
+                shiftStart: shiftStart,
+                shiftEnd: shiftEnd,
+                startDate: satDate.toString(),
+                endDate: satDate.toString(),
+              ),
+            );
+          }
+        }
       }
     }
 
+
     return shifts;
   }
-
-
 }

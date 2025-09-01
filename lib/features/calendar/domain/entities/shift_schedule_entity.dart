@@ -6,6 +6,8 @@ class ShiftScheduleEntity {
   final String date;
   final String shiftStart;
   final String shiftEnd;
+  final String? startDate;
+  final String? endDate;
 
   ShiftScheduleEntity({
     required this.id,
@@ -15,5 +17,7 @@ class ShiftScheduleEntity {
     required this.date,
     required this.shiftStart,
     required this.shiftEnd,
+    this.startDate,
+    this.endDate,
   });
 }

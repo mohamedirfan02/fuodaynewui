@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
+import 'package:fuoday/core/di/injection.dart';
+import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/organizations/presentation/providers/DepartmentListProvider.dart';
 import 'package:fuoday/features/organizations/presentation/widgets/organizations_team_designation_member_count_heading.dart';
@@ -19,11 +21,20 @@ class _OrganizationsOurTeamsState extends State<OrganizationsOurTeams> {
   @override
   void initState() {
     super.initState();
-    final webUserId = '28'; // Replace with actual value from Hive/local storage
-    Future.microtask(() =>
-        context.read<DepartmentListProvider>().fetchDepartmentList(webUserId)
-    );
+
+    final webUserId = getIt<HiveStorageService>()
+        .employeeDetails?['web_user_id']
+        ?.toString();
+
+    if (webUserId != null) {
+      final provider = context.read<DepartmentListProvider>();
+      provider.fetchDepartmentList(webUserId);
+    } else {
+      // Handle the case when webUserId is null
+      debugPrint("⚠️ webUserId is null. Cannot fetch department list.");
+    }
   }
+
 
 
   @override

@@ -26,6 +26,8 @@ class ShiftScheduleRepositoryImpl implements ShiftScheduleRepository {
             date: model.date,
             shiftStart: model.shiftStart,
             shiftEnd: model.shiftEnd,
+            startDate: model.startDate,
+            endDate: model.endDate,
           ),
         )
         .toList();
