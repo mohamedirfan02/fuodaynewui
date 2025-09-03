@@ -325,7 +325,7 @@ final GoRouter appRouter = GoRouter(
 
     // recruiter bottom nav
     GoRoute(
-      path: "/employeeBottomNav",
+      path: "/recruiterBottomNav",
       name: AppRouteConstants.recruiterBottomNav,
       builder: (context, state) {
         return RecruiterBottomNav();

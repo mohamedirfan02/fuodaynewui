@@ -13,6 +13,7 @@ import 'package:fuoday/features/auth/presentation/providers/employee_auth_login_
 import 'package:fuoday/features/auth/presentation/providers/employee_auth_logout_provider.dart';
 import 'package:fuoday/features/auth/presentation/providers/sliding_segmented_provider.dart';
 import 'package:fuoday/features/bottom_nav/providers/bottom_nav_provider.dart';
+import 'package:fuoday/features/bottom_nav/providers/recruiter_bottom_nav_provider.dart';
 import 'package:fuoday/features/calendar/presentation/providers/shift_schedule_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/all_events_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/check_in_provider.dart';
@@ -42,6 +43,12 @@ extension ProviderExtension on BuildContext {
   BottomNavProvider get bottomNavProviderRead => read<BottomNavProvider>();
 
   BottomNavProvider get bottomNavProviderWatch => watch<BottomNavProvider>();
+
+  // Recruiter nav
+  RecruiterBottomNavProvider get recruiterBottomNavProviderRead =>
+      read<RecruiterBottomNavProvider>();
+  RecruiterBottomNavProvider get recruiterBottomNavProviderWatch =>
+      watch<RecruiterBottomNavProvider>();
 
   // Sliding Segmented Provider
   SlidingSegmentedProvider get slidingSegmentProviderRead =>

@@ -53,6 +53,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'features/bottom_nav/providers/recruiter_bottom_nav_provider.dart';
 import 'features/home/presentation/provider/checkin_status_provider.dart';
 import 'features/leave_tracker/presentation/providers/leave_regulation_provider.dart';
 import 'features/management/presentation/provider/emp_audit_form_provider.dart';
@@ -94,6 +95,8 @@ class MyApp extends StatelessWidget {
       providers: [
         // Bottom Nav Provider
         ChangeNotifierProvider(create: (context) => getIt<BottomNavProvider>()),
+
+        ChangeNotifierProvider(create: (context) => getIt<RecruiterBottomNavProvider>()),
 
         // Sliding Segmented Provider
         ChangeNotifierProvider(

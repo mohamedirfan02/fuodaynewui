@@ -48,6 +48,7 @@ import 'package:fuoday/features/auth/presentation/providers/employee_auth_login_
 import 'package:fuoday/features/auth/presentation/providers/employee_auth_logout_provider.dart';
 import 'package:fuoday/features/auth/presentation/providers/sliding_segmented_provider.dart';
 import 'package:fuoday/features/bottom_nav/providers/bottom_nav_provider.dart';
+import 'package:fuoday/features/bottom_nav/providers/recruiter_bottom_nav_provider.dart';
 import 'package:fuoday/features/calendar/data/datasources/shift_schedule_remote_datasource.dart';
 import 'package:fuoday/features/calendar/data/repository/shift_schedule_repository_impl.dart';
 import 'package:fuoday/features/calendar/domain/repository/shift_schedule_repository.dart';
@@ -243,6 +244,8 @@ void setUpServiceLocator() {
     () => SlidingSegmentedProvider(),
   );
   getIt.registerFactory<BottomNavProvider>(() => BottomNavProvider());
+
+  getIt.registerFactory<RecruiterBottomNavProvider>(() => RecruiterBottomNavProvider());
 
   // Data Source
   getIt.registerLazySingleton<EmployeeAuthRemoteDataSource>(
