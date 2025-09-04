@@ -374,6 +374,8 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                           date: item.date,
                           progress: item.progress,
                           deadline: item.deadline,
+                          progressNote: item.progressNote,
+                          command: item.comment,
                         );
                       },
                     ),

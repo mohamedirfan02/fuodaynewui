@@ -14,6 +14,9 @@ class KHomeEmployeeFeedsAssignedWorksTile extends StatelessWidget {
   final String date;
   final String progress;
   final String deadline;
+  final String? progressNote;
+  final String? command;
+
 
   const KHomeEmployeeFeedsAssignedWorksTile({
     super.key,
@@ -26,6 +29,8 @@ class KHomeEmployeeFeedsAssignedWorksTile extends StatelessWidget {
     required this.date,
     required this.progress,
     required this.deadline,
+     this.progressNote,
+     this.command,
   });
 
   @override
@@ -109,9 +114,22 @@ class KHomeEmployeeFeedsAssignedWorksTile extends StatelessWidget {
                           "Deadline: $deadline",
                           style: GoogleFonts.sora(fontSize: 10.sp)
                       ),
+
                       SizedBox(height: 4.h),
                       KText(
-                        text: "Progress: $progress",
+                        text: "Progress Note: $progressNote",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10.sp,
+                      ),
+                      SizedBox(height: 4.h),
+                      KText(
+                        text: "reason: $command",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10.sp,
+                      ),
+                      SizedBox(height: 4.h),
+                      KText(
+                        text: "Status: $progress",
                         fontWeight: FontWeight.w600,
                         color: AppColors.softRed,
                         fontSize: 10.sp,

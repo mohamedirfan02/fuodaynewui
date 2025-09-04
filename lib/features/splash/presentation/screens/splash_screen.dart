@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
             AppAssetsConstants.logo,
             height: 200.h,
             width: 200.w,
-            fit: BoxFit.cover,
+           // fit: BoxFit.cover,
           ),
         ),
       ),

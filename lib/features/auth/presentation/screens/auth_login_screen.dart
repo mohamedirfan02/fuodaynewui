@@ -70,9 +70,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
 
                 Image.asset(
                   AppAssetsConstants.logo,
-                  height: 120.h,
-                  width: 120.w,
-                  fit: BoxFit.cover,
+                  height: 150.h,
+                  width: 150.w,
+                 // fit: BoxFit.cover,
                 ),
 
                 Expanded(

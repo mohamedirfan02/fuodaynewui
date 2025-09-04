@@ -29,9 +29,9 @@ class OnBoardingScreen extends StatelessWidget {
             Center(
               child: Image.asset(
                 AppAssetsConstants.logo,
-                height: 200.h,
-                width: 200.w,
-                fit: BoxFit.cover,
+                height: 250.h,
+                width: 250.w,
+               // fit: BoxFit.cover,
               ),
             ),
 

@@ -13,7 +13,7 @@ class AppAssetsConstants {
   static const String organizationalProgramImg =
       "assets/images/svg/organizational-program.svg";
   static const String announcementsImg = "assets/images/svg/announcements.svg";
-  static const String logo = "assets/images/png/fuoday-logo.png";
+  static const String logo = "assets/images/png/Fuoday_logo.png";
   static const String attendanceImg = "assets/images/svg/attendance-timing.svg";
   static const String sunImg = "assets/images/svg/sun.svg";
   static const String emptyData = "assets/images/svg/sun.svg";
