@@ -161,6 +161,9 @@ class AppApiEndpointConstants {
 
   static String updateTasks = '$baseUrl/hrms/performance/updatetasks';
 
+  // send badge data
+  static String addBadges = '$baseUrl/hrms/home/recognitions';
+
   //get audit reporting team
   static String getAuditReportingTeam(int webUserId) => '$baseUrl/hrms/performance/getauditreportingteam/$webUserId';
 
@@ -172,5 +175,8 @@ class AppApiEndpointConstants {
 
   // get teamTreeByAccordingToManagerName
   static String getTeamTree(int webUserId) => '$baseUrl/web-users/getemployeesbymanagers/$webUserId';
+
+  // get All Badges
+  static String getBadges(int webUserId) => '$baseUrl/hrms/home/recognitions/$webUserId';
 
 }

@@ -27,6 +27,8 @@ class AddTask extends StatefulWidget {
 class _AddTaskState extends State<AddTask> {
   // Form Key
   final formKey = GlobalKey<FormState>();
+  DateTime? assignDate;
+  DateTime selectedDeadline = DateTime.now();
 
   // Controllers
   final TextEditingController assignedByController = TextEditingController();
@@ -39,7 +41,6 @@ class _AddTaskState extends State<AddTask> {
   String selectedPriority = 'High';
   String assignedByName = 'Irfan'; // Set accordingly
   int webUserId = 0;
-  DateTime selectedDeadline = DateTime.now();
 
   @override
   void dispose() {
@@ -68,8 +69,7 @@ class _AddTaskState extends State<AddTask> {
     final employeeDetails = hiveService.employeeDetails;
 
     // Dynamically get web_user_id
-    final int id =
-        int.tryParse(employeeDetails?['id']?.toString() ?? '') ?? 0;
+    final int id = int.tryParse(employeeDetails?['id']?.toString() ?? '') ?? 0;
 
     if (id == 0) {
       print("❌ Invalid or missing id from Hive");
@@ -89,9 +89,11 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
     // Select Date
     Future<void> selectDate(
-      BuildContext context,
-      TextEditingController controller,
-    ) async {
+        BuildContext context,
+        TextEditingController controller, {
+          required bool isDeadline,
+          required bool isAssignDate,
+        }) async {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -114,9 +116,21 @@ class _AddTaskState extends State<AddTask> {
       );
 
       if (picked != null) {
-        controller.text = "${picked.day}/${picked.month}/${picked.year}";
+        controller.text = DateFormat('dd/MM/yyyy').format(picked);
+
+        if (isDeadline) {
+          setState(() {
+            selectedDeadline = picked;
+          });
+        }
+        if (isAssignDate) {
+          setState(() {
+            assignDate = picked;
+          });
+        }
       }
     }
+
 
     return Scaffold(
       backgroundColor: AppColors.secondaryColor,
@@ -145,7 +159,7 @@ class _AddTaskState extends State<AddTask> {
                 KAuthTextFormField(
                   label: "Assign Date",
                   onTap: () async {
-                    selectDate(context, assignDateController);
+                    await selectDate(context, assignDateController, isDeadline: false, isAssignDate: true);
                   },
                   controller: assignDateController,
                   hintText: "Select assign date",
@@ -225,7 +239,7 @@ class _AddTaskState extends State<AddTask> {
                 KAuthTextFormField(
                   label: "Deadline",
                   onTap: () async {
-                    selectDate(context, deadlineController);
+                    await selectDate(context, deadlineController, isDeadline: true, isAssignDate: false);
                   },
                   controller: deadlineController,
                   hintText: "Select Deadline",
@@ -268,18 +282,17 @@ class _AddTaskState extends State<AddTask> {
 
                       final taskEntity = HomeAddTaskEntity(
                         webUserId: int.parse(webUserId),
-                        date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                        date: DateFormat('yyyy-MM-dd').format(assignDate ?? DateTime.now()),
                         description: descriptionController.text.trim(),
                         assignedBy: assignedByName,
                         assignedById: int.parse(webUserId),
                         assignedTo: assignedToName,
                         assignedToId: int.parse(assignedToId),
                         priority: priority,
-                        deadline: DateFormat(
-                          'yyyy-MM-dd',
-                        ).format(selectedDeadline),
+                        deadline: DateFormat('yyyy-MM-dd').format(selectedDeadline),
                         project: projectNameController.text.trim(),
                       );
+
 
                       try {
                         final usecase = GetIt.I<HomeAddTaskUseCase>();

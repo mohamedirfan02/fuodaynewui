@@ -11,10 +11,14 @@ import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/home/data/model/event_model.dart';
+import 'package:fuoday/features/home/data/model/recognition_model.dart';
 import 'package:fuoday/features/home/domain/entities/event_entity.dart';
+import 'package:fuoday/features/home/domain/entities/recognition_entity.dart';
+import 'package:fuoday/features/home/presentation/provider/recognition_provider.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_checkin_button.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_home_activities_card.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_home_activity_alert_dialog_box.dart';
+import 'package:fuoday/features/home/presentation/widgets/adding_badge.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -67,6 +71,41 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
       }
     });
   }
+  // Updated callback for when badges are submitted
+
+  void _handleBadgesSubmitted(List<Map<String, dynamic>> badges) async {
+    final provider = getIt<RecognitionProvider>();
+
+    final recognitions = badges.map((b) {
+      return RecognitionModel(
+        id: b['id'],
+        title: b['title'],
+        count: int.tryParse(b['description'] ?? "1") ?? 1,
+        imagePath: b['imagePath'], // ✅ local path
+      );
+    }).toList();
+
+    await provider.saveRecognitions(
+      webUserId: 0,
+      badges: recognitions, // Provider accepts Entity, Model extends Entity
+    );
+
+    AppLoggerHelper.logInfo("Badges sent successfully");
+  }
+
+
+
+// Callback for when badges are updated
+  void _handleBadgesUpdated() {
+    AppLoggerHelper.logWarning('Badges were updated');
+
+    // TODO: Any additional logic after badges are updated
+    // For example:
+    // - Refresh some data
+    // - Update UI
+    // - Log analytics event
+  }
+
 
   @override
   void dispose() {
@@ -381,6 +420,25 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                     ],
                   ),
                 ),
+              KVerticalSpacer(height: 10.h),
+
+              // Recognition Wall section header
+              KText(
+                text: "Recognition Wall :",
+                fontWeight: FontWeight.w800,
+                fontSize: 14,
+                color: AppColors.titleColor,
+              ),
+
+              KVerticalSpacer(height: 10.h),
+
+              // Use the reusable Recognition Wall Widget
+              RecognitionWallWidget(
+                title: "Click the edit icon ✎ to add and manage your achievements !",
+                description: 'Recognizing our team\'s extraordinary efforts, we express heartfelt gratitude for your dedication, hard work, and the positive impact you bring daily',
+                onBadgesSubmitted: _handleBadgesSubmitted,
+                onBadgesUpdated: _handleBadgesUpdated,
+              ),
 
               // Show error if checkin status fetch failed
               if (checkinStatusProvider.error != null)

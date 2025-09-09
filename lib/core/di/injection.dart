@@ -54,32 +54,42 @@ import 'package:fuoday/features/calendar/data/repository/shift_schedule_reposito
 import 'package:fuoday/features/calendar/domain/repository/shift_schedule_repository.dart';
 import 'package:fuoday/features/calendar/domain/usecases/get_monthly_shift_usecase.dart';
 import 'package:fuoday/features/calendar/presentation/providers/shift_schedule_provider.dart';
+import 'package:fuoday/features/home/data/datasources/remote/badge_remote_data_source.dart';
 import 'package:fuoday/features/home/data/datasources/remote/check_in_remote_data_source.dart';
 import 'package:fuoday/features/home/data/datasources/remote/checkin_status_remote_data_source.dart';
 import 'package:fuoday/features/home/data/datasources/remote/event_remote_data_source.dart';
 import 'package:fuoday/features/home/data/datasources/remote/home_add_task_remote_data_source.dart';
 import 'package:fuoday/features/home/data/datasources/remote/home_feeds_project_remote_data_source.dart';
+import 'package:fuoday/features/home/data/datasources/remote/recognition_remote_data_source.dart';
+import 'package:fuoday/features/home/data/repositories/badge_repository_impl.dart';
 import 'package:fuoday/features/home/data/repositories/checkin_repository.dart';
 import 'package:fuoday/features/home/data/repositories/checkin_status_repository_impl.dart';
 import 'package:fuoday/features/home/data/repositories/get_all_events_remote_repository_impl.dart';
 import 'package:fuoday/features/home/data/repositories/home_addtask_repositoryImpl.dart';
 import 'package:fuoday/features/home/data/repositories/home_feeds_project_data_repository_impl.dart';
+import 'package:fuoday/features/home/data/repositories/recognition_repository_impl.dart';
+import 'package:fuoday/features/home/domain/repositories/badge_repository.dart';
 import 'package:fuoday/features/home/domain/repositories/checkin_repository.dart';
 import 'package:fuoday/features/home/domain/repositories/checkin_status_repository.dart';
 import 'package:fuoday/features/home/domain/repositories/events_repository.dart';
 import 'package:fuoday/features/home/domain/repositories/home_addtask_repository.dart';
 import 'package:fuoday/features/home/domain/repositories/home_feeds_project_data_repository.dart';
+import 'package:fuoday/features/home/domain/repositories/recognition_repository.dart';
 import 'package:fuoday/features/home/domain/usecases/checkin_usecase.dart';
 import 'package:fuoday/features/home/domain/usecases/emp_list_usecase.dart';
 import 'package:fuoday/features/home/domain/usecases/get_announcement_usecase.dart';
+import 'package:fuoday/features/home/domain/usecases/get_badges_usecase.dart';
 import 'package:fuoday/features/home/domain/usecases/get_celebrations_usecase.dart';
 import 'package:fuoday/features/home/domain/usecases/get_checkin_status_usecase.dart';
 import 'package:fuoday/features/home/domain/usecases/get_home_feeds_project_data_use_case.dart';
 import 'package:fuoday/features/home/domain/usecases/get_organizational_program_usecase.dart';
 import 'package:fuoday/features/home/domain/usecases/home_addtask_usecase.dart';
+import 'package:fuoday/features/home/domain/usecases/save_recognitions_usecase.dart';
 import 'package:fuoday/features/home/presentation/provider/all_events_provider.dart';
+import 'package:fuoday/features/home/presentation/provider/badge_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/check_in_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/checkin_status_provider.dart';
+import 'package:fuoday/features/home/presentation/provider/recognition_provider.dart';
 import 'package:fuoday/features/hr/data/datasources/hr_overview_remote_datasource.dart';
 import 'package:fuoday/features/hr/data/repository/hr_overview_repository_impl.dart';
 import 'package:fuoday/features/hr/domain/repository/hr_overview_repository.dart';
@@ -1119,6 +1129,44 @@ void setUpServiceLocator() {
 // Provider
   getIt.registerFactory(
         () => TeamTreeProvider(getTeamTreeUseCase: getIt<GetTeamTreeUseCase>()),
+  );
+
+  // Recognition wall
+  // Data Source
+  getIt.registerLazySingleton<RecognitionRemoteDataSource>(
+        () => RecognitionRemoteDataSourceImpl(getIt<DioService>()),
+  );
+
+// Repository
+  getIt.registerLazySingleton<RecognitionRepository>(
+        () => RecognitionRepositoryImpl(getIt()),
+  );
+
+// Usecase
+  getIt.registerLazySingleton(() => SaveRecognitionsUseCase(getIt()));
+
+// Provider
+  getIt.registerFactory(
+        () => RecognitionProvider(saveRecognitionsUseCase: getIt()),
+  );
+
+
+// Data Source
+  getIt.registerLazySingleton<BadgeRemoteDataSource>(
+        () => BadgeRemoteDataSourceImpl(getIt<DioService>()),
+  );
+
+// Repository
+  getIt.registerLazySingleton<BadgeRepository>(
+        () => BadgeRepositoryImpl(getIt()),
+  );
+
+// Usecase
+  getIt.registerLazySingleton(() => GetBadgesUseCase(getIt()));
+
+  // Provider
+  getIt.registerFactory(
+        () => BadgeProvider(getBadgesUseCase: getIt()),
   );
 
 

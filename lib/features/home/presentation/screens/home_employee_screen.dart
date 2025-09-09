@@ -98,26 +98,26 @@ class _HomeEmployeeScreenState extends State<HomeEmployeeScreen> {
                   spacing: 20.w,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    KCircularCachedImage(imageUrl: profilePhoto, size: 80.h),
+                    KCircularCachedImage(imageUrl: profilePhoto, size: 90.h),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         KText(
                           text: name,
                           fontWeight: FontWeight.w600,
-                          fontSize: 14.sp,
+                          fontSize: 20.sp,
                           color: AppColors.secondaryColor,
                         ),
                         KText(
                           text: "Employee Id: $empId",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10.sp,
+                          fontSize: 12.sp,
                           color: AppColors.secondaryColor,
                         ),
                         KText(
                           text: email,
                           fontWeight: FontWeight.w500,
-                          fontSize: 10.sp,
+                          fontSize: 12.sp,
                           color: AppColors.secondaryColor,
                         ),
                       ],
