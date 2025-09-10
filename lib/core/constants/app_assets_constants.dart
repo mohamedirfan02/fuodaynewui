@@ -17,5 +17,7 @@ class AppAssetsConstants {
   static const String attendanceImg = "assets/images/svg/attendance-timing.svg";
   static const String sunImg = "assets/images/svg/sun.svg";
   static const String emptyData = "assets/images/svg/empty.svg";
+  static const String atsUserIcon = "assets/images/svg/ats-user.svg";
+
 
 }

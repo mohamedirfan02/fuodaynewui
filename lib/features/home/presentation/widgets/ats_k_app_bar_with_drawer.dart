@@ -31,7 +31,7 @@ class AtsKAppBarWithDrawer extends StatelessWidget implements PreferredSizeWidge
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: !showUserInfo,
-      backgroundColor: backgroundColor ?? AppColors.secondaryColor,
+      backgroundColor: AppColors.secondaryColor,
       leading: IconButton(
         onPressed: onDrawerPressed ?? () {},
         icon: Icon(Icons.menu, color: iconColor ?? AppColors.titleColor),

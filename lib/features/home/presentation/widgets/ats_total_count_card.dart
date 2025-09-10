@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
+import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 
 class AtsTotalCountCard extends StatelessWidget {
@@ -19,28 +21,34 @@ class AtsTotalCountCard extends StatelessWidget {
     required this.attendanceDescription,
     required this.attendanceIconColor,
     required this.attendancePercentageColor,
-    this.growthText, // optional
+    this.growthText,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 0.4.sw,
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+      width: 155.w,
+      height: 103.h,
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
-        border: Border.all(width: 0.1.w, color: AppColors.greyColor),
-        borderRadius: BorderRadius.circular(8.r),
-        color: AppColors.secondaryColor,
+        border: Border.all(width: 0.5.w, color: AppColors.greyColor.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(12.r),
+        color: AppColors.secondaryColor.withOpacity(1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
           // Top Icon
           CircleAvatar(
             radius: 14.r,
-            backgroundColor: AppColors.attendanceCardTextLightColor,
-            child: Icon(attendanceCardIcon, color: AppColors.primaryColor, size: 16.sp),
+            backgroundColor: AppColors.cardBorderColor,
+            child: SvgPicture.asset(
+              AppAssetsConstants.atsUserIcon,
+              width: 16.w,
+              height: 16.w,
+              color: AppColors.titleColor,
+              fit: BoxFit.contain,
+            ),
           ),
 
           SizedBox(height: 8.h),
@@ -57,7 +65,7 @@ class AtsTotalCountCard extends StatelessWidget {
               ),
               SizedBox(width: 6.w),
 
-              if (growthText != null) // ✅ Only show if provided
+              if (growthText != null)
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                   decoration: BoxDecoration(
@@ -82,7 +90,7 @@ class AtsTotalCountCard extends StatelessWidget {
             ],
           ),
 
-          KVerticalSpacer(height: 8.h),
+          KVerticalSpacer(height: 6.h),
 
           // Description
           KText(

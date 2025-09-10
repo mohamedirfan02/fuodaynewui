@@ -14,6 +14,7 @@ class KAuthFilledBtn extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final BorderRadiusGeometry borderRadius;
+  final Widget? icon; // optional icon
 
   const KAuthFilledBtn({
     super.key,
@@ -27,6 +28,7 @@ class KAuthFilledBtn extends StatelessWidget {
     this.fontSize = 14,
     this.fontWeight = FontWeight.w600,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
+    this.icon, // optional
   });
 
   @override
@@ -55,13 +57,23 @@ class KAuthFilledBtn extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(textColor),
                 ),
               )
-            : Text(
-                text,
-                style: GoogleFonts.sora(
-                  color: textColor,
-                  fontSize: fontSize.sp,
-                  fontWeight: fontWeight,
-                ),
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null) ...[
+                    icon!,
+                    SizedBox(width: 6.w), // spacing between icon and text
+                  ],
+                  Text(
+                    text,
+                    style: GoogleFonts.sora(
+                      color: textColor,
+                      fontSize: fontSize.sp,
+                      fontWeight: fontWeight,
+                    ),
+                  ),
+                ],
               ),
       ),
     );

@@ -51,7 +51,15 @@ class AppColors {
     Color(0xFF4756A5), // rgba(71, 86, 165, 1.0)
   ];
 
+  // ATS Homepage PieChat Color
+  static const Color closed = Color(0xFF2DD4BF); // rgba(45, 212, 191, 1)
+  static const Color pending = Color(0xFF8C62FF); // rgba(140, 98, 255, 1)
+  static const Color unactive = Color(0xFFFE964A); // rgba(254, 150, 74, 1)
+
   static const Color transparentColor = Colors.transparent;
+
+  //Ats Homepage Bg
+  static const Color atsHomepageBg = Color(0xFFFAFAFA);
 
   // Primary Color
   static const Color primaryColor = Color(0xFF8B5CB7);
