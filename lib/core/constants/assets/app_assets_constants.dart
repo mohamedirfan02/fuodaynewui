@@ -19,4 +19,14 @@ class AppAssetsConstants {
   static const String emptyData = "assets/images/svg/sun.svg";
 
   static const String atsUserIcon = "assets/images/svg/ats-user.svg";
+
+  static const String editIcon = "assets/icons/edit.svg";
+
+  static const String deleteIcon = "assets/icons/delete.svg";
+
+  static const String downloadIcon = "assets/icons/download.svg";
+
+  static const String dateIcon = "assets/icons/date.svg";
+
+  static const String filterIcon = "assets/icons/filter.svg";
 }

@@ -180,6 +180,8 @@ flutter:
 
 
   assets:
+    #Icons Svg
+    - assets/icons/
     # svg
     - assets/images/svg/
     # png

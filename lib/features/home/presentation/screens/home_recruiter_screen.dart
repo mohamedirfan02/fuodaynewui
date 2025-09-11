@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_drawer.dart';
+import 'package:fuoday/commons/widgets/k_filter_button.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
@@ -10,9 +12,12 @@ import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
+import 'package:fuoday/features/home/presentation/widgets/k_application_table.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
 import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card.dart';
+
+import '../../../../core/constants/assets/app_assets_constants.dart';
 
 class HomeRecruiterScreen extends StatefulWidget {
   const HomeRecruiterScreen({super.key});
@@ -23,10 +28,454 @@ class HomeRecruiterScreen extends StatefulWidget {
 
 class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController dateController = TextEditingController();
 
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
 
-  final TextEditingController dateController = TextEditingController();
+  int get totalPages => (applicantsData.length / itemsPerPage).ceil();
+
+  int pageWindowStart = 1; // first page in current window
+  int pageWindowSize = 5;  // show 5 numbers at a time
+
+  // Pagination state
+  int currentPage = 1;
+  int itemsPerPage = 6; // Change this to show how many items per page
+
+  List<Map<String, dynamic>> get paginatedApplicants {
+    int totalPages = (applicantsData.length / itemsPerPage).ceil();
+
+    // Ensure currentPage is within range
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    int startIndex = (currentPage - 1) * itemsPerPage;
+    int endIndex = startIndex + itemsPerPage;
+    if (startIndex >= applicantsData.length) return []; // safe guard
+    if (endIndex > applicantsData.length) endIndex = applicantsData.length;
+
+    return applicantsData.sublist(startIndex, endIndex);
+  }
+
+  List<Map<String, dynamic>> applicantsData = [
+    {
+      'name': 'Pristia Candra',
+      'email': 'pristia@gmail.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '01 May 2025',
+      'avatarColor': AppColors.primaryColor,
+    },
+    {
+      'name': 'Hanna Baptista',
+      'email': 'hanna@gmail.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '01 May 2025',
+      'avatarColor': AppColors.greyColor,
+    },
+    {
+      'name': 'John Doe',
+      'email': 'john@gmail.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.approvedColor,
+    },
+    {
+      'name': 'James George',
+      'email': 'james@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.unactive,
+    },
+    {
+      'name': 'Miracle Geidt',
+      'email': 'miracle@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.titleColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.titleColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.secondaryColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.greyColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authTextFieldSuffixIconColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.unactive,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.pending,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.checkInColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authUnderlineBorderColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },{
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    // Add more items...
+  ];
 
   // Select Date
   Future<void> selectDate(
@@ -206,29 +655,75 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                         children: [
                           // Start Date
                           Expanded(
-                            child: KAuthTextFormField(
-                              onTap: () {
-                                selectDate(context, dateController);
-                              },
-                              controller: dateController,
-                              hintText: "Start Date",
-                              keyboardType: TextInputType.datetime,
-                              suffixIcon: Icons.date_range,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.atsHomepageBg, // background
+                                borderRadius: BorderRadius.circular(8.r), // rounded corners
+                                border: Border.all(
+                                  color: Colors.grey.shade300, // border color
+                                  width: 1, // border width
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1), // shadow color
+                                    blurRadius: 6, // softness
+                                    offset: const Offset(0, 3), // horizontal, vertical shadow offset
+                                  ),
+                                ],
+                              ),
+                              child: KAuthFilledBtn(
+                                text: "Date",
+                                fontWeight: FontWeight.w600,
+                                textColor: AppColors.greyColor,
+                                icon: SvgPicture.asset(
+                                  AppAssetsConstants.dateIcon,
+                                  height: 16.67.h,
+                                  width: 15.w,
+                                  fit: BoxFit.contain,
+                                ),
+                                onPressed: () {
+                                  selectDate(context, dateController);
+                                },
+                                backgroundColor: Colors.transparent, // transparent since Container has bg
+                                height: 28.h,
+                                fontSize: 13.sp,
+                              ),
                             ),
                           ),
+
                           // Export file
                           Expanded(
-                            child: KAuthFilledBtn(
-                              text: "Export",
-                              icon: Icon(
-                                Icons.download_outlined,
-                                color: Colors.white,
-                                size: 14.sp,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.atsHomepageBg, // background
+                                borderRadius: BorderRadius.circular(10.r), // rounded corners
+                                border: Border.all(
+                                  color: Colors.grey.shade300, // border color
+                                  width: 1, // border width
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.primaryColor.withOpacity(0.1), // shadow color
+                                    blurRadius: 6, // softness
+                                    offset: const Offset(0, 3), // horizontal, vertical shadow offset
+                                  ),
+                                ],
                               ),
-                              onPressed: () {},
-                              backgroundColor: AppColors.primaryColor,
-                              height: 28.h,
-                              fontSize: 11.sp,
+                              child: KAuthFilledBtn(
+                                text: "Export",
+                                icon: SvgPicture.asset(
+                                  AppAssetsConstants.downloadIcon,
+                                  // Replace with your delete SVG
+                                  height: 16.67.h,
+                                  width: 15.w,
+                                  fit: BoxFit.contain,
+                                  color: Colors.white, // Optional: tint the SVG
+                                ),
+                                onPressed: () {},
+                                backgroundColor: AppColors.primaryColor,
+                                height: 28.h,
+                                fontSize: 13.sp,
+                              ),
                             ),
                           ),
                         ],
@@ -236,129 +731,74 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                       KVerticalSpacer(height: 16.h),
 
                       // Filter Field
-                      KAuthTextFormField(
-                        onTap: () {},
-                        hintText: "Filter",
-                        keyboardType: TextInputType.text,
-                        suffixIcon: Icons.filter_list_outlined,
+                      KFilterBtn(
+                        text: "Filter",
+                        textColor: Colors.black,
+                        backgroundColor: Colors.white,
+                        borderColor: const Color.fromRGBO(233, 234, 236, 1),
+                        borderRadius: BorderRadius.circular(10.r),
+                        onPressed: () {
+                          print("Filter pressed");
+                        },
+                        icon: SvgPicture.asset(
+                          AppAssetsConstants.filterIcon,
+                          height: 16.h,
+                          width: 16.w,
+                          color: Colors.black,
+                        ),
                       ),
+
+
+
+
 
                       KVerticalSpacer(height: 24.h),
 
-                      // Table Headers
-                      Container(
-                        width: 327.w, // ✅ Outer card width
-                        height: 56.h, // ✅ Outer card height
-                        color: AppColors.atsHomepageBg,
-                        child: Row(
+                      // SingleChildScrollView(
+                      //   scrollDirection: Axis.horizontal,
+                      //   child: ApplicantTable(
+                      //     applicants: applicantsData, // ✅ just pass your list
+                      //     itemsPerPage: 6, // optional
+                      //   ),
+                      // ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Column(
                           children: [
-                            Expanded(
-                              flex: 3,
-                              child: KText(
-                                text: "Applicant details",
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12.sp,
-                                color: AppColors.greyColor,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: KText(
-                                text: "Employee Type",
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12.sp,
-                                color: AppColors.greyColor,
-                                textAlign: TextAlign.end,
-                              ),
+                            ApplicantItem.buildHeader(),
+                            // 👈 header from same file
+                            SizedBox(height: 16.h),
+                            Column(
+                              children: paginatedApplicants.map((applicant) {
+                                return ApplicantItem(
+                                  name: applicant['name'],
+                                  email: applicant['email'],
+                                  phoneNumber: applicant['phone'],
+                                  cv: applicant['cv'],
+                                  createdDate: applicant['createdDate'],
+                                  avatarColor: applicant['avatarColor'],
+                                  showInitials: true,
+                                  initials: applicant['name']
+                                      .substring(0, 2)
+                                      .toUpperCase(),
+                                  onStageChanged: (newStage) {
+                                    print(
+                                      "${applicant['name']} stage changed to $newStage",
+                                    );
+                                  },
+                                );
+                              }).toList(),
                             ),
                           ],
                         ),
                       ),
 
-                      KVerticalSpacer(height: 16.h),
-
-                      // Applicant List
-                      Column(
-                        children: [
-                          ApplicantItem(
-                            name: "Pristia Candra",
-                            email: "pristia@gmail.com",
-                            employeeType: "Fulltime",
-                            avatarColor: Colors.orange,
-                          ),
-                          KVerticalSpacer(height: 12.h),
-                          ApplicantItem(
-                            name: "Hanna Baptista",
-                            email: "hanna@gmail.com",
-                            employeeType: "Contractor",
-                            avatarColor: Colors.green,
-                          ),
-                          KVerticalSpacer(height: 12.h),
-                          ApplicantItem(
-                            name: "Miracle Geidt",
-                            email: "miracle@gmail.com",
-                            employeeType: "Freelance",
-                            avatarColor: Colors.teal,
-                            showInitials: true,
-                            initials: "MG",
-                          ),
-                          KVerticalSpacer(height: 12.h),
-                          ApplicantItem(
-                            name: "Rayna Torff",
-                            email: "rayna@gmail.com",
-                            employeeType: "Fulltime",
-                            avatarColor: Colors.brown,
-                          ),
-                          KVerticalSpacer(height: 12.h),
-                          ApplicantItem(
-                            name: "Giana Lipshutz",
-                            email: "giana@gmail.com",
-                            employeeType: "Fulltime",
-                            avatarColor: Colors.purple,
-                          ),
-                        ],
-                      ),
 
                       KVerticalSpacer(height: 24.h),
 
                       // Pagination
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.chevron_left, size: 16.sp),
-                                padding: EdgeInsets.zero,
-                                constraints: BoxConstraints(),
-                              ),
-                              SizedBox(width: 8.w),
-                              _buildPageNumber("1", isActive: true),
-                              SizedBox(width: 8.w),
-                              _buildPageNumber("2"),
-                              SizedBox(width: 8.w),
-                              _buildPageNumber("3"),
-                              SizedBox(width: 8.w),
-                              KText(
-                                text: "...",
-                                fontSize: 12.sp,
-                                color: AppColors.greyColor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              SizedBox(width: 30.w),
-                              _buildPageNumber("10"),
-                              SizedBox(width: 8.w),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.chevron_right, size: 16.sp),
-                                padding: EdgeInsets.zero,
-                                constraints: BoxConstraints(),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      _buildPageNumbersRow(),
+
                       SizedBox(height: 16.w),
                       Row(
                         children: [
@@ -370,13 +810,15 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                           ),
                           SizedBox(width: 40.w),
                           Container(
-                            padding: EdgeInsets.all(10.w), // ✅ Padding from Figma
+                            padding: EdgeInsets.all(10.w),
+                            // ✅ Padding from Figma
                             decoration: BoxDecoration(
                               border: Border.all(
                                 width: 0.77.w, // ✅ Border width
                                 color: AppColors.greyColor.withOpacity(0.1),
                               ),
-                              borderRadius: BorderRadius.circular(8.r), // ✅ Border radius
+                              borderRadius: BorderRadius.circular(8.r),
+                              // ✅ Border radius
                               color: AppColors.secondaryColor,
                             ),
                             child: Row(
@@ -425,8 +867,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                       UpcomingSection(),
                     ],
                   ),
-                )
-
+                ),
               ],
             ),
           ),
@@ -434,24 +875,74 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
       ),
     );
   }
-  // Helper method to build page numbers
-  Widget _buildPageNumber(String number, {bool isActive = false}) {
-    return Container(
-      width: 32.w,
-      height: 32.w,
-      decoration: BoxDecoration(
-        color: isActive ? Color(0xFFF8F8F8) : Colors.transparent,
-        borderRadius: BorderRadius.circular(4.r),
-        // border: isActive
-        //     ? null
-        //     : Border.all(color: AppColors.greyColor.withOpacity(0.3)),
-      ),
-      child: Center(
-        child: KText(
-          text: number,
-          fontSize: 12.sp,
-          color: isActive ? Colors.black : AppColors.titleColor,
-          fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+
+  Widget _buildPageNumbersRow() {
+    int windowEnd = (pageWindowStart + pageWindowSize - 1);
+    if (windowEnd > totalPages) windowEnd = totalPages;
+
+    List<Widget> pageButtons = [];
+
+    // Previous window arrow
+    pageButtons.add(IconButton(
+      icon: Icon(Icons.chevron_left, size: 16.sp),
+      onPressed: pageWindowStart > 1
+          ? () {
+        setState(() {
+          pageWindowStart -= pageWindowSize;
+          currentPage = pageWindowStart;
+        });
+      }
+          : null,
+    ));
+
+    // Page numbers
+    for (int i = pageWindowStart; i <= windowEnd; i++) {
+      pageButtons.add(Padding(
+        padding: EdgeInsets.only(right: 8.w),
+        child: _buildPageNumber(i),
+      ));
+    }
+
+    // Next window arrow
+    pageButtons.add(IconButton(
+      icon: Icon(Icons.chevron_right, size: 16.sp),
+      onPressed: windowEnd < totalPages
+          ? () {
+        setState(() {
+          pageWindowStart += pageWindowSize;
+          currentPage = pageWindowStart;
+        });
+      }
+          : null,
+    ));
+
+    return Row(children: pageButtons);
+  }
+
+
+  Widget _buildPageNumber(int pageNum) {
+    final isActive = pageNum == currentPage;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currentPage = pageNum;
+        });
+      },
+      child: Container(
+        width: 32.w,
+        height: 32.w,
+        decoration: BoxDecoration(
+          color: isActive ? Color(0xFFF8F8F8) : Colors.transparent,
+          borderRadius: BorderRadius.circular(4.r),
+        ),
+        child: Center(
+          child: KText(
+            text: pageNum.toString(),
+            fontSize: 12.sp,
+            color: isActive ? Colors.black : AppColors.titleColor,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+          ),
         ),
       ),
     );
