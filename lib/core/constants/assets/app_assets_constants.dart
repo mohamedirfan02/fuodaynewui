@@ -29,4 +29,11 @@ class AppAssetsConstants {
   static const String dateIcon = "assets/icons/date.svg";
 
   static const String filterIcon = "assets/icons/filter.svg";
+
+  static const String starIcon = "assets/icons/star.svg";
+
+  static const String aiFitCheckBtn = "assets/images/svg/ai-fit-check-btn.svg";
+
+  static const String aiFitCheckPng = "assets/images/png/buttons.png";
+
 }

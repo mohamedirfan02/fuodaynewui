@@ -6,8 +6,9 @@ import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 
 class ApplicantItem extends StatefulWidget {
+  final int? sno;
   final String name;
-  final String email;
+  final String? email; // ✅ optional
   final String phoneNumber;
   final Color avatarColor;
   final bool showInitials;
@@ -16,14 +17,16 @@ class ApplicantItem extends StatefulWidget {
   final String? createdDate;
   final VoidCallback? onEditTap;
   final VoidCallback? onDeleteTap;
-  final Function(String)? onStageChanged; // callback when stage changes
+  final Function(String)? onStageChanged;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final bool showAvatar; // ✅ optional avatar
 
   const ApplicantItem({
     Key? key,
+    this.sno,
     required this.name,
-    required this.email,
+    this.email, // ✅ optional
     required this.phoneNumber,
     required this.avatarColor,
     this.showInitials = false,
@@ -33,9 +36,11 @@ class ApplicantItem extends StatefulWidget {
     this.onEditTap,
     this.onDeleteTap,
     this.onStageChanged,
-    this.onEdit, // Add this
-    this.onDelete, // Add this
+    this.onEdit,
+    this.onDelete,
+    this.showAvatar = true, // ✅ default true
   }) : super(key: key);
+
 
   /// ✅ HEADER WIDGET
   static Widget buildHeader() {
@@ -45,6 +50,16 @@ class ApplicantItem extends StatefulWidget {
       color: AppColors.atsHomepageBg,
       child: Row(
         children: [
+          SizedBox(
+            width: 50.w,
+            child: KText(
+              text: "S.No",
+              fontWeight: FontWeight.w500,
+              fontSize: 12.sp,
+              color: AppColors.greyColor,
+              textAlign: TextAlign.center,
+            ),
+          ),
           SizedBox(
             width: 190.w,
             child: KText(
@@ -112,7 +127,6 @@ class ApplicantItem extends StatefulWidget {
   @override
   State<ApplicantItem> createState() => _ApplicantItemState();
 
-  // Available stages for the dropdown
   static const List<String> availableStages = [
     'Applied',
     'Screening',
@@ -126,11 +140,6 @@ class ApplicantItem extends StatefulWidget {
 class _ApplicantItemState extends State<ApplicantItem> {
   String? selectedStage;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Widget _buildStageDropdown() {
     return SizedBox(
       width: 100.w,
@@ -138,7 +147,6 @@ class _ApplicantItemState extends State<ApplicantItem> {
         value: selectedStage,
         isExpanded: true,
         underline: Container(),
-        // removes the default underline
         hint: KText(
           text: "Select Stage",
           fontSize: 10.sp,
@@ -161,9 +169,7 @@ class _ApplicantItemState extends State<ApplicantItem> {
             setState(() {
               selectedStage = newStage;
             });
-            if (widget.onStageChanged != null) {
-              widget.onStageChanged!(newStage);
-            }
+            widget.onStageChanged?.call(newStage);
           }
         },
       ),
@@ -176,40 +182,57 @@ class _ApplicantItemState extends State<ApplicantItem> {
       children: [
         Row(
           children: [
-            // Replace this part inside ApplicantItem -> Name & Avatar section
+            // ✅ S.No Column
             SizedBox(
-              width: 200.w, // give more width since it's now stacked
+              width: 60.w,
+              child: Center(
+                child: KText(
+                  text: widget.sno?.toString() ?? "-",
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.titleColor,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+
+            // ✅ Name + Avatar + Email
+            // ✅ Name + Avatar + Email
+            SizedBox(
+              width: 200.w,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // First row -> Avatar + Name
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 24.w,
-                        height: 24.w,
-                        decoration: BoxDecoration(
-                          color: widget.avatarColor,
-                          borderRadius: BorderRadius.circular(16.r),
+                      if (widget.showAvatar) // ✅ Only show avatar if true
+                        Container(
+                          width: 24.w,
+                          height: 24.w,
+                          decoration: BoxDecoration(
+                            color: widget.avatarColor,
+                            borderRadius: BorderRadius.circular(16.r),
+                          ),
+                          child: widget.showInitials && widget.initials != null
+                              ? Center(
+                            child: KText(
+                              text: widget.initials!,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          )
+                              : ClipRRect(
+                            borderRadius: BorderRadius.circular(16.r),
+                            child: Image.asset(
+                              AppAssetsConstants.personPlaceHolderImg,
+                            ),
+                          ),
                         ),
-                        child: widget.showInitials && widget.initials != null
-                            ? Center(
-                                child: KText(
-                                  text: widget.initials!,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(16.r),
-                                child: Image.asset(
-                                  AppAssetsConstants.personPlaceHolderImg,
-                                ),
-                              ),
-                      ),
-                      SizedBox(width: 16.w),
+
+                      if (widget.showAvatar) SizedBox(width: 16.w), // ✅ spacing only if avatar exists
+
                       Expanded(
                         child: KText(
                           text: widget.name,
@@ -223,22 +246,22 @@ class _ApplicantItemState extends State<ApplicantItem> {
 
                   SizedBox(height: 2.h),
 
-                  // Second row -> Email
-                  Padding(
-                    padding: EdgeInsets.only(left: 40.w),
-                    // indent to align with text (after avatar)
-                    child: KText(
-                      text: widget.email,
-                      fontSize: 12.sp,
-                      color: AppColors.greyColor,
-                      fontWeight: FontWeight.w400,
+                  if (widget.email != null && widget.email!.isNotEmpty) // ✅ Only show email if provided
+                    Padding(
+                      padding: EdgeInsets.only(left: widget.showAvatar ? 40.w : 0), // ✅ indent only if avatar shown
+                      child: KText(
+                        text: widget.email!,
+                        fontSize: 12.sp,
+                        color: AppColors.greyColor,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
 
-            // Phone
+
+            // ✅ Phone
             SizedBox(
               width: 100.w,
               child: Center(
@@ -252,41 +275,41 @@ class _ApplicantItemState extends State<ApplicantItem> {
               ),
             ),
 
-            // CV
+            // ✅ CV
             SizedBox(
-              width: 100.w, // give more width if needed for text + icon
+              width: 100.w,
               child: Center(
                 child: (widget.cv != null && widget.cv!.isNotEmpty)
                     ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(
-                            child: KText(
-                              text: widget.cv!,
-                              fontSize: 12.sp,
-                              color: AppColors.titleColor,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(width: 4.w),
-                          Icon(
-                            Icons.download_outlined,
-                            size: 16.sp,
-                            color: AppColors.greyColor,
-                          ),
-                        ],
-                      )
-                    : KText(
-                        text: "-",
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: KText(
+                        text: widget.cv!,
                         fontSize: 12.sp,
-                        color: AppColors.greyColor,
+                        color: AppColors.titleColor,
                         fontWeight: FontWeight.w400,
-                        textAlign: TextAlign.center,
                       ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Icon(
+                      Icons.download_outlined,
+                      size: 16.sp,
+                      color: AppColors.greyColor,
+                    ),
+                  ],
+                )
+                    : KText(
+                  text: "-",
+                  fontSize: 12.sp,
+                  color: AppColors.greyColor,
+                  fontWeight: FontWeight.w400,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
 
-            // Created Date
+            // ✅ Created Date
             SizedBox(
               width: 120.w,
               child: Center(
@@ -300,66 +323,54 @@ class _ApplicantItemState extends State<ApplicantItem> {
               ),
             ),
 
-            // Stage Dropdown
+            // ✅ Stage Dropdown
             _buildStageDropdown(),
 
-            // Replace your existing SizedBox with this:
+            // ✅ Action Buttons
             SizedBox(
               width: 120.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Edit Button
+                  // Edit
                   Container(
                     width: 30.w,
                     height: 30.h,
                     decoration: BoxDecoration(
-                      color: AppColors.primaryColor, // Blue color for edit
+                      color: AppColors.primaryColor,
                       borderRadius: BorderRadius.circular(8.r),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: IconButton(
-                        onPressed: () {
-                          print("Edit button pressed");
-                        },
-                        icon: SvgPicture.asset(
-                          AppAssetsConstants.editIcon,
-                          // Replace with your edit SVG
-                          height: 13.h,
-                          width: 11.67.w,
-                          fit: BoxFit.contain,
-                          color: Colors.white, // Optional: tint the SVG
-                        ),
-                        padding: EdgeInsets.zero,
+                    child: IconButton(
+                      onPressed: widget.onEdit ?? () {},
+                      icon: SvgPicture.asset(
+                        AppAssetsConstants.editIcon,
+                        height: 13.h,
+                        width: 11.67.w,
+                        fit: BoxFit.contain,
+                        color: Colors.white,
                       ),
+                      padding: EdgeInsets.zero,
                     ),
                   ),
-                  SizedBox(width: 8.w), // Space between buttons
-                  // Delete Button
+                  SizedBox(width: 8.w),
+                  // Delete
                   Container(
                     width: 30.w,
                     height: 30.h,
                     decoration: BoxDecoration(
-                      color: AppColors.softRed, // Red color for delete
+                      color: AppColors.softRed,
                       borderRadius: BorderRadius.circular(8.r),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: IconButton(
-                        onPressed: () {
-                          print("Delete button pressed");
-                        },
-                        icon: SvgPicture.asset(
-                          AppAssetsConstants.deleteIcon,
-                          // Replace with your delete SVG
-                          height: 12.07.h,
-                          width: 11.66.w,
-                          fit: BoxFit.contain,
-                          color: Colors.white, // Optional: tint the SVG
-                        ),
-                        padding: EdgeInsets.zero,
+                    child: IconButton(
+                      onPressed: widget.onDelete ?? () {},
+                      icon: SvgPicture.asset(
+                        AppAssetsConstants.deleteIcon,
+                        height: 12.07.h,
+                        width: 11.66.w,
+                        fit: BoxFit.contain,
+                        color: Colors.white,
                       ),
+                      padding: EdgeInsets.zero,
                     ),
                   ),
                 ],
@@ -367,11 +378,10 @@ class _ApplicantItemState extends State<ApplicantItem> {
             ),
           ],
         ),
-
-        // Divider
         SizedBox(height: 10.h),
         Divider(thickness: 1, color: AppColors.primaryColor.withOpacity(0.10)),
       ],
     );
   }
 }
+

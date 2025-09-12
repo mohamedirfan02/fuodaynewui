@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fuoday/commons/widgets/k_drawer.dart';
+import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
 import 'package:fuoday/commons/widgets/k_filter_button.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
@@ -9,10 +9,8 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
-import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
-import 'package:fuoday/features/home/presentation/widgets/k_application_table.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
 import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card.dart';
@@ -516,7 +514,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
     // Safe extraction of employee details
     final name = employeeDetails?['name'] ?? "No Name";
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
-    final designation = employeeDetails?['designation'] ?? "No Designation";
+    //final designation = employeeDetails?['designation'] ?? "No Designation";
     final email = employeeDetails?['email'] ?? "No Email";
 
     // Grid Attendance Data
@@ -569,7 +567,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
         onDrawerPressed: _openDrawer,
         onNotificationPressed: () {},
       ),
-      drawer: KDrawer(
+      drawer: KAtsDrawer(
         userEmail: email,
         userName: name,
         profileImageUrl: profilePhoto,
@@ -766,11 +764,14 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                         child: Column(
                           children: [
                             ApplicantItem.buildHeader(),
-                            // 👈 header from same file
                             SizedBox(height: 16.h),
                             Column(
-                              children: paginatedApplicants.map((applicant) {
+                              children: List.generate(paginatedApplicants.length, (index) {
+                                final applicant = paginatedApplicants[index];
+                                final sno = ((currentPage - 1) * itemsPerPage) + index + 1; // 👈 correct numbering
+
                                 return ApplicantItem(
+                                  sno: sno, // ✅ now it continues across pages
                                   name: applicant['name'],
                                   email: applicant['email'],
                                   phoneNumber: applicant['phone'],
@@ -778,20 +779,18 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                                   createdDate: applicant['createdDate'],
                                   avatarColor: applicant['avatarColor'],
                                   showInitials: true,
-                                  initials: applicant['name']
-                                      .substring(0, 2)
-                                      .toUpperCase(),
+                                  initials: applicant['name'].substring(0, 2).toUpperCase(),
                                   onStageChanged: (newStage) {
-                                    print(
-                                      "${applicant['name']} stage changed to $newStage",
-                                    );
+                                    print("${applicant['name']} stage changed to $newStage");
                                   },
                                 );
-                              }).toList(),
+                              }),
+
                             ),
                           ],
                         ),
                       ),
+
 
 
                       KVerticalSpacer(height: 24.h),
