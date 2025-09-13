@@ -29,7 +29,15 @@ class AppAssetsConstants {
 
   static const String filterIcon = "assets/icons/filter.svg";
 
+  static const String eyeIcon = "assets/icons/eye.svg";
+
+  static const String drawerIcon = "assets/icons/drawer.svg";
+
+  static const String notificationIcon = "assets/icons/notification.svg";
+
   static const String starIcon = "assets/icons/star.svg";
+
+  static const String addIcon = "assets/icons/add.svg";
 
   static const String aiFitCheckBtn = "assets/images/svg/ai-fit-check-btn.svg";
 

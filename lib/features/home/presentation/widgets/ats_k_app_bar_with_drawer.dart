@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_circular_cache_image.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
+import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 
-class AtsKAppBarWithDrawer extends StatelessWidget implements PreferredSizeWidget {
+class AtsKAppBarWithDrawer extends StatelessWidget
+    implements PreferredSizeWidget {
   final VoidCallback onDrawerPressed;
   final Color? backgroundColor;
   final Color? iconColor;
@@ -34,27 +37,32 @@ class AtsKAppBarWithDrawer extends StatelessWidget implements PreferredSizeWidge
       backgroundColor: AppColors.secondaryColor,
       leading: IconButton(
         onPressed: onDrawerPressed ?? () {},
-        icon: Icon(Icons.menu, color: iconColor ?? AppColors.titleColor),
+        icon: SvgPicture.asset(
+          AppAssetsConstants.drawerIcon,
+          height: 11.67,
+          width: 15,
+          fit: BoxFit.contain,
+        ),
       ),
       title: showUserInfo
           ? Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          KText(
-            text: userName,
-            fontWeight: FontWeight.w600,
-            fontSize: 12.sp,
-            color: AppColors.secondaryColor,
-          ),
-          KText(
-            text: userDesignation,
-            fontWeight: FontWeight.w500,
-            fontSize: 10.sp,
-            color: AppColors.secondaryColor,
-          ),
-        ],
-      )
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                KText(
+                  text: userName,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12.sp,
+                  color: AppColors.secondaryColor,
+                ),
+                KText(
+                  text: userDesignation,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 10.sp,
+                  color: AppColors.secondaryColor,
+                ),
+              ],
+            )
           : null,
 
       actions: [
@@ -70,7 +78,12 @@ class AtsKAppBarWithDrawer extends StatelessWidget implements PreferredSizeWidge
                 ),
               );
             },
-            icon: Icon(Icons.notifications, color: AppColors.titleColor),
+            icon: SvgPicture.asset(
+              AppAssetsConstants.notificationIcon,
+              height: 20,
+              width: 20,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
         // Show user profile photo only when showUserInfo is true
@@ -79,12 +92,11 @@ class AtsKAppBarWithDrawer extends StatelessWidget implements PreferredSizeWidge
             padding: EdgeInsets.only(right: 8.w),
             child: KCircularCachedImage(
               imageUrl: cachedNetworkImageUrl,
-              size: 35.h, // Smaller size for AppBar
+              size: 32.h, // Smaller size for AppBar
               fit: BoxFit.cover,
             ),
           ),
         ],
-
       ],
     );
   }

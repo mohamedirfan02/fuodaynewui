@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
+import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
 import 'package:fuoday/commons/widgets/k_filter_button.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
+import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
-import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
 import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card.dart';
 
-import '../../../../core/constants/assets/app_assets_constants.dart';
 
 class HomeRecruiterScreen extends StatefulWidget {
   const HomeRecruiterScreen({super.key});
@@ -27,32 +27,14 @@ class HomeRecruiterScreen extends StatefulWidget {
 class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController dateController = TextEditingController();
-
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
-
-  int get totalPages => (applicantsData.length / itemsPerPage).ceil();
-
-  int pageWindowStart = 1; // first page in current window
-  int pageWindowSize = 5;  // show 5 numbers at a time
-
   // Pagination state
   int currentPage = 1;
   int itemsPerPage = 6; // Change this to show how many items per page
+  int pageWindowStart = 1; // first page in current window
+  int pageWindowSize = 5; // show 5 numbers at a time
 
-  List<Map<String, dynamic>> get paginatedApplicants {
-    int totalPages = (applicantsData.length / itemsPerPage).ceil();
 
-    // Ensure currentPage is within range
-    if (currentPage > totalPages) currentPage = totalPages;
-    if (currentPage < 1) currentPage = 1;
-
-    int startIndex = (currentPage - 1) * itemsPerPage;
-    int endIndex = startIndex + itemsPerPage;
-    if (startIndex >= applicantsData.length) return []; // safe guard
-    if (endIndex > applicantsData.length) endIndex = applicantsData.length;
-
-    return applicantsData.sublist(startIndex, endIndex);
-  }
 
   List<Map<String, dynamic>> applicantsData = [
     {
@@ -104,382 +86,153 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
       'avatarColor': AppColors.authBackToLoginColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Alex Johnson',
+      'email': 'alex@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
+      'createdDate': '03 May 2025',
       'avatarColor': AppColors.titleColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Sarah Wilson',
+      'email': 'sarah@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
+      'createdDate': '03 May 2025',
       'avatarColor': AppColors.secondaryColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Mike Davis',
+      'email': 'mike@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
+      'createdDate': '04 May 2025',
       'avatarColor': AppColors.greyColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Emma Thompson',
+      'email': 'emma@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
+      'createdDate': '04 May 2025',
       'avatarColor': AppColors.authTextFieldSuffixIconColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'David Brown',
+      'email': 'david@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
+      'createdDate': '05 May 2025',
       'avatarColor': AppColors.unactive,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Lisa Garcia',
+      'email': 'lisa@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
+      'createdDate': '05 May 2025',
       'avatarColor': AppColors.pending,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Tom Anderson',
+      'email': 'tom@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
+      'createdDate': '06 May 2025',
       'avatarColor': AppColors.checkInColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Rachel Miller',
+      'email': 'rachel@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
+      'createdDate': '06 May 2025',
       'avatarColor': AppColors.authUnderlineBorderColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Kevin Taylor',
+      'email': 'kevin@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
+      'createdDate': '07 May 2025',
+      'avatarColor': AppColors.approvedColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Jessica Lee',
+      'email': 'jessica@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
+      'createdDate': '07 May 2025',
+      'avatarColor': AppColors.primaryColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Ryan Clark',
+      'email': 'ryan@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
+      'createdDate': '08 May 2025',
+      'avatarColor': AppColors.titleColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Amanda White',
+      'email': 'amanda@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
+      'createdDate': '08 May 2025',
+      'avatarColor': AppColors.greyColor,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Chris Martinez',
+      'email': 'chris@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
+      'createdDate': '09 May 2025',
+      'avatarColor': AppColors.pending,
     },
     {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
+      'name': 'Nicole Rodriguez',
+      'email': 'nicole@unpixel.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
+      'createdDate': '09 May 2025',
+      'avatarColor': AppColors.unactive,
     },
-    {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },
-    {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },
-    {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },
-    {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },
-    {
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },{
-      'name': 'Skylar Herwitz',
-      'email': 'skylar@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '02 May 2025',
-      'avatarColor': AppColors.authBackToLoginColor,
-    },
-    // Add more items...
   ];
+
+  // Getter methods for pagination
+  int get totalPages => (applicantsData.length / itemsPerPage).ceil();
+
+  List<Map<String, dynamic>> get paginatedApplicants {
+    int totalPagesCount = (applicantsData.length / itemsPerPage).ceil();
+
+    // Ensure currentPage is within range
+    if (currentPage > totalPagesCount) currentPage = totalPagesCount;
+    if (currentPage < 1) currentPage = 1;
+
+    int startIndex = (currentPage - 1) * itemsPerPage;
+    int endIndex = startIndex + itemsPerPage;
+    if (startIndex >= applicantsData.length) return []; // safe guard
+    if (endIndex > applicantsData.length) endIndex = applicantsData.length;
+
+    return applicantsData.sublist(startIndex, endIndex);
+  }
+
+  // Calculate display text for showing entries
+  String get entriesDisplayText {
+    if (applicantsData.isEmpty) return "Showing 0 to 0 of 0 entries";
+
+    int startIndex = (currentPage - 1) * itemsPerPage + 1;
+    int endIndex = currentPage * itemsPerPage;
+    if (endIndex > applicantsData.length) endIndex = applicantsData.length;
+
+    return "Showing $startIndex to $endIndex of ${applicantsData.length} entries";
+  }
 
   // Select Date
   Future<void> selectDate(
-    BuildContext context,
-    TextEditingController controller,
-  ) async {
+      BuildContext context,
+      TextEditingController controller,
+      ) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -514,10 +267,9 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
     // Safe extraction of employee details
     final name = employeeDetails?['name'] ?? "No Name";
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
-    //final designation = employeeDetails?['designation'] ?? "No Designation";
     final email = employeeDetails?['email'] ?? "No Email";
 
-    // Grid Attendance Data
+    // Grid Attendance Data - Updated with dynamic counts
     final List<Map<String, dynamic>> gridAttendanceData = [
       {
         'icon': Icons.person,
@@ -581,7 +333,6 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
-              // ✅ FIX: wrap multiple children
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 GridView.builder(
@@ -591,17 +342,17 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
-                    childAspectRatio: 155 / 113, // ✅ matches Figma
+                    childAspectRatio: 155 / 113,
                   ),
                   itemCount: gridAttendanceData.length,
                   itemBuilder: (context, index) {
                     final item = gridAttendanceData[index];
                     return AtsTotalCountCard(
-                      attendanceCount: item['numberOfCount'].toString(),
-                      attendanceCardIcon: item['icon'],
-                      attendanceDescription: item['title'],
-                      attendanceIconColor: AppColors.primaryColor,
-                      attendancePercentageColor: AppColors.checkInColor,
+                      employeeCount: item['numberOfCount'].toString(),
+                      employeeCardIcon: item['icon'],
+                      employeeDescription: item['title'],
+                      employeeIconColor: AppColors.primaryColor,
+                      employeePercentageColor: AppColors.checkInColor,
                       growthText: item['growth'],
                     );
                   },
@@ -653,75 +404,41 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                         children: [
                           // Start Date
                           Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.atsHomepageBg, // background
-                                borderRadius: BorderRadius.circular(8.r), // rounded corners
-                                border: Border.all(
-                                  color: Colors.grey.shade300, // border color
-                                  width: 1, // border width
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1), // shadow color
-                                    blurRadius: 6, // softness
-                                    offset: const Offset(0, 3), // horizontal, vertical shadow offset
-                                  ),
-                                ],
+                            child: KAtsGlowButton(
+                              text: "Date",
+                              textColor: AppColors.greyColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              icon: SvgPicture.asset(
+                                AppAssetsConstants.dateIcon,
+                                height: 20,
+                                width: 20,
+                                fit: BoxFit.contain,
                               ),
-                              child: KAuthFilledBtn(
-                                text: "Date",
-                                fontWeight: FontWeight.w600,
-                                textColor: AppColors.greyColor,
-                                icon: SvgPicture.asset(
-                                  AppAssetsConstants.dateIcon,
-                                  height: 16.67.h,
-                                  width: 15.w,
-                                  fit: BoxFit.contain,
-                                ),
-                                onPressed: () {
-                                  selectDate(context, dateController);
-                                },
-                                backgroundColor: Colors.transparent, // transparent since Container has bg
-                                height: 28.h,
-                                fontSize: 13.sp,
-                              ),
+                              onPressed: () {
+                                selectDate(context, dateController);
+                              },
+                              backgroundColor: AppColors.secondaryColor,
                             ),
                           ),
 
                           // Export file
                           Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.atsHomepageBg, // background
-                                borderRadius: BorderRadius.circular(10.r), // rounded corners
-                                border: Border.all(
-                                  color: Colors.grey.shade300, // border color
-                                  width: 1, // border width
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.primaryColor.withOpacity(0.1), // shadow color
-                                    blurRadius: 6, // softness
-                                    offset: const Offset(0, 3), // horizontal, vertical shadow offset
-                                  ),
-                                ],
+                            child: KAtsGlowButton(
+                              text: "Export",
+                              textColor: AppColors.secondaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              icon: SvgPicture.asset(
+                                AppAssetsConstants.downloadIcon,
+                                height: 20,
+                                width: 20,
+                                fit: BoxFit.contain,
                               ),
-                              child: KAuthFilledBtn(
-                                text: "Export",
-                                icon: SvgPicture.asset(
-                                  AppAssetsConstants.downloadIcon,
-                                  // Replace with your delete SVG
-                                  height: 16.67.h,
-                                  width: 15.w,
-                                  fit: BoxFit.contain,
-                                  color: Colors.white, // Optional: tint the SVG
-                                ),
-                                onPressed: () {},
-                                backgroundColor: AppColors.primaryColor,
-                                height: 28.h,
-                                fontSize: 13.sp,
-                              ),
+                              onPressed: () {
+                                print("Export button tapped");
+                              },
+                              backgroundColor: AppColors.primaryColor,
                             ),
                           ),
                         ],
@@ -746,19 +463,9 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                         ),
                       ),
 
-
-
-
-
                       KVerticalSpacer(height: 24.h),
 
-                      // SingleChildScrollView(
-                      //   scrollDirection: Axis.horizontal,
-                      //   child: ApplicantTable(
-                      //     applicants: applicantsData, // ✅ just pass your list
-                      //     itemsPerPage: 6, // optional
-                      //   ),
-                      // ),
+                      // Applicant Table with Pagination
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Column(
@@ -766,32 +473,39 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                             ApplicantItem.buildHeader(),
                             SizedBox(height: 16.h),
                             Column(
-                              children: List.generate(paginatedApplicants.length, (index) {
-                                final applicant = paginatedApplicants[index];
-                                final sno = ((currentPage - 1) * itemsPerPage) + index + 1; // 👈 correct numbering
+                              children: List.generate(
+                                paginatedApplicants.length,
+                                    (index) {
+                                  final applicant = paginatedApplicants[index];
+                                  final sno =
+                                      ((currentPage - 1) * itemsPerPage) +
+                                          index +
+                                          1; // Correct numbering across pages
 
-                                return ApplicantItem(
-                                  sno: sno, // ✅ now it continues across pages
-                                  name: applicant['name'],
-                                  email: applicant['email'],
-                                  phoneNumber: applicant['phone'],
-                                  cv: applicant['cv'],
-                                  createdDate: applicant['createdDate'],
-                                  avatarColor: applicant['avatarColor'],
-                                  showInitials: true,
-                                  initials: applicant['name'].substring(0, 2).toUpperCase(),
-                                  onStageChanged: (newStage) {
-                                    print("${applicant['name']} stage changed to $newStage");
-                                  },
-                                );
-                              }),
-
+                                  return ApplicantItem(
+                                    sno: sno,
+                                    name: applicant['name'],
+                                    email: applicant['email'],
+                                    phoneNumber: applicant['phone'],
+                                    cv: applicant['cv'],
+                                    createdDate: applicant['createdDate'],
+                                    avatarColor: applicant['avatarColor'],
+                                    showInitials: true,
+                                    initials: applicant['name']
+                                        .substring(0, 2)
+                                        .toUpperCase(),
+                                    onStageChanged: (newStage) {
+                                      print(
+                                        "${applicant['name']} stage changed to $newStage",
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),
                       ),
-
-
 
                       KVerticalSpacer(height: 24.h),
 
@@ -802,34 +516,38 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                       Row(
                         children: [
                           KText(
-                            text: "Showing 1 to 8 of 50 entries",
+                            text: entriesDisplayText, // Dynamic entries text
                             fontSize: 12.sp,
                             color: AppColors.greyColor,
                             fontWeight: FontWeight.w500,
                           ),
                           SizedBox(width: 40.w),
-                          Container(
-                            padding: EdgeInsets.all(10.w),
-                            // ✅ Padding from Figma
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 0.77.w, // ✅ Border width
-                                color: AppColors.greyColor.withOpacity(0.1),
-                              ),
-                              borderRadius: BorderRadius.circular(8.r),
-                              // ✅ Border radius
-                              color: AppColors.secondaryColor,
-                            ),
-                            child: Row(
-                              children: [
-                                KText(
-                                  text: "Show 8",
-                                  fontSize: 12.sp,
-                                  color: AppColors.titleColor,
-                                  fontWeight: FontWeight.w500,
+                          GestureDetector(
+                            onTap: () {
+                              // Show dropdown or bottom sheet to change items per page
+                              _showItemsPerPageSelector();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10.w),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.77.w,
+                                  color: AppColors.greyColor.withOpacity(0.1),
                                 ),
-                                Icon(Icons.keyboard_arrow_up, size: 14.sp),
-                              ],
+                                borderRadius: BorderRadius.circular(8.r),
+                                color: AppColors.secondaryColor,
+                              ),
+                              child: Row(
+                                children: [
+                                  KText(
+                                    text: "Show $itemsPerPage",
+                                    fontSize: 10.sp,
+                                    color: AppColors.titleColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  Icon(Icons.keyboard_arrow_down, size: 15.sp),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -882,42 +600,47 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
     List<Widget> pageButtons = [];
 
     // Previous window arrow
-    pageButtons.add(IconButton(
-      icon: Icon(Icons.chevron_left, size: 16.sp),
-      onPressed: pageWindowStart > 1
-          ? () {
-        setState(() {
-          pageWindowStart -= pageWindowSize;
-          currentPage = pageWindowStart;
-        });
-      }
-          : null,
-    ));
+    pageButtons.add(
+      IconButton(
+        icon: Icon(Icons.chevron_left, size: 16.sp),
+        onPressed: pageWindowStart > 1
+            ? () {
+          setState(() {
+            pageWindowStart -= pageWindowSize;
+            currentPage = pageWindowStart;
+          });
+        }
+            : null,
+      ),
+    );
 
     // Page numbers
     for (int i = pageWindowStart; i <= windowEnd; i++) {
-      pageButtons.add(Padding(
-        padding: EdgeInsets.only(right: 8.w),
-        child: _buildPageNumber(i),
-      ));
+      pageButtons.add(
+        Padding(
+          padding: EdgeInsets.only(right: 8.w),
+          child: _buildPageNumber(i),
+        ),
+      );
     }
 
     // Next window arrow
-    pageButtons.add(IconButton(
-      icon: Icon(Icons.chevron_right, size: 16.sp),
-      onPressed: windowEnd < totalPages
-          ? () {
-        setState(() {
-          pageWindowStart += pageWindowSize;
-          currentPage = pageWindowStart;
-        });
-      }
-          : null,
-    ));
+    pageButtons.add(
+      IconButton(
+        icon: Icon(Icons.chevron_right, size: 16.sp),
+        onPressed: windowEnd < totalPages
+            ? () {
+          setState(() {
+            pageWindowStart += pageWindowSize;
+            currentPage = pageWindowStart;
+          });
+        }
+            : null,
+      ),
+    );
 
     return Row(children: pageButtons);
   }
-
 
   Widget _buildPageNumber(int pageNum) {
     final isActive = pageNum == currentPage;
@@ -944,6 +667,49 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showItemsPerPageSelector() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              KText(
+                text: "Candidate per page",
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.titleColor,
+              ),
+              SizedBox(height: 16.h),
+              ...([5, 6, 10, 15, 20].map((count) =>
+                  ListTile(
+                    title: KText(
+                      text: "Show $count Candidate",
+                      fontSize: 14.sp,
+                      color: AppColors.titleColor, fontWeight: FontWeight.w500,
+                    ),
+                    trailing: itemsPerPage == count
+                        ? Icon(Icons.check, color: AppColors.primaryColor)
+                        : null,
+                    onTap: () {
+                      setState(() {
+                        itemsPerPage = count;
+                        currentPage = 1; // Reset to first page
+                        pageWindowStart = 1; // Reset pagination window
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
+              )),
+            ],
+          ),
+        );
+      },
     );
   }
 }

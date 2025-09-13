@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_ats_app_bar.dart';
-import 'package:fuoday/commons/widgets/k_filter_button.dart';
+import 'package:fuoday/commons/widgets/k_ats_data_table.dart';
+import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
+import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
 import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
@@ -15,12 +17,9 @@ import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/ats_candidate/widgets/k_ats_file_upload_btn.dart';
-import 'package:fuoday/features/ats_candidate/widgets/k_ats_gradient_btn.dart';
-import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
+import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
-import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
-import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
 import 'package:go_router/go_router.dart';
 
 class CandidateScreen extends StatefulWidget {
@@ -30,132 +29,213 @@ class CandidateScreen extends StatefulWidget {
   State<CandidateScreen> createState() => _CandidateScreenState();
 }
 
-int get totalPages => (applicantsData.length / itemsPerPage).ceil();
-
-int pageWindowStart = 1; // first page in current window
-int pageWindowSize = 5; // show 5 numbers at a time
-
-// Pagination state
-int currentPage = 1;
-int itemsPerPage = 6; // Change this to show how many items per page
-
-List<Map<String, dynamic>> get paginatedApplicants {
-  int totalPages = (applicantsData.length / itemsPerPage).ceil();
-
-  // Ensure currentPage is within range
-  if (currentPage > totalPages) currentPage = totalPages;
-  if (currentPage < 1) currentPage = 1;
-
-  int startIndex = (currentPage - 1) * itemsPerPage;
-  int endIndex = startIndex + itemsPerPage;
-  if (startIndex >= applicantsData.length) return []; // safe guard
-  if (endIndex > applicantsData.length) endIndex = applicantsData.length;
-
-  return applicantsData.sublist(startIndex, endIndex);
-}
-
-List<Map<String, dynamic>> applicantsData = [
-  {
-    'name': 'Pristia Candra',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '01 May 2025',
-    'avatarColor': AppColors.primaryColor,
-  },
-  {
-    'name': 'Hanna Baptista',
-    'email': 'hanna@gmail.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '01 May 2025',
-    'avatarColor': AppColors.greyColor,
-  },
-  {
-    'name': 'John Doe',
-    'email': 'john@gmail.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.approvedColor,
-  },
-  {
-    'name': 'James George',
-    'email': 'james@unpixel.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.unactive,
-  },
-  {
-    'name': 'Miracle Geidt',
-    'email': 'miracle@unpixel.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.titleColor,
-  },
-  {
-    'name': 'Skylar Herwitz',
-    'email': 'skylar@unpixel.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.authBackToLoginColor,
-  },{
-    'name': 'Skylar Herwitz',
-    'email': 'skylar@unpixel.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.authBackToLoginColor,
-  },{
-    'name': 'Skylar Herwitz',
-    'email': 'skylar@unpixel.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.authBackToLoginColor,
-  },{
-    'name': 'Skylar Herwitz',
-    'email': 'skylar@unpixel.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.authBackToLoginColor,
-  },{
-    'name': 'Skylar Herwitz',
-    'email': 'skylar@unpixel.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.authBackToLoginColor,
-  },{
-    'name': 'Skylar Herwitz',
-    'email': 'skylar@unpixel.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.authBackToLoginColor,
-  },{
-    'name': 'Skylar Herwitz',
-    'email': 'skylar@unpixel.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.authBackToLoginColor,
-  },{
-    'name': 'Skylar Herwitz',
-    'email': 'skylar@unpixel.com',
-    'phone': '08092139441',
-    'cv': 'cv.pdf',
-    'createdDate': '02 May 2025',
-    'avatarColor': AppColors.authBackToLoginColor,
-  },
-];
-
 class _CandidateScreenState extends State<CandidateScreen> {
-  final TextEditingController jobDescriptionController =
-      TextEditingController();
+  final TextEditingController jobDescriptionController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+  // Pagination state
+  int currentPage = 1;
+  int itemsPerPage = 6; // Change this to show how many items per page
+  int pageWindowStart = 1; // first page in current window
+  int pageWindowSize = 5; // show 5 numbers at a time
+
+  // Sample data for candidates
+  final List<Map<String, dynamic>> sampleData = [
+    {
+      "sno": 1,
+      "name": "Aarav Sharma",
+      "colum3": "15-09-2025",
+      "colum4": "aarav_cv.pdf",
+      "colum5": "Fresher",
+      "colum6": "Flutter Developer",
+      "colum7": "Selected",
+      "avatarColor": Colors.blue,
+      "initials": "AS",
+    },
+    {
+      "sno": 2,
+      "name": "Priya Verma",
+      "colum3": "16-09-2025",
+      "colum4": "priya_cv.pdf",
+      "colum5": "2 yrs",
+      "colum6": "Backend Developer",
+      "colum7": "On Hold",
+      "avatarColor": Colors.purple,
+      "initials": "PV",
+    },
+    {
+      "sno": 3,
+      "name": "Rohan Gupta",
+      "colum3": "17-09-2025",
+      "colum4": "rohan_cv.pdf",
+      "colum5": "1 yr",
+      "colum6": "UI/UX Designer",
+      "colum7": "Rejected",
+      "avatarColor": Colors.orange,
+      "initials": "RG",
+    },
+    {
+      "sno": 4,
+      "name": "Neha Singh",
+      "colum3": "18-09-2025",
+      "colum4": "neha_cv.pdf",
+      "colum5": "3 yrs",
+      "colum6": "Full Stack Developer",
+      "colum7": "In Progress",
+      "avatarColor": Colors.green,
+      "initials": "NS",
+    },
+    {
+      "sno": 5,
+      "name": "Arjun Mehta",
+      "colum3": "19-09-2025",
+      "colum4": "arjun_cv.pdf",
+      "colum5": "Fresher",
+      "colum6": "QA Engineer",
+      "colum7": "L1 60%",
+      "avatarColor": Colors.red,
+      "initials": "AM",
+    },
+    {
+      "sno": 6,
+      "name": "Simran Kaur",
+      "colum3": "20-09-2025",
+      "colum4": "simran_cv.pdf",
+      "colum5": "4 yrs",
+      "colum6": "Project Manager",
+      "colum7": "HR Round",
+      "avatarColor": Colors.teal,
+      "initials": "SK",
+    },
+    {
+      "sno": 7,
+      "name": "Vikram Rao",
+      "colum3": "21-09-2025",
+      "colum4": "vikram_cv.pdf",
+      "colum5": "2 yrs",
+      "colum6": "Data Analyst",
+      "colum7": "L2 70%",
+      "avatarColor": Colors.cyan,
+      "initials": "VR",
+    },
+    {
+      "sno": 8,
+      "name": "Ananya Nair",
+      "colum3": "22-09-2025",
+      "colum4": "ananya_cv.pdf",
+      "colum5": "Fresher",
+      "colum6": "AI Engineer",
+      "colum7": "Selected",
+      "avatarColor": Colors.indigo,
+      "initials": "AN",
+    },
+    {
+      "sno": 9,
+      "name": "Karan Patel",
+      "colum3": "23-09-2025",
+      "colum4": "karan_cv.pdf",
+      "colum5": "5 yrs",
+      "colum6": "DevOps Engineer",
+      "colum7": "L3 95%",
+      "avatarColor": Colors.deepOrange,
+      "initials": "KP",
+    },
+    {
+      "sno": 10,
+      "name": "Meera Iyer",
+      "colum3": "24-09-2025",
+      "colum4": "meera_cv.pdf",
+      "colum5": "1 yr",
+      "colum6": "Business Analyst",
+      "colum7": "On Hold",
+      "avatarColor": Colors.pink,
+      "initials": "MI",
+    },
+    {
+      "sno": 11,
+      "name": "Rahul Kumar",
+      "colum3": "25-09-2025",
+      "colum4": "rahul_cv.pdf",
+      "colum5": "3 yrs",
+      "colum6": "Mobile Developer",
+      "colum7": "Selected",
+      "avatarColor": Colors.brown,
+      "initials": "RK",
+    },
+    {
+      "sno": 12,
+      "name": "Sneha Reddy",
+      "colum3": "26-09-2025",
+      "colum4": "sneha_cv.pdf",
+      "colum5": "2 yrs",
+      "colum6": "Frontend Developer",
+      "colum7": "In Progress",
+      "avatarColor": Colors.amber,
+      "initials": "SR",
+    },
+    {
+      "sno": 13,
+      "name": "Amit Agarwal",
+      "colum3": "27-09-2025",
+      "colum4": "amit_cv.pdf",
+      "colum5": "4 yrs",
+      "colum6": "Tech Lead",
+      "colum7": "HR Round",
+      "avatarColor": Colors.lightBlue,
+      "initials": "AA",
+    },
+    {
+      "sno": 14,
+      "name": "Pooja Jain",
+      "colum3": "28-09-2025",
+      "colum4": "pooja_cv.pdf",
+      "colum5": "1 yr",
+      "colum6": "Content Writer",
+      "colum7": "On Hold",
+      "avatarColor": Colors.deepPurple,
+      "initials": "PJ",
+    },
+    {
+      "sno": 15,
+      "name": "Rajesh Mishra",
+      "colum3": "29-09-2025",
+      "colum4": "rajesh_cv.pdf",
+      "colum5": "6 yrs",
+      "colum6": "System Admin",
+      "colum7": "Rejected",
+      "avatarColor": Colors.lime,
+      "initials": "RM",
+    },
+  ];
+
+  // Getter methods for pagination
+  int get totalPages => (sampleData.length / itemsPerPage).ceil();
+
+  List<Map<String, dynamic>> get paginatedData {
+    int totalPagesCount = (sampleData.length / itemsPerPage).ceil();
+
+    // Ensure currentPage is within range
+    if (currentPage > totalPagesCount) currentPage = totalPagesCount;
+    if (currentPage < 1) currentPage = 1;
+
+    int startIndex = (currentPage - 1) * itemsPerPage;
+    int endIndex = startIndex + itemsPerPage;
+    if (startIndex >= sampleData.length) return []; // safe guard
+    if (endIndex > sampleData.length) endIndex = sampleData.length;
+
+    return sampleData.sublist(startIndex, endIndex);
+  }
+
+  // Calculate display text for showing entries
+  String get entriesDisplayText {
+    if (sampleData.isEmpty) return "Showing 0 to 0 of 0 entries";
+
+    int startIndex = (currentPage - 1) * itemsPerPage + 1;
+    int endIndex = currentPage * itemsPerPage;
+    if (endIndex > sampleData.length) endIndex = sampleData.length;
+
+    return "Showing $startIndex to $endIndex of ${sampleData.length} entries";
+  }
 
   @override
   void dispose() {
@@ -167,42 +247,127 @@ class _CandidateScreenState extends State<CandidateScreen> {
   Widget build(BuildContext context) {
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
+    final name = employeeDetails?['name'] ?? "No Name";
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
+    final email = employeeDetails?['email'] ?? "No Email";
+
+    final headers = [
+      SizedBox(
+        width: 50.w,
+        child: KText(
+          text: "S.No",
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
+        ),
+      ),
+      SizedBox(
+        width: 200.w,
+        child: KText(
+          text: "Name",
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
+        ),
+      ),
+      SizedBox(
+        width: 120.w,
+        child: KText(
+          text: "Interview Date",
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
+        ),
+      ),
+      SizedBox(
+        width: 160.w,
+        child: KText(
+          text: "Attachment",
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
+        ),
+      ),
+      SizedBox(
+        width: 100.w,
+        child: KText(
+          text: "Experience",
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
+        ),
+      ),
+      SizedBox(
+        width: 160.w,
+        child: KText(
+          text: "Role",
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
+        ),
+      ),
+      SizedBox(
+        width: 120.w,
+        child: KText(
+          text: "Status",
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
+        ),
+      ),
+      SizedBox(
+        width: 150.w,
+        child: KText(
+          text: "Action",
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
+        ),
+      ),
+    ];
+
 
     final List<Map<String, dynamic>> gridAttendanceData = [
       {
         'icon': Icons.person,
         'title': 'Total Applied',
-        'numberOfCount': "3,540",
+        'numberOfCount': "3,450",
         'growth': "+5.1%",
       },
       {
         'title': 'Shortlisted Candidates',
-        'numberOfCount': "1,540",
+        'numberOfCount': "1,234",
         'growth': "+5.1%",
         'icon': Icons.person,
       },
       {
         'title': 'Hold Candidates',
-        'numberOfCount': "500",
+        'numberOfCount':"588",
         'growth': "+5.1%",
         'icon': Icons.person,
       },
       {
         'title': 'Rejected Candidates',
-        'numberOfCount': "1,504",
+        'numberOfCount': "98",
         'growth': "+5.1%",
         'icon': Icons.person,
       },
     ];
 
     return Scaffold(
-      appBar: KAtsAppBar(
-        title: "Candidates",
-        centerTitle: false,
-        leadingIcon: Icons.arrow_back,
-        onLeadingIconPress: () => Navigator.pop(context),
+      key: _scaffoldKey,
+      appBar: AtsKAppBarWithDrawer(
+        userName: "",
         cachedNetworkImageUrl: profilePhoto,
+        userDesignation: "",
+        showUserInfo: true,
+        onDrawerPressed: _openDrawer,
+        onNotificationPressed: () {},
+      ),
+      drawer: KAtsDrawer(
+        userEmail: email,
+        userName: name,
+        profileImageUrl: profilePhoto,
       ),
       body: Container(
         width: double.infinity,
@@ -213,7 +378,6 @@ class _CandidateScreenState extends State<CandidateScreen> {
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
-              // ✅ FIX: wrap multiple children
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 GridView.builder(
@@ -223,17 +387,17 @@ class _CandidateScreenState extends State<CandidateScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
-                    childAspectRatio: 155 / 113, // ✅ matches Figma
+                    childAspectRatio: 155 / 113,
                   ),
                   itemCount: gridAttendanceData.length,
                   itemBuilder: (context, index) {
                     final item = gridAttendanceData[index];
                     return AtsTotalCountCard(
-                      attendanceCount: item['numberOfCount'].toString(),
-                      attendanceCardIcon: item['icon'],
-                      attendanceDescription: item['title'],
-                      attendanceIconColor: AppColors.primaryColor,
-                      attendancePercentageColor: AppColors.checkInColor,
+                      employeeCount: item['numberOfCount'].toString(),
+                      employeeCardIcon: item['icon'],
+                      employeeDescription: item['title'],
+                      employeeIconColor: AppColors.primaryColor,
+                      employeePercentageColor: AppColors.checkInColor,
                       growthText: item['growth'],
                     );
                   },
@@ -334,24 +498,10 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                 ),
                               );
                             } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
-                              // Handle Word files - you can either:
-                              // Option 1: Show file info/details
                               KSnackBar.success(
                                 context,
                                 "Word file selected: ${pickedFile.name}",
                               );
-
-                              // Option 2: Open with system default app (if you have url_launcher)
-                              // await launchUrl(Uri.file(filePath!));
-
-                              // Option 3: Navigate to a Word preview screen (if you implement one)
-                              // GoRouter.of(context).pushNamed(
-                              //   AppRouteConstants.wordPreview,
-                              //   extra: FilePreviewData(
-                              //     filePath: filePath!,
-                              //     fileName: fileName,
-                              //   ),
-                              // );
                             } else {
                               KSnackBar.failure(
                                 context,
@@ -390,7 +540,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
                           },
                           uploadPickerTitle: "",
                           uploadPickerIcon:
-                              context.filePickerProviderWatch.isPicked("resume")
+                          context.filePickerProviderWatch.isPicked("resume")
                               ? Icons.check_circle
                               : Icons.upload,
                           description: context.filePickerProviderWatch.getFile("resume") != null
@@ -427,7 +577,6 @@ class _CandidateScreenState extends State<CandidateScreen> {
 
                         /// 🔹 Input Field
                         KAuthTextFormField(
-                          // label: "",
                           controller: jobDescriptionController,
                           hintText: "Enter Job Description",
                           keyboardType: TextInputType.text,
@@ -435,20 +584,6 @@ class _CandidateScreenState extends State<CandidateScreen> {
 
                         SizedBox(height: 20.h),
 
-                        // Align(
-                        //   alignment: Alignment.center,
-                        //   child:
-                        //       /// 🔹 CTA Button
-                        //   GenerateAIButton(
-                        //
-                        //         onPressed: () {
-                        //           KSnackBar.success(
-                        //             context,
-                        //             "Fit check with AI tapped",
-                        //           );
-                        //         },
-                        //       ),
-                        // ),
                         Align(
                           alignment: Alignment.center,
                           child: GestureDetector(
@@ -459,7 +594,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
                               );
                             },
                             child: Image.asset(
-                              AppAssetsConstants.aiFitCheckPng, // update constant to your PNG path
+                              AppAssetsConstants.aiFitCheckPng,
                               height: 90.h,
                               width: 200.w,
                               fit: BoxFit.cover,
@@ -505,203 +640,58 @@ class _CandidateScreenState extends State<CandidateScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Start Date
+                          // Filter Button
                           Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.atsHomepageBg,
-                                // background
-                                borderRadius: BorderRadius.circular(8.r),
-                                // rounded corners
-                                border: Border.all(
-                                  color: Colors.grey.shade300, // border color
-                                  width: 1, // border width
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    // shadow color
-                                    blurRadius: 6,
-                                    // softness
-                                    offset: const Offset(
-                                      0,
-                                      3,
-                                    ), // horizontal, vertical shadow offset
-                                  ),
-                                ],
+                            child: KAtsGlowButton(
+                              text: "Filter",textColor: AppColors.greyColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              icon: SvgPicture.asset(
+                                AppAssetsConstants.filterIcon,
+                                height: 15,
+                                width: 15,
+                                fit: BoxFit.contain,
                               ),
-                              child: KAuthFilledBtn(
-                                text: "Filter",
-                                fontWeight: FontWeight.w600,
-                                textColor: AppColors.greyColor,
-                                icon: SvgPicture.asset(
-                                  AppAssetsConstants.filterIcon,
-                                  height: 13.h,
-                                  width: 13.w,
-                                  fit: BoxFit.contain,
-                                ),
-                                onPressed: () {
-                                  //  selectDate(context, dateController);
-                                },
-                                backgroundColor: Colors.transparent,
-                                // transparent since Container has bg
-                                height: 28.h,
-                                fontSize: 13.sp,
-                              ),
+                              onPressed: () {
+                                print("Filter button tapped");
+                              },
+                              backgroundColor: AppColors.secondaryColor,
                             ),
                           ),
 
                           // Export file
                           Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.atsHomepageBg,
-                                // background
-                                borderRadius: BorderRadius.circular(10.r),
-                                // rounded corners
-                                border: Border.all(
-                                  color: Colors.grey.shade300, // border color
-                                  width: 1, // border width
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.primaryColor.withOpacity(
-                                      0.1,
-                                    ), // shadow color
-                                    blurRadius: 6, // softness
-                                    offset: const Offset(
-                                      0,
-                                      3,
-                                    ), // horizontal, vertical shadow offset
-                                  ),
-                                ],
+                            child: KAtsGlowButton(
+                              text: "Candidates",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              icon: SvgPicture.asset(
+                                AppAssetsConstants.addIcon,
+                                height: 15,
+                                width: 15,
+                                fit: BoxFit.contain,
                               ),
-                              child: KAuthFilledBtn(
-                                text: "Candidate",
-                                icon: SvgPicture.asset(
-                                  AppAssetsConstants.downloadIcon,
-                                  // Replace with your delete SVG
-                                  height: 13.67.h,
-                                  width: 14.w,
-                                  fit: BoxFit.contain,
-                                  color: Colors.white, // Optional: tint the SVG
-                                ),
-                                onPressed: () {},
-                                backgroundColor: AppColors.primaryColor,
-                                height: 28.h,
-                                fontSize: 12.sp,
-                              ),
+                              onPressed: () {
+                                print("Candidates button tapped");
+                              },
+                              backgroundColor: AppColors.primaryColor,
                             ),
-                          ),
+                          )
                         ],
                       ),
-                      // Container(
-                      //   width: 140,
-                      //   height: 44,
-                      //   padding: const EdgeInsets.symmetric(
-                      //     horizontal: 18,
-                      //     vertical: 10,
-                      //   ),
-                      //   decoration: BoxDecoration(
-                      //     color: const Color(0xFF9258BC), // background: rgba(146, 88, 188, 1)
-                      //     borderRadius: BorderRadius.circular(8),
-                      //     border: Border.all(
-                      //       color: const Color(0xFF9258BC), // same as bg
-                      //       width: 1,
-                      //     ),
-                      //     boxShadow: [
-                      //       // outer glow
-                      //       BoxShadow(
-                      //         color: const Color(0xFFEBF2FF), // rgba(235, 242, 255, 1)
-                      //         spreadRadius: 4,
-                      //         blurRadius: 0,
-                      //         offset: const Offset(0, 0),
-                      //       ),
-                      //       // subtle drop shadow
-                      //       BoxShadow(
-                      //         color: const Color.fromRGBO(0, 11, 33, 0.05),
-                      //         spreadRadius: 0,
-                      //         blurRadius: 2,
-                      //         offset: const Offset(0, 1),
-                      //       ),
-                      //     ],
-                      //   ),
-                      //   child: Center(
-                      //     child: Text(
-                      //       "Button", // 👉 replace with your label
-                      //       style: const TextStyle(
-                      //         color: Colors.white,
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.w600,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                       KVerticalSpacer(height: 16.h),
 
-                      // Filter Field
-                      // KFilterBtn(
-                      //   text: "Filter",
-                      //   textColor: Colors.black,
-                      //   backgroundColor: Colors.white,
-                      //   borderColor: const Color.fromRGBO(233, 234, 236, 1),
-                      //   borderRadius: BorderRadius.circular(10.r),
-                      //   onPressed: () {
-                      //     print("Filter pressed");
-                      //   },
-                      //   icon: SvgPicture.asset(
-                      //     AppAssetsConstants.filterIcon,
-                      //     height: 16.h,
-                      //     width: 16.w,
-                      //     color: Colors.black,
-                      //   ),
-                      // ),
-
-                      KVerticalSpacer(height: 24.h),
-
-                      // SingleChildScrollView(
-                      //   scrollDirection: Axis.horizontal,
-                      //   child: ApplicantTable(
-                      //     applicants: applicantsData, // ✅ just pass your list
-                      //     itemsPerPage: 6, // optional
-                      //   ),
-                      // ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          children: [
-                            ApplicantItem.buildHeader(),
-                            SizedBox(height: 16.h),
-                            Column(
-                              children: List.generate(paginatedApplicants.length, (index) {
-                                final applicant = paginatedApplicants[index];
-                                final sno = ((currentPage - 1) * itemsPerPage) + index + 1; // 👈 correct numbering
-
-                                return ApplicantItem(
-                                  sno: sno,
-                                  name: applicant['name'],
-                             //     email: applicant['email'], // 👈 if null → won’t show
-                                  phoneNumber: applicant['phone'],
-                                  cv: applicant['cv'],
-                                  createdDate: applicant['createdDate'],
-                                  avatarColor: applicant['avatarColor'],
-                                  showInitials: true,
-                                  initials: applicant['name'].substring(0, 2).toUpperCase(),
-                                  showAvatar: false, // 👈 if you don’t want avatar
-                                  onStageChanged: (newStage) {
-                                    print("${applicant['name']} stage changed to $newStage");
-                                  },
-                                );
-
-                              }),
-
-                            ),
-                          ],
+                      // Data Table with paginated data
+                      SizedBox(
+                        height: 330.h,
+                        width: 1445.w, // 👈 Figma width (if you want it strict)
+                        child: KAtsDataTable(
+                          columnHeaders: headers,
+                          rowData: paginatedData,
+                          minWidth: 1445.w, // 👈 match with figma width// Using paginated data
                         ),
                       ),
 
-
-                      KVerticalSpacer(height: 24.h),
 
                       // Pagination
                       _buildPageNumbersRow(),
@@ -710,68 +700,42 @@ class _CandidateScreenState extends State<CandidateScreen> {
                       Row(
                         children: [
                           KText(
-                            text: "Showing 1 to 8 of 50 entries",
+                            text: entriesDisplayText, // Dynamic entries text
                             fontSize: 12.sp,
                             color: AppColors.greyColor,
                             fontWeight: FontWeight.w500,
                           ),
                           SizedBox(width: 40.w),
-                          Container(
-                            padding: EdgeInsets.all(10.w),
-                            // ✅ Padding from Figma
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 0.77.w, // ✅ Border width
-                                color: AppColors.greyColor.withOpacity(0.1),
-                              ),
-                              borderRadius: BorderRadius.circular(8.r),
-                              // ✅ Border radius
-                              color: AppColors.secondaryColor,
-                            ),
-                            child: Row(
-                              children: [
-                                KText(
-                                  text: "Show 8",
-                                  fontSize: 12.sp,
-                                  color: AppColors.titleColor,
-                                  fontWeight: FontWeight.w500,
+                          GestureDetector(
+                            onTap: () {
+                              // Show dropdown or bottom sheet to change items per page
+                              _showItemsPerPageSelector();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10.w),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.77.w,
+                                  color: AppColors.greyColor.withOpacity(0.1),
                                 ),
-                                Icon(Icons.keyboard_arrow_up, size: 14.sp),
-                              ],
+                                borderRadius: BorderRadius.circular(8.r),
+                                color: AppColors.secondaryColor,
+                              ),
+                              child: Row(
+                                children: [
+                                  KText(
+                                    text: "Show $itemsPerPage",
+                                    fontSize: 12.sp,
+                                    color: AppColors.titleColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  Icon(Icons.keyboard_arrow_down, size: 14.sp),
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16.w),
-
-                Container(
-                  padding: EdgeInsets.all(18.47.w),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
-                    ),
-                    borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header
-                      CalendarHeader(),
-
-                      SizedBox(height: 20.h),
-
-                      // TODAY Section
-                      TodaySection(),
-
-                      SizedBox(height: 24.h),
-
-                      // UPCOMING Section
-                      UpcomingSection(),
                     ],
                   ),
                 ),
@@ -795,11 +759,11 @@ class _CandidateScreenState extends State<CandidateScreen> {
         icon: Icon(Icons.chevron_left, size: 16.sp),
         onPressed: pageWindowStart > 1
             ? () {
-                setState(() {
-                  pageWindowStart -= pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
+          setState(() {
+            pageWindowStart -= pageWindowSize;
+            currentPage = pageWindowStart;
+          });
+        }
             : null,
       ),
     );
@@ -820,11 +784,11 @@ class _CandidateScreenState extends State<CandidateScreen> {
         icon: Icon(Icons.chevron_right, size: 16.sp),
         onPressed: windowEnd < totalPages
             ? () {
-                setState(() {
-                  pageWindowStart += pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
+          setState(() {
+            pageWindowStart += pageWindowSize;
+            currentPage = pageWindowStart;
+          });
+        }
             : null,
       ),
     );
@@ -857,6 +821,49 @@ class _CandidateScreenState extends State<CandidateScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showItemsPerPageSelector() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              KText(
+                text: "Items per page",
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.titleColor,
+              ),
+              SizedBox(height: 16.h),
+              ...([5, 6, 10, 15, 20].map((count) =>
+                  ListTile(
+                    title: KText(
+                      text: "Show $count items",
+                      fontSize: 14.sp,
+                      color: AppColors.titleColor, fontWeight: FontWeight.w500,
+                    ),
+                    trailing: itemsPerPage == count
+                        ? Icon(Icons.check, color: AppColors.primaryColor)
+                        : null,
+                    onTap: () {
+                      setState(() {
+                        itemsPerPage = count;
+                        currentPage = 1; // Reset to first page
+                        pageWindowStart = 1; // Reset pagination window
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
+              )),
+            ],
+          ),
+        );
+      },
     );
   }
 }

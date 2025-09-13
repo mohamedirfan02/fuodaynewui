@@ -7,20 +7,20 @@ import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 
 class AtsTotalCountCard extends StatelessWidget {
-  final Color attendancePercentageColor;
-  final Color attendanceIconColor;
-  final String attendanceCount;
-  final IconData attendanceCardIcon;
-  final String attendanceDescription;
+  final Color employeePercentageColor;
+  final Color employeeIconColor;
+  final String employeeCount;
+  final IconData employeeCardIcon;
+  final String employeeDescription;
   final String? growthText; // ✅ Added for growth (+5.1%)
 
   const AtsTotalCountCard({
     super.key,
-    required this.attendanceCount,
-    required this.attendanceCardIcon,
-    required this.attendanceDescription,
-    required this.attendanceIconColor,
-    required this.attendancePercentageColor,
+    required this.employeeCount,
+    required this.employeeCardIcon,
+    required this.employeeDescription,
+    required this.employeeIconColor,
+    required this.employeePercentageColor,
     this.growthText,
   });
 
@@ -58,7 +58,7 @@ class AtsTotalCountCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               KText(
-                text: attendanceCount,
+                text: employeeCount,
                 fontWeight: FontWeight.w700,
                 fontSize: 16.sp,
                 color: AppColors.titleColor,
@@ -69,19 +69,19 @@ class AtsTotalCountCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                   decoration: BoxDecoration(
-                    color: attendancePercentageColor.withOpacity(0.1),
+                    color: employeePercentageColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.arrow_upward, color: attendancePercentageColor, size: 12.sp),
+                      Icon(Icons.arrow_upward, color: employeePercentageColor, size: 12.sp),
                       SizedBox(width: 2.w),
                       Text(
                         growthText!,
                         style: TextStyle(
                           fontSize: 10.sp,
                           fontWeight: FontWeight.w600,
-                          color: attendancePercentageColor,
+                          color: employeePercentageColor,
                         ),
                       ),
                     ],
@@ -94,8 +94,8 @@ class AtsTotalCountCard extends StatelessWidget {
 
           // Description
           KText(
-            text: attendanceDescription,
-            fontWeight: FontWeight.w500,
+            text: employeeDescription,
+            fontWeight: FontWeight.w400,
             fontSize: 10.sp,
             color: AppColors.titleColor,
           ),

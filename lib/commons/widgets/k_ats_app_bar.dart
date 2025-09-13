@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_circular_cache_image.dart';
+import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -36,12 +38,13 @@ class KAtsAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: AppColors.secondaryColor,
       centerTitle: centerTitle,
       elevation: 0,
       title: Column(
-        crossAxisAlignment:
-        centerTitle ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        crossAxisAlignment: centerTitle
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
@@ -68,7 +71,7 @@ class KAtsAppBar extends StatelessWidget implements PreferredSizeWidget {
           onLeadingIconPress();
           HapticFeedback.mediumImpact();
         },
-        icon: Icon(leadingIcon, color: AppColors.secondaryColor),
+        icon: Icon(leadingIcon, color: AppColors.greyColor),
       ),
       actions: [
         // 🔔 Notification Icon (only if provided)
@@ -78,7 +81,12 @@ class KAtsAppBar extends StatelessWidget implements PreferredSizeWidget {
               HapticFeedback.mediumImpact();
               onNotificationPressed?.call();
             },
-            icon: Icon(Icons.notifications, color: AppColors.secondaryColor),
+            icon: SvgPicture.asset(
+              AppAssetsConstants.notificationIcon,
+              height: 20,
+              width: 20,
+              fit: BoxFit.contain,
+            ),
           ),
 
         // 👤 Profile Image (only if provided)
