@@ -92,4 +92,9 @@ class AppRouteConstants {
   // Preview Screen
   static const String imagePreview = "imagePreview";
   static const String pdfPreview = "pdfPreview";
+
+
+  //ATS Drawer Screens
+  static const String trackerScreen = "trackerScreen";
+  static const String candidateScreen = "atsCandidate";
 }

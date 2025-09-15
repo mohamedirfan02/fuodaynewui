@@ -5,6 +5,7 @@ import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/features/approval/presentation/screens/approval_screen.dart';
 import 'package:fuoday/features/ats_candidate/presentation/screens/candidate_screen.dart';
+import 'package:fuoday/features/ats_tracker/presentation/screens/tracker_screen.dart';
 import 'package:fuoday/features/attendance/presentation/screens/attendance_absent_days_details_screen.dart';
 import 'package:fuoday/features/attendance/presentation/screens/attendance_early_arrivals_details_screen.dart';
 import 'package:fuoday/features/attendance/presentation/screens/attendance_late_arrival_details_screen.dart';
@@ -348,6 +349,15 @@ final GoRouter appRouter = GoRouter(
       name: AppRouteConstants.atsCandidate,
       builder: (context, state) {
         return CandidateScreen();
+      },
+    ),
+
+    // Ats Tracker Screen
+    GoRoute(
+      path: "/trackerScreen",
+      name: AppRouteConstants.trackerScreen,
+      builder: (context, state) {
+        return TrackerScreen();
       },
     ),
 

@@ -3,25 +3,26 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
-import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 
 class AtsTotalCountCard extends StatelessWidget {
   final Color employeePercentageColor;
   final Color employeeIconColor;
   final String employeeCount;
-  final IconData employeeCardIcon;
   final String employeeDescription;
-  final String? growthText; // ✅ Added for growth (+5.1%)
+  final String? growthText;
+
+  // ✅ Dynamic icon: can be SVG asset (String) or IconData
+  final dynamic employeeCardIcon;
 
   const AtsTotalCountCard({
     super.key,
     required this.employeeCount,
-    required this.employeeCardIcon,
     required this.employeeDescription,
     required this.employeeIconColor,
     required this.employeePercentageColor,
     this.growthText,
+    this.employeeCardIcon,
   });
 
   @override
@@ -38,17 +39,11 @@ class AtsTotalCountCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Top Icon
+          // ✅ Dynamic Icon
           CircleAvatar(
             radius: 14.r,
             backgroundColor: AppColors.cardBorderColor,
-            child: SvgPicture.asset(
-              AppAssetsConstants.atsUserIcon,
-              width: 16.w,
-              height: 16.w,
-              color: AppColors.titleColor,
-              fit: BoxFit.contain,
-            ),
+            child: _buildIcon(),
           ),
 
           SizedBox(height: 8.h),
@@ -103,4 +98,21 @@ class AtsTotalCountCard extends StatelessWidget {
       ),
     );
   }
+
+  // ✅ Helper to render Icon or SVG
+  Widget _buildIcon() {
+    if (employeeCardIcon is IconData) {
+      return Icon(employeeCardIcon, size: 16.sp, color: AppColors.titleColor);
+    } else if (employeeCardIcon is String) {
+      return SvgPicture.asset(
+        employeeCardIcon,
+        width: 16.w,
+        height: 16.w,
+        color: AppColors.titleColor,
+        fit: BoxFit.contain,
+      );
+    }
+    return Icon(Icons.help_outline, size: 16.sp, color: AppColors.titleColor);
+  }
 }
+

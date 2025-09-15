@@ -89,8 +89,10 @@ class AppRouteConstants {
   // Management Screen
   static const String management = "management";
 
-
+  // ATS Screens
   static const String atsCandidate = "atsCandidate";
+
+  static const String trackerScreen = "trackerScreen";
 
   // Preview Screen
   static const String imagePreview = "imagePreview";

@@ -304,8 +304,11 @@ class MyApp extends StatelessWidget {
                 ? "Fuoday Dev"
                 : "Fuoday",
             theme: ThemeData(
-              textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
+              fontFamily: GoogleFonts.inter().fontFamily,
             ),
+            // theme: ThemeData(
+            //   textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
+            // ),
             routerConfig: appRouter,
             builder: (context, child) {
               return Banner(

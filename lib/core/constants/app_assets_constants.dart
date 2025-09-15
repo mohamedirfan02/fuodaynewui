@@ -43,4 +43,14 @@ class AppAssetsConstants {
 
   static const String aiFitCheckPng = "assets/images/png/buttons.png";
 
+  static const String holdIcon = "assets/icons/hold.svg";
+
+  static const String bookIcon = "assets/icons/book.svg";
+
+  static const String selectedIcon = "assets/icons/selected.svg";
+
+  static const String rejectedIcon = "assets/icons/rejected.svg";
+
+  static const String pecIcon = "assets/icons/pec.svg";
+
 }

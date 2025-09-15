@@ -272,7 +272,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
     // Grid Attendance Data - Updated with dynamic counts
     final List<Map<String, dynamic>> gridAttendanceData = [
       {
-        'icon': Icons.person,
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
         'title': 'Total Opening Position',
         'numberOfCount': "3,540",
         'growth': "+5.1%",
@@ -281,31 +281,31 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
         'title': 'Total Closed Position',
         'numberOfCount': "1,540",
         'growth': "+5.1%",
-        'icon': Icons.person,
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
       },
       {
         'title': 'Total Employee',
         'numberOfCount': "500",
         'growth': "+5.1%",
-        'icon': Icons.person,
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
       },
       {
         'title': 'Shortlisted',
         'numberOfCount': "1,504",
         'growth': "+5.1%",
-        'icon': Icons.person,
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
       },
       {
         'title': 'On Hold',
         'numberOfCount': "562",
         'growth': "+5.1%",
-        'icon': Icons.person,
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
       },
       {
         'title': 'Onboarding',
         'numberOfCount': "850",
         'growth': "+5.1%",
-        'icon': Icons.person,
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
       },
     ];
 
@@ -335,6 +335,17 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // Home Page Title
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: KText(
+                    text: "Welcome To Applicant Tracking System :",
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.sp,
+                    color: AppColors.titleColor,
+                  ),
+                ),
+                SizedBox(height: 20.h),
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

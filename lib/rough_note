@@ -31,3 +31,74 @@
                           ],
                         ),
                       ),
+
+                      // Logout
+                                      KAtsDrawerListTile(
+                                        drawerTitle: "Logout",
+                                        drawerListTileOnTap: () {
+                                          _showLogoutDialog(context);
+                                        },
+                                        drawerLeadingIcon: Icons.logout,
+                                        isSelected: false, // Logout is never selected
+                                      ),
+  // Helper method to handle navigation with duplicate route prevention
+  void _navigateToRoute(BuildContext context, String routeName) {
+    Navigator.pop(context); // Close drawer first
+
+    // Check if we're already on the target route
+    if (currentRoute != routeName) {
+      GoRouter.of(context).pushNamed(routeName);
+    }
+    // If we're already on the same route, just close the drawer (no navigation)
+  }
+
+  Widget _buildDivider() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 40.w),
+      child: Divider(color: AppColors.subTitleColor.withOpacity(0.2)),
+    );
+  }
+                        void _showLogoutDialog(BuildContext context) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Logout"),
+                                content: Text("Are you sure you want to logout?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context); // Close dialog
+                                    },
+                                    child: Text("Cancel"),
+                                  ),
+
+                                  TextButton(
+                                    onPressed: () async {
+                                      final logoutProvider = context.employeeAuthLogoutProviderRead;
+
+                                      await logoutProvider.logout();
+
+                                      // Only navigate if logout was successful (no error)
+                                      if (logoutProvider.error == null) {
+                                        GoRouter.of(
+                                          context,
+                                        ).pushReplacementNamed(AppRouteConstants.login);
+
+                                        KSnackBar.success(context, 'Logout Successfully');
+                                      } else {
+                                        KSnackBar.failure(
+                                          context,
+                                          'Logout failed: ${logoutProvider.error}',
+                                        );
+                                      }
+                                    },
+                                    child: context.employeeAuthLogOutProviderWatch.isLoading
+                                        ? const CircularProgressIndicator()
+                                        : const Text("Logout"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }

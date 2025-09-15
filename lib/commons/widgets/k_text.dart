@@ -9,6 +9,9 @@ class KText extends StatelessWidget {
   final Color? color;
   final bool isUnderline;
   final Color? underlineColor;
+  // 🔥 Add new optional parameters
+  final int? maxLines;
+  final TextOverflow? overflow;
 
   const KText({
     super.key,
@@ -19,6 +22,8 @@ class KText extends StatelessWidget {
     this.color,
     this.isUnderline = false,
     this.underlineColor,
+    this.maxLines,         // ✅ not required
+    this.overflow,         // ✅ not required
   });
 
   @override
@@ -26,14 +31,23 @@ class KText extends StatelessWidget {
     return Text(
       text,
       textAlign: textAlign,
-
-      style: GoogleFonts.sora(
+      maxLines: maxLines,   // ✅ applied
+      overflow: overflow,   // ✅ applied
+      style: GoogleFonts.inter(
         fontWeight: fontWeight,
         fontSize: fontSize,
         color: color,
         decoration: isUnderline ? TextDecoration.underline : null,
         decorationColor: underlineColor,
       ),
+
+      // style: GoogleFonts.sora(
+      //   fontWeight: fontWeight,
+      //   fontSize: fontSize,
+      //   color: color,
+      //   decoration: isUnderline ? TextDecoration.underline : null,
+      //   decorationColor: underlineColor,
+      // ),
     );
   }
 }

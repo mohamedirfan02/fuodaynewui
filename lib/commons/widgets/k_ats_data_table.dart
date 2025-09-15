@@ -6,11 +6,34 @@ import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 
+// Action button configuration class
+class ActionButton {
+  final String icon;
+  final Color backgroundColor;
+  final VoidCallback onPressed;
+  final String? tooltip;
+  final double? width;
+  final double? height;
+
+  ActionButton({
+    required this.icon,
+    required this.backgroundColor,
+    required this.onPressed,
+    this.tooltip,
+    this.width,
+    this.height,
+  });
+}
+
 class KAtsDataTable extends StatelessWidget {
-  final List<Widget> columnHeaders; // ✅ now accepts widgets
+  final List<Widget> columnHeaders;
   final List<Map<String, dynamic>> rowData;
   final double minWidth;
   final Color headerColor;
+  final List<ActionButton>? defaultActions; // Default actions for all rows
+  final bool showActionsColumn; // Whether to show actions column
+  final bool showStatusColumn; // Whether to show status column
+
 
   const KAtsDataTable({
     super.key,
@@ -18,6 +41,10 @@ class KAtsDataTable extends StatelessWidget {
     required this.rowData,
     this.minWidth = 1000,
     this.headerColor = AppColors.atsHomepageBg,
+    this.defaultActions,
+    this.showActionsColumn = true,
+    this.showStatusColumn = true, // default true
+
   });
 
   @override
@@ -27,24 +54,19 @@ class KAtsDataTable extends StatelessWidget {
       horizontalMargin: 12,
       minWidth: minWidth,
       headingRowColor: MaterialStateProperty.all(headerColor),
-
-      /// 👇 increase row height here
       dataRowHeight: 60,
-      // maximum height
-      /// ✅ Customizable headers
+
       columns: columnHeaders
           .map((headerWidget) => DataColumn(label: headerWidget))
           .toList(),
 
-      /// ✅ Custom rows
       rows: rowData.map((row) {
         return DataRow(
           cells: [
             // S.No
-            // Inside your KAtsDataTable build row:
             DataCell(
               SizedBox(
-                width: 50.w, // ✅ fix width so no extra space
+                width: 50.w,
                 child: Center(
                   child: KText(
                     text: row["sno"].toString(),
@@ -67,7 +89,7 @@ class KAtsDataTable extends StatelessWidget {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        if (row["avatar"] != null) // show avatar if exists
+                        if (row["avatar"] != null)
                           Container(
                             width: 24.w,
                             height: 24.w,
@@ -96,14 +118,14 @@ class KAtsDataTable extends StatelessWidget {
                           ),
                         if (row["avatar"] != null) SizedBox(width: 16.w),
 
-                        // Name
-                        Expanded(
+                        Flexible(
                           child: KText(
                             text: row["name"] ?? "-",
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: AppColors.titleColor,
-                            // overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -111,7 +133,6 @@ class KAtsDataTable extends StatelessWidget {
 
                     SizedBox(height: 2.h),
 
-                    // Email below, indented if avatar exists
                     if (row["email"] != null &&
                         row["email"].toString().isNotEmpty)
                       Padding(
@@ -123,7 +144,6 @@ class KAtsDataTable extends StatelessWidget {
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w400,
                           color: AppColors.greyColor,
-                          //  overflow: TextOverflow.ellipsis,
                         ),
                       ),
                   ],
@@ -131,7 +151,7 @@ class KAtsDataTable extends StatelessWidget {
               ),
             ),
 
-            // Phone
+            // Phone/Interview Date
             DataCell(
               SizedBox(
                 width: 120.w,
@@ -146,41 +166,48 @@ class KAtsDataTable extends StatelessWidget {
               ),
             ),
 
-            // CV + Download
+            // CV + Download/Attachment
             DataCell(
               SizedBox(
                 width: 160.w,
-
-                child:
-                    (row["colum4"] != null &&
-                        row["colum4"].toString().isNotEmpty)
+                child: (row["colum4"] != null && row["colum4"].toString().isNotEmpty)
                     ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          KText(
-                              text: row["colum4"],
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.titleColor,
-                              //overflow: TextOverflow.ellipsis,
-                          ),
-                          Icon(
-                            Icons.download_outlined,
-                            size: 16.sp,
-                            color: AppColors.greyColor,
-                          ),
-                        ],
-                      )
-                    : KText(
-                        text: "-",
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: KText(
+                        text: row["colum4"],
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.greyColor,
+                        color: AppColors.titleColor,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
+                    ),
+
+                    // 🔥 Show icon only if explicitly enabled
+                    if (row["showDownload"] == true)
+                      Padding(
+                        padding: EdgeInsets.only(left: 6.w),
+                        child: Icon(
+                          Icons.download_outlined,
+                          size: 16.sp,
+                          color: AppColors.greyColor,
+                        ),
+                      ),
+                  ],
+                )
+                    : KText(
+                  text: "-",
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.greyColor,
+                ),
               ),
             ),
 
-            // Created Date
+
+            // Experience
             DataCell(
               SizedBox(
                 width: 100.w,
@@ -195,10 +222,10 @@ class KAtsDataTable extends StatelessWidget {
               ),
             ),
 
-            // Stage Dropdown
+            // Role
             DataCell(
               SizedBox(
-                width: 100.w,
+                width: 160.w,
                 child: Center(
                   child: KText(
                     text: row["colum6"] ?? "-",
@@ -210,99 +237,140 @@ class KAtsDataTable extends StatelessWidget {
               ),
             ),
 
-            DataCell(
-              Center(
-                child: SizedBox(
-                  child: Container(
-                    color: Colors.green.withOpacity(0.1),
-                    child: KText(
-                      text: row["colum7"] ?? "-",
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.checkInColor,
+            // Status
+            // Status (optional column)
+            if (showStatusColumn)
+              DataCell(
+                Center(
+                  child: SizedBox(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 4.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: _getStatusColor(row["colum7"]).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                      child: KText(
+                        text: row["colum7"] ?? "-",
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w500,
+                        color: _getStatusColor(row["colum7"]),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-
-            // Action buttons
-            DataCell(
-              SizedBox(
-                width: 110.w, // make sure this fits within your cell
-                child: FittedBox(
-                  // ensures content scales down if needed
-                  fit: BoxFit.scaleDown,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Edit button
-                      Container(
-                        width: 30.w,
-                        height: 30.h,
-                        decoration: BoxDecoration(
-                          color: AppColors.checkInColor,
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: SvgPicture.asset(
-                            AppAssetsConstants.eyeIcon,
-                            height: 13.h,
-                            width: 11.67.w,
-                            color: Colors.white,
-                          ),
-                          padding: EdgeInsets.zero,
-                        ),
-                      ),
-                      SizedBox(width: 8.w),
-                      // Another action button
-                      Container(
-                        width: 30.w,
-                        height: 30.h,
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: SvgPicture.asset(
-                            AppAssetsConstants.editIcon,
-                            height: 13.h,
-                            width: 11.67.w,
-                            color: Colors.white,
-                          ),
-                          padding: EdgeInsets.zero,
-                        ),
-                      ),
-                      SizedBox(width: 8.w),
-                      // Delete button
-                      Container(
-                        width: 30.w,
-                        height: 30.h,
-                        decoration: BoxDecoration(
-                          color: AppColors.softRed,
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: SvgPicture.asset(
-                            AppAssetsConstants.deleteIcon,
-                            height: 12.07.h,
-                            width: 11.66.w,
-                            color: Colors.white,
-                          ),
-                          padding: EdgeInsets.zero,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // Action buttons - Now configurable
+            if (showActionsColumn)
+              DataCell(SizedBox(width: 150.w, child: _buildActionButtons(row))),
           ],
         );
       }).toList(),
     );
+  }
+
+  // Helper method to get status color
+  Color _getStatusColor(String? status) {
+    if (status == null) return AppColors.greyColor;
+
+    switch (status.toLowerCase()) {
+      case 'selected':
+        return AppColors.checkInColor;
+      case 'rejected':
+        return AppColors.softRed;
+      case 'on hold':
+        return Colors.orange;
+      case 'in progress':
+        return Colors.blue;
+      case 'hr round':
+        return Colors.purple;
+      default:
+        if (status.contains('%')) {
+          return Colors.amber;
+        }
+        return AppColors.checkInColor;
+    }
+  }
+
+  // Build action buttons based on row data or default actions
+  Widget _buildActionButtons(Map<String, dynamic> row) {
+    List<ActionButton> actions = [];
+
+    // Check if row has custom actions
+    if (row["actions"] != null && row["actions"] is List<ActionButton>) {
+      actions = row["actions"];
+    } else if (defaultActions != null) {
+      actions = defaultActions!;
+    } else {
+      // Default actions if none specified
+      actions = [
+        ActionButton(
+          icon: AppAssetsConstants.eyeIcon,
+          backgroundColor: AppColors.checkInColor,
+          onPressed: () => _onViewPressed(row),
+          tooltip: "View",
+        ),
+        ActionButton(
+          icon: AppAssetsConstants.editIcon,
+          backgroundColor: AppColors.primaryColor,
+          onPressed: () => _onEditPressed(row),
+          tooltip: "Edit",
+        ),
+        ActionButton(
+          icon: AppAssetsConstants.deleteIcon,
+          backgroundColor: AppColors.softRed,
+          onPressed: () => _onDeletePressed(row),
+          tooltip: "Delete",
+        ),
+      ];
+    }
+
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: actions.map((action) {
+          return Padding(
+            padding: EdgeInsets.only(right: actions.last == action ? 0 : 8.w),
+            child: Tooltip(
+              message: action.tooltip ?? "",
+              child: Container(
+                width: action.width ?? 30.w,
+                height: action.height ?? 30.h,
+                decoration: BoxDecoration(
+                  color: action.backgroundColor,
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: IconButton(
+                  onPressed: action.onPressed,
+                  icon: SvgPicture.asset(
+                    action.icon,
+                    height: 13.h,
+                    width: 11.67.w,
+                    color: Colors.white,
+                  ),
+                  padding: EdgeInsets.zero,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  // Default action handlers (can be overridden)
+  void _onViewPressed(Map<String, dynamic> row) {
+    print("View pressed for: ${row["name"]}");
+  }
+
+  void _onEditPressed(Map<String, dynamic> row) {
+    print("Edit pressed for: ${row["name"]}");
+  }
+
+  void _onDeletePressed(Map<String, dynamic> row) {
+    print("Delete pressed for: ${row["name"]}");
   }
 }

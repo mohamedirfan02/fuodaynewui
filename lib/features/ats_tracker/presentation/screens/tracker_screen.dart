@@ -4,38 +4,27 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_ats_data_table.dart';
 import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
 import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
-import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
-import 'package:fuoday/core/extensions/provider_extension.dart';
-import 'package:fuoday/core/helper/app_logger_helper.dart';
-import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
-import 'package:fuoday/features/ats_candidate/widgets/k_ats_file_upload_btn.dart';
-import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
-import 'package:go_router/go_router.dart';
 
-class CandidateScreen extends StatefulWidget {
-  const CandidateScreen({super.key});
+class TrackerScreen extends StatefulWidget {
+  const TrackerScreen({super.key});
 
   @override
-  State<CandidateScreen> createState() => _CandidateScreenState();
+  State<TrackerScreen> createState() => _TrackerScreenState();
 }
 
-class _CandidateScreenState extends State<CandidateScreen> {
-  final TextEditingController jobDescriptionController =
-      TextEditingController();
+class _TrackerScreenState extends State<TrackerScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
-  final String currentRoute =
-      AppRouteConstants.candidateScreen; // Replace with actual current route
 
   // Pagination state
   int currentPage = 1;
@@ -48,182 +37,122 @@ class _CandidateScreenState extends State<CandidateScreen> {
     {
       "sno": 1,
       "name": "Aarav Sharma",
-      "colum3": "15-09-2025",
-      "colum4": "aarav_cv.pdf",
-      "showDownload": true,
-      "colum5": "Fresher",
-      "colum6": "Flutter Developer",
-      "colum7": "Selected",
-      "avatarColor": Colors.blue,
-      "initials": "AS",
+      "colum3": "2 yrs", // Experience
+      "colum4": "Mumbai, Maharashtra", // Location
+      "colum5": "Flutter Developer", // Role
+      "colum6": "85%", // ATS Score
     },
     {
       "sno": 2,
       "name": "Priya Verma",
-      "colum3": "16-09-2025",
-      "colum4": "priya_cv.pdf",
-      "colum5": "2 yrs",
-      "colum6": "Backend Developer",
-      "colum7": "On Hold",
-      "avatarColor": Colors.purple,
-      "initials": "PV",
-      "showDownload": true,
+      "colum3": "3 yrs",
+      "colum4": "Delhi, NCR",
+      "colum5": "Backend Developer",
+      "colum6": "78%",
     },
     {
       "sno": 3,
       "name": "Rohan Gupta",
-      "colum3": "17-09-2025",
-      "colum4": "rohan_cv.pdf",
-      "colum5": "1 yr",
-      "colum6": "UI/UX Designer",
-      "colum7": "Rejected",
-      "avatarColor": Colors.orange,
-      "initials": "RG",
-      "showDownload": true,
+      "colum3": "1.5 yrs",
+      "colum4": "Pune, Maharashtra",
+      "colum5": "UI/UX Designer",
+      "colum6": "65%",
     },
     {
       "sno": 4,
       "name": "Neha Singh",
-      "colum3": "18-09-2025",
-      "colum4": "neha_cv.pdf",
-      "colum5": "3 yrs",
-      "colum6": "Full Stack Developer",
-      "colum7": "In Progress",
-      "avatarColor": Colors.green,
-      "initials": "NS",
-      "showDownload": true,
+      "colum3": "4 yrs",
+      "colum4": "Bangalore, Karnataka",
+      "colum5": "Full Stack Developer",
+      "colum6": "92%",
     },
     {
       "sno": 5,
       "name": "Arjun Mehta",
-      "colum3": "19-09-2025",
-      "colum4": "arjun_cv.pdf",
-      "colum5": "Fresher",
-      "colum6": "QA Engineer",
-      "colum7": "L1 60%",
-      "avatarColor": Colors.red,
-      "initials": "AM",
-      "showDownload": true,
+      "colum3": "Fresher",
+      "colum4": "Ahmedabad, Gujarat",
+      "colum5": "QA Engineer",
+      "colum6": "60%",
     },
     {
       "sno": 6,
       "name": "Simran Kaur",
-      "colum3": "20-09-2025",
-      "colum4": "simran_cv.pdf",
-      "colum5": "4 yrs",
-      "colum6": "Project Manager",
-      "colum7": "HR Round",
-      "avatarColor": Colors.teal,
-      "initials": "SK",
-      "showDownload": true,
+      "colum3": "5 yrs",
+      "colum4": "Chennai, Tamil Nadu",
+      "colum5": "Project Manager",
+      "colum6": "88%",
     },
     {
       "sno": 7,
       "name": "Vikram Rao",
-      "colum3": "21-09-2025",
-      "colum4": "vikram_cv.pdf",
-      "colum5": "2 yrs",
-      "colum6": "Data Analyst",
-      "colum7": "L2 70%",
-      "avatarColor": Colors.cyan,
-      "initials": "VR",
-      "showDownload": true,
+      "colum3": "2.5 yrs",
+      "colum4": "Hyderabad, Telangana",
+      "colum5": "Data Analyst",
+      "colum6": "73%",
     },
     {
       "sno": 8,
       "name": "Ananya Nair",
-      "colum3": "22-09-2025",
-      "colum4": "ananya_cv.pdf",
-      "colum5": "Fresher",
-      "colum6": "AI Engineer",
-      "colum7": "Selected",
-      "avatarColor": Colors.indigo,
-      "initials": "AN",
-      "showDownload": true,
+      "colum3": "1 yr",
+      "colum4": "Kochi, Kerala",
+      "colum5": "AI Engineer",
+      "colum6": "95%",
     },
     {
       "sno": 9,
       "name": "Karan Patel",
-      "colum3": "23-09-2025",
-      "colum4": "karan_cv.pdf",
-      "colum5": "5 yrs",
-      "colum6": "DevOps Engineer",
-      "colum7": "L3 95%",
-      "avatarColor": Colors.deepOrange,
-      "initials": "KP",
-      "showDownload": true,
+      "colum3": "6 yrs",
+      "colum4": "Surat, Gujarat",
+      "colum5": "DevOps Engineer",
+      "colum6": "91%",
     },
     {
       "sno": 10,
       "name": "Meera Iyer",
-      "colum3": "24-09-2025",
-      "colum4": "meera_cv.pdf",
-      "colum5": "1 yr",
-      "colum6": "Business Analyst",
-      "colum7": "On Hold",
-      "avatarColor": Colors.pink,
-      "initials": "MI",
-      "showDownload": true,
+      "colum3": "3.5 yrs",
+      "colum4": "Coimbatore, Tamil Nadu",
+      "colum5": "Business Analyst",
+      "colum6": "67%",
     },
     {
       "sno": 11,
       "name": "Rahul Kumar",
-      "colum3": "25-09-2025",
-      "colum4": "rahul_cv.pdf",
-      "colum5": "3 yrs",
-      "colum6": "Mobile Developer",
-      "colum7": "Selected",
-      "avatarColor": Colors.brown,
-      "initials": "RK",
-      "showDownload": true,
+      "colum3": "4.5 yrs",
+      "colum4": "Kolkata, West Bengal",
+      "colum5": "Mobile Developer",
+      "colum6": "84%",
     },
     {
       "sno": 12,
       "name": "Sneha Reddy",
-      "colum3": "26-09-2025",
-      "colum4": "sneha_cv.pdf",
-      "colum5": "2 yrs",
-      "colum6": "Frontend Developer",
-      "colum7": "In Progress",
-      "avatarColor": Colors.amber,
-      "initials": "SR",
-      "showDownload": true,
+      "colum3": "2 yrs",
+      "colum4": "Visakhapatnam, Andhra Pradesh",
+      "colum5": "Frontend Developer",
+      "colum6": "79%",
     },
     {
       "sno": 13,
       "name": "Amit Agarwal",
-      "colum3": "27-09-2025",
-      "colum4": "amit_cv.pdf",
-      "colum5": "4 yrs",
-      "colum6": "Tech Lead",
-      "colum7": "HR Round",
-      "avatarColor": Colors.lightBlue,
-      "initials": "AA",
-      "showDownload": true,
+      "colum3": "7 yrs",
+      "colum4": "Jaipur, Rajasthan",
+      "colum5": "Tech Lead",
+      "colum6": "89%",
     },
     {
       "sno": 14,
       "name": "Pooja Jain",
-      "colum3": "28-09-2025",
-      "colum4": "pooja_cv.pdf",
-      "colum5": "1 yr",
-      "colum6": "Content Writer",
-      "colum7": "On Hold",
-      "avatarColor": Colors.deepPurple,
-      "initials": "PJ",
-      "showDownload": true,
+      "colum3": "1.5 yrs",
+      "colum4": "Indore, Madhya Pradesh",
+      "colum5": "Content Writer",
+      "colum6": "55%",
     },
     {
       "sno": 15,
       "name": "Rajesh Mishra",
-      "colum3": "29-09-2025",
-      "colum4": "rajesh_cv.pdf",
-      "colum5": "6 yrs",
-      "colum6": "System Admin",
-      "colum7": "Rejected",
-      "avatarColor": Colors.lime,
-      "initials": "RM",
-      "showDownload": true,
+      "colum3": "8 yrs",
+      "colum4": "Lucknow, Uttar Pradesh",
+      "colum5": "System Admin",
+      "colum6": "71%",
     },
   ];
 
@@ -257,18 +186,13 @@ class _CandidateScreenState extends State<CandidateScreen> {
   }
 
   @override
-  void dispose() {
-    jobDescriptionController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
-    final name = employeeDetails?['name'] ?? "No Name";
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
+    final name = employeeDetails?['name'] ?? "No Name";
     final email = employeeDetails?['email'] ?? "No Email";
+    final String currentRoute = AppRouteConstants.trackerScreen; // Replace with actual current route
 
     final headers = [
       SizedBox(
@@ -292,24 +216,6 @@ class _CandidateScreenState extends State<CandidateScreen> {
       SizedBox(
         width: 120.w,
         child: KText(
-          text: "Interview Date",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 160.w,
-        child: KText(
-          text: "Attachment",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 100.w,
-        child: KText(
           text: "Experience",
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
@@ -319,6 +225,15 @@ class _CandidateScreenState extends State<CandidateScreen> {
       SizedBox(
         width: 160.w,
         child: KText(
+          text: "Location",
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
+        ),
+      ),
+      SizedBox(
+        width: 100.w,
+        child: KText(
           text: "Role",
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
@@ -326,49 +241,55 @@ class _CandidateScreenState extends State<CandidateScreen> {
         ),
       ),
       SizedBox(
-        width: 120.w,
+        width: 160.w,
         child: KText(
-          text: "Status",
+          text: "ATS Score",
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
           color: AppColors.greyColor,
         ),
       ),
-      SizedBox(
-        width: 150.w,
-        child: KText(
-          text: "Action",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
+
+      //   if (showStatusColumn) // ✅ conditional
+      //      SizedBox(
+      //      width: 120.w,
+      //      child: KText(
+      //        text: "Status",
+      //        fontSize: 12.sp,
+      //        fontWeight: FontWeight.w500,
+      //        color: AppColors.greyColor,
+      //      ),
+      //    ),
     ];
 
+    // Grid Attendance Data - Updated with dynamic counts
     final List<Map<String, dynamic>> gridAttendanceData = [
       {
-        'icon': AppAssetsConstants.bookIcon, // ✅ SVG path
-        'title': 'Total Applied',
-        'numberOfCount': "3,450",
+        'icon': AppAssetsConstants.downloadIcon, // ✅ SVG path
+        'title': 'Resume Downloaded',
+        'numberOfCount': "13,540",
         'growth': "+5.1%",
       },
       {
-        'title': 'Shortlisted Candidates',
-        'numberOfCount': "1,234",
+        'title': 'Above 80% Score',
+        'numberOfCount': "708",
         'growth': "+5.1%",
-        'icon': AppAssetsConstants.selectedIcon, // ✅ SVG path
+        'icon': AppAssetsConstants.pecIcon, // ✅ SVG path
+
       },
       {
-        'title': 'Hold Candidates',
-        'numberOfCount': "588",
+        'title': '50% - 80% Score',
+        'numberOfCount': "958",
         'growth': "+5.1%",
-        'icon': AppAssetsConstants.holdIcon, // ✅ SVG path
+        'icon': AppAssetsConstants.pecIcon, // ✅ SVG path
+
       },
       {
-        'title': 'Rejected Candidates',
-        'numberOfCount': "98",
+        'title': '40% Score',
+        'numberOfCount': "1,504",
         'growth': "+5.1%",
-        'icon': AppAssetsConstants.rejectedIcon, // ✅ SVG path
+        'icon': AppAssetsConstants.pecIcon, // ✅ SVG path
+
       },
     ];
 
@@ -383,8 +304,8 @@ class _CandidateScreenState extends State<CandidateScreen> {
         onNotificationPressed: () {},
       ),
       drawer: KAtsDrawer(
+       userName: name,
         userEmail: email,
-        userName: name,
         profileImageUrl: profilePhoto,
         currentRoute: currentRoute, // This will highlight the current screen
       ),
@@ -402,7 +323,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: KText(
-                    text: "Interview Candidates Data's:",
+                    text: "Tracker Your Candidates",
                     fontWeight: FontWeight.w600,
                     fontSize: 16.sp,
                     color: AppColors.titleColor,
@@ -431,216 +352,6 @@ class _CandidateScreenState extends State<CandidateScreen> {
                     );
                   },
                 ),
-
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: AppColors.recruiterBorderGradient,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(7.69.r),
-                  ),
-                  padding: EdgeInsets.all(2.w), // border thickness
-                  child: Container(
-                    padding: EdgeInsets.all(18.47.w),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondaryColor,
-                      borderRadius: BorderRadius.circular(6.5.r),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /// 🔹 Header Row
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              AppAssetsConstants.starIcon,
-                              height: 32.h,
-                              width: 32.w,
-                              fit: BoxFit.contain,
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  KText(
-                                    text: "GenAI Integration",
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16.sp,
-                                    color: AppColors.titleColor,
-                                  ),
-                                  KText(
-                                    text: "Upload the Resume and check",
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12.sp,
-                                    color: AppColors.greyColor,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                KSnackBar.success(context, "Info tapped");
-                              },
-                              icon: Icon(
-                                Icons.info_outline,
-                                size: 20.sp,
-                                color: AppColors.greyColor,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 16.h),
-
-                        /// 🔹 Upload Picker
-                        KAtsUploadPickerTile(
-                          showOnlyView: context.filePickerProviderWatch
-                              .isPicked("resume"),
-                          onViewTap: () {
-                            final pickedFile = context.filePickerProviderRead
-                                .getFile("resume");
-                            if (pickedFile == null) return;
-
-                            final filePath = pickedFile.path;
-                            final fileName = pickedFile.name.toLowerCase();
-
-                            if (fileName.endsWith('.pdf')) {
-                              GoRouter.of(context).pushNamed(
-                                AppRouteConstants.pdfPreview,
-                                extra: FilePreviewData(
-                                  filePath: filePath!,
-                                  fileName: fileName,
-                                ),
-                              );
-                            } else if (fileName.endsWith('.png') ||
-                                fileName.endsWith('.jpg') ||
-                                fileName.endsWith('.jpeg') ||
-                                fileName.endsWith('.webp')) {
-                              GoRouter.of(context).pushNamed(
-                                AppRouteConstants.imagePreview,
-                                extra: FilePreviewData(
-                                  filePath: filePath!,
-                                  fileName: fileName,
-                                ),
-                              );
-                            } else if (fileName.endsWith('.doc') ||
-                                fileName.endsWith('.docx')) {
-                              KSnackBar.success(
-                                context,
-                                "Word file selected: ${pickedFile.name}",
-                              );
-                            } else {
-                              KSnackBar.failure(
-                                context,
-                                "Unsupported file type",
-                              );
-                            }
-                          },
-                          showCancel: context.filePickerProviderWatch.isPicked(
-                            "resume",
-                          ),
-                          onCancelTap: () {
-                            context.filePickerProviderRead.removeFile("resume");
-                            KSnackBar.success(
-                              context,
-                              "File removed successfully",
-                            );
-                          },
-                          uploadOnTap: () async {
-                            final key = "resume";
-                            final filePicker = context.filePickerProviderRead;
-                            await filePicker.pickFile(key);
-
-                            final pickedFile = filePicker.getFile(key);
-                            if (filePicker.isPicked(key)) {
-                              AppLoggerHelper.logInfo(
-                                'Picked file: ${pickedFile!.name}',
-                              );
-                              KSnackBar.success(
-                                context,
-                                'Picked file: ${pickedFile.name}',
-                              );
-                            } else {
-                              AppLoggerHelper.logError('No file selected.');
-                              KSnackBar.failure(context, 'No file selected.');
-                            }
-                          },
-                          uploadPickerTitle: "",
-                          uploadPickerIcon:
-                              context.filePickerProviderWatch.isPicked("resume")
-                              ? Icons.check_circle
-                              : Icons.upload,
-                          description:
-                              context.filePickerProviderWatch.getFile(
-                                    "resume",
-                                  ) !=
-                                  null
-                              ? "Selected File: ${context.filePickerProviderWatch.getFile("resume")!.name}"
-                              : "Browse file to upload\nSupports .pdf, .doc, .docx",
-                        ),
-
-                        SizedBox(height: 16.h),
-
-                        /// 🔹 Job Description label
-                        Row(
-                          children: [
-                            KText(
-                              text: "Job Description",
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14.sp,
-                              color: AppColors.titleColor,
-                            ),
-                            KText(
-                              text: " *",
-                              color: Colors.red,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            SizedBox(width: 4.w),
-                            Icon(
-                              Icons.info_outline,
-                              size: 16.sp,
-                              color: AppColors.greyColor,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8.h),
-
-                        /// 🔹 Input Field
-                        KAuthTextFormField(
-                          controller: jobDescriptionController,
-                          hintText: "Enter Job Description",
-                          keyboardType: TextInputType.text,
-                        ),
-
-                        SizedBox(height: 20.h),
-
-                        Align(
-                          alignment: Alignment.center,
-                          child: GestureDetector(
-                            onTap: () {
-                              KSnackBar.success(
-                                context,
-                                "Fit check with AI tapped",
-                              );
-                            },
-                            child: Image.asset(
-                              AppAssetsConstants.aiFitCheckPng,
-                              height: 90.h,
-                              width: 200.w,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
                 SizedBox(height: 14.h),
                 Container(
                   padding: EdgeInsets.all(18.47.w),
@@ -698,7 +409,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
                           // Export file
                           Expanded(
                             child: KAtsGlowButton(
-                              text: "Candidates",
+                              text: "Interview",
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
                               icon: SvgPicture.asset(
@@ -720,12 +431,11 @@ class _CandidateScreenState extends State<CandidateScreen> {
                       // Data Table with paginated data
                       SizedBox(
                         height: 330.h,
-                        width: 1445.w, // 👈 Figma width (if you want it strict)
                         child: KAtsDataTable(
                           columnHeaders: headers,
                           rowData: paginatedData,
-                          minWidth: 1445
-                              .w, // 👈 match with figma width// Using paginated data
+                          showActionsColumn: false,
+                          showStatusColumn: false,
                         ),
                       ),
 
