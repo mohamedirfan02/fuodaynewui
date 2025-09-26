@@ -46,6 +46,10 @@ class AppAssetsConstants {
 
   static const String pecIcon = "assets/icons/pec.svg";
 
+  static const String atsFuoDayLogo = "assets/images/png/ats-fuoday-logo.png";
+
+  static const String atsFuoDayLogoSvg = "assets/images/svg/ats-fuoday-logo.svg";
+
 
 
 }

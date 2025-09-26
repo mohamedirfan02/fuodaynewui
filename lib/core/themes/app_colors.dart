@@ -92,6 +92,9 @@ class AppColors {
   static const Color authUnderlineBorderColor = Color(0xFFC1B1B1);
   static const Color softRed = Color(0xFFE03137);
 
+  // ats drawer selected color
+  static const Color softBlue = Color(0xFF3FA2F6);
+
 
   // Text Btn Color
   static const Color textBtnColor = Color(0xFF3342FD);

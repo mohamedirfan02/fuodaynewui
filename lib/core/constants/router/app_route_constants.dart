@@ -92,7 +92,11 @@ class AppRouteConstants {
   // ATS Screens
   static const String atsCandidate = "atsCandidate";
 
-  static const String trackerScreen = "trackerScreen";
+  static const String interviewScreen = "interviewScreen";
+
+  static const String atsTrackerScreen = "atsTrackerScreen";
+
+  static const String hiringScreen = "hiringScreen";
 
   // Preview Screen
   static const String imagePreview = "imagePreview";

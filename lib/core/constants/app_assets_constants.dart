@@ -32,6 +32,8 @@ class AppAssetsConstants {
   static const String eyeIcon = "assets/icons/eye.svg";
 
   static const String drawerIcon = "assets/icons/drawer.svg";
+  static const String noteIcon = "assets/icons/note.svg";
+  static const String pointIcon = "assets/icons/point.svg";
 
   static const String notificationIcon = "assets/icons/notification.svg";
 
@@ -52,5 +54,11 @@ class AppAssetsConstants {
   static const String rejectedIcon = "assets/icons/rejected.svg";
 
   static const String pecIcon = "assets/icons/pec.svg";
+
+
+  static const String atsFuoDayLogo = "assets/images/png/ats-fuoday-logo.png";
+
+  static const String atsFuoDayLogoSvg = "assets/images/svg/ats-fuoday-logo.svg";
+
 
 }

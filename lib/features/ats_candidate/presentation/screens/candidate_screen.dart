@@ -402,10 +402,18 @@ class _CandidateScreenState extends State<CandidateScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: KText(
-                    text: "Interview Candidates Data's:",
+                    text: "Candidates",
                     fontWeight: FontWeight.w600,
                     fontSize: 16.sp,
                     color: AppColors.titleColor,
+                  ),
+                ),  Align(
+                  alignment: Alignment.centerLeft,
+                  child: KText(
+                    text: "Manage your Candidates",
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.sp,
+                    color: AppColors.greyColor,
                   ),
                 ),
                 SizedBox(height: 20.h),

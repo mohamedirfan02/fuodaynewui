@@ -587,7 +587,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                   context,
                                                 ).pushReplacementNamed(
                                                   AppRouteConstants
-                                                      .recruiterBottomNav,
+                                                      .homeRecruiter,
                                                 );
                                               } else {
                                                 AppLoggerHelper.logError(

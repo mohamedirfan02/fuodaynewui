@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fuoday/commons/widgets/k_circular_cache_image.dart';
 import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/core/constants/router/app_route_constants.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
 import 'package:go_router/go_router.dart';
 import 'k_ats_drawer_list_tile.dart';
 
@@ -14,14 +14,14 @@ class KAtsDrawer extends StatelessWidget {
   final String? userName;
   final String? userEmail;
   final String? profileImageUrl;
-  final String? currentRoute; // Add this parameter to track current route
+  final String? currentRoute;
 
   const KAtsDrawer({
     super.key,
     this.userName,
     this.userEmail,
     this.profileImageUrl,
-    this.currentRoute, // Add this to constructor
+    this.currentRoute,
   });
 
   @override
@@ -35,135 +35,124 @@ class KAtsDrawer extends StatelessWidget {
       backgroundColor: AppColors.secondaryColor,
       child: Column(
         children: [
-          // Profile Header
-          UserAccountsDrawerHeader(
-            decoration: BoxDecoration(color: AppColors.primaryColor),
-            accountName: KText(
-              text: userName ?? "No name",
-              color: AppColors.secondaryColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 14.sp,
+          // Logo Header
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.only(
+              top: 30.5.h,
+              left: 2.03.w,
+              right: 20.w,
+              bottom: 17.5.h, // 10.5 + 35 (logo height) + 7 (gap) - creating proper spacing
             ),
-            accountEmail: KText(
-              text: userEmail ?? "No email",
+            decoration: BoxDecoration(
               color: AppColors.secondaryColor,
-              fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
+              border: Border(
+                bottom: BorderSide(
+                  color: AppColors.subTitleColor.withOpacity(0.1),
+                  width: 1,
+                ),
+              ),
             ),
-            currentAccountPicture: KCircularCachedImage(
-              imageUrl: profileImageUrl ?? "",
-              size: 200.h,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Image.asset(
+                AppAssetsConstants.atsFuoDayLogo,
+                height: 35.h,
+                width: 176.w,
+              ),
             ),
           ),
 
           // Menu Items
           Expanded(
             child: ListView(
-              scrollDirection: Axis.vertical,
+              padding: EdgeInsets.zero,
               children: [
-                // Teams
+                SizedBox(height: 10.h),
+
+                // Home
+                KAtsDrawerListTile(
+                  drawerTitle: "Home",
+                  drawerListTileOnTap: () {
+                    _navigateToRoute(context, AppRouteConstants.homeRecruiter);
+                  },
+                  drawerLeadingIcon: Icons.home_outlined,
+                  isSelected: currentRoute == AppRouteConstants.homeRecruiter,
+                ),
+
+                // Candidates
                 KAtsDrawerListTile(
                   drawerTitle: "Candidates",
                   drawerListTileOnTap: () {
                     _navigateToRoute(context, AppRouteConstants.atsCandidate);
                   },
-                  drawerLeadingIcon: Icons.group,
+                  drawerLeadingIcon: Icons.group_outlined,
                   isSelected: currentRoute == AppRouteConstants.atsCandidate,
                 ),
 
-                // Tracker Screen
+                // ATS Tracker
                 KAtsDrawerListTile(
-                  drawerTitle: "Tracker",
+                  drawerTitle: "ATS Tracker",
                   drawerListTileOnTap: () {
-                    _navigateToRoute(context, AppRouteConstants.trackerScreen);
+                    _navigateToRoute(context, AppRouteConstants.atsTrackerScreen);
                   },
-                  drawerLeadingIcon: Icons.location_city,
-                  isSelected: currentRoute == AppRouteConstants.trackerScreen,
+                  drawerLeadingIcon: Icons.track_changes_outlined,
+                  isSelected: currentRoute == AppRouteConstants.atsTrackerScreen,
                 ),
 
-                // Team Tree
+                // Hiring
                 KAtsDrawerListTile(
-                  drawerTitle: "Team Tree",
+                  drawerTitle: "Hiring",
                   drawerListTileOnTap: () {
-                    // Only close drawer for now since route is commented
-                    Navigator.pop(context);
-                    // _navigateToRoute(context, AppRouteConstants.teamTree);
+                    _navigateToRoute(context, AppRouteConstants.hiringScreen);
                   },
-                  drawerLeadingIcon: Icons.account_tree_outlined,
-                  isSelected: currentRoute == AppRouteConstants.teamTree, // Update when you add the route
+                  drawerLeadingIcon: Icons.business_center_outlined,
+                  isSelected: currentRoute == AppRouteConstants.hiringScreen,
                 ),
 
-                _buildDivider(),
-
-                // Attendance
+                // Calendar
                 KAtsDrawerListTile(
-                  drawerTitle: "Attendance",
-                  drawerListTileOnTap: () {
-                    Navigator.pop(context);
-                    // _navigateToRoute(context, AppRouteConstants.attendance);
-                  },
-                  drawerLeadingIcon: Icons.add_chart,
-                  isSelected: currentRoute == AppRouteConstants.attendance, // Update when you add the route
-                ),
-
-                // Time Tracker
-                KAtsDrawerListTile(
-                  drawerTitle: "Time Tracker",
+                  drawerTitle: "Calendar",
                   drawerListTileOnTap: () {
                     Navigator.pop(context);
                     // _navigateToRoute(context, AppRouteConstants.timeTracker);
                   },
-                  drawerLeadingIcon: Icons.timelapse,
-                  isSelected: currentRoute == AppRouteConstants.timeTracker, // Update when you add the route
+                  drawerLeadingIcon: Icons.calendar_today_outlined,
+                  isSelected: currentRoute == AppRouteConstants.timeTracker,
                 ),
 
-                // HR menu — visible only if designation is "hr"
-                if (designation.toLowerCase() == 'hr')
-                  KAtsDrawerListTile(
-                    drawerTitle: "HR",
-                    drawerListTileOnTap: () {
-                      Navigator.pop(context);
-                      // _navigateToRoute(context, AppRouteConstants.hr);
-                    },
-                    drawerLeadingIcon: Icons.hail_rounded,
-                    isSelected: currentRoute == AppRouteConstants.hr, // Update when you add the route
-                  ),
-
-                // Management
-                if (managementRoles.contains(designation.trim().toLowerCase()))
-                  KAtsDrawerListTile(
-                    drawerTitle: "Management",
-                    drawerListTileOnTap: () {
-                      Navigator.pop(context);
-                      // _navigateToRoute(context, AppRouteConstants.management);
-                    },
-                    drawerLeadingIcon: Icons.manage_accounts_rounded,
-                    isSelected: currentRoute == AppRouteConstants.management, // Update when you add the route
-                  ),
-
-                // Pay Slip
+                // Index
                 KAtsDrawerListTile(
-                  drawerTitle: "Pay Slip",
+                  drawerTitle: "Index",
+                  drawerListTileOnTap: () {
+                    Navigator.pop(context);
+                    // _navigateToRoute(context, AppRouteConstants.hr);
+                  },
+                  drawerLeadingIcon: Icons.list_alt_outlined,
+                  isSelected: currentRoute == AppRouteConstants.hr,
+                ),
+
+                // Job Portal
+                KAtsDrawerListTile(
+                  drawerTitle: "Job Portal",
+                  drawerListTileOnTap: () {
+                    Navigator.pop(context);
+                    // _navigateToRoute(context, AppRouteConstants.management);
+                  },
+                  drawerLeadingIcon: Icons.work_outline,
+                  isSelected: currentRoute == AppRouteConstants.management,
+                ),
+
+                // Admin Tab
+                KAtsDrawerListTile(
+                  drawerTitle: "Admin Tab",
                   drawerListTileOnTap: () {
                     Navigator.pop(context);
                     // _navigateToRoute(context, AppRouteConstants.paySlip);
                   },
-                  drawerLeadingIcon: Icons.payment_rounded,
-                  isSelected: currentRoute == AppRouteConstants.paySlip, // Update when you add the route
+                  drawerLeadingIcon: Icons.admin_panel_settings_outlined,
+                  isSelected: currentRoute == AppRouteConstants.paySlip,
                 ),
-
-                // Performance
-                KAtsDrawerListTile(
-                  drawerTitle: "Performance",
-                  drawerListTileOnTap: () {
-                    Navigator.pop(context);
-                    // _navigateToRoute(context, AppRouteConstants.performance);
-                  },
-                  drawerLeadingIcon: Icons.quick_contacts_dialer,
-                  isSelected: currentRoute == AppRouteConstants.performance, // Update when you add the route
-                ),
-
-                _buildDivider(),
 
                 // Support
                 KAtsDrawerListTile(
@@ -172,9 +161,37 @@ class KAtsDrawer extends StatelessWidget {
                     Navigator.pop(context);
                     // _navigateToRoute(context, AppRouteConstants.support);
                   },
-                  drawerLeadingIcon: Icons.support_agent,
-                  isSelected: currentRoute == AppRouteConstants.support, // Update when you add the route
+                  drawerLeadingIcon: Icons.support_agent_outlined,
+                  isSelected: currentRoute == AppRouteConstants.support,
                 ),
+
+                // Spacer to push Help Center and Settings to bottom
+                SizedBox(height: 60.h),
+
+                // Help Center (with notification badge as shown in Figma)
+                KAtsDrawerListTile(
+                  drawerTitle: "Help Center",
+                  drawerListTileOnTap: () {
+                    Navigator.pop(context);
+                    // _navigateToRoute(context, AppRouteConstants.performance);
+                  },
+                  drawerLeadingIcon: Icons.help_outline,
+                  isSelected: currentRoute == AppRouteConstants.performance,
+               //   hasNotificationBadge: true, // You'll need to add this property to your KAtsDrawerListTile
+                ),
+
+                // Setting
+                KAtsDrawerListTile(
+                  drawerTitle: "Setting",
+                  drawerListTileOnTap: () {
+                    Navigator.pop(context);
+                    // _navigateToRoute(context, AppRouteConstants.settings);
+                  },
+                  drawerLeadingIcon: Icons.settings_outlined,
+                 // isSelected: currentRoute == AppRouteConstants.settings,
+                ),
+
+                SizedBox(height: 20.h),
 
                 // Logout
                 KAtsDrawerListTile(
@@ -182,9 +199,11 @@ class KAtsDrawer extends StatelessWidget {
                   drawerListTileOnTap: () {
                     _showLogoutDialog(context);
                   },
-                  drawerLeadingIcon: Icons.logout,
-                  isSelected: false, // Logout is never selected
+                  drawerLeadingIcon: Icons.logout_outlined,
+                  isSelected: false,
                 ),
+
+                SizedBox(height: 20.h),
               ],
             ),
           ),
@@ -204,28 +223,37 @@ class KAtsDrawer extends StatelessWidget {
     // If we're already on the same route, just close the drawer (no navigation)
   }
 
-  Widget _buildDivider() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 40.w),
-      child: Divider(color: AppColors.subTitleColor.withOpacity(0.2)),
-    );
-  }
-
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Logout"),
-          content: Text("Are you sure you want to logout?"),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          title: KText(
+            text: "Logout",
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+          ),
+          content: KText(
+            text: "Are you sure you want to logout?",
+            fontSize: 14.sp,
+            color: AppColors.subTitleColor,            fontWeight: FontWeight.w600,
+
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context); // Close dialog
               },
-              child: Text("Cancel"),
-            ),
+              child: KText(
+                text: "Cancel",
+                color: AppColors.subTitleColor,            fontWeight: FontWeight.w600,
 
+                fontSize: 14.sp,
+              ),
+            ),
             TextButton(
               onPressed: () async {
                 final logoutProvider = context.employeeAuthLogoutProviderRead;
@@ -234,10 +262,7 @@ class KAtsDrawer extends StatelessWidget {
 
                 // Only navigate if logout was successful (no error)
                 if (logoutProvider.error == null) {
-                  GoRouter.of(
-                    context,
-                  ).pushReplacementNamed(AppRouteConstants.login);
-
+                  GoRouter.of(context).pushReplacementNamed(AppRouteConstants.login);
                   KSnackBar.success(context, 'Logout Successfully');
                 } else {
                   KSnackBar.failure(
@@ -247,8 +272,20 @@ class KAtsDrawer extends StatelessWidget {
                 }
               },
               child: context.employeeAuthLogOutProviderWatch.isLoading
-                  ? const CircularProgressIndicator()
-                  : const Text("Logout"),
+                  ? SizedBox(
+                width: 16.w,
+                height: 16.h,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor),
+                ),
+              )
+                  : KText(
+                text: "Logout",
+                color: AppColors.primaryColor,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         );

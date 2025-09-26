@@ -7,6 +7,7 @@ import 'package:fuoday/commons/widgets/k_filter_button.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
+import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
@@ -15,7 +16,6 @@ import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.d
 import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
 import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card.dart';
-
 
 class HomeRecruiterScreen extends StatefulWidget {
   const HomeRecruiterScreen({super.key});
@@ -27,14 +27,14 @@ class HomeRecruiterScreen extends StatefulWidget {
 class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController dateController = TextEditingController();
+
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+
   // Pagination state
   int currentPage = 1;
   int itemsPerPage = 6; // Change this to show how many items per page
   int pageWindowStart = 1; // first page in current window
   int pageWindowSize = 5; // show 5 numbers at a time
-
-
 
   List<Map<String, dynamic>> applicantsData = [
     {
@@ -230,9 +230,9 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
 
   // Select Date
   Future<void> selectDate(
-      BuildContext context,
-      TextEditingController controller,
-      ) async {
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -268,6 +268,8 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
     final name = employeeDetails?['name'] ?? "No Name";
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
     final email = employeeDetails?['email'] ?? "No Email";
+    final String currentRoute =
+        AppRouteConstants.homeRecruiter; // Replace with actual current route
 
     // Grid Attendance Data - Updated with dynamic counts
     final List<Map<String, dynamic>> gridAttendanceData = [
@@ -323,6 +325,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
         userEmail: email,
         userName: name,
         profileImageUrl: profilePhoto,
+        currentRoute: currentRoute, // This will highlight the current screen
       ),
       body: Container(
         width: double.infinity,
@@ -338,12 +341,30 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                 // Home Page Title
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: KText(
-                    text: "Welcome To Applicant Tracking System :",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
-                    color: AppColors.titleColor,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      KText(
+                        text: "Hello $name",
+                        fontWeight: FontWeight.w600,
+                        fontSize: 24.sp,
+                        color: AppColors.titleColor,
+                      ),
+                      const SizedBox(width: 8), // spacing between text and emoji
+                      const Text(
+                        "👋",
+                        style: TextStyle(fontSize: 24), // match text size
+                      ),
+                    ],
                   ),
+                ),
+
+                SizedBox(height: 8.h),
+                KText(
+                  text: "Welcome back to Recruiter Dashboard",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12.sp,
+                  color: AppColors.greyColor,
                 ),
                 SizedBox(height: 20.h),
                 GridView.builder(
@@ -486,12 +507,12 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                             Column(
                               children: List.generate(
                                 paginatedApplicants.length,
-                                    (index) {
+                                (index) {
                                   final applicant = paginatedApplicants[index];
                                   final sno =
                                       ((currentPage - 1) * itemsPerPage) +
-                                          index +
-                                          1; // Correct numbering across pages
+                                      index +
+                                      1; // Correct numbering across pages
 
                                   return ApplicantItem(
                                     sno: sno,
@@ -616,11 +637,11 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
         icon: Icon(Icons.chevron_left, size: 16.sp),
         onPressed: pageWindowStart > 1
             ? () {
-          setState(() {
-            pageWindowStart -= pageWindowSize;
-            currentPage = pageWindowStart;
-          });
-        }
+                setState(() {
+                  pageWindowStart -= pageWindowSize;
+                  currentPage = pageWindowStart;
+                });
+              }
             : null,
       ),
     );
@@ -641,11 +662,11 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
         icon: Icon(Icons.chevron_right, size: 16.sp),
         onPressed: windowEnd < totalPages
             ? () {
-          setState(() {
-            pageWindowStart += pageWindowSize;
-            currentPage = pageWindowStart;
-          });
-        }
+                setState(() {
+                  pageWindowStart += pageWindowSize;
+                  currentPage = pageWindowStart;
+                });
+              }
             : null,
       ),
     );
@@ -697,25 +718,26 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                 color: AppColors.titleColor,
               ),
               SizedBox(height: 16.h),
-              ...([5, 6, 10, 15, 20].map((count) =>
-                  ListTile(
-                    title: KText(
-                      text: "Show $count Candidate",
-                      fontSize: 14.sp,
-                      color: AppColors.titleColor, fontWeight: FontWeight.w500,
-                    ),
-                    trailing: itemsPerPage == count
-                        ? Icon(Icons.check, color: AppColors.primaryColor)
-                        : null,
-                    onTap: () {
-                      setState(() {
-                        itemsPerPage = count;
-                        currentPage = 1; // Reset to first page
-                        pageWindowStart = 1; // Reset pagination window
-                      });
-                      Navigator.pop(context);
-                    },
+              ...([5, 6, 10, 15, 20].map(
+                (count) => ListTile(
+                  title: KText(
+                    text: "Show $count Candidate",
+                    fontSize: 14.sp,
+                    color: AppColors.titleColor,
+                    fontWeight: FontWeight.w500,
                   ),
+                  trailing: itemsPerPage == count
+                      ? Icon(Icons.check, color: AppColors.primaryColor)
+                      : null,
+                  onTap: () {
+                    setState(() {
+                      itemsPerPage = count;
+                      currentPage = 1; // Reset to first page
+                      pageWindowStart = 1; // Reset pagination window
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
               )),
             ],
           ),

@@ -96,5 +96,8 @@ class AppRouteConstants {
 
   //ATS Drawer Screens
   static const String trackerScreen = "trackerScreen";
+  static const String atsTrackerScreen = "atsTrackerScreen";
   static const String candidateScreen = "atsCandidate";
+  static const String interviewScreen = "interviewScreen";
+  static const String hiringScreen = "hiringScreen";
 }

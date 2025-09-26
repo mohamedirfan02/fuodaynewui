@@ -14,14 +14,14 @@ import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
 
-class TrackerScreen extends StatefulWidget {
-  const TrackerScreen({super.key});
+class AtsTrackerOverviewTab extends StatefulWidget {
+  const AtsTrackerOverviewTab({super.key});
 
   @override
-  State<TrackerScreen> createState() => _TrackerScreenState();
+  State<AtsTrackerOverviewTab> createState() => _AtsTrackerOverviewTabState();
 }
 
-class _TrackerScreenState extends State<TrackerScreen> {
+class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
@@ -295,20 +295,6 @@ class _TrackerScreenState extends State<TrackerScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AtsKAppBarWithDrawer(
-        userName: "",
-        cachedNetworkImageUrl: profilePhoto,
-        userDesignation: "",
-        showUserInfo: true,
-        onDrawerPressed: _openDrawer,
-        onNotificationPressed: () {},
-      ),
-      drawer: KAtsDrawer(
-       userName: name,
-        userEmail: email,
-        profileImageUrl: profilePhoto,
-        currentRoute: currentRoute, // This will highlight the current screen
-      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -320,16 +306,6 @@ class _TrackerScreenState extends State<TrackerScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: KText(
-                    text: "Tracker Your Candidates",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
-                    color: AppColors.titleColor,
-                  ),
-                ),
-                SizedBox(height: 20.h),
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -505,11 +481,11 @@ class _TrackerScreenState extends State<TrackerScreen> {
         icon: Icon(Icons.chevron_left, size: 16.sp),
         onPressed: pageWindowStart > 1
             ? () {
-                setState(() {
-                  pageWindowStart -= pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
+          setState(() {
+            pageWindowStart -= pageWindowSize;
+            currentPage = pageWindowStart;
+          });
+        }
             : null,
       ),
     );
@@ -530,11 +506,11 @@ class _TrackerScreenState extends State<TrackerScreen> {
         icon: Icon(Icons.chevron_right, size: 16.sp),
         onPressed: windowEnd < totalPages
             ? () {
-                setState(() {
-                  pageWindowStart += pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
+          setState(() {
+            pageWindowStart += pageWindowSize;
+            currentPage = pageWindowStart;
+          });
+        }
             : null,
       ),
     );
@@ -587,7 +563,7 @@ class _TrackerScreenState extends State<TrackerScreen> {
               ),
               SizedBox(height: 16.h),
               ...([5, 6, 10, 15, 20].map(
-                (count) => ListTile(
+                    (count) => ListTile(
                   title: KText(
                     text: "Show $count items",
                     fontSize: 14.sp,
