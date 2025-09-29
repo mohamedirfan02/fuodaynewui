@@ -27,9 +27,6 @@ class KAtsDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final employeeDetails = HiveStorageService().employeeDetails ?? {};
-    final designation = (employeeDetails['designation'] ?? '').toString();
-
-    final managementRoles = ['assistant manager-it', 'founder & ceo'];
 
     return Drawer(
       backgroundColor: AppColors.secondaryColor,
