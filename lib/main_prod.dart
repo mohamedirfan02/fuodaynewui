@@ -26,6 +26,7 @@ void main() async {
   //flutter build apk --flavor prod -t lib/main_prod.dart --release
 
   await Hive.initFlutter(); // Required if you're using hive_flutter
+///test
   // Open the box
   await Hive.openBox('employeeDetails');
 
