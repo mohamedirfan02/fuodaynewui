@@ -252,7 +252,6 @@ class MyApp extends StatelessWidget {
 
         // Payroll Provider
         ChangeNotifierProvider(create: (context) => getIt<PayrollProvider>()),
-
         // Payroll Overview Provider
         ChangeNotifierProvider(
           create: (context) => getIt<PayrollOverviewProvider>(),
