@@ -23,7 +23,7 @@ void main() async {
   final app = Firebase.app();
   print("🔥 Firebase initialized: ${app.name}");
 
-  //flutter build apk --flavor prod -t lib/main_prod.dart --release
+  ///flutter build apk --flavor prod -t lib/main_prod.dart --release
 
   await Hive.initFlutter(); // Required if you're using hive_flutter
   // Open the box
