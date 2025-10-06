@@ -100,4 +100,7 @@ class AppRouteConstants {
   static const String candidateScreen = "atsCandidate";
   static const String interviewScreen = "interviewScreen";
   static const String hiringScreen = "hiringScreen";
+  static const String atsCalendarScreen = "atsCalendarScreen";
+  static const String atsIndexScreen = "atsIndexScreen";
+  static const String atsJobPortalScreen = "atsJobPortalScreen";
 }

@@ -111,40 +111,36 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Calendar",
                   drawerListTileOnTap: () {
-                    Navigator.pop(context);
-                    // _navigateToRoute(context, AppRouteConstants.timeTracker);
+                     _navigateToRoute(context, AppRouteConstants.atsCalendarScreen);
                   },
                   drawerLeadingIcon: Icons.calendar_today_outlined,
-                  isSelected: currentRoute == AppRouteConstants.timeTracker,
+                  isSelected: currentRoute == AppRouteConstants.atsCalendarScreen,
                 ),
 
                 // Index
                 KAtsDrawerListTile(
                   drawerTitle: "Index",
                   drawerListTileOnTap: () {
-                    Navigator.pop(context);
-                    // _navigateToRoute(context, AppRouteConstants.hr);
+                     _navigateToRoute(context, AppRouteConstants.atsIndexScreen);
                   },
                   drawerLeadingIcon: Icons.list_alt_outlined,
-                  isSelected: currentRoute == AppRouteConstants.hr,
+                  isSelected: currentRoute == AppRouteConstants.atsIndexScreen,
                 ),
 
                 // Job Portal
                 KAtsDrawerListTile(
                   drawerTitle: "Job Portal",
                   drawerListTileOnTap: () {
-                    Navigator.pop(context);
-                    // _navigateToRoute(context, AppRouteConstants.management);
+                     _navigateToRoute(context, AppRouteConstants.atsJobPortalScreen);
                   },
                   drawerLeadingIcon: Icons.work_outline,
-                  isSelected: currentRoute == AppRouteConstants.management,
+                  isSelected: currentRoute == AppRouteConstants.atsJobPortalScreen,
                 ),
 
                 // Admin Tab
                 KAtsDrawerListTile(
                   drawerTitle: "Admin Tab",
                   drawerListTileOnTap: () {
-                    Navigator.pop(context);
                     // _navigateToRoute(context, AppRouteConstants.paySlip);
                   },
                   drawerLeadingIcon: Icons.admin_panel_settings_outlined,
@@ -155,7 +151,6 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Support",
                   drawerListTileOnTap: () {
-                    Navigator.pop(context);
                     // _navigateToRoute(context, AppRouteConstants.support);
                   },
                   drawerLeadingIcon: Icons.support_agent_outlined,
@@ -169,7 +164,6 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Help Center",
                   drawerListTileOnTap: () {
-                    Navigator.pop(context);
                     // _navigateToRoute(context, AppRouteConstants.performance);
                   },
                   drawerLeadingIcon: Icons.help_outline,
@@ -181,7 +175,6 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Setting",
                   drawerListTileOnTap: () {
-                    Navigator.pop(context);
                     // _navigateToRoute(context, AppRouteConstants.settings);
                   },
                   drawerLeadingIcon: Icons.settings_outlined,

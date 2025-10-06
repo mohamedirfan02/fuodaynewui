@@ -4,8 +4,11 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/features/approval/presentation/screens/approval_screen.dart';
+import 'package:fuoday/features/ats_calender/presentation/screen/ats_calender_screen.dart';
 import 'package:fuoday/features/ats_candidate/presentation/screens/candidate_screen.dart';
 import 'package:fuoday/features/ats_hiring/presentation/screens/hiring_screen.dart';
+import 'package:fuoday/features/ats_index/presentation/screen/ats_index_screen.dart';
+import 'package:fuoday/features/ats_job_portal/presentation/screen/ats_job_portal_screen.dart';
 import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_interview.dart';
 import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_screen.dart';
 import 'package:fuoday/features/attendance/presentation/screens/attendance_absent_days_details_screen.dart';
@@ -378,6 +381,33 @@ final GoRouter appRouter = GoRouter(
       name: AppRouteConstants.hiringScreen,
       builder: (context, state) {
         return HiringScreen();
+      },
+    ),
+
+    // Ats calendar Screen
+    GoRoute(
+      path: "/atsCalendarScreen",
+      name: AppRouteConstants.atsCalendarScreen,
+      builder: (context, state) {
+        return AtsCalenderScreen();
+      },
+    ),
+
+    // Ats index Screen
+    GoRoute(
+      path: "/atsIndexScreen",
+      name: AppRouteConstants.atsIndexScreen,
+      builder: (context, state) {
+        return AtsIndexScreen();
+      },
+    ),
+
+    // Ats jobPortal Screen
+    GoRoute(
+      path: "/atsJobPortalScreen",
+      name: AppRouteConstants.atsJobPortalScreen,
+      builder: (context, state) {
+        return AtsJobPortalScreen();
       },
     ),
 
