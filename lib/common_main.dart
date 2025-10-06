@@ -98,7 +98,9 @@ class MyApp extends StatelessWidget {
         // Bottom Nav Provider
         ChangeNotifierProvider(create: (context) => getIt<BottomNavProvider>()),
 
-        ChangeNotifierProvider(create: (context) => getIt<RecruiterBottomNavProvider>()),
+        ChangeNotifierProvider(
+          create: (context) => getIt<RecruiterBottomNavProvider>(),
+        ),
 
         // Sliding Segmented Provider
         ChangeNotifierProvider(
@@ -249,10 +251,7 @@ class MyApp extends StatelessWidget {
         ),
 
         // Payroll Provider
-        ChangeNotifierProvider(
-          create: (context) => getIt<PayrollProvider>(),
-        ),
-
+        ChangeNotifierProvider(create: (context) => getIt<PayrollProvider>()),
         // Payroll Overview Provider
         ChangeNotifierProvider(
           create: (context) => getIt<PayrollOverviewProvider>(),
@@ -278,20 +277,12 @@ class MyApp extends StatelessWidget {
           create: (context) => getIt<AuditReportProvider>(),
         ),
 
-        ChangeNotifierProvider(
-          create: (context) => getIt<TeamTreeProvider>(),
-        ),
+        ChangeNotifierProvider(create: (context) => getIt<TeamTreeProvider>()),
 
         ChangeNotifierProvider(
           create: (context) => getIt<RecognitionProvider>(),
         ),
-
-        ChangeNotifierProvider(
-          create: (context) => getIt<BadgeProvider>(),
-        ),
-
-
-
+        ChangeNotifierProvider(create: (context) => getIt<BadgeProvider>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
@@ -303,9 +294,7 @@ class MyApp extends StatelessWidget {
             title: AppEnvironment.environmentName == "DEV"
                 ? "Fuoday Dev"
                 : "Fuoday",
-            theme: ThemeData(
-              fontFamily: GoogleFonts.inter().fontFamily,
-            ),
+            theme: ThemeData(fontFamily: GoogleFonts.inter().fontFamily),
             // theme: ThemeData(
             //   textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
             // ),
