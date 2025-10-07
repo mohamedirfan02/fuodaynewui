@@ -147,7 +147,7 @@ class _HiringScreenState extends State<HiringScreen> {
                                     fit: BoxFit.contain,
                                   ),
                                   const SizedBox(width: 6),
-                                  const Text("Hiring"),
+                                  const Text("Hring"),
                                 ],
                               ),
                             ),
