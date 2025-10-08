@@ -68,7 +68,7 @@ class _HiringScreenState extends State<HiringScreen> {
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
     final email = employeeDetails?['email'] ?? "No Email";
     final String currentRoute =
-        AppRouteConstants.atsTrackerScreen; // Replace with actual current route
+        AppRouteConstants.hiringScreen; // Replace with actual current route
 
     // Debugging Logger
     AppLoggerHelper.logInfo("Employee Details: $employeeDetails");

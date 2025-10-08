@@ -151,6 +151,9 @@ dependencies:
   #flutter_inset_shadow:
   flutter_inset_box_shadow: ^1.0.8
 
+  #mailer:
+  mailer: ^6.1.0
+
 
 
 

@@ -547,43 +547,49 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                       SizedBox(height: 16.w),
                       Row(
                         children: [
+                          // Dynamic entries text
                           KText(
-                            text: entriesDisplayText, // Dynamic entries text
-                            fontSize: 12.sp,
+                            text: entriesDisplayText,
+                            fontSize: MediaQuery.of(context).size.width * 0.03, // responsive font
                             color: AppColors.greyColor,
                             fontWeight: FontWeight.w500,
                           ),
-                          SizedBox(width: 40.w),
+
+                          SizedBox(width: MediaQuery.of(context).size.width * 0.08), // spacing between text and button
+
+                          // Dropdown container
                           GestureDetector(
-                            onTap: () {
-                              // Show dropdown or bottom sheet to change items per page
-                              _showItemsPerPageSelector();
-                            },
+                            onTap: _showItemsPerPageSelector,
                             child: Container(
-                              padding: EdgeInsets.all(10.w),
+                              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  width: 0.77.w,
+                                  width: 0.8,
                                   color: AppColors.greyColor.withOpacity(0.1),
                                 ),
-                                borderRadius: BorderRadius.circular(8.r),
+                                borderRadius: BorderRadius.circular(8),
                                 color: AppColors.secondaryColor,
                               ),
                               child: Row(
                                 children: [
                                   KText(
                                     text: "Show $itemsPerPage",
-                                    fontSize: 10.sp,
+                                    fontSize: MediaQuery.of(context).size.width * 0.025,
                                     color: AppColors.titleColor,
                                     fontWeight: FontWeight.w500,
                                   ),
-                                  Icon(Icons.keyboard_arrow_down, size: 15.sp),
+                                  Icon(
+                                    Icons.keyboard_arrow_down,
+                                    size: MediaQuery.of(context).size.width * 0.04,
+                                    color: AppColors.titleColor,
+                                  ),
                                 ],
                               ),
                             ),
                           ),
                         ],
-                      ),
+                      )
+
                     ],
                   ),
                 ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
@@ -16,18 +15,23 @@ class RequirementStatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final totalJobs = dataMap.values.fold<double>(0, (a, b) => a + b).toInt();
 
+    // Scale factor for adaptive UI
+    final scale = screenWidth / 375; // 375 is base iPhone width from Figma
+
     return Container(
-      width: 327.w, // ✅ Outer card width
-      height: 315.45.h, // ✅ Outer card height
-      padding: EdgeInsets.all(18.47.w), // ✅ Padding from Figma
+      width: screenWidth * 0.87, // ≈ 327 from 375
+      height: screenHeight * 0.45, // adaptive height
+      padding: EdgeInsets.all(18 * scale),
       decoration: BoxDecoration(
         border: Border.all(
-          width: 0.77.w, // ✅ Border width
+          width: 0.8 * scale,
           color: AppColors.greyColor.withOpacity(0.3),
         ),
-        borderRadius: BorderRadius.circular(7.69.r), // ✅ Border radius
+        borderRadius: BorderRadius.circular(8 * scale),
         color: AppColors.secondaryColor,
       ),
       child: Column(
@@ -40,7 +44,7 @@ class RequirementStatsCard extends StatelessWidget {
               KText(
                 text: "Total Requirement",
                 fontWeight: FontWeight.w600,
-                fontSize: 16.sp,
+                fontSize: 16 * scale,
                 color: AppColors.titleColor,
               ),
               InkWell(
@@ -52,12 +56,12 @@ class RequirementStatsCard extends StatelessWidget {
                     KText(
                       text: "See all",
                       fontWeight: FontWeight.w500,
-                      fontSize: 11.sp,
+                      fontSize: 11 * scale,
                       color: AppColors.subTitleColor,
                     ),
                     Icon(
                       Icons.arrow_forward_ios,
-                      size: 12.sp,
+                      size: 12 * scale,
                       color: AppColors.titleColor,
                     ),
                   ],
@@ -66,113 +70,104 @@ class RequirementStatsCard extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 16.h),
+          SizedBox(height: 16 * scale),
 
-          // Pie chart with circular center (from Figma data)
+          // Pie chart
           Center(
             child: SizedBox(
-              width: 151.62.w,
-              height: 149.97.h,
+              width: screenWidth * 0.4,
+              height: screenWidth * 0.4,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Donut chart
                   PieChart(
                     dataMap: dataMap,
                     colorList: colorMap.values.toList(),
                     chartType: ChartType.ring,
-                    ringStrokeWidth: 20.w,
-
-                    chartValuesOptions:
-                    const ChartValuesOptions(showChartValues: false),
+                    ringStrokeWidth: 20 * scale,
+                    chartValuesOptions: const ChartValuesOptions(
+                      showChartValues: false,
+                    ),
                     legendOptions: const LegendOptions(showLegends: false),
-                    chartLegendSpacing: 12.w,  // Adds gap between slices
+                    chartLegendSpacing: 12 * scale,
                   ),
 
-                  // inner circle
-                  Positioned(
-                    top: 39.83.h,  // from Figma
-                    left: 32.83.w, // from Figma
-                    child: Container(
-                      width: 86.2.w,
-                      height: 86.2.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.secondaryColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1), // rgba(0,0,0,0.1)
-                            blurRadius: 33.14.r, // spread softness
-                            offset: Offset(0, 4.14.h), // X=0, Y=4.14
-                          ),
-                        ],
-                      ),
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          KText(
-                            text: totalJobs.toString(),
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14.sp,
-                            color: AppColors.titleColor,
-                          ),
-                          SizedBox(height: 2.h),
-                          KText(
-                            text: "Total Jobs",
-                            fontWeight: FontWeight.w500,
-                            fontSize: 10.sp,
-                            color: AppColors.subTitleColor,
-                          ),
-                        ],
-                      ),
+                  // Inner circle
+                  Container(
+                    width: screenWidth * 0.22,
+                    height: screenWidth * 0.22,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.secondaryColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 30 * scale,
+                          offset: Offset(0, 4 * scale),
+                        ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        KText(
+                          text: totalJobs.toString(),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14 * scale,
+                          color: AppColors.titleColor,
+                        ),
+                        SizedBox(height: 2 * scale),
+                        KText(
+                          text: "Total Jobs",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10 * scale,
+                          color: AppColors.subTitleColor,
+                        ),
+                      ],
                     ),
                   ),
-
                 ],
               ),
             ),
           ),
 
+          SizedBox(height: 16 * scale),
 
-
-          SizedBox(height: 16.93.h), //  gap before legend
-
-          // ✅ Legend section sized
-          SizedBox(
-            width: 296.99.w,
-            height: 78.54.h,
+          // ✅ Legend section
+          Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: dataMap.entries.map((entry) {
                 final label = entry.key;
                 final value = entry.value.toInt();
                 final color = colorMap[label]!;
 
                 return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.77.h / 2), // ✅ gap / 2
+                  padding: EdgeInsets.symmetric(vertical: 5 * scale),
                   child: Row(
                     children: [
                       Container(
-                        width: 10.w,
-                        height: 10.w,
+                        width: 10 * scale,
+                        height: 10 * scale,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: color,
                         ),
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: 8 * scale),
                       Expanded(
                         child: KText(
                           text: label,
                           fontWeight: FontWeight.w500,
-                          fontSize: 12.sp,
+                          fontSize: 12 * scale,
                           color: AppColors.titleColor,
                         ),
                       ),
                       KText(
                         text: value.toString(),
                         fontWeight: FontWeight.w600,
-                        fontSize: 12.sp,
+                        fontSize: 12 * scale,
                         color: AppColors.titleColor,
                       ),
                     ],
