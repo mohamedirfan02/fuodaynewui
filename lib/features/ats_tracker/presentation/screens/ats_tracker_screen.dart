@@ -13,6 +13,7 @@ import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/secure_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
+import 'package:go_router/go_router.dart';
 import 'ats_tracker_interview.dart';
 import 'ats_tracker_overview.dart';
 
@@ -72,111 +73,127 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
       "Has Employee Details: ${hiveService.hasEmployeeDetails}",
     );
 
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AtsKAppBarWithDrawer(
-          userName: "",
-          cachedNetworkImageUrl: profilePhoto,
-          userDesignation: "",
-          showUserInfo: true,
-          onDrawerPressed: _openDrawer,
-          onNotificationPressed: () {},
-        ),
-        drawer: KAtsDrawer(
-          userName: name,
-          userEmail: email,
-          currentRoute: currentRoute, // This will highlight the current screen
-        ),
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: AppColors.atsHomepageBg,
-          child: Padding(
-            padding: EdgeInsets.only(top: 20.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: KText(
-                    text: "ATS Tracker",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 24.sp,
-                    color: AppColors.titleColor,
+    return WillPopScope(
+      onWillPop: () async {
+        // If not on Home → go Home instead of closing app
+        if (currentRoute != AppRouteConstants.homeRecruiter) {
+          GoRouter.of(context).goNamed(AppRouteConstants.homeRecruiter);
+          return false; // block closing app
+        }
+        return true; // already in Home → allow app exit
+      },
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AtsKAppBarWithDrawer(
+            userName: "",
+            cachedNetworkImageUrl: profilePhoto,
+            userDesignation: "",
+            showUserInfo: true,
+            onDrawerPressed: _openDrawer,
+            onNotificationPressed: () {},
+          ),
+          drawer: KAtsDrawer(
+            userName: name,
+            userEmail: email,
+            currentRoute:
+                currentRoute, // This will highlight the current screen
+          ),
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: AppColors.atsHomepageBg,
+            child: Padding(
+              padding: EdgeInsets.only(top: 20.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: KText(
+                      text: "ATS Tracker",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 24.sp,
+                      color: AppColors.titleColor,
+                    ),
                   ),
-                ),
-                KVerticalSpacer(height: 20.h),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: KText(
-                    text: "Manage your Interview Schedule",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.sp,
-                    color: AppColors.greyColor,
+                  KVerticalSpacer(height: 20.h),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: KText(
+                      text: "Manage your Interview Schedule",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      color: AppColors.greyColor,
+                    ),
                   ),
-                ),
 
-                Expanded(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.w, right: 0, top: 20.h, bottom: 20.h),
-                        child: TabBar(
-                          isScrollable: true,
-                          tabAlignment: TabAlignment.start, // left align
-                          dividerColor: AppColors.atsHomepageBg,
-                          unselectedLabelColor: AppColors.greyColor,
-                          indicatorColor: AppColors.primaryColor,
-                          labelColor: AppColors.titleColor,
-                          tabs: [
-                            Tab(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SvgPicture.asset(
-                                    AppAssetsConstants.pointIcon,
-                                    height:20,
-                                    width: 20,
-                                    fit: BoxFit.contain,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  const Text("Overview"),
-                                ],
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: 20.w,
+                            right: 0,
+                            top: 20.h,
+                            bottom: 20.h,
+                          ),
+                          child: TabBar(
+                            isScrollable: true,
+                            tabAlignment: TabAlignment.start, // left align
+                            dividerColor: AppColors.atsHomepageBg,
+                            unselectedLabelColor: AppColors.greyColor,
+                            indicatorColor: AppColors.primaryColor,
+                            labelColor: AppColors.titleColor,
+                            tabs: [
+                              Tab(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SvgPicture.asset(
+                                      AppAssetsConstants.pointIcon,
+                                      height: 20,
+                                      width: 20,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    const Text("Overview"),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Tab(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SvgPicture.asset(
-                                    AppAssetsConstants.noteIcon,
-                                    height: 20,
-                                    width: 20,
-                                    fit: BoxFit.contain,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  const Text("Interview"),
-                                ],
+                              Tab(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SvgPicture.asset(
+                                      AppAssetsConstants.noteIcon,
+                                      height: 20,
+                                      width: 20,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    const Text("Interview"),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
 
-                      Expanded(
-                        child: TabBarView(
-                          children: [
-                            AtsTrackerOverviewTab(),
-                            InterviewScreen(),
-                          ],
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              AtsTrackerOverviewTab(),
+                              InterviewScreen(),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

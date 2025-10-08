@@ -72,7 +72,7 @@ class KHomeActivitiesCard extends StatelessWidget {
 
             // Title
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              padding: EdgeInsets.symmetric(horizontal: 11.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

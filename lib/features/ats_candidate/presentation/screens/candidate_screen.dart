@@ -372,418 +372,436 @@ class _CandidateScreenState extends State<CandidateScreen> {
       },
     ];
 
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AtsKAppBarWithDrawer(
-        userName: "",
-        cachedNetworkImageUrl: profilePhoto,
-        userDesignation: "",
-        showUserInfo: true,
-        onDrawerPressed: _openDrawer,
-        onNotificationPressed: () {},
-      ),
-      drawer: KAtsDrawer(
-        userEmail: email,
-        userName: name,
-        profileImageUrl: profilePhoto,
-        currentRoute: currentRoute, // This will highlight the current screen
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: AppColors.atsHomepageBg,
-        child: Padding(
-          padding: EdgeInsets.all(16.w),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: KText(
-                    text: "Candidates",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
-                    color: AppColors.titleColor,
-                  ),
-                ),  Align(
-                  alignment: Alignment.centerLeft,
-                  child: KText(
-                    text: "Manage your Candidates",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.sp,
-                    color: AppColors.greyColor,
-                  ),
-                ),
-                SizedBox(height: 20.h),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10.w,
-                    mainAxisSpacing: 10.h,
-                    childAspectRatio: 155 / 113,
-                  ),
-                  itemCount: gridAttendanceData.length,
-                  itemBuilder: (context, index) {
-                    final item = gridAttendanceData[index];
-                    return AtsTotalCountCard(
-                      employeeCount: item['numberOfCount'].toString(),
-                      employeeCardIcon: item['icon'],
-                      employeeDescription: item['title'],
-                      employeeIconColor: AppColors.primaryColor,
-                      employeePercentageColor: AppColors.checkInColor,
-                      growthText: item['growth'],
-                    );
-                  },
-                ),
-
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: AppColors.recruiterBorderGradient,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+    return WillPopScope(
+      onWillPop: () async {
+        // If not on Home → go Home instead of closing app
+        if (currentRoute != AppRouteConstants.homeRecruiter) {
+          GoRouter.of(context).goNamed(AppRouteConstants.homeRecruiter);
+          return false; // block closing app
+        }
+        return true; // already in Home → allow app exit
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AtsKAppBarWithDrawer(
+          userName: "",
+          cachedNetworkImageUrl: profilePhoto,
+          userDesignation: "",
+          showUserInfo: true,
+          onDrawerPressed: _openDrawer,
+          onNotificationPressed: () {},
+        ),
+        drawer: KAtsDrawer(
+          userEmail: email,
+          userName: name,
+          profileImageUrl: profilePhoto,
+          currentRoute: currentRoute, // This will highlight the current screen
+        ),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: AppColors.atsHomepageBg,
+          child: Padding(
+            padding: EdgeInsets.all(16.w),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: KText(
+                      text: "Candidates",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.sp,
+                      color: AppColors.titleColor,
                     ),
-                    borderRadius: BorderRadius.circular(7.69.r),
                   ),
-                  padding: EdgeInsets.all(2.w), // border thickness
-                  child: Container(
-                    padding: EdgeInsets.all(18.47.w),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: KText(
+                      text: "Manage your Candidates",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      color: AppColors.greyColor,
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.w,
+                      mainAxisSpacing: 10.h,
+                      childAspectRatio: 155 / 113,
+                    ),
+                    itemCount: gridAttendanceData.length,
+                    itemBuilder: (context, index) {
+                      final item = gridAttendanceData[index];
+                      return AtsTotalCountCard(
+                        employeeCount: item['numberOfCount'].toString(),
+                        employeeCardIcon: item['icon'],
+                        employeeDescription: item['title'],
+                        employeeIconColor: AppColors.primaryColor,
+                        employeePercentageColor: AppColors.checkInColor,
+                        growthText: item['growth'],
+                      );
+                    },
+                  ),
+
+                  Container(
                     decoration: BoxDecoration(
-                      color: AppColors.secondaryColor,
-                      borderRadius: BorderRadius.circular(6.5.r),
+                      gradient: LinearGradient(
+                        colors: AppColors.recruiterBorderGradient,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(7.69.r),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /// 🔹 Header Row
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              AppAssetsConstants.starIcon,
-                              height: 32.h,
-                              width: 32.w,
-                              fit: BoxFit.contain,
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  KText(
-                                    text: "GenAI Integration",
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16.sp,
-                                    color: AppColors.titleColor,
-                                  ),
-                                  KText(
-                                    text: "Upload the Resume and check",
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12.sp,
-                                    color: AppColors.greyColor,
-                                  ),
-                                ],
+                    padding: EdgeInsets.all(2.w), // border thickness
+                    child: Container(
+                      padding: EdgeInsets.all(18.47.w),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondaryColor,
+                        borderRadius: BorderRadius.circular(6.5.r),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /// 🔹 Header Row
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                AppAssetsConstants.starIcon,
+                                height: 32.h,
+                                width: 32.w,
+                                fit: BoxFit.contain,
                               ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                KSnackBar.success(context, "Info tapped");
-                              },
-                              icon: Icon(
-                                Icons.info_outline,
-                                size: 20.sp,
-                                color: AppColors.greyColor,
+                              SizedBox(width: 12.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    KText(
+                                      text: "GenAI Integration",
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.sp,
+                                      color: AppColors.titleColor,
+                                    ),
+                                    KText(
+                                      text: "Upload the Resume and check",
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12.sp,
+                                      color: AppColors.greyColor,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 16.h),
-
-                        /// 🔹 Upload Picker
-                        KAtsUploadPickerTile(
-                          showOnlyView: context.filePickerProviderWatch
-                              .isPicked("resume"),
-                          onViewTap: () {
-                            final pickedFile = context.filePickerProviderRead
-                                .getFile("resume");
-                            if (pickedFile == null) return;
-
-                            final filePath = pickedFile.path;
-                            final fileName = pickedFile.name.toLowerCase();
-
-                            if (fileName.endsWith('.pdf')) {
-                              GoRouter.of(context).pushNamed(
-                                AppRouteConstants.pdfPreview,
-                                extra: FilePreviewData(
-                                  filePath: filePath!,
-                                  fileName: fileName,
+                              IconButton(
+                                onPressed: () {
+                                  KSnackBar.success(context, "Info tapped");
+                                },
+                                icon: Icon(
+                                  Icons.info_outline,
+                                  size: 20.sp,
+                                  color: AppColors.greyColor,
                                 ),
-                              );
-                            } else if (fileName.endsWith('.png') ||
-                                fileName.endsWith('.jpg') ||
-                                fileName.endsWith('.jpeg') ||
-                                fileName.endsWith('.webp')) {
-                              GoRouter.of(context).pushNamed(
-                                AppRouteConstants.imagePreview,
-                                extra: FilePreviewData(
-                                  filePath: filePath!,
-                                  fileName: fileName,
-                                ),
-                              );
-                            } else if (fileName.endsWith('.doc') ||
-                                fileName.endsWith('.docx')) {
-                              KSnackBar.success(
-                                context,
-                                "Word file selected: ${pickedFile.name}",
-                              );
-                            } else {
-                              KSnackBar.failure(
-                                context,
-                                "Unsupported file type",
-                              );
-                            }
-                          },
-                          showCancel: context.filePickerProviderWatch.isPicked(
-                            "resume",
+                              ),
+                            ],
                           ),
-                          onCancelTap: () {
-                            context.filePickerProviderRead.removeFile("resume");
-                            KSnackBar.success(
-                              context,
-                              "File removed successfully",
-                            );
-                          },
-                          uploadOnTap: () async {
-                            final key = "resume";
-                            final filePicker = context.filePickerProviderRead;
-                            await filePicker.pickFile(key);
 
-                            final pickedFile = filePicker.getFile(key);
-                            if (filePicker.isPicked(key)) {
-                              AppLoggerHelper.logInfo(
-                                'Picked file: ${pickedFile!.name}',
+                          SizedBox(height: 16.h),
+
+                          /// 🔹 Upload Picker
+                          KAtsUploadPickerTile(
+                            showOnlyView: context.filePickerProviderWatch
+                                .isPicked("resume"),
+                            onViewTap: () {
+                              final pickedFile = context.filePickerProviderRead
+                                  .getFile("resume");
+                              if (pickedFile == null) return;
+
+                              final filePath = pickedFile.path;
+                              final fileName = pickedFile.name.toLowerCase();
+
+                              if (fileName.endsWith('.pdf')) {
+                                GoRouter.of(context).pushNamed(
+                                  AppRouteConstants.pdfPreview,
+                                  extra: FilePreviewData(
+                                    filePath: filePath!,
+                                    fileName: fileName,
+                                  ),
+                                );
+                              } else if (fileName.endsWith('.png') ||
+                                  fileName.endsWith('.jpg') ||
+                                  fileName.endsWith('.jpeg') ||
+                                  fileName.endsWith('.webp')) {
+                                GoRouter.of(context).pushNamed(
+                                  AppRouteConstants.imagePreview,
+                                  extra: FilePreviewData(
+                                    filePath: filePath!,
+                                    fileName: fileName,
+                                  ),
+                                );
+                              } else if (fileName.endsWith('.doc') ||
+                                  fileName.endsWith('.docx')) {
+                                KSnackBar.success(
+                                  context,
+                                  "Word file selected: ${pickedFile.name}",
+                                );
+                              } else {
+                                KSnackBar.failure(
+                                  context,
+                                  "Unsupported file type",
+                                );
+                              }
+                            },
+                            showCancel: context.filePickerProviderWatch
+                                .isPicked("resume"),
+                            onCancelTap: () {
+                              context.filePickerProviderRead.removeFile(
+                                "resume",
                               );
                               KSnackBar.success(
                                 context,
-                                'Picked file: ${pickedFile.name}',
-                              );
-                            } else {
-                              AppLoggerHelper.logError('No file selected.');
-                              KSnackBar.failure(context, 'No file selected.');
-                            }
-                          },
-                          uploadPickerTitle: "",
-                          uploadPickerIcon:
-                              context.filePickerProviderWatch.isPicked("resume")
-                              ? Icons.check_circle
-                              : Icons.upload,
-                          description:
-                              context.filePickerProviderWatch.getFile(
-                                    "resume",
-                                  ) !=
-                                  null
-                              ? "Selected File: ${context.filePickerProviderWatch.getFile("resume")!.name}"
-                              : "Browse file to upload\nSupports .pdf, .doc, .docx",
-                        ),
-
-                        SizedBox(height: 16.h),
-
-                        /// 🔹 Job Description label
-                        Row(
-                          children: [
-                            KText(
-                              text: "Job Description",
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14.sp,
-                              color: AppColors.titleColor,
-                            ),
-                            KText(
-                              text: " *",
-                              color: Colors.red,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            SizedBox(width: 4.w),
-                            Icon(
-                              Icons.info_outline,
-                              size: 16.sp,
-                              color: AppColors.greyColor,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8.h),
-
-                        /// 🔹 Input Field
-                        KAuthTextFormField(
-                          controller: jobDescriptionController,
-                          hintText: "Enter Job Description",
-                          keyboardType: TextInputType.text,
-                        ),
-
-                        SizedBox(height: 20.h),
-
-                        Align(
-                          alignment: Alignment.center,
-                          child: GestureDetector(
-                            onTap: () {
-                              KSnackBar.success(
-                                context,
-                                "Fit check with AI tapped",
+                                "File removed successfully",
                               );
                             },
-                            child: Image.asset(
-                              AppAssetsConstants.aiFitCheckPng,
-                              height: 90.h,
-                              width: 200.w,
-                              fit: BoxFit.cover,
+                            uploadOnTap: () async {
+                              final key = "resume";
+                              final filePicker = context.filePickerProviderRead;
+                              await filePicker.pickFile(key);
+
+                              final pickedFile = filePicker.getFile(key);
+                              if (filePicker.isPicked(key)) {
+                                AppLoggerHelper.logInfo(
+                                  'Picked file: ${pickedFile!.name}',
+                                );
+                                KSnackBar.success(
+                                  context,
+                                  'Picked file: ${pickedFile.name}',
+                                );
+                              } else {
+                                AppLoggerHelper.logError('No file selected.');
+                                KSnackBar.failure(context, 'No file selected.');
+                              }
+                            },
+                            uploadPickerTitle: "",
+                            uploadPickerIcon:
+                                context.filePickerProviderWatch.isPicked(
+                                  "resume",
+                                )
+                                ? Icons.check_circle
+                                : Icons.upload,
+                            description:
+                                context.filePickerProviderWatch.getFile(
+                                      "resume",
+                                    ) !=
+                                    null
+                                ? "Selected File: ${context.filePickerProviderWatch.getFile("resume")!.name}"
+                                : "Browse file to upload\nSupports .pdf, .doc, .docx",
+                          ),
+
+                          SizedBox(height: 16.h),
+
+                          /// 🔹 Job Description label
+                          Row(
+                            children: [
+                              KText(
+                                text: "Job Description",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                                color: AppColors.titleColor,
+                              ),
+                              KText(
+                                text: " *",
+                                color: Colors.red,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              SizedBox(width: 4.w),
+                              Icon(
+                                Icons.info_outline,
+                                size: 16.sp,
+                                color: AppColors.greyColor,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8.h),
+
+                          /// 🔹 Input Field
+                          KAuthTextFormField(
+                            controller: jobDescriptionController,
+                            hintText: "Enter Job Description",
+                            keyboardType: TextInputType.text,
+                          ),
+
+                          SizedBox(height: 20.h),
+
+                          Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () {
+                                KSnackBar.success(
+                                  context,
+                                  "Fit check with AI tapped",
+                                );
+                              },
+                              child: Image.asset(
+                                AppAssetsConstants.aiFitCheckPng,
+                                height: 90.h,
+                                width: 200.w,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 14.h),
+                  Container(
+                    padding: EdgeInsets.all(18.47.w),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 0.77.w,
+                        color: AppColors.greyColor.withOpacity(0.3),
+                      ),
+                      borderRadius: BorderRadius.circular(7.69.r),
+                      color: AppColors.secondaryColor,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        // Header
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            KText(
+                              text: "Candidate List",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                              color: AppColors.titleColor,
+                            ),
+                          ],
+                        ),
+                        KVerticalSpacer(height: 20.h),
+
+                        // Date and Export Row
+                        Row(
+                          spacing: 20.w,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Filter Button
+                            Expanded(
+                              child: KAtsGlowButton(
+                                text: "Filter",
+                                textColor: AppColors.greyColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                icon: SvgPicture.asset(
+                                  AppAssetsConstants.filterIcon,
+                                  height: 15,
+                                  width: 15,
+                                  fit: BoxFit.contain,
+                                ),
+                                onPressed: () {
+                                  print("Filter button tapped");
+                                },
+                                backgroundColor: AppColors.secondaryColor,
+                              ),
+                            ),
+
+                            // Export file
+                            Expanded(
+                              child: KAtsGlowButton(
+                                text: "Candidates",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                                icon: SvgPicture.asset(
+                                  AppAssetsConstants.addIcon,
+                                  height: 15,
+                                  width: 15,
+                                  fit: BoxFit.contain,
+                                ),
+                                onPressed: () {
+                                  print("Candidates button tapped");
+                                },
+                                backgroundColor: AppColors.primaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        KVerticalSpacer(height: 16.h),
+
+                        // Data Table with paginated data
+                        SizedBox(
+                          height: 330.h,
+                          width:
+                              1445.w, // 👈 Figma width (if you want it strict)
+                          child: KAtsDataTable(
+                            columnHeaders: headers,
+                            rowData: paginatedData,
+                            minWidth: 1445
+                                .w, // 👈 match with figma width// Using paginated data
+                          ),
+                        ),
+
+                        // Pagination
+                        _buildPageNumbersRow(),
+
+                        SizedBox(height: 16.w),
+                        Row(
+                          children: [
+                            KText(
+                              text: entriesDisplayText, // Dynamic entries text
+                              fontSize: 12.sp,
+                              color: AppColors.greyColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            SizedBox(width: 40.w),
+                            GestureDetector(
+                              onTap: () {
+                                // Show dropdown or bottom sheet to change items per page
+                                _showItemsPerPageSelector();
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(10.w),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 0.77.w,
+                                    color: AppColors.greyColor.withOpacity(0.1),
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                  color: AppColors.secondaryColor,
+                                ),
+                                child: Row(
+                                  children: [
+                                    KText(
+                                      text: "Show $itemsPerPage",
+                                      fontSize: 12.sp,
+                                      color: AppColors.titleColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    Icon(
+                                      Icons.keyboard_arrow_down,
+                                      size: 14.sp,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                ),
-
-                SizedBox(height: 14.h),
-                Container(
-                  padding: EdgeInsets.all(18.47.w),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
-                    ),
-                    borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      // Header
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          KText(
-                            text: "Candidate List",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                            color: AppColors.titleColor,
-                          ),
-                        ],
-                      ),
-                      KVerticalSpacer(height: 20.h),
-
-                      // Date and Export Row
-                      Row(
-                        spacing: 20.w,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Filter Button
-                          Expanded(
-                            child: KAtsGlowButton(
-                              text: "Filter",
-                              textColor: AppColors.greyColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                              icon: SvgPicture.asset(
-                                AppAssetsConstants.filterIcon,
-                                height: 15,
-                                width: 15,
-                                fit: BoxFit.contain,
-                              ),
-                              onPressed: () {
-                                print("Filter button tapped");
-                              },
-                              backgroundColor: AppColors.secondaryColor,
-                            ),
-                          ),
-
-                          // Export file
-                          Expanded(
-                            child: KAtsGlowButton(
-                              text: "Candidates",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                              icon: SvgPicture.asset(
-                                AppAssetsConstants.addIcon,
-                                height: 15,
-                                width: 15,
-                                fit: BoxFit.contain,
-                              ),
-                              onPressed: () {
-                                print("Candidates button tapped");
-                              },
-                              backgroundColor: AppColors.primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      KVerticalSpacer(height: 16.h),
-
-                      // Data Table with paginated data
-                      SizedBox(
-                        height: 330.h,
-                        width: 1445.w, // 👈 Figma width (if you want it strict)
-                        child: KAtsDataTable(
-                          columnHeaders: headers,
-                          rowData: paginatedData,
-                          minWidth: 1445
-                              .w, // 👈 match with figma width// Using paginated data
-                        ),
-                      ),
-
-                      // Pagination
-                      _buildPageNumbersRow(),
-
-                      SizedBox(height: 16.w),
-                      Row(
-                        children: [
-                          KText(
-                            text: entriesDisplayText, // Dynamic entries text
-                            fontSize: 12.sp,
-                            color: AppColors.greyColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          SizedBox(width: 40.w),
-                          GestureDetector(
-                            onTap: () {
-                              // Show dropdown or bottom sheet to change items per page
-                              _showItemsPerPageSelector();
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(10.w),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 0.77.w,
-                                  color: AppColors.greyColor.withOpacity(0.1),
-                                ),
-                                borderRadius: BorderRadius.circular(8.r),
-                                color: AppColors.secondaryColor,
-                              ),
-                              child: Row(
-                                children: [
-                                  KText(
-                                    text: "Show $itemsPerPage",
-                                    fontSize: 12.sp,
-                                    color: AppColors.titleColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  Icon(Icons.keyboard_arrow_down, size: 14.sp),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
