@@ -39,7 +39,8 @@ class KAtsDrawer extends StatelessWidget {
               top: 30.5.h,
               left: 2.03.w,
               right: 20.w,
-              bottom: 17.5.h, // 10.5 + 35 (logo height) + 7 (gap) - creating proper spacing
+              bottom: 17.5
+                  .h, // 10.5 + 35 (logo height) + 7 (gap) - creating proper spacing
             ),
             decoration: BoxDecoration(
               color: AppColors.secondaryColor,
@@ -91,10 +92,14 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "ATS Tracker",
                   drawerListTileOnTap: () {
-                    _navigateToRoute(context, AppRouteConstants.atsTrackerScreen);
+                    _navigateToRoute(
+                      context,
+                      AppRouteConstants.atsTrackerScreen,
+                    );
                   },
                   drawerLeadingIcon: Icons.track_changes_outlined,
-                  isSelected: currentRoute == AppRouteConstants.atsTrackerScreen,
+                  isSelected:
+                      currentRoute == AppRouteConstants.atsTrackerScreen,
                 ),
 
                 // Hiring
@@ -111,17 +116,21 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Calendar",
                   drawerListTileOnTap: () {
-                     _navigateToRoute(context, AppRouteConstants.atsCalendarScreen);
+                    _navigateToRoute(
+                      context,
+                      AppRouteConstants.atsCalendarScreen,
+                    );
                   },
                   drawerLeadingIcon: Icons.calendar_today_outlined,
-                  isSelected: currentRoute == AppRouteConstants.atsCalendarScreen,
+                  isSelected:
+                      currentRoute == AppRouteConstants.atsCalendarScreen,
                 ),
 
                 // Index
                 KAtsDrawerListTile(
                   drawerTitle: "Index",
                   drawerListTileOnTap: () {
-                     _navigateToRoute(context, AppRouteConstants.atsIndexScreen);
+                    _navigateToRoute(context, AppRouteConstants.atsIndexScreen);
                   },
                   drawerLeadingIcon: Icons.list_alt_outlined,
                   isSelected: currentRoute == AppRouteConstants.atsIndexScreen,
@@ -131,10 +140,14 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Job Portal",
                   drawerListTileOnTap: () {
-                     _navigateToRoute(context, AppRouteConstants.atsJobPortalScreen);
+                    _navigateToRoute(
+                      context,
+                      AppRouteConstants.atsJobPortalScreen,
+                    );
                   },
                   drawerLeadingIcon: Icons.work_outline,
-                  isSelected: currentRoute == AppRouteConstants.atsJobPortalScreen,
+                  isSelected:
+                      currentRoute == AppRouteConstants.atsJobPortalScreen,
                 ),
 
                 // Admin Tab
@@ -168,7 +181,7 @@ class KAtsDrawer extends StatelessWidget {
                   },
                   drawerLeadingIcon: Icons.help_outline,
                   isSelected: currentRoute == AppRouteConstants.performance,
-               //   hasNotificationBadge: true, // You'll need to add this property to your KAtsDrawerListTile
+                  //   hasNotificationBadge: true, // You'll need to add this property to your KAtsDrawerListTile
                 ),
 
                 // Setting
@@ -178,7 +191,7 @@ class KAtsDrawer extends StatelessWidget {
                     // _navigateToRoute(context, AppRouteConstants.settings);
                   },
                   drawerLeadingIcon: Icons.settings_outlined,
-                 // isSelected: currentRoute == AppRouteConstants.settings,
+                  // isSelected: currentRoute == AppRouteConstants.settings,
                 ),
 
                 SizedBox(height: 20.h),
@@ -208,7 +221,7 @@ class KAtsDrawer extends StatelessWidget {
 
     // Check if we're already on the target route
     if (currentRoute != routeName) {
-      GoRouter.of(context).pushNamed(routeName);
+      GoRouter.of(context).goNamed(routeName);
     }
     // If we're already on the same route, just close the drawer (no navigation)
   }
@@ -229,8 +242,8 @@ class KAtsDrawer extends StatelessWidget {
           content: KText(
             text: "Are you sure you want to logout?",
             fontSize: 14.sp,
-            color: AppColors.subTitleColor,            fontWeight: FontWeight.w600,
-
+            color: AppColors.subTitleColor,
+            fontWeight: FontWeight.w600,
           ),
           actions: [
             TextButton(
@@ -239,7 +252,8 @@ class KAtsDrawer extends StatelessWidget {
               },
               child: KText(
                 text: "Cancel",
-                color: AppColors.subTitleColor,            fontWeight: FontWeight.w600,
+                color: AppColors.subTitleColor,
+                fontWeight: FontWeight.w600,
 
                 fontSize: 14.sp,
               ),
@@ -252,7 +266,9 @@ class KAtsDrawer extends StatelessWidget {
 
                 // Only navigate if logout was successful (no error)
                 if (logoutProvider.error == null) {
-                  GoRouter.of(context).pushReplacementNamed(AppRouteConstants.login);
+                  GoRouter.of(
+                    context,
+                  ).pushReplacementNamed(AppRouteConstants.login);
                   KSnackBar.success(context, 'Logout Successfully');
                 } else {
                   KSnackBar.failure(
@@ -263,23 +279,56 @@ class KAtsDrawer extends StatelessWidget {
               },
               child: context.employeeAuthLogOutProviderWatch.isLoading
                   ? SizedBox(
-                width: 16.w,
-                height: 16.h,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor),
-                ),
-              )
+                      width: 16.w,
+                      height: 16.h,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.primaryColor,
+                        ),
+                      ),
+                    )
                   : KText(
-                text: "Logout",
-                color: AppColors.primaryColor,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-              ),
+                      text: "Logout",
+                      color: AppColors.primaryColor,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
             ),
           ],
         );
       },
+    );
+  }
+}
+
+//Back To Home Wrapper
+class MainScaffold extends StatelessWidget {
+  final Widget child;
+  final String currentRoute;
+
+  const MainScaffold({
+    Key? key,
+    required this.child,
+    required this.currentRoute,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        // If not on Home → go Home instead of closing app
+        if (currentRoute != AppRouteConstants.homeRecruiter) {
+          GoRouter.of(context).goNamed(AppRouteConstants.homeRecruiter);
+          return false;
+        }
+        // If already on Home → allow back to exit
+        return true;
+      },
+      child: Scaffold(
+        drawer: KAtsDrawer(currentRoute: currentRoute),
+        body: child,
+      ),
     );
   }
 }
