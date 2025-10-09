@@ -192,7 +192,8 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
     final name = employeeDetails?['name'] ?? "No Name";
     final email = employeeDetails?['email'] ?? "No Email";
-    final String currentRoute = AppRouteConstants.trackerScreen; // Replace with actual current route
+    final String currentRoute =
+        AppRouteConstants.trackerScreen; // Replace with actual current route
 
     final headers = [
       SizedBox(
@@ -275,21 +276,18 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
         'numberOfCount': "708",
         'growth': "+5.1%",
         'icon': AppAssetsConstants.pecIcon, // ✅ SVG path
-
       },
       {
         'title': '50% - 80% Score',
         'numberOfCount': "958",
         'growth': "+5.1%",
         'icon': AppAssetsConstants.pecIcon, // ✅ SVG path
-
       },
       {
         'title': '40% Score',
         'numberOfCount': "1,504",
         'growth': "+5.1%",
         'icon': AppAssetsConstants.pecIcon, // ✅ SVG path
-
       },
     ];
 
@@ -434,7 +432,7 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                               _showItemsPerPageSelector();
                             },
                             child: Container(
-                              padding: EdgeInsets.all(10.w),
+                              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   width: 0.77.w,
@@ -447,11 +445,18 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                                 children: [
                                   KText(
                                     text: "Show $itemsPerPage",
-                                    fontSize: 12.sp,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                        0.025,
                                     color: AppColors.titleColor,
                                     fontWeight: FontWeight.w500,
                                   ),
-                                  Icon(Icons.keyboard_arrow_down, size: 14.sp),
+                                  Icon(
+                                    Icons.keyboard_arrow_down,
+                                    size:
+                                        MediaQuery.of(context).size.width *
+                                        0.04,
+                                  ),
                                 ],
                               ),
                             ),
@@ -481,11 +486,11 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
         icon: Icon(Icons.chevron_left, size: 16.sp),
         onPressed: pageWindowStart > 1
             ? () {
-          setState(() {
-            pageWindowStart -= pageWindowSize;
-            currentPage = pageWindowStart;
-          });
-        }
+                setState(() {
+                  pageWindowStart -= pageWindowSize;
+                  currentPage = pageWindowStart;
+                });
+              }
             : null,
       ),
     );
@@ -506,11 +511,11 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
         icon: Icon(Icons.chevron_right, size: 16.sp),
         onPressed: windowEnd < totalPages
             ? () {
-          setState(() {
-            pageWindowStart += pageWindowSize;
-            currentPage = pageWindowStart;
-          });
-        }
+                setState(() {
+                  pageWindowStart += pageWindowSize;
+                  currentPage = pageWindowStart;
+                });
+              }
             : null,
       ),
     );
@@ -563,7 +568,7 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
               ),
               SizedBox(height: 16.h),
               ...([5, 6, 10, 15, 20].map(
-                    (count) => ListTile(
+                (count) => ListTile(
                   title: KText(
                     text: "Show $count items",
                     fontSize: 14.sp,
