@@ -31,7 +31,7 @@ class AttendanceCard extends StatelessWidget {
         // Card Content
         Container(
           width: 0.4.sw,
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          padding: EdgeInsets.symmetric(horizontal: 19.w, vertical: 19.h),
           decoration: BoxDecoration(
             border: Border.all(width: 0.1.w, color: AppColors.greyColor),
             borderRadius: BorderRadius.circular(8.r),
