@@ -35,6 +35,7 @@ import 'package:fuoday/features/attendance/domain/usecases/get_total_attendance_
 import 'package:fuoday/features/attendance/domain/usecases/get_total_early_arrivals_details_use_case.dart';
 import 'package:fuoday/features/attendance/domain/usecases/get_total_late_arrivals_details_use_case.dart';
 import 'package:fuoday/features/attendance/domain/usecases/get_total_punctual_arrivals_details_use_case.dart';
+import 'package:fuoday/features/attendance/presentation/providers/date_time_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_absent_days_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_attendance_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_early_arrivals_details_provider.dart';
@@ -255,16 +256,16 @@ void setUpServiceLocator() {
   );
   getIt.registerFactory<BottomNavProvider>(() => BottomNavProvider());
 
-  getIt.registerFactory<RecruiterBottomNavProvider>(() => RecruiterBottomNavProvider());
+  getIt.registerFactory<RecruiterBottomNavProvider>(
+    () => RecruiterBottomNavProvider(),
+  );
 
   // Data Source
   getIt.registerLazySingleton<EmployeeAuthRemoteDataSource>(
     () => EmployeeAuthRemoteDataSource(dioService: getIt<DioService>()),
   );
 
-  getIt.registerLazySingleton(
-    () => HomeFeedsProjectRemoteDataSource(getIt()),
-  );
+  getIt.registerLazySingleton(() => HomeFeedsProjectRemoteDataSource(getIt()));
 
   // Add Check-In Data Source
   getIt.registerLazySingleton<CheckInRemoteDataSource>(
@@ -820,21 +821,22 @@ void setUpServiceLocator() {
 
   // Data sources
   getIt.registerLazySingleton<AttendanceRemoteDataSource>(
-          () => AttendanceRemoteDataSourceImpl(dioService: getIt()));
+    () => AttendanceRemoteDataSourceImpl(dioService: getIt()),
+  );
 
   // Repository
   getIt.registerLazySingleton<AttendanceRepository>(
-        () => AttendanceRepositoryImpl(remoteDataSource: getIt()),
+    () => AttendanceRepositoryImpl(remoteDataSource: getIt()),
   );
 
   // Use cases
   getIt.registerLazySingleton<GetTotalPunctualArrivalsDetailsUseCase>(
-        () => GetTotalPunctualArrivalsDetailsUseCase(repository: getIt()),
+    () => GetTotalPunctualArrivalsDetailsUseCase(repository: getIt()),
   );
 
   // Providers
   getIt.registerFactory<TotalPunctualArrivalDetailsProvider>(
-        () => TotalPunctualArrivalDetailsProvider(
+    () => TotalPunctualArrivalDetailsProvider(
       getTotalPunctualArrivalsDetailsUseCase: getIt(),
     ),
   );
@@ -948,227 +950,212 @@ void setUpServiceLocator() {
 
   // Payroll
   getIt.registerLazySingleton<PayrollRemoteDataSource>(
-        () => PayrollRemoteDataSourceImpl(
+    () => PayrollRemoteDataSourceImpl(
       dio: getIt<DioService>(), // Using your existing DioService
       baseUrl: AppEnvironment.baseUrl, // From flavors config
     ),
   );
 
   getIt.registerLazySingleton<PayrollRepository>(
-        () => PayrollRepositoryImpl(
+    () => PayrollRepositoryImpl(
       remoteDataSource: getIt<PayrollRemoteDataSource>(),
     ),
   );
 
   getIt.registerLazySingleton<GetPayrollUseCase>(
-        () => GetPayrollUseCase(
-      getIt<PayrollRepository>(),
-    ),
+    () => GetPayrollUseCase(getIt<PayrollRepository>()),
   );
 
   getIt.registerFactory<PayrollProvider>(
-        () => PayrollProvider(
-      getPayrollUseCase: getIt<GetPayrollUseCase>(),
-    ),
+    () => PayrollProvider(getPayrollUseCase: getIt<GetPayrollUseCase>()),
   );
 
   // Register Repository
   getIt.registerLazySingleton<PayrollOverviewRepository>(
-        () => PayrollOverviewRepositoryImpl(getIt<DioService>()),
+    () => PayrollOverviewRepositoryImpl(getIt<DioService>()),
   );
 
-// Register Use Case
+  // Register Use Case
   getIt.registerLazySingleton(
-        () => GetPayrollOverviewUseCase(getIt<PayrollOverviewRepository>()),
+    () => GetPayrollOverviewUseCase(getIt<PayrollOverviewRepository>()),
   );
 
-// Register Provider
+  // Register Provider
   getIt.registerFactory(
-        () => PayrollOverviewProvider(getPayrollOverviewUseCase: getIt()),
+    () => PayrollOverviewProvider(getPayrollOverviewUseCase: getIt()),
   );
 
-// hr screen
+  // hr screen
 
-// Data source
+  // Data source
   getIt.registerLazySingleton<HROverviewRemoteDataSource>(
-        () => HROverviewRemoteDataSourceImpl(dioService: getIt<DioService>()),
+    () => HROverviewRemoteDataSourceImpl(dioService: getIt<DioService>()),
   );
 
-//  Repository
+  //  Repository
   getIt.registerLazySingleton<HROverviewRepository>(
-        () => HROverviewRepositoryImpl(remoteDataSource: getIt<HROverviewRemoteDataSource>()),
+    () => HROverviewRepositoryImpl(
+      remoteDataSource: getIt<HROverviewRemoteDataSource>(),
+    ),
   );
 
-//  Use case
+  //  Use case
   getIt.registerLazySingleton<GetHROverview>(
-        () => GetHROverview(getIt<HROverviewRepository>()),
+    () => GetHROverview(getIt<HROverviewRepository>()),
   );
 
-//  Provider
+  //  Provider
   getIt.registerFactory<HROverviewProvider>(
-        () => HROverviewProvider(getHROverviewUseCase: getIt<GetHROverview>()),
+    () => HROverviewProvider(getHROverviewUseCase: getIt<GetHROverview>()),
   );
-
 
   // Data sources
   // In your DI setup
   getIt.registerLazySingleton<EmpAuditFormDataSource>(
-        () => EmpAuditFormDataSourceImpl(
+    () => EmpAuditFormDataSourceImpl(
       dioService: getIt<DioService>(), // Uses your existing DioService
     ),
   );
 
   // Repositories
   getIt.registerLazySingleton<EmpAuditFormRepository>(
-        () => EmpAuditFormRepositoryImpl(getIt()),
+    () => EmpAuditFormRepositoryImpl(getIt()),
   );
 
   // Use cases
-  getIt.registerLazySingleton(
-        () => GetEmployeesByManagersUseCase(getIt()),
-  );
+  getIt.registerLazySingleton(() => GetEmployeesByManagersUseCase(getIt()));
 
   // Providers
-  getIt.registerFactory(
-        () => EmpAuditFormProvider(getIt()),
-  );
-
+  getIt.registerFactory(() => EmpAuditFormProvider(getIt()));
 
   // leave regulation
   // Data source
   getIt.registerLazySingleton<LeaveRegulationRemoteDataSource>(
-        () => LeaveRegulationRemoteDataSourceImpl(getIt<DioService>()),
+    () => LeaveRegulationRemoteDataSourceImpl(getIt<DioService>()),
   );
 
   // Repository
   getIt.registerLazySingleton<LeaveRegulationRepository>(
-        () => LeaveRegulationRepositoryImpl(getIt()),
+    () => LeaveRegulationRepositoryImpl(getIt()),
   );
 
   // Use case
-  getIt.registerLazySingleton(
-        () => SubmitLeaveRegulationUseCase(getIt()),
-  );
-  getIt.registerFactory(
-        () => LeaveRegulationProvider(getIt()),
-  );
+  getIt.registerLazySingleton(() => SubmitLeaveRegulationUseCase(getIt()));
+  getIt.registerFactory(() => LeaveRegulationProvider(getIt()));
 
   //get audit form emp list
   // Data Source
   getIt.registerLazySingleton<AuditReportingTeamRemoteDataSource>(
-          () => AuditReportingTeamRemoteDataSourceImpl(getIt<DioService>()),
+    () => AuditReportingTeamRemoteDataSourceImpl(getIt<DioService>()),
   );
   // Repository
-      getIt.registerLazySingleton<AuditReportingTeamRepository>(
-          () => AuditReportingTeamRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<AuditReportingTeamRepository>(
+    () => AuditReportingTeamRepositoryImpl(getIt()),
+  );
 
   // Usecase
   getIt.registerLazySingleton(() => GetAuditReportingTeamUseCase(getIt()));
 
   // Provider
   getIt.registerFactory(
-        () => AuditReportingTeamProvider(
+    () => AuditReportingTeamProvider(
       getAuditReportingTeamUseCase: getIt<GetAuditReportingTeamUseCase>(),
     ),
   );
 
-
   // Data Source
   getIt.registerLazySingleton<CheckinStatusRemoteDataSource>(
-        () => CheckinStatusRemoteDataSourceImpl(getIt<DioService>()),
+    () => CheckinStatusRemoteDataSourceImpl(getIt<DioService>()),
   );
 
-// Repository
+  // Repository
   getIt.registerLazySingleton<CheckinStatusRepository>(
-        () => CheckinStatusRepositoryImpl(getIt()),
+    () => CheckinStatusRepositoryImpl(getIt()),
   );
 
-// Usecase
+  // Usecase
   getIt.registerLazySingleton(() => GetCheckinStatusUseCase(getIt()));
 
-// Provider
+  // Provider
   getIt.registerFactory(
-        () => CheckinStatusProvider(
+    () => CheckinStatusProvider(
       getCheckinStatusUseCase: getIt<GetCheckinStatusUseCase>(),
     ),
   );
 
   // Data Source
   getIt.registerLazySingleton<AuditReportRemoteDataSource>(
-        () => AuditReportRemoteDataSourceImpl(getIt<DioService>()),
+    () => AuditReportRemoteDataSourceImpl(getIt<DioService>()),
   );
 
-// Repository
+  // Repository
   getIt.registerLazySingleton<AuditReportRepository>(
-        () => AuditReportRepositoryImpl(getIt()),
+    () => AuditReportRepositoryImpl(getIt()),
   );
 
-// Usecase
+  // Usecase
   getIt.registerLazySingleton(() => GetAuditReportUseCase(getIt()));
 
-// Provider
+  // Provider
   getIt.registerFactory(
-        () => AuditReportProvider(
+    () => AuditReportProvider(
       getAuditReportUseCase: getIt<GetAuditReportUseCase>(),
     ),
   );
 
   // Data Source
   getIt.registerLazySingleton<TeamTreeRemoteDataSource>(
-        () => TeamTreeRemoteDataSourceImpl(getIt<DioService>()),
+    () => TeamTreeRemoteDataSourceImpl(getIt<DioService>()),
   );
 
-// Repository
+  // Repository
   getIt.registerLazySingleton<TeamTreeRepository>(
-        () => TeamTreeRepositoryImpl(getIt()),
+    () => TeamTreeRepositoryImpl(getIt()),
   );
 
-// Usecase
+  // Usecase
   getIt.registerLazySingleton(() => GetTeamTreeUseCase(getIt()));
 
-// Provider
+  // Provider
   getIt.registerFactory(
-        () => TeamTreeProvider(getTeamTreeUseCase: getIt<GetTeamTreeUseCase>()),
+    () => TeamTreeProvider(getTeamTreeUseCase: getIt<GetTeamTreeUseCase>()),
   );
 
   // Recognition wall
   // Data Source
   getIt.registerLazySingleton<RecognitionRemoteDataSource>(
-        () => RecognitionRemoteDataSourceImpl(getIt<DioService>()),
+    () => RecognitionRemoteDataSourceImpl(getIt<DioService>()),
   );
 
-// Repository
+  // Repository
   getIt.registerLazySingleton<RecognitionRepository>(
-        () => RecognitionRepositoryImpl(getIt()),
+    () => RecognitionRepositoryImpl(getIt()),
   );
 
-// Usecase
+  // Usecase
   getIt.registerLazySingleton(() => SaveRecognitionsUseCase(getIt()));
-
-// Provider
-  getIt.registerFactory(
-        () => RecognitionProvider(saveRecognitionsUseCase: getIt()),
-  );
-
-
-// Data Source
-  getIt.registerLazySingleton<BadgeRemoteDataSource>(
-        () => BadgeRemoteDataSourceImpl(getIt<DioService>()),
-  );
-
-// Repository
-  getIt.registerLazySingleton<BadgeRepository>(
-        () => BadgeRepositoryImpl(getIt()),
-  );
-
-// Usecase
-  getIt.registerLazySingleton(() => GetBadgesUseCase(getIt()));
 
   // Provider
   getIt.registerFactory(
-        () => BadgeProvider(getBadgesUseCase: getIt()),
+    () => RecognitionProvider(saveRecognitionsUseCase: getIt()),
   );
 
+  // Data Source
+  getIt.registerLazySingleton<BadgeRemoteDataSource>(
+    () => BadgeRemoteDataSourceImpl(getIt<DioService>()),
+  );
 
+  // Repository
+  getIt.registerLazySingleton<BadgeRepository>(
+    () => BadgeRepositoryImpl(getIt()),
+  );
 
+  // Usecase
+  getIt.registerLazySingleton(() => GetBadgesUseCase(getIt()));
+
+  // Provider
+  getIt.registerFactory(() => BadgeProvider(getBadgesUseCase: getIt()));
+
+  //Date Time Provider
+  getIt.registerFactory<DateTimeProvider>(() => DateTimeProvider());
 }

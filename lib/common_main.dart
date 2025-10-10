@@ -54,6 +54,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'features/attendance/presentation/providers/date_time_provider.dart';
 import 'features/bottom_nav/providers/recruiter_bottom_nav_provider.dart';
 import 'features/home/presentation/provider/badge_provider.dart';
 import 'features/home/presentation/provider/checkin_status_provider.dart';
@@ -283,6 +284,7 @@ class MyApp extends StatelessWidget {
           create: (context) => getIt<RecognitionProvider>(),
         ),
         ChangeNotifierProvider(create: (context) => getIt<BadgeProvider>()),
+        ChangeNotifierProvider(create: (context) => getIt<DateTimeProvider>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),

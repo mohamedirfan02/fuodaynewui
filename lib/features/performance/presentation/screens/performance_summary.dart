@@ -25,7 +25,6 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
   late final int webUserId;
   final dateFormatter = DateFormat('yyyy-MM-dd'); // or 'dd-MM-yyyy'
 
-
   @override
   void initState() {
     hiveService = getIt<HiveStorageService>();
@@ -45,7 +44,7 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
   Widget build(BuildContext context) {
     // Providers
     final provider = context.performanceSummaryProviderWatch;
-// Columns
+    // Columns
     final columns = [
       'Date',
       'Task',
@@ -53,22 +52,23 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
       'Deadline',
       'Status',
       'Progress Note',
-
     ];
-// instead of hardcoding
-    final data = provider.summary?.tasks?.map((task) {
-      return {
-        //'S.No': task.id.toString(),
-        'Date': task.date != null ? dateFormatter.format(task.date!) : '',
-        'Task': task.description ?? '',
-        'Assigned By': task.assignedBy ?? '',
-        'Deadline': task.deadline != null ? dateFormatter.format(task.deadline!) : '',
-        'Status': task.status ?? '',
-        'Progress Note': task.progressNote ?? '',
-
-      };
-    }).toList() ?? [];
-
+    // instead of hardcoding
+    final data =
+        provider.summary?.tasks?.map((task) {
+          return {
+            //'S.No': task.id.toString(),
+            'Date': task.date != null ? dateFormatter.format(task.date!) : '',
+            'Task': task.description ?? '',
+            'Assigned By': task.assignedBy ?? '',
+            'Deadline': task.deadline != null
+                ? dateFormatter.format(task.deadline!)
+                : '',
+            'Status': task.status ?? '',
+            'Progress Note': task.progressNote ?? '',
+          };
+        }).toList() ??
+        [];
 
     // Performance Summary Card
     final performanceSummaryCard = [
@@ -88,7 +88,8 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
       {
         'iconData': Icons.star_rate,
         'cardTitle': "Performance Ratings",
-        'cardSubTitle': "${provider.summary?.performanceRatingOutOf5?.toString() ??'0'}/5"
+        'cardSubTitle':
+            "${provider.summary?.performanceRatingOutOf5?.toString() ?? '0'}/5",
       },
       {
         'iconData': Icons.calendar_today,

@@ -4,6 +4,7 @@ import 'package:fuoday/commons/providers/dropdown_provider.dart';
 import 'package:fuoday/core/providers/app_file_downloader_provider.dart';
 import 'package:fuoday/core/providers/app_file_picker_provider.dart';
 import 'package:fuoday/core/providers/app_internet_checker_provider.dart';
+import 'package:fuoday/features/attendance/presentation/providers/date_time_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_absent_days_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_attendance_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_early_arrivals_details_provider.dart';
@@ -205,4 +206,7 @@ extension ProviderExtension on BuildContext {
 
   CheckinStatusProvider get checkinStatusProviderRead =>
       read<CheckinStatusProvider>();
+
+  //Date Time Showing Provider
+  DateTimeProvider get dateTimeProviderWatch => watch<DateTimeProvider>();
 }

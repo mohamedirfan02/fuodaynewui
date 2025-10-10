@@ -53,7 +53,8 @@ class _AttendanceOverviewState extends State<AttendanceOverview> {
     //     KSnackBar.success(context, "Internet Connection Available");
     //   }
     // });
-
+    //Date and Time Showing provider
+    final dateTimeProvider = context.dateTimeProviderWatch;
     // Total Attendance Details Provider
     final totalAttendanceDetailsProvider =
         context.totalAttendanceDetailsProviderWatch;
@@ -126,10 +127,10 @@ class _AttendanceOverviewState extends State<AttendanceOverview> {
         children: [
           // Attendance Welcoming Card
           AttendanceWelcomingCard(
-            attendanceCardTime: "09:02:04 AM",
-            attendanceCardTimeMessage: "Good Morning",
+            attendanceCardTime: dateTimeProvider.currentTime, //"09:02:04 AM",
+            attendanceCardTimeMessage: dateTimeProvider.greeting,
             attendanceDay: "Today",
-            attendanceDate: "26 July 2025",
+            attendanceDate: dateTimeProvider.currentDate,
             onViewAttendance: () {
               // Total Attendance View Screen
               GoRouter.of(
