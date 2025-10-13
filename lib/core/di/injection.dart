@@ -221,6 +221,12 @@ import 'package:fuoday/features/time_tracker/domain/usecase/get_time_and_project
 import 'package:fuoday/features/time_tracker/presentation/provider/time_tracker_provider.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../features/home/data/datasources/remote/emp_department_remote_datasource.dart';
+import '../../features/home/data/repositories/employee_department_repository_impl.dart';
+import '../../features/home/domain/repositories/emp_department_repository.dart';
+import '../../features/home/domain/usecases/emp_department_usecase.dart';
+import '../../features/home/presentation/provider/employee_department_provider.dart';
+
 // Get It
 final getIt = GetIt.instance;
 
@@ -1158,4 +1164,30 @@ void setUpServiceLocator() {
 
   //Date Time Provider
   getIt.registerFactory<DateTimeProvider>(() => DateTimeProvider());
+
+  // Data Source
+  getIt.registerLazySingleton<EmployeeDepartmentDataSource>(
+    () => EmployeeDepartmentDataSourceImpl(dioService: getIt<DioService>()),
+  );
+
+  // Repository
+  getIt.registerLazySingleton<EmployeeDepartmentRepository>(
+    () => EmployeeDepartmentRepositoryImpl(
+      dataSource: getIt<EmployeeDepartmentDataSource>(),
+    ),
+  );
+
+  // Usecase
+  getIt.registerLazySingleton(
+    () => GetEmployeesByManagerUseCase(
+      repository: getIt<EmployeeDepartmentRepository>(),
+    ),
+  );
+
+  // Provider
+  getIt.registerFactory(
+    () => EmployeeDepartmentProvider(
+      getEmployeesByManagerUseCase: getIt<GetEmployeesByManagerUseCase>(),
+    ),
+  );
 }

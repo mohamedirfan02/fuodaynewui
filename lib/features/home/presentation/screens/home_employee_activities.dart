@@ -93,9 +93,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
     AppLoggerHelper.logInfo("Badges sent successfully");
   }
 
-
-
-// Callback for when badges are updated
+  // Callback for when badges are updated
   void _handleBadgesUpdated() {
     AppLoggerHelper.logWarning('Badges were updated');
 
@@ -105,7 +103,6 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
     // - Update UI
     // - Log analytics event
   }
-
 
   @override
   void dispose() {
@@ -309,6 +306,76 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                               color: AppColors.secondaryColor,
                             ),
                             KVerticalSpacer(height: 8.h),
+
+                            ///Break In % Break Out
+                            KCheckInButton(
+                              text: checkInProvider.isLoading
+                                  ? "Loading..."
+                                  : (checkinStatusProvider
+                                            .isCurrentlyCheckedIn ||
+                                        checkInProvider.isCheckedIn)
+                                  ? "Break Out"
+                                  : "Break In",
+                              fontSize: 8.sp,
+                              height: 25.h,
+                              width: 100.w,
+                              backgroundColor: checkInProvider.isLoading
+                                  ? Colors.grey
+                                  : (checkinStatusProvider
+                                            .isCurrentlyCheckedIn ||
+                                        checkInProvider.isCheckedIn)
+                                  ? AppColors.checkOutColor
+                                  : AppColors.checkInColor,
+                              onPressed: checkInProvider.isLoading
+                                  ? null
+                                  : () async {
+                                      // Navigator.of(context).push(
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) => TesingPage(),
+                                      //   ),
+                                      // );
+                                      // final now = DateTime.now()
+                                      //     .toIso8601String();
+                                      //
+                                      // if (checkinStatusProvider
+                                      //         .isCurrentlyCheckedIn ||
+                                      //     checkInProvider.isCheckedIn) {
+                                      //   await context.checkInProviderRead
+                                      //       .handleCheckOut(
+                                      //         userId: webUserId,
+                                      //         time: now,
+                                      //       );
+                                      //   // Stop the local stopwatch timer when checking out
+                                      //   checkInProvider.stopWatchTimer
+                                      //       .onStopTimer();
+                                      //   AppLoggerHelper.logInfo(
+                                      //     "Check Out Web User Id: $webUserId",
+                                      //   );
+                                      // } else {
+                                      //   await context.checkInProviderRead
+                                      //       .handleCheckIn(
+                                      //         userId: webUserId,
+                                      //         time: now,
+                                      //       );
+                                      //   AppLoggerHelper.logInfo(
+                                      //     "Check In Web User Id: $webUserId",
+                                      //   );
+                                      //
+                                      //   // Start the local stopwatch timer for immediate feedback
+                                      //   checkInProvider.stopWatchTimer
+                                      //       .onResetTimer();
+                                      //   checkInProvider.stopWatchTimer
+                                      //       .onStartTimer();
+                                      // }
+                                      //
+                                      // // Refresh checkin status after check-in/out
+                                      // if (webUserId > 0) {
+                                      //   await context.checkinStatusProviderRead
+                                      //       .fetchCheckinStatus(webUserId);
+                                      // }
+                                    },
+                            ),
+                            KVerticalSpacer(height: 10.h),
                             KAuthFilledBtn(
                               text:
                                   "Location ${checkinStatusProvider.checkinStatus?.location ?? 'onSite'}",
@@ -434,8 +501,10 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
 
               // Use the reusable Recognition Wall Widget
               RecognitionWallWidget(
-                title: "Click the edit icon ✎ to add and manage your achievements !",
-                description: 'Recognizing our team\'s extraordinary efforts, we express heartfelt gratitude for your dedication, hard work, and the positive impact you bring daily',
+                // title:
+                //     "Click the edit icon ✎ to add and manage your achievements !",
+                description:
+                    'Recognizing our team\'s extraordinary efforts, we express heartfelt gratitude for your dedication, hard work, and the positive impact you bring daily',
                 onBadgesSubmitted: _handleBadgesSubmitted,
                 onBadgesUpdated: _handleBadgesUpdated,
               ),
@@ -523,7 +592,9 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                               ),
                               KVerticalSpacer(height: 5.h),
                               KText(
-                                text: DateFormat('dd MMM yyyy').format(event.date),
+                                text: DateFormat(
+                                  'dd MMM yyyy',
+                                ).format(event.date),
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12.sp,
                                 color: AppColors.greyColor,
