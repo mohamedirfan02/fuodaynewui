@@ -58,6 +58,7 @@ import 'features/attendance/presentation/providers/date_time_provider.dart';
 import 'features/bottom_nav/providers/recruiter_bottom_nav_provider.dart';
 import 'features/home/presentation/provider/badge_provider.dart';
 import 'features/home/presentation/provider/checkin_status_provider.dart';
+import 'features/home/presentation/provider/employee_department_provider.dart';
 import 'features/leave_tracker/presentation/providers/leave_regulation_provider.dart';
 import 'features/management/presentation/provider/emp_audit_form_provider.dart';
 import 'features/payslip/presentation/Provider/payroll_overview_provider.dart';
@@ -285,6 +286,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (context) => getIt<BadgeProvider>()),
         ChangeNotifierProvider(create: (context) => getIt<DateTimeProvider>()),
+        ChangeNotifierProvider(
+          create: (context) => getIt<EmployeeDepartmentProvider>(),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),

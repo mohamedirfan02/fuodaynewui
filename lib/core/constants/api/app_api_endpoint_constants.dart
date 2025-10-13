@@ -139,22 +139,27 @@ class AppApiEndpointConstants {
   static String postAuditForm = '$baseUrl/hrms/performance/addaudit';
 
   //get payroll details
-  static String getPayroll(int webUserId) => '$baseUrl/hrms/payroll/getpayroll/$webUserId';
+  static String getPayroll(int webUserId) =>
+      '$baseUrl/hrms/payroll/getpayroll/$webUserId';
 
   //get PayRoll OverView Details
-  static String getPayrollOverView(int webUserId) => '$baseUrl/hrms/payroll/getoverview/$webUserId';
+  static String getPayrollOverView(int webUserId) =>
+      '$baseUrl/hrms/payroll/getoverview/$webUserId';
 
   // download payslip
-  static String downloadPayslip(int webUserId) => '$baseUrl/hrms/payroll/downloadpayslip/$webUserId';
+  static String downloadPayslip(int webUserId) =>
+      '$baseUrl/hrms/payroll/downloadpayslip/$webUserId';
 
   //HrOverview screen
-  static String getHrOverview(int webUserId) => '$baseUrl/hrms/hr/gethr/$webUserId';
+  static String getHrOverview(int webUserId) =>
+      '$baseUrl/hrms/hr/gethr/$webUserId';
 
   //Create and update events
   static String addEvents = '$baseUrl/admin-users/save/event';
 
   //Get getEmployeesByManagers
-  static String getEmployeesByManagers(int webUserId) => '$baseUrl/web-users/getemployeesbymanagers/$webUserId';
+  static String getEmployeesByManagers(int webUserId) =>
+      '$baseUrl/web-users/getemployeesbymanagers/$webUserId';
 
   //Leave Regulation
   static String leaveRegulation = '$baseUrl/hrms/leave/regulate';
@@ -165,18 +170,25 @@ class AppApiEndpointConstants {
   static String addBadges = '$baseUrl/hrms/home/recognitions';
 
   //get audit reporting team
-  static String getAuditReportingTeam(int webUserId) => '$baseUrl/hrms/performance/getauditreportingteam/$webUserId';
+  static String getAuditReportingTeam(int webUserId) =>
+      '$baseUrl/hrms/performance/getauditreportingteam/$webUserId';
 
   //get checkIn checkOut status and time
-  static String getCheckInCheckOutStatusAndTime(int webUserId) => '$baseUrl/hrms/home/getactivities/$webUserId';
+  static String getCheckInCheckOutStatusAndTime(int webUserId) =>
+      '$baseUrl/hrms/home/getactivities/$webUserId';
 
   // get each person audit from
-  static String getEachPersonAuditForm(int id) => '$baseUrl/hrms/performance/getauditreport/$id';
+  static String getEachPersonAuditForm(int id) =>
+      '$baseUrl/hrms/performance/getauditreport/$id';
 
   // get teamTreeByAccordingToManagerName
-  static String getTeamTree(int webUserId) => '$baseUrl/web-users/getemployeesbymanagers/$webUserId';
+  static String getTeamTree(int webUserId) =>
+      '$baseUrl/web-users/getemployeesbymanagers/$webUserId';
 
   // get All Badges
-  static String getBadges(int webUserId) => '$baseUrl/hrms/home/recognitions/$webUserId';
-
+  static String getBadges(int webUserId) =>
+      '$baseUrl/hrms/home/recognitions/$webUserId';
+  // get All Badges
+  static String getEmpDepartment(int webUserId) =>
+      '$baseUrl/web-users/getemployeesbyadmin/$webUserId';
 }

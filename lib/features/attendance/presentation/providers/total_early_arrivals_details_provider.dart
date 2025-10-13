@@ -27,28 +27,27 @@ class TotalEarlyArrivalsDetailsProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final EarlyArrivalsEntity result =
-      await getTotalEarlyArrivalsUseCase.call(webUserId);
+      final EarlyArrivalsEntity result = await getTotalEarlyArrivalsUseCase
+          .call(webUserId);
 
       _earlyArrivalsDetails = result;
-      _isLoading = false;
+      //_isLoading = false;
 
       AppLoggerHelper.logInfo(
         '✅ Early arrivals fetched successfully for userId: $webUserId',
       );
     } catch (e, stack) {
       _earlyArrivalsDetails = null;
-      _isLoading = false;
+      // _isLoading = false;
       _errorMessage = "Failed to fetch early arrivals data: $e";
 
       AppLoggerHelper.logError(
         '❌ Error fetching early arrivals for userId $webUserId: $e',
       );
       AppLoggerHelper.logError(stack.toString()); // optional, for full trace
+    } finally {
+      _isLoading = false;
+      notifyListeners(); // Important: ensure UI rebuilds
     }
-
-
-    notifyListeners();
   }
 }
-

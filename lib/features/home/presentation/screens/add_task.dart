@@ -14,8 +14,11 @@ import 'package:fuoday/features/home/data/model/emp_list_model.dart';
 import 'package:fuoday/features/home/domain/entities/home_addtask_entity.dart';
 import 'package:fuoday/features/home/domain/usecases/emp_list_usecase.dart';
 import 'package:fuoday/features/home/domain/usecases/home_addtask_usecase.dart';
+import 'package:fuoday/features/home/presentation/widgets/assigned_person_dropdown.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+
+import '../../domain/entities/emp_department_entity.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({super.key});
@@ -54,6 +57,7 @@ class _AddTaskState extends State<AddTask> {
     super.dispose();
   }
 
+  List<EmployeeModelEntity> selectedEmployees = [];
   List<EmployeeModel> employees = [];
   String? selectedEmployeeName;
   String? selectedEmployeeId;
@@ -84,16 +88,15 @@ class _AddTaskState extends State<AddTask> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     // Select Date
     Future<void> selectDate(
-        BuildContext context,
-        TextEditingController controller, {
-          required bool isDeadline,
-          required bool isAssignDate,
-        }) async {
+      BuildContext context,
+      TextEditingController controller, {
+      required bool isDeadline,
+      required bool isAssignDate,
+    }) async {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -131,7 +134,6 @@ class _AddTaskState extends State<AddTask> {
       }
     }
 
-
     return Scaffold(
       backgroundColor: AppColors.secondaryColor,
       body: SingleChildScrollView(
@@ -159,7 +161,12 @@ class _AddTaskState extends State<AddTask> {
                 KAuthTextFormField(
                   label: "Assign Date",
                   onTap: () async {
-                    await selectDate(context, assignDateController, isDeadline: false, isAssignDate: true);
+                    await selectDate(
+                      context,
+                      assignDateController,
+                      isDeadline: false,
+                      isAssignDate: true,
+                    );
                   },
                   controller: assignDateController,
                   hintText: "Select assign date",
@@ -178,18 +185,34 @@ class _AddTaskState extends State<AddTask> {
                 KVerticalSpacer(height: 6.h),
 
                 // Assigned To Person Text Field
-                KDropdownTextFormField<String>(
-                  hintText: "Select assigned person",
-                  value: selectedEmployeeName,
-                  items: employees.map((e) => e.name).toList(), // Changed from empName to name
-                  onChanged: (value) {
-                    final selected = employees.firstWhere(
-                          (e) => e.name == value, // Changed from empName to name
-                    );
-                    setState(() {
-                      selectedEmployeeName = selected.name; // Changed from empName to name
-                      selectedEmployeeId = selected.id.toString(); // Changed from webUserId to id
-                    });
+                // KDropdownTextFormField<String>(
+                //   hintText: "Select assigned person",
+                //   value: selectedEmployeeName,
+                //   items: employees.map((e) => e.name).toList(), // Changed from empName to name
+                //   onChanged: (value) {
+                //     final selected = employees.firstWhere(
+                //           (e) => e.name == value, // Changed from empName to name
+                //     );
+                //     setState(() {
+                //       selectedEmployeeName = selected.name; // Changed from empName to name
+                //       selectedEmployeeId = selected.id.toString(); // Changed from webUserId to id
+                //     });
+                //   },
+                // ),
+                // EmployeeDepartmentDropdown(
+                //   // example manager ID
+                //   onSelectionChanged: (selectedEmployees) {
+                //     // 🔹 You can access selected employee data here
+                //     for (final emp in selectedEmployees) {
+                //       debugPrint(
+                //         'You selected: ${emp.empName} (${emp.department})',
+                //       );
+                //     }
+                //   },
+                // ),
+                EmployeeDepartmentDropdownCheckbox(
+                  onSelectionChanged: (employees) {
+                    selectedEmployees = employees;
                   },
                 ),
 
@@ -239,7 +262,12 @@ class _AddTaskState extends State<AddTask> {
                 KAuthTextFormField(
                   label: "Deadline",
                   onTap: () async {
-                    await selectDate(context, deadlineController, isDeadline: true, isAssignDate: false);
+                    await selectDate(
+                      context,
+                      deadlineController,
+                      isDeadline: true,
+                      isAssignDate: false,
+                    );
                   },
                   controller: deadlineController,
                   hintText: "Select Deadline",
@@ -279,20 +307,41 @@ class _AddTaskState extends State<AddTask> {
                         );
                         return;
                       }
+                      // ✅ Check selected employees
+                      if (webUserId == null ||
+                          selectedEmployees.isEmpty ||
+                          priority == null ||
+                          assignedByName.isEmpty) {
+                        KSnackBar.failure(
+                          context,
+                          'Missing required information',
+                        );
+                        return;
+                      }
+
+                      // If multiple employees selected, you can choose first or send as comma separated
+                      final assignedToName2 = selectedEmployees
+                          .map((e) => e.empName)
+                          .join(', ');
+                      final assignedToId2 = selectedEmployees.first
+                          .toString(); // or handle multiple
 
                       final taskEntity = HomeAddTaskEntity(
                         webUserId: int.parse(webUserId),
-                        date: DateFormat('yyyy-MM-dd').format(assignDate ?? DateTime.now()),
+                        date: DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(assignDate ?? DateTime.now()),
                         description: descriptionController.text.trim(),
                         assignedBy: assignedByName,
                         assignedById: int.parse(webUserId),
                         assignedTo: assignedToName,
                         assignedToId: int.parse(assignedToId),
                         priority: priority,
-                        deadline: DateFormat('yyyy-MM-dd').format(selectedDeadline),
+                        deadline: DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(selectedDeadline),
                         project: projectNameController.text.trim(),
                       );
-
 
                       try {
                         final usecase = GetIt.I<HomeAddTaskUseCase>();
