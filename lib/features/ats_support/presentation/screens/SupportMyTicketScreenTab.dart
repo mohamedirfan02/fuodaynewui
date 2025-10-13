@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fuoday/commons/widgets/k_text.dart';
-import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/ats_job_portal/presentation/widgets/k_container_card.dart';
 
-class JobPortalDesignPositionsTab extends StatefulWidget {
-  const JobPortalDesignPositionsTab({super.key});
+class SupportMyTicketTab extends StatefulWidget {
+  const SupportMyTicketTab({super.key});
 
   @override
-  State<JobPortalDesignPositionsTab> createState() =>
-      _JobPortalDesignPositionsTabState();
+  State<SupportMyTicketTab> createState() => _SupportMyTicketTabState();
 }
 
-class _JobPortalDesignPositionsTabState
-    extends State<JobPortalDesignPositionsTab> {
-
+class _SupportMyTicketTabState extends State<SupportMyTicketTab> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

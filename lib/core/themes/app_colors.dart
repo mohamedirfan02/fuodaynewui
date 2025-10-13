@@ -68,6 +68,9 @@ class AppColors {
   //Ats Homepage Bg
   static const Color atsHomepageBg = Color(0xFFFAFAFA);
 
+  // Ats tittle Color
+  static const Color atsTittleText = Color(0xFF061B2E);
+
   // Primary Color
   static const Color primaryColor = Color(0xFF8B5CB7);
 
@@ -95,9 +98,15 @@ class AppColors {
   // ats drawer selected color
   static const Color softBlue = Color(0xFF3FA2F6);
 
+  // chat bg color
+  static const Color chatBg = Color(0xFFEEF4FF);
+
 
   // Text Btn Color
   static const Color textBtnColor = Color(0xFF3342FD);
+
+  //divider line color
+  static const Color lightGreyColor = Color(0xFFE5E7EB); // 👈 Added this
 
   // authBtnColor
   static const Color authBtnColor = Color(0xFF5584FF);

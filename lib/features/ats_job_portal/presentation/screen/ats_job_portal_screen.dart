@@ -22,32 +22,47 @@ class AtsJobPortalScreen extends StatefulWidget {
   State<AtsJobPortalScreen> createState() => _AtsJobPortalScreenState();
 }
 
-class _AtsJobPortalScreenState extends State<AtsJobPortalScreen> {
+class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
-  final String currentRoute =
-      AppRouteConstants.atsJobPortalScreen; // Replace with actual current route
+
+  final String currentRoute = AppRouteConstants.atsJobPortalScreen;
+
   final List<Map<String, dynamic>> gridAttendanceData = [
     {
-      'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+      'icon': AppAssetsConstants.atsUserIcon,
       'title': 'Total Job Created',
       'numberOfCount': "23",
     },
     {
       'title': 'Hired through Linkedin',
       'numberOfCount': "123",
-      'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+      'icon': AppAssetsConstants.atsUserIcon,
     },
     {
       'title': 'Hired through Indeed',
       'numberOfCount': "245",
-      'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+      'icon': AppAssetsConstants.atsUserIcon,
     },
     {
       'title': 'Hired through Naukri',
       'numberOfCount': "850",
-      'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+      'icon': AppAssetsConstants.atsUserIcon,
     },
   ];
 
@@ -61,206 +76,153 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        // If not on Home → go Home instead of closing app
         if (currentRoute != AppRouteConstants.homeRecruiter) {
           GoRouter.of(context).goNamed(AppRouteConstants.homeRecruiter);
-          return false; // block closing app
+          return false;
         }
-        return true; // already in Home → allow app exit
+        return true;
       },
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          key: _scaffoldKey,
-          appBar: AtsKAppBarWithDrawer(
-            userName: "",
-            cachedNetworkImageUrl: profilePhoto,
-            userDesignation: "",
-            showUserInfo: true,
-            onDrawerPressed: _openDrawer,
-            onNotificationPressed: () {},
-          ),
-          drawer: KAtsDrawer(
-            userEmail: email,
-            userName: name,
-            profileImageUrl: profilePhoto,
-            currentRoute: currentRoute,
-          ),
-          body: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: AppColors.atsHomepageBg,
-            child: NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                    return [
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.all(16.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              // Home Page Title
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    KText(
-                                      text: "Job Portal",
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 24.sp,
-                                      color: AppColors.titleColor,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 8.h),
-                              KText(
-                                text: "Manage your Interview Schedule",
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12.sp,
-                                color: AppColors.greyColor,
-                              ),
-                              SizedBox(height: 20.h),
-                              GridView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 10.w,
-                                      mainAxisSpacing: 10.h,
-                                      childAspectRatio: 155 / 113,
-                                    ),
-                                itemCount: gridAttendanceData.length,
-                                itemBuilder: (context, index) {
-                                  final item = gridAttendanceData[index];
-                                  return AtsTotalCountCard(
-                                    employeeCount: item['numberOfCount']
-                                        .toString(),
-                                    employeeCardIcon: item['icon'],
-                                    employeeDescription: item['title'],
-                                    employeeIconColor: AppColors.primaryColor,
-                                    employeePercentageColor:
-                                        AppColors.checkInColor,
-                                    growthText: item['growth'],
-                                  );
-                                },
-                              ),
-                              SizedBox(height: 16.h),
-                              Row(
-                                spacing: 20.w,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: KAtsGlowButton(
-                                      text: "Create Post",
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13,
-                                      icon: SvgPicture.asset(
-                                        AppAssetsConstants.addIcon,
-                                        height: 15,
-                                        width: 15,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      onPressed: () {
-                                        print("Candidates button tapped");
-                                      },
-                                      backgroundColor: AppColors.primaryColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AtsKAppBarWithDrawer(
+          userName: "",
+          cachedNetworkImageUrl: profilePhoto,
+          userDesignation: "",
+          showUserInfo: true,
+          onDrawerPressed: _openDrawer,
+          onNotificationPressed: () {},
+        ),
+        drawer: KAtsDrawer(
+          userEmail: email,
+          userName: name,
+          profileImageUrl: profilePhoto,
+          currentRoute: currentRoute,
+        ),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: AppColors.atsHomepageBg,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Header Section
+                Padding(
+                  padding: EdgeInsets.all(16.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Home Page Title
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            KText(
+                              text: "Job Portal",
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24.sp,
+                              color: AppColors.titleColor,
+                            ),
+                          ],
                         ),
                       ),
-                      SliverPersistentHeader(
-                        pinned: true,
-                        delegate: _StickyTabBarDelegate(
-                          TabBar(
-                            isScrollable: true,
-                            tabAlignment: TabAlignment.start,
-                            dividerColor: AppColors.atsHomepageBg,
-                            unselectedLabelColor: AppColors.greyColor,
-                            indicatorColor: AppColors.primaryColor,
-                            labelColor: AppColors.titleColor,
-                            tabs: [
-                              Tab(
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // SvgPicture.asset(
-                                    //   AppAssetsConstants.pointIcon,
-                                    //   height: 20,
-                                    //   width: 20,
-                                    //   fit: BoxFit.contain,
-                                    // ),
-
-                                    const Text("Design Position"),
-                                  ],
-                                ),
-                              ),
-                              Tab(
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // SvgPicture.asset(
-                                    //   AppAssetsConstants.noteIcon,
-                                    //   height: 20,
-                                    //   width: 20,
-                                    //   fit: BoxFit.contain,
-                                    // ),
-
-                                    const Text("Development Position"),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      SizedBox(height: 8.h),
+                      KText(
+                        text: "Manage your Interview Schedule",
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12.sp,
+                        color: AppColors.greyColor,
                       ),
-                    ];
-                  },
-              body: TabBarView(
-                children: [JobPortalDesignPositionsTab(), JobPortalDevelopmentPositionTab()],
-              ),
+                      SizedBox(height: 20.h),
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10.w,
+                          mainAxisSpacing: 10.h,
+                          childAspectRatio: 155 / 113,
+                        ),
+                        itemCount: gridAttendanceData.length,
+                        itemBuilder: (context, index) {
+                          final item = gridAttendanceData[index];
+                          return AtsTotalCountCard(
+                            employeeCount: item['numberOfCount'].toString(),
+                            employeeCardIcon: item['icon'],
+                            employeeDescription: item['title'],
+                            employeeIconColor: AppColors.primaryColor,
+                            employeePercentageColor: AppColors.checkInColor,
+                            growthText: item['growth'],
+                          );
+                        },
+                      ),
+                      SizedBox(height: 16.h),
+                      Row(
+                        spacing: 20.w,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: KAtsGlowButton(
+                              text: "Create Post",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              icon: SvgPicture.asset(
+                                AppAssetsConstants.addIcon,
+                                height: 15,
+                                width: 15,
+                                fit: BoxFit.contain,
+                              ),
+                              onPressed: () {
+                                print("Create Post button tapped");
+                              },
+                              backgroundColor: AppColors.primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16.h),
+                    ],
+                  ),
+                ),
+
+                // Tab Bar
+                Container(
+                  color: AppColors.atsHomepageBg,
+                  padding: EdgeInsets.only(left: 16.w),
+                  child: TabBar(
+                    controller: _tabController,
+                    isScrollable: true,
+                    tabAlignment: TabAlignment.start,
+                    dividerColor: AppColors.atsHomepageBg,
+                    unselectedLabelColor: AppColors.greyColor,
+                    indicatorColor: AppColors.primaryColor,
+                    labelColor: AppColors.titleColor,
+                    tabs: const [
+                      Tab(text: "Design Position"),
+                      Tab(text: "Development Position"),
+                    ],
+                  ),
+                ),
+
+                // Tab Content (Non-scrollable)
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: TabBarView(
+                    controller: _tabController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: const [
+                      JobPortalDesignPositionsTab(),
+                      JobPortalDevelopmentPositionTab(),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
-  }
-}
-
-class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
-  const _StickyTabBarDelegate(this.tabBar);
-
-  final TabBar tabBar;
-
-  @override
-  double get minExtent => tabBar.preferredSize.height;
-
-  @override
-  double get maxExtent => tabBar.preferredSize.height;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return Container(
-      color: AppColors.atsHomepageBg,
-      padding: EdgeInsets.only(left: 20.w),
-      child: tabBar,
-    );
-  }
-
-  @override
-  bool shouldRebuild(_StickyTabBarDelegate oldDelegate) {
-    return tabBar != oldDelegate.tabBar;
   }
 }

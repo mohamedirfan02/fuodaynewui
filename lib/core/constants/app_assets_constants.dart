@@ -60,5 +60,7 @@ class AppAssetsConstants {
 
   static const String atsFuoDayLogoSvg = "assets/images/svg/ats-fuoday-logo.svg";
 
+  static const String ticketIcon = "assets/icons/ticket.svg";
+
 
 }

@@ -104,4 +104,5 @@ class AppRouteConstants {
   static const String atsIndexScreen = "atsIndexScreen";
   static const String atsJobPortalScreen = "atsJobPortalScreen";
   static const String atsIndexMailScreen = "atsIndexMailScreen";
+  static const String atsSupportScreen = "atsSupportScreen";
 }

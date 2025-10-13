@@ -164,10 +164,10 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Support",
                   drawerListTileOnTap: () {
-                    // _navigateToRoute(context, AppRouteConstants.support);
+                    _navigateToRoute(context, AppRouteConstants.atsSupportScreen);
                   },
                   drawerLeadingIcon: Icons.support_agent_outlined,
-                  isSelected: currentRoute == AppRouteConstants.support,
+                  isSelected: currentRoute == AppRouteConstants.atsSupportScreen,
                 ),
 
                 // Spacer to push Help Center and Settings to bottom

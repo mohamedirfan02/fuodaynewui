@@ -9,6 +9,7 @@ import 'package:fuoday/features/ats_candidate/presentation/screens/candidate_scr
 import 'package:fuoday/features/ats_hiring/presentation/screens/hiring_screen.dart';
 import 'package:fuoday/features/ats_index/presentation/screen/ats_index_screen.dart';
 import 'package:fuoday/features/ats_job_portal/presentation/screen/ats_job_portal_screen.dart';
+import 'package:fuoday/features/ats_support/presentation/screens/ats_support_screen.dart';
 import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_interview.dart';
 import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_screen.dart';
 import 'package:fuoday/features/attendance/presentation/screens/attendance_absent_days_details_screen.dart';
@@ -408,6 +409,15 @@ final GoRouter appRouter = GoRouter(
       name: AppRouteConstants.atsJobPortalScreen,
       builder: (context, state) {
         return AtsJobPortalScreen();
+      },
+    ),
+
+    // Ats jobPortal Screen
+    GoRoute(
+      path: "/atsSupportScreen",
+      name: AppRouteConstants.atsSupportScreen,
+      builder: (context, state) {
+        return AtsSupportScreen();
       },
     ),
 

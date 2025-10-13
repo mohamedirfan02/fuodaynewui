@@ -389,7 +389,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                 ),
                 builder: (context) {
                   return DraggableScrollableSheet(
-                    expand: false,
+                    expand: true,
                     initialChildSize: 0.9,
 // covers ~90% of the screen
                     minChildSize: 0.5,

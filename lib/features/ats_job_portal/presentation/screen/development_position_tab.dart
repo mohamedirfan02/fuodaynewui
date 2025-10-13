@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fuoday/commons/widgets/k_text.dart';
-import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
+
+import 'package:fuoday/features/ats_job_portal/presentation/widgets/k_container_card.dart';
 class JobPortalDevelopmentPositionTab extends StatefulWidget {
   const JobPortalDevelopmentPositionTab({super.key});
 
@@ -13,37 +12,36 @@ class JobPortalDevelopmentPositionTab extends StatefulWidget {
 class _JobPortalDevelopmentPositionTabState extends State<JobPortalDevelopmentPositionTab> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: 190.h,
-        width: 327.w,
-        padding: EdgeInsets.all(18.47.w),
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 0.77.w,
-            color: AppColors.greyColor.withOpacity(0.3),
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      child: Column(
+        children: [
+          // Your job cards here
+          JobCard(
+            title: '3D Designer',
+            status: 'ACTIVE',
+            subtitle: 'Designer . Unpixel HQ',
+            candidatesInfo: '0 Candidates Applied',
+            timeInfo: 'Created 3m ago',
           ),
-          borderRadius: BorderRadius.circular(7.69.r),
-          color: AppColors.secondaryColor,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            // Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                KText(
-                  text: "Applicant details",
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16.sp,
-                  color: AppColors.titleColor,
-                ),
-              ],
-            ),
-            KVerticalSpacer(height: 20.h),
-          ],
-        ),
+          SizedBox(height: 16.h),
+          JobCard(
+            title: 'UI/UX Designer',
+            status: 'ACTIVE',
+            subtitle: 'Designer . Tech Corp',
+            candidatesInfo: '5 Candidates Applied',
+            timeInfo: 'Created 1h ago',
+          ),
+          SizedBox(height: 16.h),
+          JobCard(
+            title: '3D Designer',
+            status: 'ACTIVE',
+            subtitle: 'DIT . Unpixel Indonesia',
+            candidatesInfo: '0 Candidates Applied',
+            timeInfo: 'Created 3m ago',
+          ),
+          // Add more cards as needed
+        ],
       ),
     );
   }
