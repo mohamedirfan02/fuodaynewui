@@ -24,8 +24,8 @@ class Badge {
   File? imageFile;
 
   Badge({this.id})
-      : titleController = TextEditingController(),
-        descriptionController = TextEditingController();
+    : titleController = TextEditingController(),
+      descriptionController = TextEditingController();
 
   void dispose() {
     titleController.dispose();
@@ -56,20 +56,17 @@ class Badge {
       'imagePath': imageFile?.path, // ✅ ensure path is passed
     };
   }
-
 }
 
-
-
 class RecognitionWallWidget extends StatefulWidget {
-  final String? title;
+  // final String? title;
   final String? description;
   final Function(List<Map<String, dynamic>>)? onBadgesSubmitted;
   final VoidCallback? onBadgesUpdated;
 
   const RecognitionWallWidget({
     super.key,
-    this.title,
+    // this.title,
     this.description,
     this.onBadgesSubmitted,
     this.onBadgesUpdated,
@@ -83,7 +80,6 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
   List<Badge> _badges = [];
   List<Map<String, dynamic>> _submittedBadges = []; // Store submitted badges
 
-
   late VoidCallback _badgeListener;
 
   @override
@@ -95,7 +91,8 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
       final employeeDetails = hiveService.employeeDetails;
 
       // Dynamically get web_user_id
-      final int id = int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
+      final int id =
+          int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
       if (id == 0) return;
 
       final badgeProvider = context.read<BadgeProvider>();
@@ -105,12 +102,14 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
         if (!mounted) return; // ✅ Check if the widget is still in the tree
         setState(() {
           _submittedBadges = badgeProvider.badges
-              .map((b) => {
-            'id': b.id,
-            'title': b.title,
-            'description': b.count.toString(),
-            'imagePath': b.imageUrl,
-          })
+              .map(
+                (b) => {
+                  'id': b.id,
+                  'title': b.title,
+                  'description': b.count.toString(),
+                  'imagePath': b.imageUrl,
+                },
+              )
               .toList();
         });
       };
@@ -133,16 +132,13 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
     super.dispose();
   }
 
-
   void _showImagePickerOptions(Badge badge, Function setDialogState) {
     final appImagePicker = AppImagePicker();
 
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(16.r),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
       builder: (context) {
         return KImagePickerOptionsBottomSheet(
@@ -241,7 +237,8 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'Badge ${index + 1}',
@@ -277,76 +274,86 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                                   height: 120.h,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: AppColors.greyColor.withOpacity(0.3),
+                                      color: AppColors.greyColor.withOpacity(
+                                        0.3,
+                                      ),
                                       width: 1.w,
                                     ),
                                     borderRadius: BorderRadius.circular(8.r),
                                   ),
                                   child: badge.imageFile != null
                                       ? Stack(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(8.r),
-                                        child: Image.file(
-                                          badge.imageFile!,
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 8.h,
-                                        right: 8.w,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setDialogState(() {
-                                              badge.imageFile = null;
-                                            });
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.all(4.w),
-                                            decoration: BoxDecoration(
-                                              color: Colors.red.withOpacity(0.8),
-                                              shape: BoxShape.circle,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                              child: Image.file(
+                                                badge.imageFile!,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
-                                            child: Icon(
-                                              Icons.close,
-                                              color: Colors.white,
-                                              size: 16.sp,
+                                            Positioned(
+                                              top: 8.h,
+                                              right: 8.w,
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  setDialogState(() {
+                                                    badge.imageFile = null;
+                                                  });
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(4.w),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red
+                                                        .withOpacity(0.8),
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                    size: 16.sp,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
+                                          ],
+                                        )
                                       : GestureDetector(
-                                    onTap: () => _showImagePickerOptions(badge, setDialogState),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.add_photo_alternate_outlined,
-                                          size: 32.sp,
-                                          color: AppColors.greyColor,
-                                        ),
-                                        SizedBox(height: 8.h),
-                                        Text(
-                                          'Add Badge Image',
-                                          style: TextStyle(
-                                            fontSize: 12.sp,
-                                            color: AppColors.greyColor,
+                                          onTap: () => _showImagePickerOptions(
+                                            badge,
+                                            setDialogState,
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons
+                                                    .add_photo_alternate_outlined,
+                                                size: 32.sp,
+                                                color: AppColors.greyColor,
+                                              ),
+                                              SizedBox(height: 8.h),
+                                              Text(
+                                                'Add Badge Image',
+                                                style: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  color: AppColors.greyColor,
+                                                ),
+                                              ),
+                                              Text(
+                                                '(Optional)',
+                                                style: TextStyle(
+                                                  fontSize: 10.sp,
+                                                  color: AppColors.greyColor
+                                                      .withOpacity(0.7),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Text(
-                                          '(Optional)',
-                                          style: TextStyle(
-                                            fontSize: 10.sp,
-                                            color: AppColors.greyColor.withOpacity(0.7),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                 ),
 
                                 SizedBox(height: 12.h),
@@ -420,7 +427,8 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                     ),
                   ),
                   child: KText(
-                    text: 'Submit (${_badges.length} Badge${_badges.length != 1 ? 's' : ''})',
+                    text:
+                        'Submit (${_badges.length} Badge${_badges.length != 1 ? 's' : ''})',
                     fontWeight: FontWeight.w600,
                     fontSize: 12.sp,
                     color: AppColors.secondaryColor,
@@ -448,7 +456,8 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
 
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
-    final int id = int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
+    final int id =
+        int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
     if (id != 0) {
       context.read<RecognitionProvider>().saveRecognitions(
@@ -458,26 +467,21 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
     }
   }
 
-
   // Method to remove a submitted badge
   void _removeSubmittedBadge(int index) {
     setState(() {
       _submittedBadges.removeAt(index);
     });
 
-    KSnackBar.success(
-      context,
-      'Badge removed successfully!',
-    );
+    KSnackBar.success(context, 'Badge removed successfully!');
   }
 
-// Widget to display submitted badges
+  // Widget to display submitted badges
   Widget _buildSubmittedBadgesDisplay() {
     if (_submittedBadges.isEmpty) {
       return Container(
         padding: EdgeInsets.all(20.w),
-        child:
-        KText(
+        child: KText(
           text: 'No badges added yet. Click the edit icon to add badges.',
           fontWeight: FontWeight.w400,
           fontSize: 14.sp,
@@ -507,7 +511,9 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      AppColors.secondaryColor.withOpacity(0.1),/// color for card
+                      AppColors.secondaryColor.withOpacity(0.1),
+
+                      /// color for card
                       AppColors.secondaryColor.withOpacity(0.05),
                     ],
                   ),
@@ -520,22 +526,21 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child:
-                          KText(
-                            text:badge['title'] ?? 'Untitled Badge',
+                          child: KText(
+                            text: badge['title'] ?? 'Untitled Badge',
                             fontWeight: FontWeight.w600,
                             fontSize: 14.sp,
                             color: AppColors.titleColor,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () => _removeSubmittedBadge(index),
-                          child: Icon(
-                            Icons.close,
-                            size: 18.sp,
-                            color: Colors.red.withOpacity(0.7),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () => _removeSubmittedBadge(index),
+                        //   child: Icon(
+                        //     Icons.close,
+                        //     size: 18.sp,
+                        //     color: Colors.red.withOpacity(0.7),
+                        //   ),
+                        // ),
                       ],
                     ),
 
@@ -545,62 +550,68 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                     Expanded(
                       child: badge['imagePath'] != null
                           ? ClipRRect(
-                        borderRadius: BorderRadius.circular(8.r),
-                        child: badge['imagePath'].startsWith('http')
-                            ? Image.network(
-                          badge['imagePath'],
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
+                              borderRadius: BorderRadius.circular(8.r),
+                              child: badge['imagePath'].startsWith('http')
+                                  ? Image.network(
+                                      badge['imagePath'],
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                            return Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.greyColor
+                                                    .withOpacity(0.2),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              child: Icon(
+                                                Icons.broken_image,
+                                                color: AppColors.greyColor,
+                                                size: 32.sp,
+                                              ),
+                                            );
+                                          },
+                                    )
+                                  : Image.file(
+                                      File(badge['imagePath']),
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                            return Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.greyColor
+                                                    .withOpacity(0.2),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              child: Icon(
+                                                Icons.broken_image,
+                                                color: AppColors.greyColor,
+                                                size: 32.sp,
+                                              ),
+                                            );
+                                          },
+                                    ),
+                            )
+                          : Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                color: AppColors.greyColor.withOpacity(0.2),
+                                color: AppColors.greyColor.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8.r),
+                                border: Border.all(
+                                  color: AppColors.greyColor.withOpacity(0.3),
+                                ),
                               ),
                               child: Icon(
-                                Icons.broken_image,
-                                color: AppColors.greyColor,
+                                Icons.badge_outlined,
+                                color: AppColors.primaryColor,
                                 size: 32.sp,
                               ),
-                            );
-                          },
-                        )
-                            : Image.file(
-                          File(badge['imagePath']),
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: AppColors.greyColor.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              child: Icon(
-                                Icons.broken_image,
-                                color: AppColors.greyColor,
-                                size: 32.sp,
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                      : Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.greyColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8.r),
-                          border: Border.all(
-                            color: AppColors.greyColor.withOpacity(0.3),
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.badge_outlined,
-                          color: AppColors.primaryColor,
-                          size: 32.sp,
-                        ),
-                      ),
+                            ),
                     ),
 
                     SizedBox(height: 8.h),
@@ -635,7 +646,6 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -657,31 +667,30 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Header with title and edit icon
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: KText(
-                  text: widget.title ?? "Recognition Wall",
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14,
-                  color: AppColors.secondaryColor,
-                ),
-              ),
-              IconButton(
-                onPressed: _showBadgeManagementPopup,
-                icon: Icon(
-                  Icons.edit,
-                  color: AppColors.secondaryColor,
-                  size: 20.sp,
-                ),
-                constraints: const BoxConstraints(),
-                padding: EdgeInsets.zero,
-                tooltip: 'Manage Badges',
-              ),
-            ],
-          ),
-
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Expanded(
+          //       child: KText(
+          //         text: widget.title ?? "Recognition Wall",
+          //         fontWeight: FontWeight.w800,
+          //         fontSize: 14,
+          //         color: AppColors.secondaryColor,
+          //       ),
+          //     ),
+          //     IconButton(
+          //       onPressed: _showBadgeManagementPopup,
+          //       icon: Icon(
+          //         Icons.edit,
+          //         color: AppColors.secondaryColor,
+          //         size: 20.sp,
+          //       ),
+          //       constraints: const BoxConstraints(),
+          //       padding: EdgeInsets.zero,
+          //       tooltip: 'Manage Badges',
+          //     ),
+          //   ],
+          // ),
           KVerticalSpacer(height: 10.h),
           // Display submitted badges or empty message
           _buildSubmittedBadgesDisplay(),
@@ -690,13 +699,13 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
 
           // Description text
           KText(
-            text: widget.description ??
+            text:
+                widget.description ??
                 'Recognizing our team\'s extraordinary efforts, we express heartfelt gratitude for your dedication, hard work, and the positive impact you bring daily',
             fontWeight: FontWeight.w400,
             fontSize: 14.sp,
             color: AppColors.secondaryColor,
           ),
-
         ],
       ),
     );

@@ -153,6 +153,8 @@ dependencies:
 
   #mailer:
   mailer: ^6.1.0
+  dropdown_search: ^6.0.2
+  flutter_multi_select_dropdown: ^1.0.0
 
 
 

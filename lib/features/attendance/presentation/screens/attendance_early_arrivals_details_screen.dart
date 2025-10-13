@@ -18,6 +18,9 @@ import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/total_early_arrivals_details_provider.dart';
 
 class AttendanceEarlyArrivalsDetailsScreen extends StatefulWidget {
   const AttendanceEarlyArrivalsDetailsScreen({super.key});
@@ -67,7 +70,8 @@ class _AttendanceEarlyArrivalsDetailsScreenState
   @override
   Widget build(BuildContext context) {
     // Providers
-    final provider = context.totalEarlyArrivalsDetailsProviderWatch;
+    //final provider = context.totalEarlyArrivalsDetailsProviderWatch;
+    final provider = context.watch<TotalEarlyArrivalsDetailsProvider>();
     final details = provider.earlyArrivalsDetails;
 
     // Your card data list
@@ -207,7 +211,6 @@ class _AttendanceEarlyArrivalsDetailsScreenState
                           title: 'Total Attendance Report',
                         );
 
-
                         // Open a PDF File
                         await OpenFilex.open(pdfFile.path);
                       }
@@ -223,7 +226,8 @@ class _AttendanceEarlyArrivalsDetailsScreenState
                         final excelFile = await excelService
                             .generateAndSaveExcel(
                               data: data,
-                              filename: 'Total Attendance Report.xlsx', columns: [],
+                              filename: 'Total Attendance Report.xlsx',
+                              columns: [],
                             );
 
                         // Open a Excel File
@@ -248,25 +252,28 @@ class _AttendanceEarlyArrivalsDetailsScreenState
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // Cards
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                // use parent scroll
-                itemCount: punctualData.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // 2 cards per row
-                  mainAxisSpacing: 12.h,
-                  crossAxisSpacing: 12.w,
-                  childAspectRatio: 1.2, // adjust for card height/width
-                ),
-                itemBuilder: (context, index) {
-                  final item = punctualData[index];
-                  return AttendancePunctualArrivalCard(
-                    punctualCountOrPercentageText: item['count']!,
-                    punctualCountOrPercentageDescriptionText: item['label']!,
-                  );
-                },
-              ),
+              provider.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      // use parent scroll
+                      itemCount: punctualData.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // 2 cards per row
+                        mainAxisSpacing: 12.h,
+                        crossAxisSpacing: 12.w,
+                        childAspectRatio: 1.2, // adjust for card height/width
+                      ),
+                      itemBuilder: (context, index) {
+                        final item = punctualData[index];
+                        return AttendancePunctualArrivalCard(
+                          punctualCountOrPercentageText: item['count']!,
+                          punctualCountOrPercentageDescriptionText:
+                              item['label']!,
+                        );
+                      },
+                    ),
 
               KVerticalSpacer(height: 10.h),
 
@@ -329,7 +336,9 @@ class _AttendanceEarlyArrivalsDetailsScreenState
                 const Center(child: Text("No Data Found"))
               else
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5, // take half of screen
+                  height:
+                      MediaQuery.of(context).size.height *
+                      0.5, // take half of screen
                   child: KDataTable(columnTitles: columns, rowData: data),
                 ),
 
