@@ -164,10 +164,14 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Support",
                   drawerListTileOnTap: () {
-                    _navigateToRoute(context, AppRouteConstants.atsSupportScreen);
+                    _navigateToRoute(
+                      context,
+                      AppRouteConstants.atsSupportScreen,
+                    );
                   },
                   drawerLeadingIcon: Icons.support_agent_outlined,
-                  isSelected: currentRoute == AppRouteConstants.atsSupportScreen,
+                  isSelected:
+                      currentRoute == AppRouteConstants.atsSupportScreen,
                 ),
 
                 // Spacer to push Help Center and Settings to bottom
@@ -302,33 +306,36 @@ class KAtsDrawer extends StatelessWidget {
   }
 }
 
-//Back To Home Wrapper
-class MainScaffold extends StatelessWidget {
-  final Widget child;
-  final String currentRoute;
-
-  const MainScaffold({
-    Key? key,
-    required this.child,
-    required this.currentRoute,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // If not on Home → go Home instead of closing app
-        if (currentRoute != AppRouteConstants.homeRecruiter) {
-          GoRouter.of(context).goNamed(AppRouteConstants.homeRecruiter);
-          return false;
-        }
-        // If already on Home → allow back to exit
-        return true;
-      },
-      child: Scaffold(
-        drawer: KAtsDrawer(currentRoute: currentRoute),
-        body: child,
-      ),
-    );
-  }
-}
+// //Back To Home Wrapper
+// class MainScaffold extends StatelessWidget {
+//   final Widget child;
+//   final String currentRoute;
+//
+//   const MainScaffold({
+//     Key? key,
+//     required this.child,
+//     required this.currentRoute,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return PopScope(
+//       canPop: false, // prevent default popping behavior
+//       onPopInvokedWithResult: (didPop, result) async {
+//         if (!didPop) {
+//           // If not on home → navigate to home instead of closing app
+//           if (currentRoute != AppRouteConstants.homeRecruiter) {
+//             context.goNamed(AppRouteConstants.homeRecruiter);
+//           } else {
+//             // Already on home → allow app exit
+//             Navigator.of(context).maybePop();
+//           }
+//         }
+//       },
+//       child: Scaffold(
+//         drawer: KAtsDrawer(currentRoute: currentRoute),
+//         body: child,
+//       ),
+//     );
+//   }
+// }

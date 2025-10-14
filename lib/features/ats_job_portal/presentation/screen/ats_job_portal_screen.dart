@@ -74,13 +74,18 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
     final email = employeeDetails?['email'] ?? "No Email";
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (currentRoute != AppRouteConstants.homeRecruiter) {
-          GoRouter.of(context).goNamed(AppRouteConstants.homeRecruiter);
-          return false;
+    return PopScope(
+      canPop: false, // Prevent default pop
+      onPopInvokedWithResult: (didPop, result) async {
+        // If not popped automatically
+        if (!didPop) {
+          if (currentRoute != AppRouteConstants.homeRecruiter) {
+            context.goNamed(AppRouteConstants.homeRecruiter);
+          } else {
+            // If already on Home → allow exiting app
+            Navigator.of(context).maybePop();
+          }
         }
-        return true;
       },
       child: Scaffold(
         key: _scaffoldKey,

@@ -76,14 +76,18 @@ class _HiringScreenState extends State<HiringScreen> {
       "Has Employee Details: ${hiveService.hasEmployeeDetails}",
     );
 
-    return WillPopScope(
-      onWillPop: () async {
-        // If not on Home → go Home instead of closing app
-        if (currentRoute != AppRouteConstants.homeRecruiter) {
-          GoRouter.of(context).goNamed(AppRouteConstants.homeRecruiter);
-          return false; // block closing app
+    return PopScope(
+      canPop: false, // Prevent default pop
+      onPopInvokedWithResult: (didPop, result) async {
+        // If not popped automatically
+        if (!didPop) {
+          if (currentRoute != AppRouteConstants.homeRecruiter) {
+            context.goNamed(AppRouteConstants.homeRecruiter);
+          } else {
+            // If already on Home → allow exiting app
+            Navigator.of(context).maybePop();
+          }
         }
-        return true; // already in Home → allow app exit
       },
       child: DefaultTabController(
         length: 2,
