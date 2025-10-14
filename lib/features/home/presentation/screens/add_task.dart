@@ -33,6 +33,10 @@ class _AddTaskState extends State<AddTask> {
   DateTime? assignDate;
   DateTime selectedDeadline = DateTime.now();
 
+  // 🔹 CHANGED: Add this key to control the dropdown
+  final GlobalKey<AssignedPersonDropdownCheckboxState> dropdownKey =
+      GlobalKey<AssignedPersonDropdownCheckboxState>();
+
   // Controllers
   final TextEditingController assignedByController = TextEditingController();
   final TextEditingController assignDateController = TextEditingController();
@@ -210,7 +214,8 @@ class _AddTaskState extends State<AddTask> {
                 //     }
                 //   },
                 // ),
-                EmployeeDepartmentDropdownCheckbox(
+                AssignedPersonDropdownCheckbox(
+                  key: dropdownKey,
                   onSelectionChanged: (employees) {
                     selectedEmployees = employees;
                   },
@@ -282,6 +287,8 @@ class _AddTaskState extends State<AddTask> {
                   // isLoading: ,
                   text: "Create Task",
                   onPressed: () async {
+                    //Immediately close dropdown (even before validation)
+                    dropdownKey.currentState?.closeDropdown();
                     if (formKey.currentState!.validate()) {
                       final hiveService = GetIt.I<HiveStorageService>();
                       final webUserId = hiveService
@@ -350,6 +357,8 @@ class _AddTaskState extends State<AddTask> {
                           context,
                           'Task assigned successfully',
                         );
+                        // Clear dropdown selections (after success)
+                        dropdownKey.currentState?.clearSelection();
 
                         // ✅ Clear all fields
                         formKey.currentState!.reset();
