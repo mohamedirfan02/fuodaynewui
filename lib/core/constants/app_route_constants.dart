@@ -93,7 +93,6 @@ class AppRouteConstants {
   static const String imagePreview = "imagePreview";
   static const String pdfPreview = "pdfPreview";
 
-
   //ATS Drawer Screens
   static const String trackerScreen = "trackerScreen";
   static const String atsTrackerScreen = "atsTrackerScreen";
@@ -104,5 +103,8 @@ class AppRouteConstants {
   static const String atsIndexScreen = "atsIndexScreen";
   static const String atsJobPortalScreen = "atsJobPortalScreen";
   static const String atsIndexMailScreen = "atsIndexMailScreen";
+  static const String atsAdminTabScreen = "atsAdminTabScreen";
   static const String atsSupportScreen = "atsSupportScreen";
+  static const String atsHelpCenterScreen = "atsHelpCenterScreen";
+  static const String atsSettingsScreen = "atsSettingsScreen";
 }

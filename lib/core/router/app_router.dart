@@ -4,11 +4,14 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/features/approval/presentation/screens/approval_screen.dart';
+import 'package:fuoday/features/ats_admin_tab/presentation/screens/ats_admin_tabs_screen.dart';
 import 'package:fuoday/features/ats_calender/presentation/screen/ats_calender_screen.dart';
 import 'package:fuoday/features/ats_candidate/presentation/screens/candidate_screen.dart';
+import 'package:fuoday/features/ats_help_center_screen/presentation/screens/ats_help_center_screen.dart';
 import 'package:fuoday/features/ats_hiring/presentation/screens/hiring_screen.dart';
 import 'package:fuoday/features/ats_index/presentation/screen/ats_index_screen.dart';
 import 'package:fuoday/features/ats_job_portal/presentation/screen/ats_job_portal_screen.dart';
+import 'package:fuoday/features/ats_settings/presentation/screens/ats_settings_screen.dart';
 import 'package:fuoday/features/ats_support/presentation/screens/ats_support_screen.dart';
 import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_interview.dart';
 import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_screen.dart';
@@ -55,7 +58,8 @@ import 'package:go_router/go_router.dart';
 CustomTransitionPage<T> _buildPageWithTransition<T>({
   required GoRouterState state,
   required Widget child,
-  required Widget Function(Animation<double>, Animation<double>, Widget) transition,
+  required Widget Function(Animation<double>, Animation<double>, Widget)
+  transition,
 }) {
   return CustomTransitionPage<T>(
     key: state.pageKey,
@@ -68,7 +72,11 @@ CustomTransitionPage<T> _buildPageWithTransition<T>({
 }
 
 /// Slide from right (Auth)
-Widget _slideFromRight(Animation<double> animation, Animation<double> _, Widget child) {
+Widget _slideFromRight(
+  Animation<double> animation,
+  Animation<double> _,
+  Widget child,
+) {
   return SlideTransition(
     position: Tween<Offset>(
       begin: const Offset(1, 0),
@@ -84,17 +92,26 @@ Widget _fadeIn(Animation<double> animation, Animation<double> _, Widget child) {
 }
 
 /// Scale in (Profile)
-Widget _scaleIn(Animation<double> animation, Animation<double> _, Widget child) {
+Widget _scaleIn(
+  Animation<double> animation,
+  Animation<double> _,
+  Widget child,
+) {
   return ScaleTransition(
-    scale: Tween<double>(begin: 0.9, end: 1).animate(
-      CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
-    ),
+    scale: Tween<double>(
+      begin: 0.9,
+      end: 1,
+    ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutBack)),
     child: child,
   );
 }
 
 /// Slide up (default/details)
-Widget _slideUp(Animation<double> animation, Animation<double> _, Widget child) {
+Widget _slideUp(
+  Animation<double> animation,
+  Animation<double> _,
+  Widget child,
+) {
   return SlideTransition(
     position: Tween<Offset>(
       begin: const Offset(0, 1),
@@ -319,8 +336,14 @@ final GoRouter appRouter = GoRouter(
           transitionDuration: const Duration(milliseconds: 300),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             // Slide from bottom
-            final tween = Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero);
-            final curvedAnimation = CurvedAnimation(parent: animation, curve: Curves.easeOut);
+            final tween = Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            );
+            final curvedAnimation = CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOut,
+            );
             return SlideTransition(
               position: tween.animate(curvedAnimation),
               child: child,
@@ -329,7 +352,6 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-
 
     // recruiter bottom nav
     GoRoute(
@@ -412,12 +434,39 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-    // Ats jobPortal Screen
+    // Ats Admin Tab Screen
+    GoRoute(
+      path: "/atsAdminTabScreen",
+      name: AppRouteConstants.atsAdminTabScreen,
+      builder: (context, state) {
+        return AtsAdminScreen();
+      },
+    ),
+
+    // Ats Support Screen
     GoRoute(
       path: "/atsSupportScreen",
       name: AppRouteConstants.atsSupportScreen,
       builder: (context, state) {
         return AtsSupportScreen();
+      },
+    ),
+
+    // Ats Help Center Screen
+    GoRoute(
+      path: "/atsHelpCenterScreen",
+      name: AppRouteConstants.atsHelpCenterScreen,
+      builder: (context, state) {
+        return AtsHelpCenterScreen();
+      },
+    ),
+
+    //Ats Settings Screens
+    GoRoute(
+      path: "/atsSettingsScreen",
+      name: AppRouteConstants.atsSettingsScreen,
+      builder: (context, state) {
+        return AtsSettingsScreen();
       },
     ),
 
@@ -526,12 +575,12 @@ final GoRouter appRouter = GoRouter(
       name: AppRouteConstants.teamTree,
       builder: (context, state) {
         final hive = getIt<HiveStorageService>();
-        final int webUserId = int.tryParse(hive.employeeDetails?['web_user_id'] ?? '0') ?? 0;
+        final int webUserId =
+            int.tryParse(hive.employeeDetails?['web_user_id'] ?? '0') ?? 0;
 
-        return TeamTreeScreen(webUserId: webUserId, );
+        return TeamTreeScreen(webUserId: webUserId);
       },
     ),
-
 
     // Hr screen
     GoRoute(
