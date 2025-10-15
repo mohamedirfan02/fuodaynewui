@@ -154,10 +154,14 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Admin Tab",
                   drawerListTileOnTap: () {
-                    // _navigateToRoute(context, AppRouteConstants.paySlip);
+                    _navigateToRoute(
+                      context,
+                      AppRouteConstants.atsAdminTabScreen,
+                    );
                   },
                   drawerLeadingIcon: Icons.admin_panel_settings_outlined,
-                  isSelected: currentRoute == AppRouteConstants.paySlip,
+                  isSelected:
+                      currentRoute == AppRouteConstants.atsAdminTabScreen,
                 ),
 
                 // Support
@@ -181,10 +185,14 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Help Center",
                   drawerListTileOnTap: () {
-                    // _navigateToRoute(context, AppRouteConstants.performance);
+                    _navigateToRoute(
+                      context,
+                      AppRouteConstants.atsHelpCenterScreen,
+                    );
                   },
                   drawerLeadingIcon: Icons.help_outline,
-                  isSelected: currentRoute == AppRouteConstants.performance,
+                  isSelected:
+                      currentRoute == AppRouteConstants.atsHelpCenterScreen,
                   //   hasNotificationBadge: true, // You'll need to add this property to your KAtsDrawerListTile
                 ),
 
@@ -192,10 +200,14 @@ class KAtsDrawer extends StatelessWidget {
                 KAtsDrawerListTile(
                   drawerTitle: "Setting",
                   drawerListTileOnTap: () {
-                    // _navigateToRoute(context, AppRouteConstants.settings);
+                    _navigateToRoute(
+                      context,
+                      AppRouteConstants.atsSettingsScreen,
+                    ); //AppRouteConstants
                   },
                   drawerLeadingIcon: Icons.settings_outlined,
-                  // isSelected: currentRoute == AppRouteConstants.settings,
+                  isSelected:
+                      currentRoute == AppRouteConstants.atsSettingsScreen,
                 ),
 
                 SizedBox(height: 20.h),

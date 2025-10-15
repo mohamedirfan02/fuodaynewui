@@ -27,6 +27,7 @@ class AssignedPersonDropdownCheckbox extends StatefulWidget {
     this.labelFontSize,
     this.labelFontWeight,
   });
+
   static AssignedPersonDropdownCheckboxState? of(BuildContext context) =>
       context.findAncestorStateOfType<AssignedPersonDropdownCheckboxState>();
 
@@ -44,7 +45,6 @@ class AssignedPersonDropdownCheckboxState
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
 
-  // Add this key for the dropdown container
   final GlobalKey _dropdownKey = GlobalKey();
 
   @override
@@ -66,7 +66,6 @@ class AssignedPersonDropdownCheckboxState
 
     final hiveService = getIt<HiveStorageService>();
     final webUserIdStr = hiveService.employeeDetails?['web_user_id'];
-
     final int? webUserId = webUserIdStr is int
         ? webUserIdStr
         : int.tryParse(webUserIdStr?.toString() ?? '');
@@ -101,7 +100,6 @@ class AssignedPersonDropdownCheckboxState
     }
   }
 
-  // 🔹 CHANGED: Make this public for external access
   void closeDropdown() {
     if (_isDropdownOpen) {
       setState(() {
@@ -111,13 +109,11 @@ class AssignedPersonDropdownCheckboxState
     }
   }
 
-  //  public method to clear selected values
   void clearSelection() {
     if (_selectedEmployees.isNotEmpty) {
       setState(() {
         _selectedEmployees.clear();
       });
-      // notify parent if needed
       widget.onSelectionChanged?.call(List<EmployeeModelEntity>.from([]));
     }
   }
@@ -131,34 +127,19 @@ class AssignedPersonDropdownCheckboxState
       }
     });
 
-    if (widget.onSelectionChanged != null) {
-      widget.onSelectionChanged!(_selectedEmployees);
-    }
+    widget.onSelectionChanged?.call(_selectedEmployees);
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<EmployeeDepartmentProvider>(
       builder: (context, provider, _) {
-        if (provider.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (provider.errorMessage != null) {
-          return Center(child: Text(provider.errorMessage!));
-        }
-
-        final empDept = provider.employeeDepartment;
-        if (empDept == null || empDept.sameDepartment.isEmpty) {
-          return const Center(child: Text('No employees found.'));
-        }
-
-        final employees = empDept.sameDepartment;
+        final isLoading = provider.isLoading;
+        final employees = provider.employeeDepartment?.sameDepartment ?? [];
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Label
             if (widget.label != null && !widget.floatingLabel) ...[
               Text(
                 widget.label!,
@@ -171,10 +152,9 @@ class AssignedPersonDropdownCheckboxState
               SizedBox(height: 6.h),
             ],
 
-            // Use Listener instead of Stack for better outside tap detection
             Listener(
               onPointerDown: (event) {
-                // Close dropdown when tapping outside
+                if (!mounted) return;
                 if (_isDropdownOpen) {
                   final RenderBox renderBox =
                       _dropdownKey.currentContext?.findRenderObject()
@@ -183,8 +163,6 @@ class AssignedPersonDropdownCheckboxState
                   final size = renderBox.size;
 
                   final tapPosition = event.position;
-
-                  // Check if tap is outside the dropdown area
                   if (tapPosition.dx < offset.dx ||
                       tapPosition.dx > offset.dx + size.width ||
                       tapPosition.dy < offset.dy ||
@@ -194,17 +172,17 @@ class AssignedPersonDropdownCheckboxState
                 }
               },
               child: Container(
-                key: _dropdownKey, // Key for detecting taps outside
+                key: _dropdownKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Dropdown trigger
+                    // 🔹 Dropdown Trigger
                     GestureDetector(
-                      onTap: _toggleDropdown,
+                      onTap: isLoading ? null : _toggleDropdown,
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 12.w,
-                          vertical: 14.h,
+                          vertical: 12.h,
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -220,7 +198,9 @@ class AssignedPersonDropdownCheckboxState
                           children: [
                             Expanded(
                               child: Text(
-                                _selectedEmployees.isEmpty
+                                isLoading
+                                    ? 'Loading...'
+                                    : _selectedEmployees.isEmpty
                                     ? 'Select assigned person'
                                     : _selectedEmployees
                                           .map((e) => e.empName)
@@ -228,9 +208,9 @@ class AssignedPersonDropdownCheckboxState
                                 style: GoogleFonts.sora(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
-                                  color: _selectedEmployees.isEmpty
-                                      ? AppColors.titleColor.withOpacity(0.5)
-                                      : AppColors.titleColor,
+                                  color: AppColors.titleColor.withOpacity(
+                                    isLoading ? 0.4 : 1.0,
+                                  ),
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -240,7 +220,9 @@ class AssignedPersonDropdownCheckboxState
                               duration: const Duration(milliseconds: 300),
                               child: Icon(
                                 Icons.arrow_drop_down_outlined,
-                                // color: AppColors.primaryColor,
+                                color: isLoading
+                                    ? AppColors.titleColor.withOpacity(0.4)
+                                    : AppColors.titleColor,
                               ),
                             ),
                           ],
@@ -248,73 +230,74 @@ class AssignedPersonDropdownCheckboxState
                       ),
                     ),
 
-                    // Dropdown content
-                    ScaleTransition(
-                      scale: _scaleAnimation,
-                      alignment: Alignment.topCenter,
-                      child: FadeTransition(
-                        opacity: _fadeAnimation,
-                        child: _isDropdownOpen
-                            ? Container(
-                                margin: EdgeInsets.only(top: 8.h),
-                                padding: EdgeInsets.all(8.w),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: AppColors.authUnderlineBorderColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.08),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 4),
+                    // 🔹 Dropdown Content
+                    if (!isLoading)
+                      ScaleTransition(
+                        scale: _scaleAnimation,
+                        alignment: Alignment.topCenter,
+                        child: FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: _isDropdownOpen
+                              ? Container(
+                                  margin: EdgeInsets.only(top: 8.h),
+                                  padding: EdgeInsets.all(8.w),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: AppColors.authUnderlineBorderColor,
                                     ),
-                                  ],
-                                ),
-                                constraints: BoxConstraints(maxHeight: 250.h),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: employees.map((emp) {
-                                      final isSelected = _selectedEmployees
-                                          .contains(emp);
-                                      return CheckboxListTile(
-                                        title: Text(
-                                          emp.empName,
-                                          style: GoogleFonts.sora(
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColors.titleColor,
-                                          ),
-                                        ),
-                                        subtitle: Text(
-                                          'Employee ID: ${emp.empId}',
-                                          style: GoogleFonts.sora(
-                                            fontSize: 10.sp,
-                                            fontWeight: FontWeight.w400,
-                                            color: AppColors.titleColor
-                                                .withOpacity(0.6),
-                                          ),
-                                        ),
-                                        value: isSelected,
-                                        onChanged: (value) => _onItemSelected(
-                                          emp,
-                                          value ?? false,
-                                        ),
-                                        activeColor: AppColors.primaryColor,
-                                        checkColor: Colors.white,
-                                        contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 4.w,
-                                          vertical: 2.h,
-                                        ),
-                                      );
-                                    }).toList(),
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.08),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              )
-                            : const SizedBox.shrink(),
+                                  constraints: BoxConstraints(maxHeight: 250.h),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: employees.map((emp) {
+                                        final isSelected = _selectedEmployees
+                                            .contains(emp);
+                                        return CheckboxListTile(
+                                          title: Text(
+                                            emp.empName,
+                                            style: GoogleFonts.sora(
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColors.titleColor,
+                                            ),
+                                          ),
+                                          subtitle: Text(
+                                            'Employee ID: ${emp.empId}',
+                                            style: GoogleFonts.sora(
+                                              fontSize: 10.sp,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppColors.titleColor
+                                                  .withOpacity(0.6),
+                                            ),
+                                          ),
+                                          value: isSelected,
+                                          onChanged: (value) => _onItemSelected(
+                                            emp,
+                                            value ?? false,
+                                          ),
+                                          activeColor: AppColors.primaryColor,
+                                          checkColor: Colors.white,
+                                          contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 4.w,
+                                            vertical: 2.h,
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
