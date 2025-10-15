@@ -350,7 +350,9 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                         fontSize: 24.sp,
                         color: AppColors.titleColor,
                       ),
-                      const SizedBox(width: 8), // spacing between text and emoji
+                      const SizedBox(
+                        width: 8,
+                      ), // spacing between text and emoji
                       const Text(
                         "👋",
                         style: TextStyle(fontSize: 24), // match text size
@@ -485,7 +487,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                         borderColor: const Color.fromRGBO(233, 234, 236, 1),
                         borderRadius: BorderRadius.circular(10.r),
                         onPressed: () {
-                          print("Filter pressed");
+                          debugPrint("Filter pressed");
                         },
                         icon: SvgPicture.asset(
                           AppAssetsConstants.filterIcon,
@@ -542,26 +544,35 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                       KVerticalSpacer(height: 24.h),
 
                       // Pagination
-                      _buildPageNumbersRow(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [_buildPageNumbersRow()],
+                      ),
 
                       SizedBox(height: 16.w),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Dynamic entries text
                           KText(
                             text: entriesDisplayText,
-                            fontSize: MediaQuery.of(context).size.width * 0.03, // responsive font
+                            fontSize:
+                                MediaQuery.of(context).size.width *
+                                0.03, // responsive font
                             color: AppColors.greyColor,
                             fontWeight: FontWeight.w500,
                           ),
 
-                          SizedBox(width: MediaQuery.of(context).size.width * 0.08), // spacing between text and button
-
+                          // SizedBox(
+                          //   width: MediaQuery.of(context).size.width * 0.08,
+                          // ), // spacing between text and button
                           // Dropdown container
                           GestureDetector(
                             onTap: _showItemsPerPageSelector,
                             child: Container(
-                              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+                              padding: EdgeInsets.all(
+                                MediaQuery.of(context).size.width * 0.02,
+                              ),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   width: 0.8,
@@ -574,13 +585,17 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                                 children: [
                                   KText(
                                     text: "Show $itemsPerPage",
-                                    fontSize: MediaQuery.of(context).size.width * 0.025,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                        0.025,
                                     color: AppColors.titleColor,
                                     fontWeight: FontWeight.w500,
                                   ),
                                   Icon(
                                     Icons.keyboard_arrow_down,
-                                    size: MediaQuery.of(context).size.width * 0.04,
+                                    size:
+                                        MediaQuery.of(context).size.width *
+                                        0.04,
                                     color: AppColors.titleColor,
                                   ),
                                 ],
@@ -588,8 +603,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                             ),
                           ),
                         ],
-                      )
-
+                      ),
                     ],
                   ),
                 ),

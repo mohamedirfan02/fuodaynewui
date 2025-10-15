@@ -271,78 +271,14 @@ class _CandidateScreenState extends State<CandidateScreen> {
     final email = employeeDetails?['email'] ?? "No Email";
 
     final headers = [
-      SizedBox(
-        width: 50.w,
-        child: KText(
-          text: "S.No",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 200.w,
-        child: KText(
-          text: "Name",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 120.w,
-        child: KText(
-          text: "Interview Date",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 160.w,
-        child: KText(
-          text: "Attachment",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 100.w,
-        child: KText(
-          text: "Experience",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 160.w,
-        child: KText(
-          text: "Role",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 120.w,
-        child: KText(
-          text: "Status",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 150.w,
-        child: KText(
-          text: "Action",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
+      _headers("S.No", 50.w),
+      _headers("Name", 100.w),
+      _headers("Interview Date", 120.w),
+      _headers("Attachment", 100.w),
+      _headers("Experience", 100.w),
+      _headers("Role", 160.w),
+      _headers("Status", 150.w),
+      _headers("Action", 150.w),
     ];
 
     final List<Map<String, dynamic>> gridAttendanceData = [
@@ -453,7 +389,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
                       );
                     },
                   ),
-
+                  SizedBox(height: 16.h),
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -750,34 +686,45 @@ class _CandidateScreenState extends State<CandidateScreen> {
                           child: KAtsDataTable(
                             columnHeaders: headers,
                             rowData: paginatedData,
-                            minWidth: 1445
+                            minWidth: 1150
                                 .w, // 👈 match with figma width// Using paginated data
                           ),
                         ),
 
                         // Pagination
-                        _buildPageNumbersRow(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [_buildPageNumbersRow()],
+                        ),
 
                         SizedBox(height: 16.w),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             KText(
                               text: entriesDisplayText, // Dynamic entries text
-                              fontSize: 12.sp,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.03,
                               color: AppColors.greyColor,
                               fontWeight: FontWeight.w500,
                             ),
-                            SizedBox(width: 40.w),
+
+                            // spacing between text and button
+                            // SizedBox(
+                            //   width: MediaQuery.of(context).size.width * 0.15,
+                            // ),
                             GestureDetector(
                               onTap: () {
                                 // Show dropdown or bottom sheet to change items per page
                                 _showItemsPerPageSelector();
                               },
                               child: Container(
-                                padding: EdgeInsets.all(10.w),
+                                padding: EdgeInsets.all(
+                                  MediaQuery.of(context).size.width * 0.02,
+                                ),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    width: 0.77.w,
+                                    width: 0.8,
                                     color: AppColors.greyColor.withOpacity(0.1),
                                   ),
                                   borderRadius: BorderRadius.circular(8.r),
@@ -787,13 +734,17 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                   children: [
                                     KText(
                                       text: "Show $itemsPerPage",
-                                      fontSize: 12.sp,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                          0.025,
                                       color: AppColors.titleColor,
                                       fontWeight: FontWeight.w500,
                                     ),
                                     Icon(
                                       Icons.keyboard_arrow_down,
-                                      size: 14.sp,
+                                      size:
+                                          MediaQuery.of(context).size.width *
+                                          0.04,
                                     ),
                                   ],
                                 ),
@@ -808,6 +759,20 @@ class _CandidateScreenState extends State<CandidateScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  SizedBox _headers(String text, double width) {
+    return SizedBox(
+      width: width,
+      child: Center(
+        child: KText(
+          text: text,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
         ),
       ),
     );
@@ -899,6 +864,14 @@ class _CandidateScreenState extends State<CandidateScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Container(
+                width: 50,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
               KText(
                 text: "Items per page",
                 fontSize: 16.sp,

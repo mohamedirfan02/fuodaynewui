@@ -196,60 +196,12 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
         AppRouteConstants.trackerScreen; // Replace with actual current route
 
     final headers = [
-      SizedBox(
-        width: 50.w,
-        child: KText(
-          text: "S.No",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 200.w,
-        child: KText(
-          text: "Name",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 120.w,
-        child: KText(
-          text: "Experience",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 160.w,
-        child: KText(
-          text: "Location",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 100.w,
-        child: KText(
-          text: "Role",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 160.w,
-        child: KText(
-          text: "ATS Score",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
+      _headers("S.No", 50.w),
+      _headers("Name", 100.w),
+      _headers("Experience", 120.w),
+      _headers("Location", 120.w),
+      _headers("Role", 100.w),
+      _headers("ATS Score", 150.w),
 
       //   if (showStatusColumn) // ✅ conditional
       //      SizedBox(
@@ -408,16 +360,21 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                         child: KAtsDataTable(
                           columnHeaders: headers,
                           rowData: paginatedData,
+                          minWidth: 1000.w,
                           showActionsColumn: false,
                           showStatusColumn: false,
                         ),
                       ),
 
                       // Pagination
-                      _buildPageNumbersRow(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [_buildPageNumbersRow()],
+                      ),
 
                       SizedBox(height: 16.w),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           KText(
                             text: entriesDisplayText, // Dynamic entries text
@@ -425,14 +382,16 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                             color: AppColors.greyColor,
                             fontWeight: FontWeight.w500,
                           ),
-                          SizedBox(width: 40.w),
+                          //SizedBox(width: 40.w),
                           GestureDetector(
                             onTap: () {
                               // Show dropdown or bottom sheet to change items per page
                               _showItemsPerPageSelector();
                             },
                             child: Container(
-                              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+                              padding: EdgeInsets.all(
+                                MediaQuery.of(context).size.width * 0.02,
+                              ),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   width: 0.77.w,
@@ -469,6 +428,20 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  SizedBox _headers(String text, double width) {
+    return SizedBox(
+      width: width,
+      child: Center(
+        child: KText(
+          text: text,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
         ),
       ),
     );

@@ -191,61 +191,28 @@ class _HiringTabState extends State<HiringTab> {
     final String currentRoute =
         AppRouteConstants.hiringScreen; // Replace with actual current route
 
+    //Table Column Header Widget
+    SizedBox _headers(String text, double width) {
+      return SizedBox(
+        width: width,
+        child: Center(
+          child: KText(
+            text: text,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColors.greyColor,
+          ),
+        ),
+      );
+    }
+
     final headers = [
-      SizedBox(
-        width: 50.w,
-        child: KText(
-          text: "S.No",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 200.w,
-        child: KText(
-          text: "Name",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 120.w,
-        child: KText(
-          text: "Experience",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 160.w,
-        child: KText(
-          text: "Location",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 100.w,
-        child: KText(
-          text: "Role",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 160.w,
-        child: KText(
-          text: "ATS Score",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
+      _headers("S.No", 50.w),
+      _headers("Name", 100.w),
+      _headers("Experience", 120.w),
+      _headers("Location", 120.w),
+      _headers("Role", 100.w),
+      _headers("ATS Score", 160.w),
 
       //   if (showStatusColumn) // ✅ conditional
       //      SizedBox(
@@ -368,24 +335,39 @@ class _HiringTabState extends State<HiringTab> {
                         child: KAtsDataTable(
                           columnHeaders: headers,
                           rowData: paginatedData,
+                          minWidth: 1000.w,
                           showActionsColumn: false,
                           showStatusColumn: false,
+                          columnWidths: [
+                            10.w,
+                            100.w,
+                            120.w,
+                            100.w,
+                            100.w,
+                            160.w,
+                            120.w,
+                            150.w,
+                          ],
                         ),
                       ),
 
                       // Pagination
-                      _buildPageNumbersRow(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [_buildPageNumbersRow()],
+                      ),
 
                       SizedBox(height: 16.w),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           KText(
                             text: entriesDisplayText, // Dynamic entries text
-                            fontSize: 12.sp,
+                            fontSize: MediaQuery.of(context).size.width * 0.03,
                             color: AppColors.greyColor,
                             fontWeight: FontWeight.w500,
                           ),
-                          SizedBox(width: 40.w),
+
                           GestureDetector(
                             onTap: () {
                               // Show dropdown or bottom sheet to change items per page
@@ -405,11 +387,18 @@ class _HiringTabState extends State<HiringTab> {
                                 children: [
                                   KText(
                                     text: "Show $itemsPerPage",
-                                    fontSize: 12.sp,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                        0.025,
                                     color: AppColors.titleColor,
                                     fontWeight: FontWeight.w500,
                                   ),
-                                  Icon(Icons.keyboard_arrow_down, size: 14.sp),
+                                  Icon(
+                                    Icons.keyboard_arrow_down,
+                                    size:
+                                        MediaQuery.of(context).size.width *
+                                        0.04,
+                                  ),
                                 ],
                               ),
                             ),

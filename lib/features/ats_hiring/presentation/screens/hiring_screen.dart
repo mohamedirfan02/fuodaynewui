@@ -116,23 +116,29 @@ class _HiringScreenState extends State<HiringScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: KText(
-                      text: "Hiring",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24.sp,
-                      color: AppColors.titleColor,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: KText(
+                        text: "Hiring",
+                        fontWeight: FontWeight.w600,
+                        fontSize: 24.sp,
+                        color: AppColors.titleColor,
+                      ),
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: KText(
-                      text: "Manage your Interview Schedule",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14.sp,
-                      color: AppColors.greyColor,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: KText(
+                        text: "Manage your Interview Schedule",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.sp,
+                        color: AppColors.greyColor,
+                      ),
                     ),
                   ),
                   SizedBox(height: 20.h),

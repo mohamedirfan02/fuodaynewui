@@ -183,61 +183,28 @@ class _OnboardingTabState extends State<OnboardingTab> {
   @override
   Widget build(BuildContext context) {
     final hiveService = getIt<HiveStorageService>();
+    //Table Column Header Widget
+    SizedBox _headers(String text, double width) {
+      return SizedBox(
+        width: width,
+        child: Center(
+          child: KText(
+            text: text,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColors.greyColor,
+          ),
+        ),
+      );
+    }
+
     final headers = [
-      SizedBox(
-        width: 50.w,
-        child: KText(
-          text: "S.No",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 200.w,
-        child: KText(
-          text: "Name",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 120.w,
-        child: KText(
-          text: "Experience",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 160.w,
-        child: KText(
-          text: "Location",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 100.w,
-        child: KText(
-          text: "Role",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-      SizedBox(
-        width: 160.w,
-        child: KText(
-          text: "ATS Score",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
+      _headers("S.No", 50.w),
+      _headers("Name", 100.w),
+      _headers("Experience", 120.w),
+      _headers("Location", 120.w),
+      _headers("Role", 100.w),
+      _headers("ATS Score", 160.w),
 
       //   if (showStatusColumn) // ✅ conditional
       //      SizedBox(
@@ -346,22 +313,27 @@ class _OnboardingTabState extends State<OnboardingTab> {
                           rowData: paginatedData,
                           showActionsColumn: false,
                           showStatusColumn: false,
+                          minWidth: 1000.w,
                         ),
                       ),
 
                       // Pagination
-                      _buildPageNumbersRow(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [_buildPageNumbersRow()],
+                      ),
 
                       SizedBox(height: 16.w),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           KText(
                             text: entriesDisplayText, // Dynamic entries text
-                            fontSize: 12.sp,
+                            fontSize: MediaQuery.of(context).size.width * 0.03,
                             color: AppColors.greyColor,
                             fontWeight: FontWeight.w500,
                           ),
-                          SizedBox(width: 40.w),
+
                           GestureDetector(
                             onTap: () {
                               // Show dropdown or bottom sheet to change items per page
@@ -381,11 +353,18 @@ class _OnboardingTabState extends State<OnboardingTab> {
                                 children: [
                                   KText(
                                     text: "Show $itemsPerPage",
-                                    fontSize: 12.sp,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                        0.025,
                                     color: AppColors.titleColor,
                                     fontWeight: FontWeight.w500,
                                   ),
-                                  Icon(Icons.keyboard_arrow_down, size: 14.sp),
+                                  Icon(
+                                    Icons.keyboard_arrow_down,
+                                    size:
+                                        MediaQuery.of(context).size.width *
+                                        0.04,
+                                  ),
                                 ],
                               ),
                             ),
@@ -415,11 +394,11 @@ class _OnboardingTabState extends State<OnboardingTab> {
         icon: Icon(Icons.chevron_left, size: 16.sp),
         onPressed: pageWindowStart > 1
             ? () {
-          setState(() {
-            pageWindowStart -= pageWindowSize;
-            currentPage = pageWindowStart;
-          });
-        }
+                setState(() {
+                  pageWindowStart -= pageWindowSize;
+                  currentPage = pageWindowStart;
+                });
+              }
             : null,
       ),
     );
@@ -440,11 +419,11 @@ class _OnboardingTabState extends State<OnboardingTab> {
         icon: Icon(Icons.chevron_right, size: 16.sp),
         onPressed: windowEnd < totalPages
             ? () {
-          setState(() {
-            pageWindowStart += pageWindowSize;
-            currentPage = pageWindowStart;
-          });
-        }
+                setState(() {
+                  pageWindowStart += pageWindowSize;
+                  currentPage = pageWindowStart;
+                });
+              }
             : null,
       ),
     );
@@ -497,7 +476,7 @@ class _OnboardingTabState extends State<OnboardingTab> {
               ),
               SizedBox(height: 16.h),
               ...([5, 6, 10, 15, 20].map(
-                    (count) => ListTile(
+                (count) => ListTile(
                   title: KText(
                     text: "Show $count items",
                     fontSize: 14.sp,
