@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
 import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
 import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
 import 'package:fuoday/commons/widgets/k_filter_button.dart';
+import 'package:fuoday/commons/widgets/k_horizontal_spacer.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
@@ -16,6 +18,7 @@ import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.d
 import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
 import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class HomeRecruiterScreen extends StatefulWidget {
   const HomeRecruiterScreen({super.key});
@@ -39,7 +42,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
   List<Map<String, dynamic>> applicantsData = [
     {
       'name': 'Pristia Candra',
-      'email': 'pristia@gmail.com',
+      'email': 'pristia@gmail.com,pristia@gmail.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
       'createdDate': '01 May 2025',
@@ -47,7 +50,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
     },
     {
       'name': 'Hanna Baptista',
-      'email': 'hanna@gmail.com',
+      'email': 'hanna@gmail.com,pristia@gmail.com',
       'phone': '08092139441',
       'cv': 'cv.pdf',
       'createdDate': '01 May 2025',
@@ -259,8 +262,140 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
     }
   }
 
+  //New Data Tbale Headers
+  // List<DataGridRow> _buildRows() => List.generate(
+  //   200,
+  //   (i) => DataGridRow(
+  //     cells: [
+  //       DataGridCell<int>(columnName: 'ID', value: i + 1),
+  //       DataGridCell<String>(columnName: 'Name', value: 'Item ${i + 1}'),
+  //       DataGridCell<double>(columnName: 'Price', value: (i + 1) * 10.5),
+  //       DataGridCell<String>(
+  //         columnName: 'Nameq',
+  //         value: 'Item cccccccc${i + 1}',
+  //       ),
+  //       DataGridCell<String>(
+  //         columnName: 'Namec',
+  //         value: 'Item vvvvvvvvv${i + 1}',
+  //       ),
+  //     ],
+  //   ),
+  // );
+
+  // // ✅ Columns
+  // List<GridColumn> _buildColumns() {
+  //   const headerStyle = TextStyle(fontWeight: FontWeight.bold);
+  //
+  //   Widget header(String text) => Container(
+  //     padding: const EdgeInsets.all(8),
+  //     alignment: Alignment.center,
+  //     child: Text(text, style: headerStyle),
+  //   );
+  //
+  //   return [
+  //     GridColumn(columnName: 'ID', label: header('ID')),
+  //     GridColumn(columnName: 'Name', label: header('Name')),
+  //     GridColumn(columnName: 'Price', width: 180, label: header('Actions')),
+  //     GridColumn(columnName: 'Namew', width: 200, label: header('Test1')),
+  //     GridColumn(columnName: 'Namec', width: 180, label: header('Actions')),
+  //   ];
+  // }
+  // Track selected stage per row
+  late List<String> _selectedStages;
+  Widget _actionButton({
+    required Color color,
+    required String icon,
+    VoidCallback? onTap,
+  }) {
+    return Container(
+      width: 30.w,
+      height: 30.h,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: IconButton(
+        onPressed: onTap,
+        icon: SvgPicture.asset(
+          icon,
+          height: 14.h,
+          fit: BoxFit.contain,
+          color: Colors.white,
+        ),
+        padding: EdgeInsets.zero,
+      ),
+    );
+  }
+
+  final List<String> stageOptions = [
+    'Select Stage',
+    'Applied',
+    'Screening',
+    '1st Interview',
+    '2nd Interview',
+    'Hiring',
+    'Rejected',
+  ];
+  //==================================================================
+  // Build DataGridRows from applicantsData
+  // Build DataGridRows from applicantsData
+  List<DataGridRow> _buildRows() => applicantsData.asMap().entries.map((entry) {
+    int index = entry.key; // row index
+    var data = entry.value;
+    return DataGridRow(
+      cells: [
+        // S.No column
+        DataGridCell<int>(columnName: 'SNo', value: index + 1),
+        DataGridCell<String>(columnName: 'Email', value: data['email']),
+        DataGridCell<String>(columnName: 'Phone', value: data['phone']),
+        DataGridCell<String>(columnName: 'CV', value: data['cv']),
+        DataGridCell<String>(
+          columnName: 'CreatedDate',
+          value: data['createdDate'],
+        ),
+        DataGridCell<String>(columnName: 'Stage', value: 'New'),
+        DataGridCell<String>(columnName: 'Action', value: 'ss'),
+      ],
+    );
+  }).toList();
+
+  //==================================================================
+  // Columns
+  List<GridColumn> _buildColumns() {
+    const headerStyle = TextStyle(
+      fontWeight: FontWeight.normal,
+      color: AppColors.greyColor,
+    );
+    Widget header(String text) => Container(
+      padding: const EdgeInsets.all(8),
+      alignment: Alignment.center,
+      child: Text(text, style: headerStyle),
+    );
+
+    return [
+      GridColumn(columnName: 'SNo', width: 70, label: header('S.No')),
+      GridColumn(columnName: 'Email', width: 200, label: header('Name')),
+      GridColumn(columnName: 'Phone', label: header('Phone Number')),
+      GridColumn(columnName: 'CV', label: header('CV')),
+      GridColumn(columnName: 'CreatedDate', label: header('Date')),
+      GridColumn(columnName: 'Stage', width: 140, label: header('Stage')),
+      GridColumn(columnName: 'Action', width: 100, label: header('Action')),
+    ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedStages = List.generate(
+      applicantsData.length,
+      (_) => 'Select Stage',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final rows = _buildRows();
+    final columns = _buildColumns();
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
 
@@ -499,116 +634,196 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
 
                       KVerticalSpacer(height: 24.h),
 
-                      // Applicant Table with Pagination
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          children: [
-                            ApplicantItem.buildHeader(),
-                            SizedBox(height: 16.h),
-                            Column(
-                              children: List.generate(
-                                paginatedApplicants.length,
-                                (index) {
-                                  final applicant = paginatedApplicants[index];
-                                  final sno =
-                                      ((currentPage - 1) * itemsPerPage) +
-                                      index +
-                                      1; // Correct numbering across pages
-
-                                  return ApplicantItem(
-                                    sno: sno,
-                                    name: applicant['name'],
-                                    email: applicant['email'],
-                                    phoneNumber: applicant['phone'],
-                                    cv: applicant['cv'],
-                                    createdDate: applicant['createdDate'],
-                                    avatarColor: applicant['avatarColor'],
-                                    showInitials: true,
-                                    initials: applicant['name']
-                                        .substring(0, 2)
-                                        .toUpperCase(),
-                                    onStageChanged: (newStage) {
-                                      print(
-                                        "${applicant['name']} stage changed to $newStage",
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      KVerticalSpacer(height: 24.h),
-
-                      // Pagination
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [_buildPageNumbersRow()],
-                      ),
-
-                      SizedBox(height: 16.w),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Dynamic entries text
-                          KText(
-                            text: entriesDisplayText,
-                            fontSize:
-                                MediaQuery.of(context).size.width *
-                                0.03, // responsive font
-                            color: AppColors.greyColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-
-                          // SizedBox(
-                          //   width: MediaQuery.of(context).size.width * 0.08,
-                          // ), // spacing between text and button
-                          // Dropdown container
-                          GestureDetector(
-                            onTap: _showItemsPerPageSelector,
-                            child: Container(
-                              padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width * 0.02,
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 0.8,
-                                  color: AppColors.greyColor.withOpacity(0.1),
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                                color: AppColors.secondaryColor,
-                              ),
-                              child: Row(
-                                children: [
-                                  KText(
-                                    text: "Show $itemsPerPage",
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                        0.025,
-                                    color: AppColors.titleColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size:
-                                        MediaQuery.of(context).size.width *
-                                        0.04,
-                                    color: AppColors.titleColor,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      ///---Old Data Table---
+                      // // Applicant Table with Pagination
+                      // SingleChildScrollView(
+                      //   scrollDirection: Axis.horizontal,
+                      //   child: Column(
+                      //     children: [
+                      //       ApplicantItem.buildHeader(),
+                      //       SizedBox(height: 16.h),
+                      //       Column(
+                      //         children: List.generate(
+                      //           paginatedApplicants.length,
+                      //           (index) {
+                      //             final applicant = paginatedApplicants[index];
+                      //             final sno =
+                      //                 ((currentPage - 1) * itemsPerPage) +
+                      //                 index +
+                      //                 1; // Correct numbering across pages
+                      //
+                      //             return ApplicantItem(
+                      //               sno: sno,
+                      //               name: applicant['name'],
+                      //               email: applicant['email'],
+                      //               phoneNumber: applicant['phone'],
+                      //               cv: applicant['cv'],
+                      //               createdDate: applicant['createdDate'],
+                      //               avatarColor: applicant['avatarColor'],
+                      //               showInitials: true,
+                      //               initials: applicant['name']
+                      //                   .substring(0, 2)
+                      //                   .toUpperCase(),
+                      //               onStageChanged: (newStage) {
+                      //                 print(
+                      //                   "${applicant['name']} stage changed to $newStage",
+                      //                 );
+                      //               },
+                      //             );
+                      //           },
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      //
+                      // KVerticalSpacer(height: 24.h),
+                      //
+                      // // Pagination
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [_buildPageNumbersRow()],
+                      // ),
+                      //
+                      // SizedBox(height: 16.w),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     // Dynamic entries text
+                      //     KText(
+                      //       text: entriesDisplayText,
+                      //       fontSize:
+                      //           MediaQuery.of(context).size.width *
+                      //           0.03, // responsive font
+                      //       color: AppColors.greyColor,
+                      //       fontWeight: FontWeight.w500,
+                      //     ),
+                      //
+                      //     // SizedBox(
+                      //     //   width: MediaQuery.of(context).size.width * 0.08,
+                      //     // ), // spacing between text and button
+                      //     // Dropdown container
+                      //     GestureDetector(
+                      //       onTap: _showItemsPerPageSelector,
+                      //       child: Container(
+                      //         padding: EdgeInsets.all(
+                      //           MediaQuery.of(context).size.width * 0.02,
+                      //         ),
+                      //         decoration: BoxDecoration(
+                      //           border: Border.all(
+                      //             width: 0.8,
+                      //             color: AppColors.greyColor.withOpacity(0.1),
+                      //           ),
+                      //           borderRadius: BorderRadius.circular(8),
+                      //           color: AppColors.secondaryColor,
+                      //         ),
+                      //         child: Row(
+                      //           children: [
+                      //             KText(
+                      //               text: "Show $itemsPerPage",
+                      //               fontSize:
+                      //                   MediaQuery.of(context).size.width *
+                      //                   0.025,
+                      //               color: AppColors.titleColor,
+                      //               fontWeight: FontWeight.w500,
+                      //             ),
+                      //             Icon(
+                      //               Icons.keyboard_arrow_down,
+                      //               size:
+                      //                   MediaQuery.of(context).size.width *
+                      //                   0.04,
+                      //               color: AppColors.titleColor,
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      ///<!---------- Data Table
+                      newData_table(columns, rows),
                     ],
                   ),
                 ),
                 SizedBox(height: 16.w),
-
+                //=========================New Table Column
+                //newData_table(columns, rows),
+                // ReusableDataGrid(
+                //   title: 'Products Table',
+                //   columns: columns,
+                //   rows: rows,
+                //   totalRows: rows.length,
+                //   initialRowsPerPage: 5,
+                //   cellBuilder: (cell, rowIndex) {
+                //     // Last column → show 3 icon buttons
+                //     if (cell.columnName == 'Price') {
+                //       return Container(
+                //         alignment: Alignment.center,
+                //         padding: const EdgeInsets.all(4),
+                //         child: FittedBox(
+                //           fit: BoxFit.scaleDown,
+                //           child: Row(
+                //             mainAxisSize: MainAxisSize.min,
+                //             children: [
+                //               // IconButton(
+                //               //   icon: const Icon(
+                //               //     Icons.edit,
+                //               //     size: 18,
+                //               //     color: Colors.blue,
+                //               //   ),
+                //               //   onPressed: () =>
+                //               //       print('Edit clicked for row $rowIndex'),
+                //               // ),
+                //               // IconButton(
+                //               //   icon: const Icon(
+                //               //     Icons.delete,
+                //               //     size: 18,
+                //               //     color: Colors.red,
+                //               //   ),
+                //               //   onPressed: () =>
+                //               //       print('Delete clicked for row $rowIndex'),
+                //               // ),
+                //               // IconButton(
+                //               //   icon: const Icon(
+                //               //     Icons.visibility,
+                //               //     size: 18,
+                //               //     color: Colors.green,
+                //               //   ),
+                //               //   onPressed: () =>
+                //               //       print('View clicked for row $rowIndex'),
+                //               // ),
+                //               Container(
+                //                 width: 50,
+                //                 height: 50,
+                //                 color: Colors.red,
+                //                 child: Center(child: CircleAvatar()),
+                //               ),
+                //               Container(
+                //                 width: 50,
+                //                 height: 50,
+                //                 color: Colors.yellow,
+                //                 child: Center(child: CircleAvatar()),
+                //               ),
+                //               Container(
+                //                 width: 50,
+                //                 height: 50,
+                //                 color: Colors.red,
+                //                 child: Center(child: CircleAvatar()),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       );
+                //     }
+                //
+                //     // Default cell styling for other columns
+                //     return Container(
+                //       alignment: Alignment.center,
+                //       padding: const EdgeInsets.all(8),
+                //       child: Text(cell.value.toString()),
+                //     );
+                //   },
+                // ),
                 Container(
                   padding: EdgeInsets.all(18.47.w),
                   decoration: BoxDecoration(
@@ -641,6 +856,148 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Padding newData_table(List<GridColumn> columns, List<DataGridRow> rows) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ReusableDataGrid(
+        title: 'Applicants',
+        columns: columns,
+        rows: rows,
+        totalRows: rows.length,
+        initialRowsPerPage: 5,
+        cellBuilder: (cell, rowIndex, actualDataIndex) {
+          final value = cell.value;
+          if (cell.columnName == 'SNo') {
+            return Container(
+              alignment:
+                  Alignment.center, // Centers horizontally and vertically
+              child: Text(cell.value.toString(), textAlign: TextAlign.center),
+            );
+          }
+          if (cell.columnName == 'Email') {
+            final applicant = applicantsData[actualDataIndex];
+            final fullName = applicant['name'] ?? "";
+            final email = applicant['email'] ?? "";
+            final color = applicant['avatarColor'] ?? Colors.grey;
+
+            // Get initials from full name
+            String getInitials(String name) {
+              final parts = name.split(' ');
+              if (parts.length == 1) return parts[0][0].toUpperCase();
+              return (parts[0][0] + parts[1][0]).toUpperCase();
+            }
+
+            return Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: color,
+                    radius: 12.r,
+                    child: KText(
+                      text: getInitials(fullName),
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          KText(
+                            text: fullName,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.titleColor,
+                            textAlign: TextAlign.center,
+                          ),
+                          KText(
+                            text: email,
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.greyColor,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          //  CV column
+          if (cell.columnName == 'CV') {
+            final applicant = applicantsData[actualDataIndex];
+            final cv = applicant['cv'] ?? "";
+            return Row(
+              children: [
+                Text(cv),
+                SizedBox(width: 4.w),
+                Icon(
+                  Icons.download_outlined,
+                  size: 16.sp,
+                  color: AppColors.greyColor,
+                ),
+              ],
+            );
+          }
+
+          // Stage dropdown column
+          if (cell.columnName == 'Stage') {
+            final applicant = applicantsData[actualDataIndex];
+            return DropdownButton<String>(
+              value: _selectedStages[rowIndex],
+              underline: const SizedBox.shrink(),
+              items: stageOptions.map((stage) {
+                return DropdownMenuItem(
+                  value: stage,
+                  child: Text(stage, style: TextStyle(fontSize: 12.sp)),
+                );
+              }).toList(),
+              onChanged: (val) {
+                if (val != null) {
+                  setState(() => _selectedStages[rowIndex] = val);
+                }
+              },
+            );
+          }
+
+          if (cell.columnName == 'Action') {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _actionButton(
+                  color: AppColors.primaryColor,
+                  icon: AppAssetsConstants.editIcon,
+                  onTap: () {},
+                ),
+                SizedBox(width: 8.w),
+                _actionButton(
+                  color: AppColors.softRed,
+                  icon: AppAssetsConstants.deleteIcon,
+                  onTap: () {},
+                ),
+              ],
+            );
+          }
+
+          // Default text cells
+          return Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
+          );
+        },
       ),
     );
   }

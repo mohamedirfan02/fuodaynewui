@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
 import 'package:fuoday/commons/widgets/k_ats_data_table.dart';
 import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
 import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
@@ -20,6 +21,7 @@ import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
 import 'package:go_router/go_router.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class CandidateScreen extends StatefulWidget {
   const CandidateScreen({super.key});
@@ -225,7 +227,67 @@ class _CandidateScreenState extends State<CandidateScreen> {
       "initials": "RM",
       "showDownload": true,
     },
+    {
+      "sno": 16,
+      "name": "Rajesh Mishra",
+      "colum3": "29-09-2025",
+      "colum4": "rajesh_cv.pdf",
+      "colum5": "6 yrs",
+      "colum6": "System Admin",
+      "colum7": "Rejected",
+      "avatarColor": Colors.lime,
+      "initials": "RM",
+      "showDownload": true,
+    },
   ];
+
+  // Build DataGridRows from applicantsData
+  List<DataGridRow> _buildRows() => sampleData.asMap().entries.map((entry) {
+    int index = entry.key; // row index
+    var data = entry.value;
+    return DataGridRow(
+      cells: [
+        // S.No column
+        DataGridCell<int>(columnName: 'SNo', value: index + 1),
+        DataGridCell<String>(columnName: 'Name', value: data['name']),
+        DataGridCell<String>(columnName: 'Date', value: data['colum3']),
+        DataGridCell<String>(columnName: 'CV', value: data['colum4']),
+        DataGridCell<String>(columnName: 'Experience', value: data['colum5']),
+        DataGridCell<String>(columnName: 'Role', value: data['colum6']),
+        DataGridCell<String>(columnName: 'Status', value: data['colum7']),
+        DataGridCell<String>(columnName: 'Action', value: "action"),
+      ],
+    );
+  }).toList();
+
+  //==================================================================
+  // Columns
+  List<GridColumn> _buildColumns() {
+    const headerStyle = TextStyle(
+      fontWeight: FontWeight.normal,
+      color: AppColors.greyColor,
+    );
+    Widget header(String text) => Container(
+      padding: const EdgeInsets.all(8),
+      alignment: Alignment.center,
+      child: Text(text, style: headerStyle),
+    );
+
+    return [
+      GridColumn(columnName: 'SNo', width: 70, label: header('S.No')),
+      GridColumn(columnName: 'Name', width: 150, label: header('Name')),
+      GridColumn(
+        columnName: 'Date',
+        width: 150,
+        label: header('Interview Date'),
+      ),
+      GridColumn(columnName: 'CV', width: 150, label: header('Attachment')),
+      GridColumn(columnName: 'Experience', label: header('Experience')),
+      GridColumn(columnName: 'Role', width: 200, label: header('Role')),
+      GridColumn(columnName: 'Status', width: 140, label: header('Status')),
+      GridColumn(columnName: 'Action', width: 200, label: header('Action')),
+    ];
+  }
 
   // Getter methods for pagination
   int get totalPages => (sampleData.length / itemsPerPage).ceil();
@@ -307,7 +369,8 @@ class _CandidateScreenState extends State<CandidateScreen> {
         'icon': AppAssetsConstants.rejectedIcon, // ✅ SVG path
       },
     ];
-
+    final rows = _buildRows();
+    final columns = _buildColumns();
     return PopScope(
       canPop: false, // Prevent default pop
       onPopInvokedWithResult: (didPop, result) async {
@@ -678,80 +741,84 @@ class _CandidateScreenState extends State<CandidateScreen> {
                         ),
                         KVerticalSpacer(height: 16.h),
 
+                        /// Old Data Table
                         // Data Table with paginated data
-                        SizedBox(
-                          height: 330.h,
-                          width:
-                              1445.w, // 👈 Figma width (if you want it strict)
-                          child: KAtsDataTable(
-                            columnHeaders: headers,
-                            rowData: paginatedData,
-                            minWidth: 1150
-                                .w, // 👈 match with figma width// Using paginated data
-                          ),
-                        ),
+                        // SizedBox(
+                        //   height: 330.h,
+                        //   width:
+                        //       1445.w, // 👈 Figma width (if you want it strict)
+                        //   child: KAtsDataTable(
+                        //     columnHeaders: headers,
+                        //     rowData: paginatedData,
+                        //     minWidth: 1150
+                        //         .w, // 👈 match with figma width// Using paginated data
+                        //   ),
+                        // ),
+                        //
+                        // // Pagination
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [_buildPageNumbersRow()],
+                        // ),
+                        //
+                        // SizedBox(height: 16.w),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     KText(
+                        //       text: entriesDisplayText, // Dynamic entries text
+                        //       fontSize:
+                        //           MediaQuery.of(context).size.width * 0.03,
+                        //       color: AppColors.greyColor,
+                        //       fontWeight: FontWeight.w500,
+                        //     ),
+                        //
+                        //     // spacing between text and button
+                        //     // SizedBox(
+                        //     //   width: MediaQuery.of(context).size.width * 0.15,
+                        //     // ),
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         // Show dropdown or bottom sheet to change items per page
+                        //         _showItemsPerPageSelector();
+                        //       },
+                        //       child: Container(
+                        //         padding: EdgeInsets.all(
+                        //           MediaQuery.of(context).size.width * 0.02,
+                        //         ),
+                        //         decoration: BoxDecoration(
+                        //           border: Border.all(
+                        //             width: 0.8,
+                        //             color: AppColors.greyColor.withOpacity(0.1),
+                        //           ),
+                        //           borderRadius: BorderRadius.circular(8.r),
+                        //           color: AppColors.secondaryColor,
+                        //         ),
+                        //         child: Row(
+                        //           children: [
+                        //             KText(
+                        //               text: "Show $itemsPerPage",
+                        //               fontSize:
+                        //                   MediaQuery.of(context).size.width *
+                        //                   0.025,
+                        //               color: AppColors.titleColor,
+                        //               fontWeight: FontWeight.w500,
+                        //             ),
+                        //             Icon(
+                        //               Icons.keyboard_arrow_down,
+                        //               size:
+                        //                   MediaQuery.of(context).size.width *
+                        //                   0.04,
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
 
-                        // Pagination
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [_buildPageNumbersRow()],
-                        ),
-
-                        SizedBox(height: 16.w),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            KText(
-                              text: entriesDisplayText, // Dynamic entries text
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.03,
-                              color: AppColors.greyColor,
-                              fontWeight: FontWeight.w500,
-                            ),
-
-                            // spacing between text and button
-                            // SizedBox(
-                            //   width: MediaQuery.of(context).size.width * 0.15,
-                            // ),
-                            GestureDetector(
-                              onTap: () {
-                                // Show dropdown or bottom sheet to change items per page
-                                _showItemsPerPageSelector();
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(
-                                  MediaQuery.of(context).size.width * 0.02,
-                                ),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 0.8,
-                                    color: AppColors.greyColor.withOpacity(0.1),
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.r),
-                                  color: AppColors.secondaryColor,
-                                ),
-                                child: Row(
-                                  children: [
-                                    KText(
-                                      text: "Show $itemsPerPage",
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                          0.025,
-                                      color: AppColors.titleColor,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    Icon(
-                                      Icons.keyboard_arrow_down,
-                                      size:
-                                          MediaQuery.of(context).size.width *
-                                          0.04,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        /// New Data Table
+                        newData_table(columns, rows),
                       ],
                     ),
                   ),
@@ -760,6 +827,194 @@ class _CandidateScreenState extends State<CandidateScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Color _getStatusColor(String? status) {
+    if (status == null) return AppColors.greyColor;
+
+    switch (status.toLowerCase()) {
+      case 'selected':
+        return AppColors.checkInColor;
+      case 'rejected':
+        return AppColors.softRed;
+      case 'on hold':
+        return Colors.orange;
+      case 'in progress':
+        return Colors.blue;
+      case 'hr round':
+        return Colors.purple;
+      default:
+        if (status.contains('%')) {
+          return Colors.amber;
+        }
+        return AppColors.checkInColor;
+    }
+  }
+
+  /// Data Table Widget
+  Padding newData_table(List<GridColumn> columns, List<DataGridRow> rows) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ReusableDataGrid(
+        title: 'Applicants',
+        columns: columns,
+        rows: rows,
+        totalRows: rows.length,
+        initialRowsPerPage: 5,
+        cellBuilder: (cell, rowIndex, actualDataIndex) {
+          final value = cell.value;
+          if (cell.columnName == 'CV') {
+            final applicant = sampleData[actualDataIndex];
+            final cv = applicant['colum4'] ?? "";
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(cv),
+                SizedBox(width: 4.w),
+                Icon(
+                  Icons.download_outlined,
+                  size: 16.sp,
+                  color: AppColors.greyColor,
+                ),
+              ],
+            );
+          }
+          if (cell.columnName == 'Status') {
+            final applicant = sampleData[actualDataIndex];
+            final status = applicant['colum7'] ?? "";
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: _getStatusColor(status).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(5.r),
+                ),
+
+                child: Center(
+                  child: KText(
+                    text: status,
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.w400,
+                    color: _getStatusColor(status),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            );
+          }
+          if (cell.columnName == 'Action') {
+            Widget _actionButton({
+              required Color color,
+              required String icon,
+              VoidCallback? onTap,
+            }) {
+              return Container(
+                width: 30.w,
+                height: 30.h,
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: IconButton(
+                  onPressed: onTap,
+                  icon: SvgPicture.asset(
+                    icon,
+                    height: 14.h,
+                    fit: BoxFit.contain,
+                    color: Colors.white,
+                  ),
+                  padding: EdgeInsets.zero,
+                ),
+              );
+            }
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _actionButton(
+                  color: AppColors.approvedColor,
+                  icon: AppAssetsConstants.eyeIcon,
+                  onTap: () {},
+                ),
+                SizedBox(width: 8.w),
+                _actionButton(
+                  color: AppColors.primaryColor,
+                  icon: AppAssetsConstants.editIcon,
+                  onTap: () {},
+                ),
+                SizedBox(width: 8.w),
+                _actionButton(
+                  color: AppColors.softRed,
+                  icon: AppAssetsConstants.deleteIcon,
+                  onTap: () {},
+                ),
+              ],
+            );
+          }
+          // Default text cells
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
+          );
+        },
+        // cellBuilder: (cell, rowIndex, actualDataIndex) {
+        //   final value = cell.value;
+        //   if (cell.columnName == 'SNo') {
+        //     return Container(
+        //       alignment:
+        //       Alignment.center, // Centers horizontally and vertically
+        //       child: Text(cell.value.toString(), textAlign: TextAlign.center),
+        //     );
+        //   }
+        //
+        //   //  CV column
+        //   if (cell.columnName == 'CV')
+        //     final applicant = sampleData[actualDataIndex];
+        //     final cv = applicant['colum4'] ?? "";
+        //     return Row(
+        //       children: [
+        //         Text(cv),
+        //         SizedBox(width: 4.w),
+        //         Icon(
+        //           Icons.download_outlined,
+        //           size: 16.sp,
+        //           color: AppColors.greyColor,
+        //         ),
+        //       ],
+        //     );
+        //   }
+        //
+        //
+        //   if (cell.columnName == 'Action') {
+        //     return Row(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         _actionButton(
+        //           color: AppColors.primaryColor,
+        //           icon: AppAssetsConstants.editIcon,
+        //           onTap: () {},
+        //         ),
+        //         SizedBox(width: 8.w),
+        //         _actionButton(
+        //           color: AppColors.softRed,
+        //           icon: AppAssetsConstants.deleteIcon,
+        //           onTap: () {},
+        //         ),
+        //       ],
+        //     );
+        //   }
+
+        // Default text cells
+        // return Container(
+        //   alignment: Alignment.centerLeft,
+        //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        //   child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
+        // );
+        // },
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
 import 'package:fuoday/commons/widgets/k_ats_data_table.dart';
 import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
@@ -11,6 +12,7 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class InterviewScreen extends StatefulWidget {
   const InterviewScreen({super.key});
@@ -154,6 +156,47 @@ class _InterviewScreenState extends State<InterviewScreen> {
     },
   ];
 
+  // Build DataGridRows from applicantsData
+  List<DataGridRow> _buildRows() => sampleData.asMap().entries.map((entry) {
+    int index = entry.key; // row index
+    var data = entry.value;
+    return DataGridRow(
+      cells: [
+        // S.No column
+        DataGridCell<int>(columnName: 'SNo', value: index + 1),
+        DataGridCell<String>(columnName: 'Name', value: data['name']),
+        DataGridCell<String>(columnName: 'Experience', value: data['colum3']),
+        DataGridCell<String>(columnName: 'Location', value: data['colum4']),
+        DataGridCell<String>(columnName: 'Role', value: data['colum5']),
+        DataGridCell<String>(columnName: 'Score', value: data['colum6']),
+      ],
+    );
+  }).toList();
+
+  //==================================================================
+  // Columns
+  List<GridColumn> _buildColumns() {
+    const headerStyle = TextStyle(
+      fontWeight: FontWeight.normal,
+      color: AppColors.greyColor,
+    );
+    Widget header(String text) => Container(
+      padding: const EdgeInsets.all(8),
+      alignment: Alignment.center,
+      child: Text(text, style: headerStyle),
+    );
+
+    return [
+      GridColumn(columnName: 'SNo', width: 70, label: header('S.No')),
+      GridColumn(columnName: 'Name', width: 150, label: header('Name')),
+
+      GridColumn(columnName: 'Experience', label: header('Experience')),
+      GridColumn(columnName: 'Location', label: header('Location')),
+      GridColumn(columnName: 'Role', width: 200, label: header('Role')),
+      GridColumn(columnName: 'Score', width: 120, label: header('ATS Score')),
+    ];
+  }
+
   // Getter methods for pagination
   int get totalPages => (sampleData.length / itemsPerPage).ceil();
 
@@ -240,7 +283,8 @@ class _InterviewScreenState extends State<InterviewScreen> {
         'icon': AppAssetsConstants.pecIcon, // ✅ SVG path
       },
     ];
-
+    final rows = _buildRows();
+    final columns = _buildColumns();
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
@@ -370,7 +414,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                         ],
                       ),
                       KVerticalSpacer(height: 16.h),
-
+                      /* <!-----------Old Data Table----------->
                       // Data Table with paginated data
                       SizedBox(
                         height: 330.h,
@@ -436,7 +480,10 @@ class _InterviewScreenState extends State<InterviewScreen> {
                             ),
                           ),
                         ],
-                      ),
+                      ),*/
+
+                      /// New Data Table
+                      newData_table(columns, rows),
                     ],
                   ),
                 ),
@@ -582,4 +629,18 @@ class _InterviewScreenState extends State<InterviewScreen> {
       },
     );
   }
+}
+
+/// Data Table Widget
+Padding newData_table(List<GridColumn> columns, List<DataGridRow> rows) {
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: ReusableDataGrid(
+      title: 'Applicants',
+      columns: columns,
+      rows: rows,
+      totalRows: rows.length,
+      initialRowsPerPage: 5,
+    ),
+  );
 }
