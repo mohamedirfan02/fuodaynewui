@@ -30,6 +30,28 @@ class HiveStorageService {
     }
   }
 
+  // Key for storing role
+  static const _keyUserRole = "userRole";
+
+  /// 🔥 Save user role (employee/recruiter)
+  Future<void> setUserRole(String role) async {
+    await _authBox.put(_keyUserRole, role);
+    AppLoggerHelper.logInfo("💾 User role saved: $role");
+  }
+
+  /// 🔥 Get user role
+  String get userRole {
+    final role = _authBox.get(_keyUserRole, defaultValue: "employee");
+    AppLoggerHelper.logInfo("📦 Fetched user role: $role");
+    return role;
+  }
+
+  /// 🔥 Clear role on logout
+  Future<void> clearUserRole() async {
+    await _authBox.delete(_keyUserRole);
+    AppLoggerHelper.logInfo("🗑️ User role cleared");
+  }
+
   /// Set Auth login status
   Future<void> setIsAuthLogged(bool value) async {
     await _authBox.put(AppHiveStorageConstants.isAuthLoggedInStatus, value);

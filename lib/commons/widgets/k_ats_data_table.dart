@@ -33,7 +33,9 @@ class KAtsDataTable extends StatelessWidget {
   final List<ActionButton>? defaultActions; // Default actions for all rows
   final bool showActionsColumn; // Whether to show actions column
   final bool showStatusColumn; // Whether to show status column
-
+  /// ✅ New feature: Custom width for each DataCell
+  /// Example: [50.w, 200.w, 120.w, 160.w, 100.w, 160.w, 120.w, 150.w]
+  final List<double>? columnWidths;
 
   const KAtsDataTable({
     super.key,
@@ -43,15 +45,15 @@ class KAtsDataTable extends StatelessWidget {
     this.headerColor = AppColors.atsHomepageBg,
     this.defaultActions,
     this.showActionsColumn = true,
-    this.showStatusColumn = true, // default true
-
+    this.showStatusColumn = true,
+    this.columnWidths, // default true
   });
 
   @override
   Widget build(BuildContext context) {
     return DataTable2(
       columnSpacing: 1,
-      horizontalMargin: 12,
+      horizontalMargin: 20,
       minWidth: minWidth,
       headingRowColor: MaterialStateProperty.all(headerColor),
       dataRowHeight: 60,
@@ -121,7 +123,7 @@ class KAtsDataTable extends StatelessWidget {
                         Flexible(
                           child: KText(
                             text: row["name"] ?? "-",
-                            fontSize: 14.sp,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.w500,
                             color: AppColors.titleColor,
                             maxLines: 2,
@@ -170,42 +172,43 @@ class KAtsDataTable extends StatelessWidget {
             DataCell(
               SizedBox(
                 width: 160.w,
-                child: (row["colum4"] != null && row["colum4"].toString().isNotEmpty)
+                child:
+                    (row["colum4"] != null &&
+                        row["colum4"].toString().isNotEmpty)
                     ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: KText(
-                        text: row["colum4"],
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: KText(
+                              text: row["colum4"],
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.titleColor,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+
+                          // 🔥 Show icon only if explicitly enabled
+                          if (row["showDownload"] == true)
+                            Padding(
+                              padding: EdgeInsets.only(left: 6.w),
+                              child: Icon(
+                                Icons.download_outlined,
+                                size: 16.sp,
+                                color: AppColors.greyColor,
+                              ),
+                            ),
+                        ],
+                      )
+                    : KText(
+                        text: "-",
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.titleColor,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        color: AppColors.greyColor,
                       ),
-                    ),
-
-                    // 🔥 Show icon only if explicitly enabled
-                    if (row["showDownload"] == true)
-                      Padding(
-                        padding: EdgeInsets.only(left: 6.w),
-                        child: Icon(
-                          Icons.download_outlined,
-                          size: 16.sp,
-                          color: AppColors.greyColor,
-                        ),
-                      ),
-                  ],
-                )
-                    : KText(
-                  text: "-",
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.greyColor,
-                ),
               ),
             ),
-
 
             // Experience
             DataCell(

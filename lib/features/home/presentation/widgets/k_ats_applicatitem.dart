@@ -8,7 +8,7 @@ import 'package:fuoday/core/themes/app_colors.dart';
 class ApplicantItem extends StatefulWidget {
   final int? sno;
   final String name;
-  final String? email; // ✅ optional
+  final String? email;
   final String phoneNumber;
   final Color avatarColor;
   final bool showInitials;
@@ -20,13 +20,13 @@ class ApplicantItem extends StatefulWidget {
   final Function(String)? onStageChanged;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
-  final bool showAvatar; // ✅ optional avatar
+  final bool showAvatar;
 
   const ApplicantItem({
     Key? key,
     this.sno,
     required this.name,
-    this.email, // ✅ optional
+    this.email,
     required this.phoneNumber,
     required this.avatarColor,
     this.showInitials = false,
@@ -38,9 +38,8 @@ class ApplicantItem extends StatefulWidget {
     this.onStageChanged,
     this.onEdit,
     this.onDelete,
-    this.showAvatar = true, // ✅ default true
+    this.showAvatar = true,
   }) : super(key: key);
-
 
   /// ✅ HEADER WIDGET
   static Widget buildHeader() {
@@ -50,82 +49,32 @@ class ApplicantItem extends StatefulWidget {
       color: AppColors.atsHomepageBg,
       child: Row(
         children: [
-          SizedBox(
-            width: 50.w,
-            child: KText(
-              text: "S.No",
-              fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
-              color: AppColors.greyColor,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            width: 190.w,
-            child: KText(
-              text: "Name",
-              fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
-              color: AppColors.greyColor,
-            ),
-          ),
-          SizedBox(
-            width: 100.w,
-            child: KText(
-              text: "Phone Number",
-              fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
-              color: AppColors.greyColor,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            width: 100.w,
-            child: KText(
-              text: "CV",
-              fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
-              color: AppColors.greyColor,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            width: 120.w,
-            child: KText(
-              text: "Created Date",
-              fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
-              color: AppColors.greyColor,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            width: 100.w,
-            child: KText(
-              text: "Stages",
-              fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
-              color: AppColors.greyColor,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            width: 100.w,
-            child: KText(
-              text: "Action",
-              fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
-              color: AppColors.greyColor,
-              textAlign: TextAlign.center,
-            ),
-          ),
+          _headerCell("S.No", 60.w),
+          _headerCell("Name", 200.w),
+          _headerCell("Phone Number", 100.w),
+          _headerCell("CV", 100.w),
+          _headerCell("Created Date", 120.w),
+          _headerCell("Stages", 100.w),
+          _headerCell("Action", 120.w),
         ],
       ),
     );
   }
 
-  @override
-  State<ApplicantItem> createState() => _ApplicantItemState();
+  static Widget _headerCell(String text, double width) {
+    return SizedBox(
+      width: width,
+      child: Center(
+        child: KText(
+          text: text,
+          fontWeight: FontWeight.w500,
+          fontSize: 12.sp,
+          color: AppColors.greyColor,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
 
   static const List<String> availableStages = [
     'Applied',
@@ -135,6 +84,9 @@ class ApplicantItem extends StatefulWidget {
     'Hiring',
     'Rejected',
   ];
+
+  @override
+  State<ApplicantItem> createState() => _ApplicantItemState();
 }
 
 class _ApplicantItemState extends State<ApplicantItem> {
@@ -143,35 +95,41 @@ class _ApplicantItemState extends State<ApplicantItem> {
   Widget _buildStageDropdown() {
     return SizedBox(
       width: 100.w,
-      child: DropdownButton<String>(
-        value: selectedStage,
-        isExpanded: true,
-        underline: Container(),
-        hint: KText(
-          text: "Select Stage",
-          fontSize: 10.sp,
-          color: AppColors.greyColor,
-          fontWeight: FontWeight.w400,
-        ),
-        items: ApplicantItem.availableStages.map((String stage) {
-          return DropdownMenuItem<String>(
-            value: stage,
+      child: Center(
+        child: DropdownButton<String>(
+          value: selectedStage,
+          isExpanded: true,
+          underline: Container(),
+          alignment: Alignment.center,
+          hint: Center(
             child: KText(
-              text: stage,
+              text: "Select Stage",
               fontSize: 10.sp,
+              color: AppColors.greyColor,
               fontWeight: FontWeight.w400,
-              color: AppColors.titleColor,
+              textAlign: TextAlign.center,
             ),
-          );
-        }).toList(),
-        onChanged: (String? newStage) {
-          if (newStage != null) {
-            setState(() {
-              selectedStage = newStage;
-            });
-            widget.onStageChanged?.call(newStage);
-          }
-        },
+          ),
+          items: ApplicantItem.availableStages.map((String stage) {
+            return DropdownMenuItem<String>(
+              value: stage,
+              alignment: Alignment.center,
+              child: KText(
+                text: stage,
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColors.titleColor,
+                textAlign: TextAlign.center,
+              ),
+            );
+          }).toList(),
+          onChanged: (String? newStage) {
+            if (newStage != null) {
+              setState(() => selectedStage = newStage);
+              widget.onStageChanged?.call(newStage);
+            }
+          },
+        ),
       ),
     );
   }
@@ -182,196 +140,152 @@ class _ApplicantItemState extends State<ApplicantItem> {
       children: [
         Row(
           children: [
-            // ✅ S.No Column
-            SizedBox(
+            // ✅ S.No
+            _cell(
               width: 60.w,
-              child: Center(
-                child: KText(
-                  text: widget.sno?.toString() ?? "-",
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.titleColor,
-                  textAlign: TextAlign.center,
-                ),
+              child: KText(
+                text: widget.sno?.toString() ?? "-",
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColors.titleColor,
+                textAlign: TextAlign.center,
               ),
             ),
 
             // ✅ Name + Avatar + Email
-            // ✅ Name + Avatar + Email
-            SizedBox(
+            _cell(
               width: 200.w,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      if (widget.showAvatar) // ✅ Only show avatar if true
-                        Container(
-                          width: 24.w,
-                          height: 24.w,
-                          decoration: BoxDecoration(
-                            color: widget.avatarColor,
-                            borderRadius: BorderRadius.circular(16.r),
-                          ),
-                          child: widget.showInitials && widget.initials != null
-                              ? Center(
-                            child: KText(
-                              text: widget.initials!,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                  if (widget.showAvatar)
+                    Container(
+                      width: 24.w,
+                      height: 24.w,
+                      decoration: BoxDecoration(
+                        color: widget.avatarColor,
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      child: widget.showInitials && widget.initials != null
+                          ? Center(
+                              child: KText(
+                                text: widget.initials!,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(16.r),
+                              child: Image.asset(
+                                AppAssetsConstants.personPlaceHolderImg,
+                              ),
                             ),
-                          )
-                              : ClipRRect(
-                            borderRadius: BorderRadius.circular(16.r),
-                            child: Image.asset(
-                              AppAssetsConstants.personPlaceHolderImg,
-                            ),
-                          ),
-                        ),
-
-                      if (widget.showAvatar) SizedBox(width: 16.w), // ✅ spacing only if avatar exists
-
-                      Expanded(
-                        child: KText(
+                    ),
+                  if (widget.showAvatar) SizedBox(width: 8.w),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        KText(
                           text: widget.name,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                           color: AppColors.titleColor,
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 2.h),
-
-                  if (widget.email != null && widget.email!.isNotEmpty) // ✅ Only show email if provided
-                    Padding(
-                      padding: EdgeInsets.only(left: widget.showAvatar ? 40.w : 0), // ✅ indent only if avatar shown
-                      child: KText(
-                        text: widget.email!,
-                        fontSize: 12.sp,
-                        color: AppColors.greyColor,
-                        fontWeight: FontWeight.w400,
-                      ),
+                        if (widget.email != null && widget.email!.isNotEmpty)
+                          KText(
+                            text: widget.email!,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.greyColor,
+                            textAlign: TextAlign.center,
+                          ),
+                      ],
                     ),
+                  ),
                 ],
               ),
             ),
 
-
-            // ✅ Phone
-            SizedBox(
+            // ✅ Phone Number
+            _cell(
               width: 100.w,
-              child: Center(
-                child: KText(
-                  text: widget.phoneNumber,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.titleColor,
-                  textAlign: TextAlign.center,
-                ),
+              child: KText(
+                text: widget.phoneNumber,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColors.titleColor,
+                textAlign: TextAlign.center,
               ),
             ),
 
             // ✅ CV
-            SizedBox(
+            _cell(
               width: 100.w,
-              child: Center(
-                child: (widget.cv != null && widget.cv!.isNotEmpty)
-                    ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: KText(
-                        text: widget.cv!,
-                        fontSize: 12.sp,
-                        color: AppColors.titleColor,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(width: 4.w),
-                    Icon(
-                      Icons.download_outlined,
-                      size: 16.sp,
+              child: (widget.cv != null && widget.cv!.isNotEmpty)
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: KText(
+                            text: widget.cv!,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.titleColor,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
+                        Icon(
+                          Icons.download_outlined,
+                          size: 16.sp,
+                          color: AppColors.greyColor,
+                        ),
+                      ],
+                    )
+                  : KText(
+                      text: "-",
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
                       color: AppColors.greyColor,
+                      textAlign: TextAlign.center,
                     ),
-                  ],
-                )
-                    : KText(
-                  text: "-",
-                  fontSize: 12.sp,
-                  color: AppColors.greyColor,
-                  fontWeight: FontWeight.w400,
-                  textAlign: TextAlign.center,
-                ),
-              ),
             ),
 
             // ✅ Created Date
-            SizedBox(
+            _cell(
               width: 120.w,
-              child: Center(
-                child: KText(
-                  text: widget.createdDate ?? "-",
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.titleColor,
-                  textAlign: TextAlign.center,
-                ),
+              child: KText(
+                text: widget.createdDate ?? "-",
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColors.titleColor,
+                textAlign: TextAlign.center,
               ),
             ),
 
             // ✅ Stage Dropdown
-            _buildStageDropdown(),
+            _cell(width: 100.w, child: _buildStageDropdown()),
 
             // ✅ Action Buttons
-            SizedBox(
+            _cell(
               width: 120.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Edit
-                  Container(
-                    width: 30.w,
-                    height: 30.h,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: IconButton(
-                      onPressed: widget.onEdit ?? () {},
-                      icon: SvgPicture.asset(
-                        AppAssetsConstants.editIcon,
-                        height: 13.h,
-                        width: 11.67.w,
-                        fit: BoxFit.contain,
-                        color: Colors.white,
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
+                  _actionButton(
+                    color: AppColors.primaryColor,
+                    icon: AppAssetsConstants.editIcon,
+                    onTap: widget.onEdit,
                   ),
                   SizedBox(width: 8.w),
-                  // Delete
-                  Container(
-                    width: 30.w,
-                    height: 30.h,
-                    decoration: BoxDecoration(
-                      color: AppColors.softRed,
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: IconButton(
-                      onPressed: widget.onDelete ?? () {},
-                      icon: SvgPicture.asset(
-                        AppAssetsConstants.deleteIcon,
-                        height: 12.07.h,
-                        width: 11.66.w,
-                        fit: BoxFit.contain,
-                        color: Colors.white,
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
+                  _actionButton(
+                    color: AppColors.softRed,
+                    icon: AppAssetsConstants.deleteIcon,
+                    onTap: widget.onDelete,
                   ),
                 ],
               ),
@@ -383,5 +297,36 @@ class _ApplicantItemState extends State<ApplicantItem> {
       ],
     );
   }
-}
 
+  Widget _cell({required double width, required Widget child}) {
+    return SizedBox(
+      width: width,
+      child: Center(child: child),
+    );
+  }
+
+  Widget _actionButton({
+    required Color color,
+    required String icon,
+    VoidCallback? onTap,
+  }) {
+    return Container(
+      width: 30.w,
+      height: 30.h,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: IconButton(
+        onPressed: onTap,
+        icon: SvgPicture.asset(
+          icon,
+          height: 14.h,
+          fit: BoxFit.contain,
+          color: Colors.white,
+        ),
+        padding: EdgeInsets.zero,
+      ),
+    );
+  }
+}
