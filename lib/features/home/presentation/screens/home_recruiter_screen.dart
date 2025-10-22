@@ -9,7 +9,6 @@ import 'package:fuoday/commons/widgets/k_horizontal_spacer.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
-import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
@@ -18,7 +17,10 @@ import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.d
 import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
 import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card.dart';
+import 'package:go_router/go_router.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
+import '../../../../core/constants/router/app_route_constants.dart';
 
 class HomeRecruiterScreen extends StatefulWidget {
   const HomeRecruiterScreen({super.key});
@@ -606,6 +608,12 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                               ),
                               onPressed: () {
                                 print("Export button tapped");
+                                context.pushNamed(
+                                  AppRouteConstants.atsTrackerScreen,
+                                );
+                                // GoRouter.of(
+                                //   context,
+                                // ).pushNamed(AppRouteConstants.atsTrackerScreen);
                               },
                               backgroundColor: AppColors.primaryColor,
                             ),

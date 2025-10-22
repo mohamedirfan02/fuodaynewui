@@ -8,13 +8,15 @@ import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
-import 'package:fuoday/core/constants/app_route_constants.dart';
+// import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
+import '../../../../core/constants/router/app_route_constants.dart';
 
 class AtsTrackerOverviewTab extends StatefulWidget {
   const AtsTrackerOverviewTab({super.key});
@@ -244,7 +246,7 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
     final name = employeeDetails?['name'] ?? "No Name";
     final email = employeeDetails?['email'] ?? "No Email";
     final String currentRoute =
-        AppRouteConstants.trackerScreen; // Replace with actual current route
+        AppRouteConstants.atsTrackerScreen; // Replace with actual current route
 
     final headers = [
       _headers("S.No", 50.w),

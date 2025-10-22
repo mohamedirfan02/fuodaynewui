@@ -130,32 +130,39 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                   final isSelected =
                       _pagerController.selectedPageIndex == pageIndex;
 
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppColors.greyColor.withOpacity(.005)
-                          : Colors.transparent,
-                      // borderRadius: BorderRadius.circular(2.r),
-                      shape: BoxShape.rectangle,
-                      // border: Border.all(
-                      //   color: isSelected
-                      //       ? AppColors.primaryColor
-                      //       : Colors.grey.shade300,
-                      //   width: 1,
-                      // ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        (pageIndex + 1)
-                            .toString(), // ✅ Display as 1-based for users
-                        style: TextStyle(
+                  return ClipRRect(
+                    borderRadius: BorderRadius.zero,
+                    child: Material(
+                      // Make the internal material fully transparent and non-rounded
+                      color: Colors.transparent,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        alignment: Alignment.center,
+                        // your custom decoration controls only what's visible
+                        decoration: BoxDecoration(
                           color: isSelected
-                              ? Colors.white
-                              : AppColors.titleColor,
-                          fontWeight: isSelected
-                              ? FontWeight.w600
-                              : FontWeight.normal,
-                          fontSize: 14.sp,
+                              ? AppColors.greyColor.withOpacity(.2)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(
+                            5,
+                          ), // ensure rectangle
+                          // add border if you want: border: Border.all(...)
+                        ),
+                        child: Text(
+                          (pageIndex + 1).toString(),
+                          style: TextStyle(
+                            color: isSelected
+                                ? Colors.white
+                                : AppColors.titleColor,
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.normal,
+                            fontSize: 14.sp,
+                          ),
                         ),
                       ),
                     ),
