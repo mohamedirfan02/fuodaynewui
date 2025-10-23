@@ -45,38 +45,41 @@ class KFilterBtn extends StatelessWidget {
           backgroundColor: backgroundColor,
           shape: RoundedRectangleBorder(borderRadius: borderRadius),
           elevation: 0,
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          padding: EdgeInsets.symmetric(
+            horizontal: 20.w,
+            vertical: MediaQuery.of(context).size.height * 0.015,
+          ),
           side: BorderSide(color: borderColor, width: borderWidth),
         ),
         onPressed: isLoading
             ? null
             : () {
-          HapticFeedback.mediumImpact();
-          onPressed();
-        },
+                HapticFeedback.mediumImpact();
+                onPressed();
+              },
         child: isLoading
             ? SizedBox(
-          height: 18.h,
-          width: 18.h,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation<Color>(textColor),
-          ),
-        )
+                height: 18.h,
+                width: 18.h,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(textColor),
+                ),
+              )
             : Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              text,
-              style: GoogleFonts.sora(
-                color: textColor,
-                fontSize: fontSize.sp,
-                fontWeight: fontWeight,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    text,
+                    style: GoogleFonts.sora(
+                      color: textColor,
+                      fontSize: fontSize.sp,
+                      fontWeight: fontWeight,
+                    ),
+                  ),
+                  if (icon != null) icon!,
+                ],
               ),
-            ),
-            if (icon != null) icon!,
-          ],
-        ),
       ),
     );
   }

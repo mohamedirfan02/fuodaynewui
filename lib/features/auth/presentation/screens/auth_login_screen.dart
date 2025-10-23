@@ -72,7 +72,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                   AppAssetsConstants.logo,
                   height: 150.h,
                   width: 150.w,
-                 // fit: BoxFit.cover,
+                  // fit: BoxFit.cover,
                 ),
 
                 Expanded(
@@ -357,6 +357,10 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                             .token,
                                                       );
 
+                                                  final role =
+                                                      "employee"; // 🔥 Store the role permanently
+                                                  await HiveStorageService()
+                                                      .setUserRole(role);
                                                   final rawWebUserId = provider
                                                       .authEntity
                                                       ?.data
@@ -417,12 +421,13 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                             .employeeDetails
                                                             .checkin ??
                                                         'no checkin',
-                                                    id: provider
-                                                        .authEntity
-                                                        ?.data
-                                                        .adminUser
-                                                        .id
-                                                        ?.toString() ?? // Convert int to String if needed
+                                                    id:
+                                                        provider
+                                                            .authEntity
+                                                            ?.data
+                                                            .adminUser
+                                                            .id
+                                                            ?.toString() ?? // Convert int to String if needed
                                                         "No ID",
                                                   );
 
@@ -508,6 +513,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                             .authEntity!
                                                             .token,
                                                       );
+                                                  final role = "recruiter";
+                                                  await HiveStorageService()
+                                                      .setUserRole(role);
 
                                                   final rawWebUserId = provider
                                                       .authEntity
@@ -565,12 +573,13 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                             .adminUser
                                                             .logo ??
                                                         "No Image Url",
-                                                    id: provider
-                                                        .authEntity
-                                                        ?.data
-                                                        .adminUser
-                                                        .id
-                                                        ?.toString() ?? // Convert int to String if needed
+                                                    id:
+                                                        provider
+                                                            .authEntity
+                                                            ?.data
+                                                            .adminUser
+                                                            .id
+                                                            ?.toString() ?? // Convert int to String if needed
                                                         "No ID",
                                                   );
 

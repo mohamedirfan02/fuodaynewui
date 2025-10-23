@@ -33,7 +33,7 @@ class _AddTaskState extends State<AddTask> {
   DateTime? assignDate;
   DateTime selectedDeadline = DateTime.now();
 
-  // 🔹 CHANGED: Add this key to control the dropdown
+  // Add this key to control the dropdown
   final GlobalKey<AssignedPersonDropdownCheckboxState> dropdownKey =
       GlobalKey<AssignedPersonDropdownCheckboxState>();
 
@@ -214,6 +214,7 @@ class _AddTaskState extends State<AddTask> {
                 //     }
                 //   },
                 // ),
+                // Assigned To Person Dropdown Checkbox
                 AssignedPersonDropdownCheckbox(
                   key: dropdownKey,
                   onSelectionChanged: (employees) {
@@ -229,6 +230,9 @@ class _AddTaskState extends State<AddTask> {
                   controller: projectNameController,
                   hintText: "Enter project name",
                   keyboardType: TextInputType.text,
+                  onTap: () {
+                    dropdownKey.currentState?.closeDropdown();
+                  },
                 ),
 
                 KVerticalSpacer(height: 20.h),

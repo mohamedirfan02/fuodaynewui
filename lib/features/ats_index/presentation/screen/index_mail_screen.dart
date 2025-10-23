@@ -7,7 +7,7 @@ import 'package:fuoday/commons/widgets/k_filter_button.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
-import 'package:fuoday/core/constants/app_route_constants.dart';
+// import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
@@ -15,6 +15,8 @@ import 'package:fuoday/features/ats_index/presentation/widgets/gmail_compose_ind
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../core/constants/router/app_route_constants.dart';
 
 class AtsIndexMailScreen extends StatefulWidget {
   const AtsIndexMailScreen({super.key});
@@ -27,7 +29,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
-  final String currentRoute = AppRouteConstants.atsIndexMailScreen;
+  final String currentRoute = AppRouteConstants.atsIndexScreen;
   Widget _buildEmailCard({
     required bool isReceived,
     required String senderName,
@@ -84,10 +86,10 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                     : null,
                 child: senderPhoto.isEmpty
                     ? Icon(
-                  Icons.person,
-                  size: 16.r,
-                  color: Colors.grey.shade600,
-                )
+                        Icons.person,
+                        size: 16.r,
+                        color: Colors.grey.shade600,
+                      )
                     : null,
               ),
               SizedBox(width: 8.w),
@@ -108,10 +110,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
             ],
           ),
           SizedBox(height: 16.h),
-          Divider(
-            color: AppColors.greyColor.withOpacity(0.2),
-            thickness: 1,
-          ),
+          Divider(color: AppColors.greyColor.withOpacity(0.2), thickness: 1),
           SizedBox(height: 16.h),
           // Subject
           Row(
@@ -135,10 +134,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
             ],
           ),
           SizedBox(height: 16.h),
-          Divider(
-            color: AppColors.greyColor.withOpacity(0.2),
-            thickness: 1,
-          ),
+          Divider(color: AppColors.greyColor.withOpacity(0.2), thickness: 1),
           SizedBox(height: 16.h),
           // Message body
           KText(
@@ -152,6 +148,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -187,10 +184,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
             children: [
               Container(
                 padding: EdgeInsets.all(18.47.w),
-                decoration: BoxDecoration(
-
-                  color: AppColors.secondaryColor,
-                ),
+                decoration: BoxDecoration(color: AppColors.secondaryColor),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -207,16 +201,15 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                               : null,
                           child: profilePhoto.isEmpty
                               ? Icon(
-                            Icons.person,
-                            size: width * 0.06,
-                            color: Colors.grey.shade600,
-                          )
+                                  Icons.person,
+                                  size: width * 0.06,
+                                  color: Colors.grey.shade600,
+                                )
                               : null,
                         ),
                         // Start Date
                         Column(
                           children: [
-
                             KText(
                               text: "Pristia Candra",
                               fontWeight: FontWeight.w500,
@@ -243,8 +236,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                               width: 20,
                               fit: BoxFit.contain,
                             ),
-                            onPressed: () {
-                            },
+                            onPressed: () {},
                             backgroundColor: AppColors.secondaryColor,
                           ),
                         ),
@@ -286,10 +278,10 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                               : null,
                           child: profilePhoto.isEmpty
                               ? Icon(
-                            Icons.person,
-                            size: 16.r,
-                            color: Colors.grey.shade600,
-                          )
+                                  Icons.person,
+                                  size: 16.r,
+                                  color: Colors.grey.shade600,
+                                )
                               : null,
                         ),
                         SizedBox(width: 8.w),
@@ -327,7 +319,8 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                         SizedBox(width: 8.w),
                         Expanded(
                           child: KText(
-                            text: "Thank you for your application at Pixel Office",
+                            text:
+                                "Thank you for your application at Pixel Office",
                             fontWeight: FontWeight.w400,
                             fontSize: 14.sp,
                             color: AppColors.titleColor,
@@ -350,17 +343,17 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                     ),
                     SizedBox(height: 12.h),
                     KText(
-                      text: "The main duties of a Senior Product Designer include conducting user research and testing, creating wireframes and prototypes, developing design systems, collaborating with cross-functional teams (such as developers, product managers, and other designers),",
+                      text:
+                          "The main duties of a Senior Product Designer include conducting user research and testing, creating wireframes and prototypes, developing design systems, collaborating with cross-functional teams (such as developers, product managers, and other designers),",
                       fontWeight: FontWeight.w400,
                       fontSize: 14.sp,
                       color: AppColors.titleColor,
-                  //    height: 1.5,
+                      //    height: 1.5,
                     ),
                   ],
                 ),
               ),
             ],
-
           ),
         ),
       ),
@@ -391,7 +384,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                   return DraggableScrollableSheet(
                     expand: true,
                     initialChildSize: 0.9,
-// covers ~90% of the screen
+                    // covers ~90% of the screen
                     minChildSize: 0.5,
                     maxChildSize: 0.95,
                     builder: (context, scrollController) {
@@ -402,7 +395,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                             left: 20.w,
                             right: 20.w,
                             bottom:
-                            MediaQuery.of(context).viewInsets.bottom + 20.h,
+                                MediaQuery.of(context).viewInsets.bottom + 20.h,
                             top: 10.h,
                           ),
                           child: const ComposeEmailScreen(), // ✅ Embedded here

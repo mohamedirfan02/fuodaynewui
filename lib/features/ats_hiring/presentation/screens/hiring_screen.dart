@@ -5,7 +5,7 @@ import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
-import 'package:fuoday/core/constants/app_route_constants.dart';
+// import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/service/dio_service.dart';
@@ -17,6 +17,7 @@ import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_ove
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/router/app_route_constants.dart';
 import 'ats_hiring_tab.dart';
 import 'ats_onboarding_tab.dart';
 
@@ -116,23 +117,29 @@ class _HiringScreenState extends State<HiringScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: KText(
-                      text: "Hiring",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24.sp,
-                      color: AppColors.titleColor,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: KText(
+                        text: "Hiring",
+                        fontWeight: FontWeight.w600,
+                        fontSize: 24.sp,
+                        color: AppColors.titleColor,
+                      ),
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: KText(
-                      text: "Manage your Interview Schedule",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14.sp,
-                      color: AppColors.greyColor,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: KText(
+                        text: "Manage your Interview Schedule",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.sp,
+                        color: AppColors.greyColor,
+                      ),
                     ),
                   ),
                   SizedBox(height: 20.h),
