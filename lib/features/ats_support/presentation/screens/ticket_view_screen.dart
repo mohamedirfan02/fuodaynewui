@@ -140,7 +140,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                     ),
 
                     Align(
-                      alignment: AlignmentGeometry.bottomRight,
+                      alignment: Alignment.bottomRight,
                       child: KText(
                         text: "20:00",
                         fontWeight: FontWeight.w400,
@@ -202,7 +202,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                     ),
 
                     Align(
-                      alignment: AlignmentGeometry.bottomRight,
+                      alignment: Alignment.bottomRight,
                       child: KText(
                         text: "20:00",
                         fontWeight: FontWeight.w400,
