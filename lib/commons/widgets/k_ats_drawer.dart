@@ -237,7 +237,7 @@ class KAtsDrawer extends StatelessWidget {
 
     // Check if we're already on the target route
     if (currentRoute != routeName) {
-      GoRouter.of(context).goNamed(routeName);
+      GoRouter.of(context).pushNamed(routeName); //goNamed
     }
     // If we're already on the same route, just close the drawer (no navigation)
   }

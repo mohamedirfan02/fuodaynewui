@@ -482,7 +482,7 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
       return Container(
         padding: EdgeInsets.all(20.w),
         child: KText(
-          text: 'No badges added yet. Click the edit icon to add badges.',
+          text: '', //No badges added yet. Click the edit icon to add badges.
           fontWeight: FontWeight.w400,
           fontSize: 14.sp,
           color: AppColors.secondaryColor,

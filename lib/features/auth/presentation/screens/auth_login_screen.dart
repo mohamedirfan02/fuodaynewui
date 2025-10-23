@@ -360,9 +360,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                   final role =
                                                       "employee"; // 🔥 Store the role permanently
                                                   await HiveStorageService()
-                                                      .setUserRole(
-                                                        role,
-                                                      ); // 🔥 ADDED LINE
+                                                      .setUserRole(role);
                                                   final rawWebUserId = provider
                                                       .authEntity
                                                       ?.data
