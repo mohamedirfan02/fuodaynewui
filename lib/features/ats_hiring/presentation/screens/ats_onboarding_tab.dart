@@ -568,6 +568,7 @@ Padding newDatatable(List<GridColumn> columns, List<DataGridRow> rows) {
       title: 'Applicants',
       columns: columns,
       rows: rows,
+      allowSorting: false,
       totalRows: rows.length,
       initialRowsPerPage: 5,
     ),

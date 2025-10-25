@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fuoday/features/home/presentation/screens/home_recruiter_screen.dart';
+import 'package:fuoday/features/home/presentation/screens/ats_screens/home_recruiter_screen.dart';
 
 class RecruiterBottomNavProvider extends ChangeNotifier {
   int _currentIndex = 2;
@@ -8,16 +8,15 @@ class RecruiterBottomNavProvider extends ChangeNotifier {
 
   // Recruiter-specific Pages
   final List<Widget> _pages = [
-
     const HomeRecruiterScreen(), // Index 0
 
-    const HomeRecruiterScreen(),           // Index 1 (instead of LeaveTracker)
+    const HomeRecruiterScreen(), // Index 1 (instead of LeaveTracker)
 
-    const HomeRecruiterScreen(),  // Index 2 (instead of HomeEmployee)
+    const HomeRecruiterScreen(), // Index 2 (instead of HomeEmployee)
 
-    const HomeRecruiterScreen(),       // Index 3
+    const HomeRecruiterScreen(), // Index 3
 
-    const HomeRecruiterScreen(),        // Index 4
+    const HomeRecruiterScreen(), // Index 4
   ];
 
   List<Widget> get pages => _pages;

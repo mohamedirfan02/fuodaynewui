@@ -14,6 +14,7 @@ class KAtsUploadPickerTile extends StatelessWidget {
   final VoidCallback? onViewTap;
   final bool showCancel;
   final bool showOnlyView;
+  final Color? backgroundcolor;
 
   const KAtsUploadPickerTile({
     super.key,
@@ -26,6 +27,7 @@ class KAtsUploadPickerTile extends StatelessWidget {
     this.showCancel = false,
     this.showOnlyView = false,
     this.onViewTap,
+    this.backgroundcolor,
   });
 
   @override
@@ -56,8 +58,7 @@ class KAtsUploadPickerTile extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.r),
-                      color: AppColors.secondaryColor,
-
+                    color: backgroundcolor ?? AppColors.secondaryColor,
                   ),
                   child: Center(
                     child: Column(

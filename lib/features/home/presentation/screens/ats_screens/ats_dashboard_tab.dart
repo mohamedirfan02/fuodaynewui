@@ -1,0 +1,1133 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
+import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
+import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
+import 'package:fuoday/commons/widgets/k_filter_button.dart';
+import 'package:fuoday/commons/widgets/k_horizontal_spacer.dart';
+import 'package:fuoday/commons/widgets/k_text.dart';
+import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
+import 'package:fuoday/core/constants/app_assets_constants.dart';
+import 'package:fuoday/core/di/injection.dart';
+import 'package:fuoday/core/service/hive_storage_service.dart';
+import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
+import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
+import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
+import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
+import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card.dart';
+import 'package:go_router/go_router.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
+import '../../../../../core/constants/router/app_route_constants.dart';
+
+class DashoardTab extends StatefulWidget {
+  const DashoardTab({super.key});
+
+  @override
+  State<DashoardTab> createState() => _DashoardTabState();
+}
+
+class _DashoardTabState extends State<DashoardTab> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController dateController = TextEditingController();
+
+  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+
+  // Pagination state
+  int currentPage = 1;
+  int itemsPerPage = 6; // Change this to show how many items per page
+  int pageWindowStart = 1; // first page in current window
+  int pageWindowSize = 5; // show 5 numbers at a time
+
+  List<Map<String, dynamic>> applicantsData = [
+    {
+      'name': 'Pristia Candra',
+      'email': 'pristia@gmail.com,pristia@gmail.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '01 May 2025',
+      'avatarColor': AppColors.primaryColor,
+    },
+    {
+      'name': 'Hanna Baptista',
+      'email': 'hanna@gmail.com,pristia@gmail.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '01 May 2025',
+      'avatarColor': AppColors.greyColor,
+    },
+    {
+      'name': 'John Doe',
+      'email': 'john@gmail.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.approvedColor,
+    },
+    {
+      'name': 'James George',
+      'email': 'james@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.unactive,
+    },
+    {
+      'name': 'Miracle Geidt',
+      'email': 'miracle@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.titleColor,
+    },
+    {
+      'name': 'Skylar Herwitz',
+      'email': 'skylar@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '02 May 2025',
+      'avatarColor': AppColors.authBackToLoginColor,
+    },
+    {
+      'name': 'Alex Johnson',
+      'email': 'alex@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '03 May 2025',
+      'avatarColor': AppColors.titleColor,
+    },
+    {
+      'name': 'Sarah Wilson',
+      'email': 'sarah@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '03 May 2025',
+      'avatarColor': AppColors.secondaryColor,
+    },
+    {
+      'name': 'Mike Davis',
+      'email': 'mike@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '04 May 2025',
+      'avatarColor': AppColors.greyColor,
+    },
+    {
+      'name': 'Emma Thompson',
+      'email': 'emma@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '04 May 2025',
+      'avatarColor': AppColors.authTextFieldSuffixIconColor,
+    },
+    {
+      'name': 'David Brown',
+      'email': 'david@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '05 May 2025',
+      'avatarColor': AppColors.unactive,
+    },
+    {
+      'name': 'Lisa Garcia',
+      'email': 'lisa@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '05 May 2025',
+      'avatarColor': AppColors.pending,
+    },
+    {
+      'name': 'Tom Anderson',
+      'email': 'tom@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '06 May 2025',
+      'avatarColor': AppColors.checkInColor,
+    },
+    {
+      'name': 'Rachel Miller',
+      'email': 'rachel@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '06 May 2025',
+      'avatarColor': AppColors.authUnderlineBorderColor,
+    },
+    {
+      'name': 'Kevin Taylor',
+      'email': 'kevin@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '07 May 2025',
+      'avatarColor': AppColors.approvedColor,
+    },
+    {
+      'name': 'Jessica Lee',
+      'email': 'jessica@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '07 May 2025',
+      'avatarColor': AppColors.primaryColor,
+    },
+    {
+      'name': 'Ryan Clark',
+      'email': 'ryan@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '08 May 2025',
+      'avatarColor': AppColors.titleColor,
+    },
+    {
+      'name': 'Amanda White',
+      'email': 'amanda@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '08 May 2025',
+      'avatarColor': AppColors.greyColor,
+    },
+    {
+      'name': 'Chris Martinez',
+      'email': 'chris@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '09 May 2025',
+      'avatarColor': AppColors.pending,
+    },
+    {
+      'name': 'Nicole Rodriguez',
+      'email': 'nicole@unpixel.com',
+      'phone': '08092139441',
+      'cv': 'cv.pdf',
+      'createdDate': '09 May 2025',
+      'avatarColor': AppColors.unactive,
+    },
+  ];
+
+  // Getter methods for pagination
+  int get totalPages => (applicantsData.length / itemsPerPage).ceil();
+
+  List<Map<String, dynamic>> get paginatedApplicants {
+    int totalPagesCount = (applicantsData.length / itemsPerPage).ceil();
+
+    // Ensure currentPage is within range
+    if (currentPage > totalPagesCount) currentPage = totalPagesCount;
+    if (currentPage < 1) currentPage = 1;
+
+    int startIndex = (currentPage - 1) * itemsPerPage;
+    int endIndex = startIndex + itemsPerPage;
+    if (startIndex >= applicantsData.length) return []; // safe guard
+    if (endIndex > applicantsData.length) endIndex = applicantsData.length;
+
+    return applicantsData.sublist(startIndex, endIndex);
+  }
+
+  // Calculate display text for showing entries
+  String get entriesDisplayText {
+    if (applicantsData.isEmpty) return "Showing 0 to 0 of 0 entries";
+
+    int startIndex = (currentPage - 1) * itemsPerPage + 1;
+    int endIndex = currentPage * itemsPerPage;
+    if (endIndex > applicantsData.length) endIndex = applicantsData.length;
+
+    return "Showing $startIndex to $endIndex of ${applicantsData.length} entries";
+  }
+
+  // Select Date
+  Future<void> selectDate(
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      initialDatePickerMode: DatePickerMode.day,
+      helpText: 'Select Date',
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.primaryColor,
+              onPrimary: AppColors.secondaryColor,
+              onSurface: AppColors.titleColor,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      controller.text = "${picked.day}/${picked.month}/${picked.year}";
+    }
+  }
+
+  //New Data Tbale Headers
+  // List<DataGridRow> _buildRows() => List.generate(
+  //   200,
+  //   (i) => DataGridRow(
+  //     cells: [
+  //       DataGridCell<int>(columnName: 'ID', value: i + 1),
+  //       DataGridCell<String>(columnName: 'Name', value: 'Item ${i + 1}'),
+  //       DataGridCell<double>(columnName: 'Price', value: (i + 1) * 10.5),
+  //       DataGridCell<String>(
+  //         columnName: 'Nameq',
+  //         value: 'Item cccccccc${i + 1}',
+  //       ),
+  //       DataGridCell<String>(
+  //         columnName: 'Namec',
+  //         value: 'Item vvvvvvvvv${i + 1}',
+  //       ),
+  //     ],
+  //   ),
+  // );
+
+  // // ✅ Columns
+  // List<GridColumn> _buildColumns() {
+  //   const headerStyle = TextStyle(fontWeight: FontWeight.bold);
+  //
+  //   Widget header(String text) => Container(
+  //     padding: const EdgeInsets.all(8),
+  //     alignment: Alignment.center,
+  //     child: Text(text, style: headerStyle),
+  //   );
+  //
+  //   return [
+  //     GridColumn(columnName: 'ID', label: header('ID')),
+  //     GridColumn(columnName: 'Name', label: header('Name')),
+  //     GridColumn(columnName: 'Price', width: 180, label: header('Actions')),
+  //     GridColumn(columnName: 'Namew', width: 200, label: header('Test1')),
+  //     GridColumn(columnName: 'Namec', width: 180, label: header('Actions')),
+  //   ];
+  // }
+  // Track selected stage per row
+  late List<String> _selectedStages;
+  Widget _actionButton({
+    required Color color,
+    required String icon,
+    VoidCallback? onTap,
+  }) {
+    return Container(
+      width: 30.w,
+      height: 30.h,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: IconButton(
+        onPressed: onTap,
+        icon: SvgPicture.asset(
+          icon,
+          height: 14.h,
+          fit: BoxFit.contain,
+          color: Colors.white,
+        ),
+        padding: EdgeInsets.zero,
+      ),
+    );
+  }
+
+  final List<String> stageOptions = [
+    'Select Stage',
+    'Applied',
+    'Screening',
+    '1st Interview',
+    '2nd Interview',
+    'Hiring',
+    'Rejected',
+  ];
+  //==================================================================
+  // Build DataGridRows from applicantsData
+  // Build DataGridRows from applicantsData
+  List<DataGridRow> _buildRows() => applicantsData.asMap().entries.map((entry) {
+    int index = entry.key; // row index
+    var data = entry.value;
+    return DataGridRow(
+      cells: [
+        // S.No column
+        DataGridCell<int>(columnName: 'SNo', value: index + 1),
+        DataGridCell<String>(columnName: 'Email', value: data['email']),
+        DataGridCell<String>(columnName: 'Phone', value: data['phone']),
+        DataGridCell<String>(columnName: 'CV', value: data['cv']),
+        DataGridCell<String>(
+          columnName: 'CreatedDate',
+          value: data['createdDate'],
+        ),
+        DataGridCell<String>(columnName: 'Stage', value: 'New'),
+        DataGridCell<String>(columnName: 'Action', value: 'ss'),
+      ],
+    );
+  }).toList();
+
+  //==================================================================
+  // Columns
+  List<GridColumn> _buildColumns() {
+    const headerStyle = TextStyle(
+      fontWeight: FontWeight.normal,
+      color: AppColors.greyColor,
+    );
+    Widget header(String text) => Container(
+      padding: const EdgeInsets.all(8),
+      alignment: Alignment.center,
+      child: Text(text, style: headerStyle),
+    );
+
+    return [
+      GridColumn(columnName: 'SNo', width: 70, label: header('S.No')),
+      GridColumn(columnName: 'Email', width: 200, label: header('Name')),
+      GridColumn(columnName: 'Phone', label: header('Phone Number')),
+      GridColumn(columnName: 'CV', label: header('CV')),
+      GridColumn(columnName: 'CreatedDate', label: header('Date')),
+      GridColumn(columnName: 'Stage', width: 140, label: header('Stage')),
+      GridColumn(columnName: 'Action', width: 100, label: header('Action')),
+    ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedStages = List.generate(
+      applicantsData.length,
+      (_) => 'Select Stage',
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = _buildRows();
+    final columns = _buildColumns();
+    final hiveService = getIt<HiveStorageService>();
+    final employeeDetails = hiveService.employeeDetails;
+
+    // Safe extraction of employee details
+    final name = employeeDetails?['name'] ?? "No Name";
+    final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
+    final email = employeeDetails?['email'] ?? "No Email";
+    final String currentRoute =
+        AppRouteConstants.homeRecruiter; // Replace with actual current route
+
+    // Grid Attendance Data - Updated with dynamic counts
+    final List<Map<String, dynamic>> gridAttendanceData = [
+      {
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+        'title': 'Total Opening Position',
+        'numberOfCount': "3,540",
+        'growth': "+5.1%",
+      },
+      {
+        'title': 'Total Closed Position',
+        'numberOfCount': "1,540",
+        'growth': "+5.1%",
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+      },
+      {
+        'title': 'Total Employee',
+        'numberOfCount': "500",
+        'growth': "+5.1%",
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+      },
+      {
+        'title': 'Shortlisted',
+        'numberOfCount': "1,504",
+        'growth': "+5.1%",
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+      },
+      {
+        'title': 'On Hold',
+        'numberOfCount': "562",
+        'growth': "+5.1%",
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+      },
+      {
+        'title': 'Onboarding',
+        'numberOfCount': "850",
+        'growth': "+5.1%",
+        'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+      },
+    ];
+
+    return Scaffold(
+      key: _scaffoldKey,
+      // appBar: AtsKAppBarWithDrawer(
+      //   userName: "",
+      //   cachedNetworkImageUrl: profilePhoto,
+      //   userDesignation: "",
+      //   showUserInfo: true,
+      //   onDrawerPressed: _openDrawer,
+      //   onNotificationPressed: () {},
+      // ),
+      // drawer: KAtsDrawer(
+      //   userEmail: email,
+      //   userName: name,
+      //   profileImageUrl: profilePhoto,
+      //   currentRoute: currentRoute, // This will highlight the current screen
+      // ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: AppColors.atsHomepageBg,
+        child: Padding(
+          padding: EdgeInsets.all(16.w),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Home Page Title
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: Row(
+                //     mainAxisSize: MainAxisSize.min,
+                //     children: [
+                //       KText(
+                //         text: "Hello $name",
+                //         fontWeight: FontWeight.w600,
+                //         fontSize: 24.sp,
+                //         color: AppColors.titleColor,
+                //       ),
+                //       const SizedBox(
+                //         width: 8,
+                //       ), // spacing between text and emoji
+                //       const Text(
+                //         "👋",
+                //         style: TextStyle(fontSize: 24), // match text size
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(height: 8.h),
+                // KText(
+                //   text: "Welcome back to Recruiter Dashboard",
+                //   fontWeight: FontWeight.w600,
+                //   fontSize: 12.sp,
+                //   color: AppColors.greyColor,
+                // ),
+                SizedBox(height: 20.h),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10.w,
+                    mainAxisSpacing: 10.h,
+                    childAspectRatio: 155 / 113,
+                  ),
+                  itemCount: gridAttendanceData.length,
+                  itemBuilder: (context, index) {
+                    final item = gridAttendanceData[index];
+                    return AtsTotalCountCard(
+                      employeeCount: item['numberOfCount'].toString(),
+                      employeeCardIcon: item['icon'],
+                      employeeDescription: item['title'],
+                      employeeIconColor: AppColors.primaryColor,
+                      employeePercentageColor: AppColors.checkInColor,
+                      growthText: item['growth'],
+                    );
+                  },
+                ),
+
+                SizedBox(height: 24.h),
+
+                RequirementStatsCard(
+                  dataMap: {"Pending": 36, "Unactive": 6, "Closed": 13},
+                  colorMap: {
+                    "Pending": AppColors.pending,
+                    "Unactive": AppColors.unactive,
+                    "Closed": AppColors.closed,
+                  },
+                ),
+                SizedBox(height: 24.h),
+                Container(
+                  padding: EdgeInsets.all(18.47.w),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 0.77.w,
+                      color: AppColors.greyColor.withOpacity(0.3),
+                    ),
+                    borderRadius: BorderRadius.circular(7.69.r),
+                    color: AppColors.secondaryColor,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      // Header
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          KText(
+                            text: "Applicant details",
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.sp,
+                            color: AppColors.titleColor,
+                          ),
+                        ],
+                      ),
+                      KVerticalSpacer(height: 20.h),
+
+                      // Date and Export Row
+                      Row(
+                        spacing: 20.w,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Start Date
+                          Expanded(
+                            child: KAtsGlowButton(
+                              text: "Date",
+                              textColor: AppColors.greyColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              icon: SvgPicture.asset(
+                                AppAssetsConstants.dateIcon,
+                                height: 20,
+                                width: 20,
+                                fit: BoxFit.contain,
+                              ),
+                              onPressed: () {
+                                selectDate(context, dateController);
+                              },
+                              backgroundColor: AppColors.secondaryColor,
+                            ),
+                          ),
+
+                          // Export file
+                          Expanded(
+                            child: KAtsGlowButton(
+                              text: "Export",
+                              textColor: AppColors.secondaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              icon: SvgPicture.asset(
+                                AppAssetsConstants.downloadIcon,
+                                height: 20,
+                                width: 20,
+                                fit: BoxFit.contain,
+                              ),
+                              onPressed: () {
+                                print("Export button tapped");
+                                // context.pushNamed(
+                                //   AppRouteConstants.atsTrackerScreen,
+                                // );
+                                // GoRouter.of(
+                                //   context,
+                                // ).pushNamed(AppRouteConstants.atsTrackerScreen);
+                              },
+                              backgroundColor: AppColors.primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      KVerticalSpacer(height: 16.h),
+
+                      // Filter Field
+                      KFilterBtn(
+                        text: "Filter",
+                        textColor: Colors.black,
+                        backgroundColor: Colors.white,
+                        borderColor: const Color.fromRGBO(233, 234, 236, 1),
+                        borderRadius: BorderRadius.circular(10.r),
+                        onPressed: () {
+                          debugPrint("Filter pressed");
+                        },
+                        icon: SvgPicture.asset(
+                          AppAssetsConstants.filterIcon,
+                          height: 16.h,
+                          width: 16.w,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      KVerticalSpacer(height: 24.h),
+
+                      ///---Old Data Table---
+                      // // Applicant Table with Pagination
+                      // SingleChildScrollView(
+                      //   scrollDirection: Axis.horizontal,
+                      //   child: Column(
+                      //     children: [
+                      //       ApplicantItem.buildHeader(),
+                      //       SizedBox(height: 16.h),
+                      //       Column(
+                      //         children: List.generate(
+                      //           paginatedApplicants.length,
+                      //           (index) {
+                      //             final applicant = paginatedApplicants[index];
+                      //             final sno =
+                      //                 ((currentPage - 1) * itemsPerPage) +
+                      //                 index +
+                      //                 1; // Correct numbering across pages
+                      //
+                      //             return ApplicantItem(
+                      //               sno: sno,
+                      //               name: applicant['name'],
+                      //               email: applicant['email'],
+                      //               phoneNumber: applicant['phone'],
+                      //               cv: applicant['cv'],
+                      //               createdDate: applicant['createdDate'],
+                      //               avatarColor: applicant['avatarColor'],
+                      //               showInitials: true,
+                      //               initials: applicant['name']
+                      //                   .substring(0, 2)
+                      //                   .toUpperCase(),
+                      //               onStageChanged: (newStage) {
+                      //                 print(
+                      //                   "${applicant['name']} stage changed to $newStage",
+                      //                 );
+                      //               },
+                      //             );
+                      //           },
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      //
+                      // KVerticalSpacer(height: 24.h),
+                      //
+                      // // Pagination
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [_buildPageNumbersRow()],
+                      // ),
+                      //
+                      // SizedBox(height: 16.w),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     // Dynamic entries text
+                      //     KText(
+                      //       text: entriesDisplayText,
+                      //       fontSize:
+                      //           MediaQuery.of(context).size.width *
+                      //           0.03, // responsive font
+                      //       color: AppColors.greyColor,
+                      //       fontWeight: FontWeight.w500,
+                      //     ),
+                      //
+                      //     // SizedBox(
+                      //     //   width: MediaQuery.of(context).size.width * 0.08,
+                      //     // ), // spacing between text and button
+                      //     // Dropdown container
+                      //     GestureDetector(
+                      //       onTap: _showItemsPerPageSelector,
+                      //       child: Container(
+                      //         padding: EdgeInsets.all(
+                      //           MediaQuery.of(context).size.width * 0.02,
+                      //         ),
+                      //         decoration: BoxDecoration(
+                      //           border: Border.all(
+                      //             width: 0.8,
+                      //             color: AppColors.greyColor.withOpacity(0.1),
+                      //           ),
+                      //           borderRadius: BorderRadius.circular(8),
+                      //           color: AppColors.secondaryColor,
+                      //         ),
+                      //         child: Row(
+                      //           children: [
+                      //             KText(
+                      //               text: "Show $itemsPerPage",
+                      //               fontSize:
+                      //                   MediaQuery.of(context).size.width *
+                      //                   0.025,
+                      //               color: AppColors.titleColor,
+                      //               fontWeight: FontWeight.w500,
+                      //             ),
+                      //             Icon(
+                      //               Icons.keyboard_arrow_down,
+                      //               size:
+                      //                   MediaQuery.of(context).size.width *
+                      //                   0.04,
+                      //               color: AppColors.titleColor,
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      ///<!---------- Data Table
+                      newData_table(columns, rows),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16.w),
+                //=========================New Table Column
+                //newData_table(columns, rows),
+                // ReusableDataGrid(
+                //   title: 'Products Table',
+                //   columns: columns,
+                //   rows: rows,
+                //   totalRows: rows.length,
+                //   initialRowsPerPage: 5,
+                //   cellBuilder: (cell, rowIndex) {
+                //     // Last column → show 3 icon buttons
+                //     if (cell.columnName == 'Price') {
+                //       return Container(
+                //         alignment: Alignment.center,
+                //         padding: const EdgeInsets.all(4),
+                //         child: FittedBox(
+                //           fit: BoxFit.scaleDown,
+                //           child: Row(
+                //             mainAxisSize: MainAxisSize.min,
+                //             children: [
+                //               // IconButton(
+                //               //   icon: const Icon(
+                //               //     Icons.edit,
+                //               //     size: 18,
+                //               //     color: Colors.blue,
+                //               //   ),
+                //               //   onPressed: () =>
+                //               //       print('Edit clicked for row $rowIndex'),
+                //               // ),
+                //               // IconButton(
+                //               //   icon: const Icon(
+                //               //     Icons.delete,
+                //               //     size: 18,
+                //               //     color: Colors.red,
+                //               //   ),
+                //               //   onPressed: () =>
+                //               //       print('Delete clicked for row $rowIndex'),
+                //               // ),
+                //               // IconButton(
+                //               //   icon: const Icon(
+                //               //     Icons.visibility,
+                //               //     size: 18,
+                //               //     color: Colors.green,
+                //               //   ),
+                //               //   onPressed: () =>
+                //               //       print('View clicked for row $rowIndex'),
+                //               // ),
+                //               Container(
+                //                 width: 50,
+                //                 height: 50,
+                //                 color: Colors.red,
+                //                 child: Center(child: CircleAvatar()),
+                //               ),
+                //               Container(
+                //                 width: 50,
+                //                 height: 50,
+                //                 color: Colors.yellow,
+                //                 child: Center(child: CircleAvatar()),
+                //               ),
+                //               Container(
+                //                 width: 50,
+                //                 height: 50,
+                //                 color: Colors.red,
+                //                 child: Center(child: CircleAvatar()),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       );
+                //     }
+                //
+                //     // Default cell styling for other columns
+                //     return Container(
+                //       alignment: Alignment.center,
+                //       padding: const EdgeInsets.all(8),
+                //       child: Text(cell.value.toString()),
+                //     );
+                //   },
+                // ),
+                Container(
+                  padding: EdgeInsets.all(18.47.w),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 0.77.w,
+                      color: AppColors.greyColor.withOpacity(0.3),
+                    ),
+                    borderRadius: BorderRadius.circular(7.69.r),
+                    color: AppColors.secondaryColor,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header
+                      CalendarHeader(),
+
+                      SizedBox(height: 20.h),
+
+                      // TODAY Section
+                      TodaySection(),
+
+                      SizedBox(height: 24.h),
+
+                      // UPCOMING Section
+                      UpcomingSection(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding newData_table(List<GridColumn> columns, List<DataGridRow> rows) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ReusableDataGrid(
+        allowSorting: false, // 🔹 Enable sorting
+        title: 'Applicants',
+        columns: columns,
+        rows: rows,
+        totalRows: rows.length,
+        initialRowsPerPage: 5,
+        cellBuilder: (cell, rowIndex, actualDataIndex) {
+          final value = cell.value;
+          if (cell.columnName == 'SNo') {
+            return Container(
+              alignment:
+                  Alignment.center, // Centers horizontally and vertically
+              child: Text(cell.value.toString(), textAlign: TextAlign.center),
+            );
+          }
+          if (cell.columnName == 'Email') {
+            final applicant = applicantsData[actualDataIndex];
+            final fullName = applicant['name'] ?? "";
+            final email = applicant['email'] ?? "";
+            final color = applicant['avatarColor'] ?? Colors.grey;
+
+            // Get initials from full name
+            String getInitials(String name) {
+              final parts = name.split(' ');
+              if (parts.length == 1) return parts[0][0].toUpperCase();
+              return (parts[0][0] + parts[1][0]).toUpperCase();
+            }
+
+            return Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: color,
+                    radius: 12.r,
+                    child: KText(
+                      text: getInitials(fullName),
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          KText(
+                            text: fullName,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.titleColor,
+                            textAlign: TextAlign.center,
+                          ),
+                          KText(
+                            text: email,
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.greyColor,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          //  CV column
+          if (cell.columnName == 'CV') {
+            final applicant = applicantsData[actualDataIndex];
+            final cv = applicant['cv'] ?? "";
+            return Row(
+              children: [
+                Text(cv),
+                SizedBox(width: 4.w),
+                Icon(
+                  Icons.download_outlined,
+                  size: 16.sp,
+                  color: AppColors.greyColor,
+                ),
+              ],
+            );
+          }
+
+          // Stage dropdown column
+          if (cell.columnName == 'Stage') {
+            final applicant = applicantsData[actualDataIndex];
+            return DropdownButton<String>(
+              value: _selectedStages[rowIndex],
+              underline: const SizedBox.shrink(),
+              items: stageOptions.map((stage) {
+                return DropdownMenuItem(
+                  value: stage,
+                  child: Text(stage, style: TextStyle(fontSize: 12.sp)),
+                );
+              }).toList(),
+              onChanged: (val) {
+                if (val != null) {
+                  setState(() => _selectedStages[rowIndex] = val);
+                }
+              },
+            );
+          }
+
+          if (cell.columnName == 'Action') {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _actionButton(
+                  color: AppColors.primaryColor,
+                  icon: AppAssetsConstants.editIcon,
+                  onTap: () {},
+                ),
+                SizedBox(width: 8.w),
+                _actionButton(
+                  color: AppColors.softRed,
+                  icon: AppAssetsConstants.deleteIcon,
+                  onTap: () {},
+                ),
+              ],
+            );
+          }
+
+          // Default text cells
+          return Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPageNumbersRow() {
+    int windowEnd = (pageWindowStart + pageWindowSize - 1);
+    if (windowEnd > totalPages) windowEnd = totalPages;
+
+    List<Widget> pageButtons = [];
+
+    // Previous window arrow
+    pageButtons.add(
+      IconButton(
+        icon: Icon(Icons.chevron_left, size: 16.sp),
+        onPressed: pageWindowStart > 1
+            ? () {
+                setState(() {
+                  pageWindowStart -= pageWindowSize;
+                  currentPage = pageWindowStart;
+                });
+              }
+            : null,
+      ),
+    );
+
+    // Page numbers
+    for (int i = pageWindowStart; i <= windowEnd; i++) {
+      pageButtons.add(
+        Padding(
+          padding: EdgeInsets.only(right: 8.w),
+          child: _buildPageNumber(i),
+        ),
+      );
+    }
+
+    // Next window arrow
+    pageButtons.add(
+      IconButton(
+        icon: Icon(Icons.chevron_right, size: 16.sp),
+        onPressed: windowEnd < totalPages
+            ? () {
+                setState(() {
+                  pageWindowStart += pageWindowSize;
+                  currentPage = pageWindowStart;
+                });
+              }
+            : null,
+      ),
+    );
+
+    return Row(children: pageButtons);
+  }
+
+  Widget _buildPageNumber(int pageNum) {
+    final isActive = pageNum == currentPage;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currentPage = pageNum;
+        });
+      },
+      child: Container(
+        width: 32.w,
+        height: 32.w,
+        decoration: BoxDecoration(
+          color: isActive ? Color(0xFFF8F8F8) : Colors.transparent,
+          borderRadius: BorderRadius.circular(4.r),
+        ),
+        child: Center(
+          child: KText(
+            text: pageNum.toString(),
+            fontSize: 12.sp,
+            color: isActive ? Colors.black : AppColors.titleColor,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showItemsPerPageSelector() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              KText(
+                text: "Candidate per page",
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.titleColor,
+              ),
+              SizedBox(height: 16.h),
+              ...([5, 6, 10, 15, 20].map(
+                (count) => ListTile(
+                  title: KText(
+                    text: "Show $count Candidate",
+                    fontSize: 14.sp,
+                    color: AppColors.titleColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  trailing: itemsPerPage == count
+                      ? Icon(Icons.check, color: AppColors.primaryColor)
+                      : null,
+                  onTap: () {
+                    setState(() {
+                      itemsPerPage = count;
+                      currentPage = 1; // Reset to first page
+                      pageWindowStart = 1; // Reset pagination window
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+              )),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

@@ -28,8 +28,9 @@ import 'package:fuoday/features/bottom_nav/presentation/employee_bottom_nav.dart
 import 'package:fuoday/features/bottom_nav/presentation/recruiter_bottom_nav.dart';
 import 'package:fuoday/features/calendar/presentation/screens/calendar_screen.dart';
 import 'package:fuoday/features/feeds/presentation/screens/feeds_screen.dart';
-import 'package:fuoday/features/home/presentation/screens/home_employee_screen.dart';
-import 'package:fuoday/features/home/presentation/screens/home_recruiter_screen.dart';
+import 'package:fuoday/features/ats_candidate/presentation/screens/ats_candidate_information_screen.dart';
+import 'package:fuoday/features/home/presentation/screens/hrms_screens/home_employee_screen.dart';
+import 'package:fuoday/features/home/presentation/screens/ats_screens/home_recruiter_screen.dart';
 import 'package:fuoday/features/hr/presentation/screens/hr_screen.dart';
 import 'package:fuoday/features/leave_tracker/presentation/screens/leave_tracker_screen.dart';
 import 'package:fuoday/features/management/presentation/screens/management_screen.dart';
@@ -53,6 +54,9 @@ import 'package:fuoday/features/teams/presentation/screens/teams_screen.dart';
 import 'package:fuoday/features/time_tracker/presentation/screens/time_tracker_screen.dart';
 import 'package:fuoday/features/work/presentation/screens/work_screen.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../features/ats_candidate/presentation/screens/ats_job_information_screen.dart';
+import '../../features/ats_support/presentation/screens/my_ticket_view_screen.dart';
 
 /// Enhanced Transition helpers with better animation curves and timing
 
@@ -426,6 +430,24 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
     GoRoute(
+      path: "/atsCandidateInformationScreen",
+      name: AppRouteConstants.atsCandidateInformationScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: CandidateInformationScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/atsJobInformationScreen",
+      name: AppRouteConstants.atsJobInformationScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: JobInformationScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
       path: "/atsTrackerScreen",
       name: AppRouteConstants.atsTrackerScreen,
       pageBuilder: (context, state) => _buildPageWithTransition(
@@ -494,6 +516,15 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) => _buildPageWithTransition(
         state: state,
         child: AtsSupportScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/atsMyTicketViewScreen",
+      name: AppRouteConstants.atsMyTicketViewScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: MyTicketViewScreen(),
         transition: _slideFromRight,
       ),
     ),

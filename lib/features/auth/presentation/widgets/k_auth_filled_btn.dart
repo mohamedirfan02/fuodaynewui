@@ -15,6 +15,7 @@ class KAuthFilledBtn extends StatelessWidget {
   final FontWeight fontWeight;
   final BorderRadiusGeometry borderRadius;
   final Widget? icon; // optional icon
+  final Widget? suffixIcon; // 🔹  optional right icon
 
   const KAuthFilledBtn({
     super.key,
@@ -29,6 +30,7 @@ class KAuthFilledBtn extends StatelessWidget {
     this.fontWeight = FontWeight.w600,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
     this.icon, // optional
+    this.suffixIcon, //optional suffix icon
   });
 
   @override
@@ -73,6 +75,11 @@ class KAuthFilledBtn extends StatelessWidget {
                       fontWeight: fontWeight,
                     ),
                   ),
+                  if (suffixIcon != null) ...[
+                    // 🔹 CHANGED: added right icon display
+                    SizedBox(width: 6.w),
+                    suffixIcon!,
+                  ],
                 ],
               ),
       ),

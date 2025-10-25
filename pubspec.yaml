@@ -153,6 +153,8 @@ dependencies:
 
   #mailer:
   mailer: ^6.1.0
+
+  #New Data Table
   syncfusion_flutter_datagrid: ^30.2.7
 
 

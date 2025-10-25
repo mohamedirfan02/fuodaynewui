@@ -13,9 +13,9 @@ import 'package:fuoday/core/service/dio_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/secure_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
-import 'package:fuoday/features/home/presentation/screens/add_task.dart';
-import 'package:fuoday/features/home/presentation/screens/home_employee_activities.dart';
-import 'package:fuoday/features/home/presentation/screens/home_employee_feeds.dart';
+import 'package:fuoday/features/home/presentation/screens/hrms_screens/add_task.dart';
+import 'package:fuoday/features/home/presentation/screens/hrms_screens/home_employee_activities.dart';
+import 'package:fuoday/features/home/presentation/screens/hrms_screens/home_employee_feeds.dart';
 
 class HomeEmployeeScreen extends StatefulWidget {
   const HomeEmployeeScreen({super.key});
