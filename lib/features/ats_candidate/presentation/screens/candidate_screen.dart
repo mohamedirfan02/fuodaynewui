@@ -9,7 +9,7 @@ import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
-// import 'package:fuoday/core/constants/app_route_constants.dart';
+import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
@@ -22,8 +22,6 @@ import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_dra
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
 import 'package:go_router/go_router.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
-import '../../../../core/constants/router/app_route_constants.dart';
 
 class CandidateScreen extends StatefulWidget {
   const CandidateScreen({super.key});
@@ -521,6 +519,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
 
                           /// 🔹 Upload Picker
                           KAtsUploadPickerTile(
+                            backgroundcolor: AppColors.atsHomepageBg,
                             showOnlyView: context.filePickerProviderWatch
                                 .isPicked("resume"),
                             onViewTap: () {
@@ -735,6 +734,10 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                 ),
                                 onPressed: () {
                                   print("Candidates button tapped");
+                                  GoRouter.of(context).pushNamed(
+                                    AppRouteConstants
+                                        .atsCandidateInformationScreen,
+                                  );
                                 },
                                 backgroundColor: AppColors.primaryColor,
                               ),
@@ -861,6 +864,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
       padding: const EdgeInsets.all(16.0),
       child: ReusableDataGrid(
         title: 'Applicants',
+        allowSorting: false,
         columns: columns,
         rows: rows,
         totalRows: rows.length,

@@ -112,6 +112,12 @@ class AppRouteConstants {
 
   static const String atsSettingsScreen = "atsSettingsScreen";
 
+  static const String atsCandidateInformationScreen =
+      "atsCandidateInformationScreen";
+
+  static const String atsJobInformationScreen = "atsJobInformationScreen";
+  static const String atsMyTicketViewScreen = "atsMyTicketViewScreen";
+
   // Preview Screen
   static const String imagePreview = "imagePreview";
   static const String pdfPreview = "pdfPreview";

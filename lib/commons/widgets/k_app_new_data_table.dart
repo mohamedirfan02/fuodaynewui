@@ -4,6 +4,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../core/themes/app_colors.dart';
 import 'k_text.dart';
+import 'package:syncfusion_flutter_core/theme.dart'; // 🔹 Add this import
 
 class ReusableDataGrid extends StatefulWidget {
   final List<GridColumn> columns;
@@ -13,6 +14,8 @@ class ReusableDataGrid extends StatefulWidget {
   final String title;
   final Widget Function(DataGridCell cell, int rowIndex, int actualDataIndex)?
   cellBuilder;
+  final bool allowSorting; // 🔹 New parameter
+  final Color? selectionColor; // 🔹 New parameter
 
   const ReusableDataGrid({
     super.key,
@@ -20,8 +23,10 @@ class ReusableDataGrid extends StatefulWidget {
     required this.rows,
     required this.totalRows,
     this.initialRowsPerPage = 8,
-    this.title = "Data Grid Table",
+    this.title = "",
     this.cellBuilder,
+    this.allowSorting = false, // 🔹 Enable sorting by default
+    this.selectionColor, // 🔹 Optional custom selection color
   });
 
   @override
@@ -41,6 +46,7 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
       rows: widget.rows,
       rowsPerPage: _rowsPerPage,
       cellBuilder: widget.cellBuilder,
+      selectionColor: widget.selectionColor,
     );
   }
 
@@ -63,23 +69,43 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.transparent),
           ),
-          child: SfDataGrid(
-            source: _dataSource,
-            showHorizontalScrollbar: true,
-            showVerticalScrollbar: false,
-            verticalScrollPhysics: const NeverScrollableScrollPhysics(),
-            horizontalScrollPhysics: const AlwaysScrollableScrollPhysics(),
-            gridLinesVisibility: GridLinesVisibility.horizontal,
-            headerGridLinesVisibility: GridLinesVisibility.horizontal,
-            columnWidthMode: ColumnWidthMode.auto,
-            allowColumnsResizing: true,
-            columnResizeMode: ColumnResizeMode.onResize,
-            highlightRowOnHover: true,
-            navigationMode: GridNavigationMode.cell,
-            selectionMode: SelectionMode.single,
-            shrinkWrapRows: true,
-            rowsPerPage: _rowsPerPage,
-            columns: widget.columns,
+          child: SfDataGridTheme(
+            data: SfDataGridThemeData(
+              gridLineColor: AppColors.greyColor.withOpacity(0.15),
+              selectionColor:
+                  // widget.selectionColor ??
+                  AppColors.primaryColor.withOpacity(
+                    0.15,
+                  ), // 🔹 Selection color
+              currentCellStyle: DataGridCurrentCellStyle(
+                // borderColor: widget.selectionColor ?? AppColors.primaryColor,
+                borderColor: AppColors.primaryColor,
+                borderWidth: 2,
+              ),
+            ),
+            child: SfDataGrid(
+              source: _dataSource,
+              showHorizontalScrollbar: true,
+              showVerticalScrollbar: false,
+              verticalScrollPhysics: const NeverScrollableScrollPhysics(),
+              horizontalScrollPhysics: const AlwaysScrollableScrollPhysics(),
+              gridLinesVisibility: GridLinesVisibility.horizontal,
+              headerGridLinesVisibility: GridLinesVisibility.horizontal,
+              columnWidthMode: ColumnWidthMode.auto,
+              allowColumnsResizing: true,
+              columnResizeMode: ColumnResizeMode.onResize,
+              highlightRowOnHover: true,
+              navigationMode: GridNavigationMode.cell,
+              selectionMode: SelectionMode.single,
+              shrinkWrapRows: true,
+              rowsPerPage: _rowsPerPage,
+              columns: widget.columns,
+              allowSorting: widget.allowSorting,
+              allowMultiColumnSorting: false, // Single column sorting
+              allowTriStateSorting:
+                  true, // Allows: ascending → descending → none
+              sortingGestureType: SortingGestureType.tap,
+            ),
           ),
         ),
         // Padding(
@@ -313,12 +339,14 @@ class GenericDataSource extends DataGridSource {
   List<DataGridRow> _paginatedRows = [];
   final Widget Function(DataGridCell cell, int rowIndex, int actualDataIndex)?
   cellBuilder;
+  final Color? selectionColor;
   int _currentPageIndex = 0;
 
   GenericDataSource({
     required List<DataGridRow> rows,
     required int rowsPerPage,
     this.cellBuilder,
+    this.selectionColor, // 🔹 Accept custom selection color
   }) : _allRows = rows,
        _rowsPerPage = rowsPerPage {
     _updatePaginatedRows(0);
@@ -356,6 +384,7 @@ class GenericDataSource extends DataGridSource {
     final actualDataIndex = (_currentPageIndex * _rowsPerPage) + rowIndex;
     return DataGridRowAdapter(
       color: Colors.white,
+      //selectedColor: selectionColor ?? AppColors.primaryColor.withOpacity(0.15),
       cells: row.getCells().map((cell) {
         if (cellBuilder != null) {
           return cellBuilder!(cell, rowIndex, actualDataIndex);

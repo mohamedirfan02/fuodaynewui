@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,7 +20,7 @@ class KAuthTextFormField extends StatelessWidget {
   final double? labelFontSize;
   final FontWeight? labelFontWeight;
   final ValueChanged<String>? onChanged; // 👈 add this
-
+  final bool isRequiredStar;
 
   const KAuthTextFormField({
     super.key,
@@ -33,12 +34,13 @@ class KAuthTextFormField extends StatelessWidget {
     this.onTap,
     this.maxLines,
     this.isReadOnly = false,
-    this.floatingLabel = false, // true for floating label, false for above label
+    this.floatingLabel =
+        false, // true for floating label, false for above label
     this.labelColor,
     this.labelFontSize,
     this.labelFontWeight,
-    this.onChanged, // 👈 add this
-
+    this.onChanged,
+    this.isRequiredStar = false,
   });
 
   @override
@@ -48,13 +50,24 @@ class KAuthTextFormField extends StatelessWidget {
       children: [
         // Label above the field (only if label is provided and floatingLabel is false)
         if (label != null && !floatingLabel) ...[
-          Text(
-            label!,
-            style: GoogleFonts.sora(
-              fontSize: labelFontSize ?? 12.sp,
-              fontWeight: labelFontWeight ?? FontWeight.w600,
-              color: labelColor ?? AppColors.titleColor,
-            ),
+          Row(
+            children: [
+              Text(
+                label!,
+                style: GoogleFonts.sora(
+                  fontSize: labelFontSize ?? 12.sp,
+                  fontWeight: labelFontWeight ?? FontWeight.w600,
+                  color: labelColor ?? AppColors.titleColor,
+                ),
+              ),
+              if (isRequiredStar)
+                KText(
+                  text: " *",
+                  color: Colors.red,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+            ],
           ),
           SizedBox(height: 6.h),
         ],
@@ -76,16 +89,20 @@ class KAuthTextFormField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hintText,
             labelText: floatingLabel ? label : null, // floating label
-            labelStyle: floatingLabel ? GoogleFonts.sora(
-              fontSize: labelFontSize ?? 12.sp,
-              fontWeight: labelFontWeight ?? FontWeight.w500,
-              color: labelColor ?? AppColors.titleColor.withOpacity(0.7),
-            ) : null,
-            floatingLabelStyle: floatingLabel ? GoogleFonts.sora(
-              fontSize: (labelFontSize ?? 12.sp) + 1,
-              fontWeight: labelFontWeight ?? FontWeight.w600,
-              color: labelColor ?? AppColors.primaryColor,
-            ) : null,
+            labelStyle: floatingLabel
+                ? GoogleFonts.sora(
+                    fontSize: labelFontSize ?? 12.sp,
+                    fontWeight: labelFontWeight ?? FontWeight.w500,
+                    color: labelColor ?? AppColors.titleColor.withOpacity(0.7),
+                  )
+                : null,
+            floatingLabelStyle: floatingLabel
+                ? GoogleFonts.sora(
+                    fontSize: (labelFontSize ?? 12.sp) + 1,
+                    fontWeight: labelFontWeight ?? FontWeight.w600,
+                    color: labelColor ?? AppColors.primaryColor,
+                  )
+                : null,
             suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
             border: const OutlineInputBorder(),
             enabledBorder: OutlineInputBorder(
@@ -95,10 +112,16 @@ class KAuthTextFormField extends StatelessWidget {
               borderSide: BorderSide(color: AppColors.primaryColor, width: 2.w),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.checkOutColor, width: 1.w),
+              borderSide: BorderSide(
+                color: AppColors.checkOutColor,
+                width: 1.w,
+              ),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.checkOutColor, width: 2.w),
+              borderSide: BorderSide(
+                color: AppColors.checkOutColor,
+                width: 2.w,
+              ),
             ),
             errorStyle: GoogleFonts.sora(fontSize: 10.sp, color: Colors.red),
           ),
