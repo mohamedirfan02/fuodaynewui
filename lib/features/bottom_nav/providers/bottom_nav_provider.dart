@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fuoday/features/calendar/presentation/screens/calendar_screen.dart';
-import 'package:fuoday/features/home/presentation/screens/home_employee_screen.dart';
+import 'package:fuoday/features/home/presentation/screens/hrms_screens/home_employee_screen.dart';
 import 'package:fuoday/features/leave_tracker/presentation/screens/leave_tracker_screen.dart';
 import 'package:fuoday/features/notification/presentation/screens/notification_screen.dart';
 import 'package:fuoday/features/profile/presentation/screens/profile_screen.dart';

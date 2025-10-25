@@ -55,12 +55,22 @@ class AppAssetsConstants {
 
   static const String pecIcon = "assets/icons/pec.svg";
 
-
   static const String atsFuoDayLogo = "assets/images/png/ats-fuoday-logo.png";
 
-  static const String atsFuoDayLogoSvg = "assets/images/svg/ats-fuoday-logo.svg";
+  static const String atsFuoDayLogoSvg =
+      "assets/images/svg/ats-fuoday-logo.svg";
 
   static const String ticketIcon = "assets/icons/ticket.svg";
 
+  static const String dashboardIcon = "assets/icons/dashboard.svg";
 
+  static const String callLogIcon = "assets/icons/callLog.svg";
+
+  static const String phoneIcon = "assets/icons/phone.svg";
+
+  static const String clockIcon = "assets/icons/clock.svg";
+
+  static const String incommingcallIcon = "assets/icons/incommingcall.svg";
+
+  static const String rejectCallIcon = "assets/icons/rejectcall.svg";
 }

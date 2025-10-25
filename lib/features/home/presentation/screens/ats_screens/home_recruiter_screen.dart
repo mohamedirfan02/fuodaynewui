@@ -12,6 +12,11 @@ import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/features/home/presentation/screens/ats_screens/ats_follow_up_call_tab.dart';
+import 'package:fuoday/features/home/presentation/screens/ats_screens/ats_non_responsive_call_tab.dart';
+import 'package:fuoday/features/home/presentation/screens/ats_screens/ats_total_call_log_tab.dart';
+import 'package:fuoday/features/home/presentation/screens/ats_screens/ats_dashboard_tab.dart';
+import 'package:fuoday/features/home/presentation/screens/ats_screens/ats_yesterday_call_tab.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
@@ -20,7 +25,8 @@ import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card
 import 'package:go_router/go_router.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../../core/constants/router/app_route_constants.dart';
+import '../../../../../core/constants/router/app_route_constants.dart';
+import '../../../../ats_hiring/presentation/screens/ats_onboarding_tab.dart';
 
 class HomeRecruiterScreen extends StatefulWidget {
   const HomeRecruiterScreen({super.key});
@@ -448,415 +454,179 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
       },
     ];
 
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AtsKAppBarWithDrawer(
-        userName: "",
-        cachedNetworkImageUrl: profilePhoto,
-        userDesignation: "",
-        showUserInfo: true,
-        onDrawerPressed: _openDrawer,
-        onNotificationPressed: () {},
-      ),
-      drawer: KAtsDrawer(
-        userEmail: email,
-        userName: name,
-        profileImageUrl: profilePhoto,
-        currentRoute: currentRoute, // This will highlight the current screen
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: AppColors.atsHomepageBg,
-        child: Padding(
-          padding: EdgeInsets.all(16.w),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
+    return DefaultTabController(
+      length: 5,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AtsKAppBarWithDrawer(
+          userName: "",
+          cachedNetworkImageUrl: profilePhoto,
+          userDesignation: "",
+          showUserInfo: true,
+          onDrawerPressed: _openDrawer,
+          onNotificationPressed: () {},
+        ),
+        drawer: KAtsDrawer(
+          userName: name,
+          userEmail: email,
+          currentRoute: currentRoute, // This will highlight the current screen
+        ),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: AppColors.atsHomepageBg,
+          child: Padding(
+            padding: EdgeInsets.only(top: 20.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Home Page Title
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      KText(
-                        text: "Hello $name",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 24.sp,
-                        color: AppColors.titleColor,
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ), // spacing between text and emoji
-                      const Text(
-                        "👋",
-                        style: TextStyle(fontSize: 24), // match text size
-                      ),
-                    ],
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        KText(
+                          text: "Hello $name",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 24.sp,
+                          color: AppColors.titleColor,
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ), // spacing between text and emoji
+                        const Text(
+                          "👋",
+                          style: TextStyle(fontSize: 24), // match text size
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-
                 SizedBox(height: 8.h),
-                KText(
-                  text: "Welcome back to Recruiter Dashboard",
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12.sp,
-                  color: AppColors.greyColor,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: KText(
+                      text: "Welcome back to Recruiter Dashboard",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      color: AppColors.greyColor,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 20.h),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10.w,
-                    mainAxisSpacing: 10.h,
-                    childAspectRatio: 155 / 113,
-                  ),
-                  itemCount: gridAttendanceData.length,
-                  itemBuilder: (context, index) {
-                    final item = gridAttendanceData[index];
-                    return AtsTotalCountCard(
-                      employeeCount: item['numberOfCount'].toString(),
-                      employeeCardIcon: item['icon'],
-                      employeeDescription: item['title'],
-                      employeeIconColor: AppColors.primaryColor,
-                      employeePercentageColor: AppColors.checkInColor,
-                      growthText: item['growth'],
-                    );
-                  },
-                ),
 
-                SizedBox(height: 24.h),
-
-                RequirementStatsCard(
-                  dataMap: {"Pending": 36, "Unactive": 6, "Closed": 13},
-                  colorMap: {
-                    "Pending": AppColors.pending,
-                    "Unactive": AppColors.unactive,
-                    "Closed": AppColors.closed,
-                  },
-                ),
-                SizedBox(height: 24.h),
-                Container(
-                  padding: EdgeInsets.all(18.47.w),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
-                    ),
-                    borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
-                  ),
+                Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // Header
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          KText(
-                            text: "Applicant details",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                            color: AppColors.titleColor,
-                          ),
-                        ],
-                      ),
-                      KVerticalSpacer(height: 20.h),
-
-                      // Date and Export Row
-                      Row(
-                        spacing: 20.w,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Start Date
-                          Expanded(
-                            child: KAtsGlowButton(
-                              text: "Date",
-                              textColor: AppColors.greyColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                              icon: SvgPicture.asset(
-                                AppAssetsConstants.dateIcon,
-                                height: 20,
-                                width: 20,
-                                fit: BoxFit.contain,
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: 20.w,
+                          right: 0,
+                          top: 20.h,
+                          bottom: 20.h,
+                        ),
+                        child: TabBar(
+                          isScrollable: true,
+                          tabAlignment: TabAlignment.start, // left align
+                          dividerColor: AppColors.atsHomepageBg,
+                          unselectedLabelColor: AppColors.greyColor,
+                          indicatorColor: AppColors.primaryColor,
+                          labelColor: AppColors.titleColor,
+                          tabs: [
+                            Tab(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    AppAssetsConstants.dashboardIcon,
+                                    height: 20,
+                                    width: 20,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  const Text("Dashboard"),
+                                ],
                               ),
-                              onPressed: () {
-                                selectDate(context, dateController);
-                              },
-                              backgroundColor: AppColors.secondaryColor,
                             ),
-                          ),
-
-                          // Export file
-                          Expanded(
-                            child: KAtsGlowButton(
-                              text: "Export",
-                              textColor: AppColors.secondaryColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                              icon: SvgPicture.asset(
-                                AppAssetsConstants.downloadIcon,
-                                height: 20,
-                                width: 20,
-                                fit: BoxFit.contain,
+                            Tab(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    AppAssetsConstants.callLogIcon,
+                                    height: 20,
+                                    width: 20,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  const Text("Total Call Made Today"),
+                                ],
                               ),
-                              onPressed: () {
-                                print("Export button tapped");
-                                context.pushNamed(
-                                  AppRouteConstants.atsTrackerScreen,
-                                );
-                                // GoRouter.of(
-                                //   context,
-                                // ).pushNamed(AppRouteConstants.atsTrackerScreen);
-                              },
-                              backgroundColor: AppColors.primaryColor,
                             ),
-                          ),
-                        ],
-                      ),
-                      KVerticalSpacer(height: 16.h),
-
-                      // Filter Field
-                      KFilterBtn(
-                        text: "Filter",
-                        textColor: Colors.black,
-                        backgroundColor: Colors.white,
-                        borderColor: const Color.fromRGBO(233, 234, 236, 1),
-                        borderRadius: BorderRadius.circular(10.r),
-                        onPressed: () {
-                          debugPrint("Filter pressed");
-                        },
-                        icon: SvgPicture.asset(
-                          AppAssetsConstants.filterIcon,
-                          height: 16.h,
-                          width: 16.w,
-                          color: Colors.black,
+                            Tab(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    AppAssetsConstants.clockIcon,
+                                    height: 20,
+                                    width: 20,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  const Text("Yesterday Call Progress"),
+                                ],
+                              ),
+                            ),
+                            Tab(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    AppAssetsConstants.incommingcallIcon,
+                                    height: 20,
+                                    width: 20,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  const Text("Follow Up Call Today"),
+                                ],
+                              ),
+                            ),
+                            Tab(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    AppAssetsConstants.rejectCallIcon,
+                                    height: 20,
+                                    width: 20,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  const Text("Non Responsive Calls"),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
 
-                      KVerticalSpacer(height: 24.h),
-
-                      ///---Old Data Table---
-                      // // Applicant Table with Pagination
-                      // SingleChildScrollView(
-                      //   scrollDirection: Axis.horizontal,
-                      //   child: Column(
-                      //     children: [
-                      //       ApplicantItem.buildHeader(),
-                      //       SizedBox(height: 16.h),
-                      //       Column(
-                      //         children: List.generate(
-                      //           paginatedApplicants.length,
-                      //           (index) {
-                      //             final applicant = paginatedApplicants[index];
-                      //             final sno =
-                      //                 ((currentPage - 1) * itemsPerPage) +
-                      //                 index +
-                      //                 1; // Correct numbering across pages
-                      //
-                      //             return ApplicantItem(
-                      //               sno: sno,
-                      //               name: applicant['name'],
-                      //               email: applicant['email'],
-                      //               phoneNumber: applicant['phone'],
-                      //               cv: applicant['cv'],
-                      //               createdDate: applicant['createdDate'],
-                      //               avatarColor: applicant['avatarColor'],
-                      //               showInitials: true,
-                      //               initials: applicant['name']
-                      //                   .substring(0, 2)
-                      //                   .toUpperCase(),
-                      //               onStageChanged: (newStage) {
-                      //                 print(
-                      //                   "${applicant['name']} stage changed to $newStage",
-                      //                 );
-                      //               },
-                      //             );
-                      //           },
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      //
-                      // KVerticalSpacer(height: 24.h),
-                      //
-                      // // Pagination
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [_buildPageNumbersRow()],
-                      // ),
-                      //
-                      // SizedBox(height: 16.w),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     // Dynamic entries text
-                      //     KText(
-                      //       text: entriesDisplayText,
-                      //       fontSize:
-                      //           MediaQuery.of(context).size.width *
-                      //           0.03, // responsive font
-                      //       color: AppColors.greyColor,
-                      //       fontWeight: FontWeight.w500,
-                      //     ),
-                      //
-                      //     // SizedBox(
-                      //     //   width: MediaQuery.of(context).size.width * 0.08,
-                      //     // ), // spacing between text and button
-                      //     // Dropdown container
-                      //     GestureDetector(
-                      //       onTap: _showItemsPerPageSelector,
-                      //       child: Container(
-                      //         padding: EdgeInsets.all(
-                      //           MediaQuery.of(context).size.width * 0.02,
-                      //         ),
-                      //         decoration: BoxDecoration(
-                      //           border: Border.all(
-                      //             width: 0.8,
-                      //             color: AppColors.greyColor.withOpacity(0.1),
-                      //           ),
-                      //           borderRadius: BorderRadius.circular(8),
-                      //           color: AppColors.secondaryColor,
-                      //         ),
-                      //         child: Row(
-                      //           children: [
-                      //             KText(
-                      //               text: "Show $itemsPerPage",
-                      //               fontSize:
-                      //                   MediaQuery.of(context).size.width *
-                      //                   0.025,
-                      //               color: AppColors.titleColor,
-                      //               fontWeight: FontWeight.w500,
-                      //             ),
-                      //             Icon(
-                      //               Icons.keyboard_arrow_down,
-                      //               size:
-                      //                   MediaQuery.of(context).size.width *
-                      //                   0.04,
-                      //               color: AppColors.titleColor,
-                      //             ),
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      ///<!---------- Data Table
-                      newData_table(columns, rows),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16.w),
-                //=========================New Table Column
-                //newData_table(columns, rows),
-                // ReusableDataGrid(
-                //   title: 'Products Table',
-                //   columns: columns,
-                //   rows: rows,
-                //   totalRows: rows.length,
-                //   initialRowsPerPage: 5,
-                //   cellBuilder: (cell, rowIndex) {
-                //     // Last column → show 3 icon buttons
-                //     if (cell.columnName == 'Price') {
-                //       return Container(
-                //         alignment: Alignment.center,
-                //         padding: const EdgeInsets.all(4),
-                //         child: FittedBox(
-                //           fit: BoxFit.scaleDown,
-                //           child: Row(
-                //             mainAxisSize: MainAxisSize.min,
-                //             children: [
-                //               // IconButton(
-                //               //   icon: const Icon(
-                //               //     Icons.edit,
-                //               //     size: 18,
-                //               //     color: Colors.blue,
-                //               //   ),
-                //               //   onPressed: () =>
-                //               //       print('Edit clicked for row $rowIndex'),
-                //               // ),
-                //               // IconButton(
-                //               //   icon: const Icon(
-                //               //     Icons.delete,
-                //               //     size: 18,
-                //               //     color: Colors.red,
-                //               //   ),
-                //               //   onPressed: () =>
-                //               //       print('Delete clicked for row $rowIndex'),
-                //               // ),
-                //               // IconButton(
-                //               //   icon: const Icon(
-                //               //     Icons.visibility,
-                //               //     size: 18,
-                //               //     color: Colors.green,
-                //               //   ),
-                //               //   onPressed: () =>
-                //               //       print('View clicked for row $rowIndex'),
-                //               // ),
-                //               Container(
-                //                 width: 50,
-                //                 height: 50,
-                //                 color: Colors.red,
-                //                 child: Center(child: CircleAvatar()),
-                //               ),
-                //               Container(
-                //                 width: 50,
-                //                 height: 50,
-                //                 color: Colors.yellow,
-                //                 child: Center(child: CircleAvatar()),
-                //               ),
-                //               Container(
-                //                 width: 50,
-                //                 height: 50,
-                //                 color: Colors.red,
-                //                 child: Center(child: CircleAvatar()),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //       );
-                //     }
-                //
-                //     // Default cell styling for other columns
-                //     return Container(
-                //       alignment: Alignment.center,
-                //       padding: const EdgeInsets.all(8),
-                //       child: Text(cell.value.toString()),
-                //     );
-                //   },
-                // ),
-                Container(
-                  padding: EdgeInsets.all(18.47.w),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
-                    ),
-                    borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header
-                      CalendarHeader(),
-
-                      SizedBox(height: 20.h),
-
-                      // TODAY Section
-                      TodaySection(),
-
-                      SizedBox(height: 24.h),
-
-                      // UPCOMING Section
-                      UpcomingSection(),
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            DashoardTab(),
+                            TotalCallTab(),
+                            YesterdayCallTab(),
+                            FollowUpCallTab(),
+                            NonResponsiveCallTab(),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
