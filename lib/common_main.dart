@@ -18,9 +18,13 @@ import 'package:fuoday/features/attendance/presentation/providers/total_attendan
 import 'package:fuoday/features/attendance/presentation/providers/total_early_arrivals_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_late_arrivals_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_punctual_arrivals_details_provider.dart';
+import 'package:fuoday/features/auth/domain/entities/employee_auth_entities.dart';
 import 'package:fuoday/features/auth/presentation/providers/employee_auth_login_provider.dart';
 import 'package:fuoday/features/auth/presentation/providers/employee_auth_logout_provider.dart';
+import 'package:fuoday/features/auth/presentation/providers/forgot_password_provider.dart';
+import 'package:fuoday/features/auth/presentation/providers/reset_password_provider.dart';
 import 'package:fuoday/features/auth/presentation/providers/sliding_segmented_provider.dart';
+import 'package:fuoday/features/auth/presentation/providers/verify_otp_provider.dart';
 import 'package:fuoday/features/bottom_nav/providers/bottom_nav_provider.dart';
 import 'package:fuoday/features/calendar/presentation/providers/shift_schedule_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/all_events_provider.dart';
@@ -288,6 +292,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => getIt<DateTimeProvider>()),
         ChangeNotifierProvider(
           create: (context) => getIt<EmployeeDepartmentProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => getIt<ForgotPasswordProvider>(),
+        ),
+        ChangeNotifierProvider(create: (context) => getIt<VerifyOtpProvider>()),
+        ChangeNotifierProvider(
+          create: (context) => getIt<ResetPasswordProvider>(),
         ),
       ],
       child: ScreenUtilInit(

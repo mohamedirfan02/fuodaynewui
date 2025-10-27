@@ -110,7 +110,7 @@ class MyTicketCard extends StatelessWidget {
               height: 25.h,
               width: 100.w,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(30.r),
                 color: _statusBackgroundColor,
               ),
               child: Center(

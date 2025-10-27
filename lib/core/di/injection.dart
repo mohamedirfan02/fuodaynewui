@@ -42,12 +42,27 @@ import 'package:fuoday/features/attendance/presentation/providers/total_early_ar
 import 'package:fuoday/features/attendance/presentation/providers/total_late_arrivals_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_punctual_arrivals_details_provider.dart';
 import 'package:fuoday/features/auth/data/datasources/remote/employee_auth_remote_datasource.dart';
+import 'package:fuoday/features/auth/data/datasources/remote/forgot_password_remote_datasource.dart';
+import 'package:fuoday/features/auth/data/datasources/remote/reset_password_remote_datasource.dart';
+import 'package:fuoday/features/auth/data/datasources/remote/verify_otp_remote_datasource.dart';
 import 'package:fuoday/features/auth/data/repository/employee_auth_repository_impl.dart';
+import 'package:fuoday/features/auth/data/repository/forgot_password_repository_impl.dart';
+import 'package:fuoday/features/auth/data/repository/reset_password_repository_impl.dart';
+import 'package:fuoday/features/auth/data/repository/verify_otp_repository_impl.dart';
+import 'package:fuoday/features/auth/domain/repository/forgot_password_repository.dart';
+import 'package:fuoday/features/auth/domain/repository/reset_password_repository.dart';
+import 'package:fuoday/features/auth/domain/repository/verify_otp_repository.dart';
 import 'package:fuoday/features/auth/domain/usecases/employee_auth_login_usecase.dart';
 import 'package:fuoday/features/auth/domain/usecases/employee_auth_logout_usecase.dart';
+import 'package:fuoday/features/auth/domain/usecases/reset_password_usecase.dart';
+import 'package:fuoday/features/auth/domain/usecases/send_otp_usecase.dart';
+import 'package:fuoday/features/auth/domain/usecases/verify_otp_usecase.dart';
 import 'package:fuoday/features/auth/presentation/providers/employee_auth_login_provider.dart';
 import 'package:fuoday/features/auth/presentation/providers/employee_auth_logout_provider.dart';
+import 'package:fuoday/features/auth/presentation/providers/forgot_password_provider.dart';
+import 'package:fuoday/features/auth/presentation/providers/reset_password_provider.dart';
 import 'package:fuoday/features/auth/presentation/providers/sliding_segmented_provider.dart';
+import 'package:fuoday/features/auth/presentation/providers/verify_otp_provider.dart';
 import 'package:fuoday/features/bottom_nav/providers/bottom_nav_provider.dart';
 import 'package:fuoday/features/bottom_nav/providers/recruiter_bottom_nav_provider.dart';
 import 'package:fuoday/features/calendar/data/datasources/shift_schedule_remote_datasource.dart';
@@ -1188,6 +1203,74 @@ void setUpServiceLocator() {
   getIt.registerFactory(
     () => EmployeeDepartmentProvider(
       getEmployeesByManagerUseCase: getIt<GetEmployeesByManagerUseCase>(),
+    ),
+  );
+
+  // Data Source
+  getIt.registerLazySingleton<ForgotPasswordRemoteDataSource>(
+    () => ForgotPasswordRemoteDataSource(dioService: getIt<DioService>()),
+  );
+
+  // Repository
+  getIt.registerLazySingleton<ForgotPasswordRepository>(
+    () => ForgotPasswordRepositoryImpl(
+      remoteDataSource: getIt<ForgotPasswordRemoteDataSource>(),
+    ),
+  );
+
+  // Use Case
+  getIt.registerLazySingleton(
+    () => SendOtpUseCase(repository: getIt<ForgotPasswordRepository>()),
+  );
+
+  // Provider (optional)
+  getIt.registerFactory(
+    () => ForgotPasswordProvider(sendOtpUseCase: getIt<SendOtpUseCase>()),
+  );
+
+  // Data Source
+  getIt.registerLazySingleton<VerifyOtpRemoteDataSource>(
+    () => VerifyOtpRemoteDataSource(dioService: getIt<DioService>()),
+  );
+
+  // Repository
+  getIt.registerLazySingleton<VerifyOtpRepository>(
+    () => VerifyOtpRepositoryImpl(
+      remoteDataSource: getIt<VerifyOtpRemoteDataSource>(),
+    ),
+  );
+
+  // Use Case
+  getIt.registerLazySingleton(
+    () => VerifyOtpUseCase(repository: getIt<VerifyOtpRepository>()),
+  );
+
+  // Provider
+  getIt.registerFactory(
+    () => VerifyOtpProvider(verifyOtpUseCase: getIt<VerifyOtpUseCase>()),
+  );
+
+  // 🔹 Data Source
+  getIt.registerLazySingleton<ResetPasswordRemoteDataSource>(
+    () => ResetPasswordRemoteDataSource(dioService: getIt<DioService>()),
+  );
+
+  // 🔹 Repository
+  getIt.registerLazySingleton<ResetPasswordRepository>(
+    () => ResetPasswordRepositoryImpl(
+      remoteDataSource: getIt<ResetPasswordRemoteDataSource>(),
+    ),
+  );
+
+  // 🔹 Use Case
+  getIt.registerLazySingleton(
+    () => ResetPasswordUseCase(repository: getIt<ResetPasswordRepository>()),
+  );
+
+  // 🔹 Provider
+  getIt.registerFactory(
+    () => ResetPasswordProvider(
+      resetPasswordUseCase: getIt<ResetPasswordUseCase>(),
     ),
   );
 }

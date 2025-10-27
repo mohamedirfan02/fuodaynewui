@@ -69,10 +69,7 @@ class TicketCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: const Color(0xFFE5E7EB),
-            width: 1.w,
-          ),
+          border: Border.all(color: const Color(0xFFE5E7EB), width: 1.w),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.04),
@@ -95,7 +92,7 @@ class TicketCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: _statusBackgroundColor,
-                    borderRadius: BorderRadius.circular(12.r),
+                    borderRadius: BorderRadius.circular(30.r),
                   ),
                   child: Text(
                     _statusText,
@@ -117,17 +114,14 @@ class TicketCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Icon
-                if (icon != null) ...[
-                  ?icon,
-                  SizedBox(width: 16.w),
-                ],
+                if (icon != null) ...[?icon, SizedBox(width: 16.w)],
 
                 // Title
                 Expanded(
                   child: Text(
                     title,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                       color: const Color(0xFF111827),
                       height: 1.4,
@@ -138,11 +132,7 @@ class TicketCard extends StatelessWidget {
             ),
 
             SizedBox(height: 24.h),
-            Divider(
-              color: AppColors.lightGreyColor,
-              thickness: 1,
-              height: 1,
-            ),
+            Divider(color: AppColors.lightGreyColor, thickness: 1, height: 1),
 
             SizedBox(height: 16.h),
 

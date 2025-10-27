@@ -99,7 +99,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
   }
 
   bool _validateDropdown(BuildContext context, String key, String label) {
-    final value = context.dropDownProviderWatch.getValue(key);
+    final value = context.dropDownProviderRead.getValue(key);
     if (value == null || value.isEmpty) {
       KSnackBar.failure(context, "Please select $label");
       return false;
@@ -153,7 +153,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
               KVerticalSpacer(height: 6.h),
               KDropdownTextFormField<String>(
                 hintText: "Select Title",
-                value: context.dropDownProviderWatch.getValue("Job Title"),
+                value: context.dropDownProviderRead.getValue("Job Title"),
                 items: ["Developer", "Designer", "Manager"],
                 onChanged: (v) =>
                     context.dropDownProviderRead.setValue("Job Title", v),
@@ -178,7 +178,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
               KVerticalSpacer(height: 6.h),
               KDropdownTextFormField<String>(
                 hintText: "Select Department",
-                value: context.dropDownProviderWatch.getValue("Department"),
+                value: context.dropDownProviderRead.getValue("Department"),
                 items: ["HR", "IT", "Finance"],
                 onChanged: (v) =>
                     context.dropDownProviderRead.setValue("Department", v),
@@ -210,7 +210,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
               KVerticalSpacer(height: 6.h),
               KDropdownTextFormField<String>(
                 hintText: "Select Experience",
-                value: context.dropDownProviderWatch.getValue("Experience"),
+                value: context.dropDownProviderRead.getValue("Experience"),
                 items: ["0-1 Years", "2-4 Years", "5+ Years"],
                 onChanged: (v) =>
                     context.dropDownProviderRead.setValue("Experience", v),
@@ -274,7 +274,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
               KVerticalSpacer(height: 6.h),
               KDropdownTextFormField<String>(
                 hintText: "Select Role",
-                value: context.dropDownProviderWatch.getValue("Role"),
+                value: context.dropDownProviderRead.getValue("Role"),
                 items: ["Lead", "Support", "Intern"],
                 onChanged: (v) =>
                     context.dropDownProviderRead.setValue("Role", v),
@@ -299,7 +299,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
               KVerticalSpacer(height: 6.h),
               KDropdownTextFormField<String>(
                 hintText: "Select Status",
-                value: context.dropDownProviderWatch.getValue("Hiring Status"),
+                value: context.dropDownProviderRead.getValue("Hiring Status"),
                 items: ["Open", "Closed", "On Hold"],
                 onChanged: (v) =>
                     context.dropDownProviderRead.setValue("Hiring Status", v),

@@ -239,7 +239,7 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 80.h,
+        height: 60.h,
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         margin: EdgeInsets.symmetric(vertical: 10.h),

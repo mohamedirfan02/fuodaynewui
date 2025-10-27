@@ -10,6 +10,18 @@ class AppApiEndpointConstants {
   // Logout Endpoint
   static String get logout => '$baseUrl/web-users/logout';
 
+  //Forgot password send otp Enpoint
+  static String get forgotPassword =>
+      '$baseUrl/web-users/forgot-password/send-otp'; //reset-password
+
+  //Forgot password Verify otp Enpoint
+  static String get forgotPasswordOTPverify =>
+      '$baseUrl/web-users/forgot-password/verify-otp';
+
+  //resetPassword Enpoint
+  static String get resetPassword =>
+      '$baseUrl/web-users/forgot-password/reset-password';
+
   // CheckIn Endpoint
   static String get checkIn => '$baseUrl/hrms/attendance/addattendance';
 
