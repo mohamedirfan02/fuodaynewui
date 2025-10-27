@@ -48,6 +48,7 @@ class EmployeeDetailsEntity {
   final String designation;
   final String department;
   final String? checkin;
+  final String? access;
 
   const EmployeeDetailsEntity({
     required this.webUserId,
@@ -55,6 +56,7 @@ class EmployeeDetailsEntity {
     required this.designation,
     required this.department,
     required this.checkin,
+    required this.access,
   });
 }
 

@@ -36,6 +36,7 @@ import 'package:fuoday/features/home/presentation/screens/ats_screens/home_recru
 import 'package:fuoday/features/hr/presentation/screens/hr_screen.dart';
 import 'package:fuoday/features/leave_tracker/presentation/screens/leave_tracker_screen.dart';
 import 'package:fuoday/features/management/presentation/screens/management_screen.dart';
+import 'package:fuoday/features/manager/presentation/manager_screen.dart';
 import 'package:fuoday/features/notification/presentation/screens/notification_screen.dart';
 import 'package:fuoday/features/on_boarding/presentation/screens/on_boarding_screen.dart';
 import 'package:fuoday/features/organizations/presentation/screens/organizations_screen.dart';
@@ -51,6 +52,7 @@ import 'package:fuoday/features/profile/presentation/screens/profile_professiona
 import 'package:fuoday/features/profile/presentation/screens/profile_screen.dart';
 import 'package:fuoday/features/splash/presentation/screens/splash_screen.dart';
 import 'package:fuoday/features/support/persentation/screens/support_screen.dart';
+import 'package:fuoday/features/team_leader/presentation/team_leader_screen.dart';
 import 'package:fuoday/features/team_tree/presentation/screens/team_tree_screen.dart';
 import 'package:fuoday/features/teams/presentation/screens/teams_screen.dart';
 import 'package:fuoday/features/time_tracker/presentation/screens/time_tracker_screen.dart';
@@ -694,6 +696,24 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) => _buildPageWithTransition(
         state: state,
         child: HRScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/teamLeader",
+      name: AppRouteConstants.teamLeader,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: TeamLeaderScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/manager",
+      name: AppRouteConstants.manager,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: ManagerScreen(),
         transition: _slideFromRight,
       ),
     ),

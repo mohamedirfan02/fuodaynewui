@@ -88,6 +88,12 @@ class AppRouteConstants {
   //hr screen
   static const String hr = "hr";
 
+  //Team Leader Screen
+  static const String teamLeader = "teamLeader";
+
+  //Manager Screen
+  static const String manager = "manager";
+
   // Management Screen
   static const String management = "management";
 

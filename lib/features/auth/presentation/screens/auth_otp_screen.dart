@@ -70,11 +70,11 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
                         SizedBox(height: 40.h),
 
                         // App Logo
-                        KSvg(
-                          svgPath: AppAssetsConstants.splashLogo,
-                          height: 100.h,
-                          width: 100.w,
-                          boxFit: BoxFit.cover,
+                        Image.asset(
+                          AppAssetsConstants.logo,
+                          height: 150.h,
+                          width: 150.w,
+                          // fit: BoxFit.cover,
                         ),
 
                         Container(

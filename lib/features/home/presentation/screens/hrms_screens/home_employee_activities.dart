@@ -309,13 +309,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
 
                             ///Break In % Break Out
                             KCheckInButton(
-                              text: checkInProvider.isLoading
-                                  ? "Loading..."
-                                  : (checkinStatusProvider
-                                            .isCurrentlyCheckedIn ||
-                                        checkInProvider.isCheckedIn)
-                                  ? "Break Out"
-                                  : "Break In",
+                              text: "Break In",
                               fontSize: 8.sp,
                               height: 25.h,
                               width: 100.w,
@@ -324,7 +318,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                                   : (checkinStatusProvider
                                             .isCurrentlyCheckedIn ||
                                         checkInProvider.isCheckedIn)
-                                  ? AppColors.checkOutColor
+                                  ? AppColors.checkInColor
                                   : AppColors.checkInColor,
                               onPressed: checkInProvider.isLoading
                                   ? null

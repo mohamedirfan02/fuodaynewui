@@ -429,6 +429,14 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                             .id
                                                             ?.toString() ?? // Convert int to String if needed
                                                         "No ID",
+
+                                                    access:
+                                                        provider
+                                                            .authEntity
+                                                            ?.data
+                                                            .employeeDetails
+                                                            .access ??
+                                                        "",
                                                   );
 
                                                   AppLoggerHelper.logInfo(
@@ -581,6 +589,13 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                             .id
                                                             ?.toString() ?? // Convert int to String if needed
                                                         "No ID",
+                                                    access:
+                                                        provider
+                                                            .authEntity
+                                                            ?.data
+                                                            .employeeDetails
+                                                            .access ??
+                                                        "",
                                                   );
 
                                                   AppLoggerHelper.logInfo(

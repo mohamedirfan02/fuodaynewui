@@ -219,6 +219,20 @@ class _AddTaskState extends State<AddTask> {
                   key: dropdownKey,
                   onSelectionChanged: (employees) {
                     selectedEmployees = employees;
+                    List<String> selectedNames = employees
+                        .map((e) => e.empName ?? '')
+                        .toList();
+
+                    // ✅ CHANGE #2: Convert that list into a single string like "Yousuf","Mohamed","Malik"
+                    String namesString = selectedNames
+                        .map((name) => '"$name"')
+                        .join(',');
+
+                    // ✅ CHANGE #3: Print for debugging
+                    print('Selected Employee Names: $namesString');
+
+                    // ✅ (Optional) if you want to keep printing all employee objects for debugging
+                    print('All Employee Objects: $employees');
                   },
                 ),
 
@@ -290,35 +304,130 @@ class _AddTaskState extends State<AddTask> {
                 KAuthFilledBtn(
                   // isLoading: ,
                   text: "Create Task",
+
+                  // onPressed: () async {
+                  //   //Immediately close dropdown (even before validation)
+                  //   dropdownKey.currentState?.closeDropdown();
+                  //   if (formKey.currentState!.validate()) {
+                  //     final hiveService = GetIt.I<HiveStorageService>();
+                  //     final webUserId = hiveService
+                  //         .employeeDetails?['web_user_id']
+                  //         ?.toString();
+                  //     final assignedToName = selectedEmployeeName;
+                  //     final assignedToId = selectedEmployeeId;
+                  //     final priority = context.dropDownProviderRead.getValue(
+                  //       'priority',
+                  //     );
+                  //
+                  //     final assignedByName = assignedByController.text
+                  //         .trim(); // <-- get dynamic name
+                  //
+                  //     if (webUserId == null ||
+                  //         assignedToName == null ||
+                  //         assignedToId == null ||
+                  //         priority == null ||
+                  //         assignedByName.isEmpty) {
+                  //       KSnackBar.failure(
+                  //         context,
+                  //         'Missing required information',
+                  //       );
+                  //       return;
+                  //     }
+                  //     // ✅ Check selected employees
+                  //     if (webUserId == null ||
+                  //         selectedEmployees.isEmpty ||
+                  //         priority == null ||
+                  //         assignedByName.isEmpty) {
+                  //       KSnackBar.failure(
+                  //         context,
+                  //         'Missing required information',
+                  //       );
+                  //       return;
+                  //     }
+                  //
+                  //     // If multiple employees selected, you can choose first or send as comma separated
+                  //     final assignedToName2 = selectedEmployees
+                  //         .map((e) => e.empName)
+                  //         .join(', ');
+                  //     final assignedToId2 = selectedEmployees.first
+                  //         .toString(); // or handle multiple
+                  //
+                  //     final taskEntity = HomeAddTaskEntity(
+                  //       webUserId: int.parse(webUserId),
+                  //       date: DateFormat(
+                  //         'yyyy-MM-dd',
+                  //       ).format(assignDate ?? DateTime.now()),
+                  //       description: descriptionController.text.trim(),
+                  //       assignedBy: assignedByName,
+                  //       assignedById: int.parse(webUserId),
+                  //       assignedTo: assignedToName,
+                  //       assignedToId: int.parse(assignedToId),
+                  //       priority: priority,
+                  //       deadline: DateFormat(
+                  //         'yyyy-MM-dd',
+                  //       ).format(selectedDeadline),
+                  //       project: projectNameController.text.trim(),
+                  //     );
+                  //
+                  //     try {
+                  //       final usecase = GetIt.I<HomeAddTaskUseCase>();
+                  //       await usecase(taskEntity, webUserId);
+                  //       KSnackBar.success(
+                  //         context,
+                  //         'Task assigned successfully',
+                  //       );
+                  //       // Clear dropdown selections (after success)
+                  //       dropdownKey.currentState?.clearSelection();
+                  //
+                  //       // ✅ Clear all fields
+                  //       formKey.currentState!.reset();
+                  //       assignedByController.clear();
+                  //       assignDateController.clear();
+                  //       assignedToController.clear();
+                  //       projectNameController.clear();
+                  //       descriptionController.clear();
+                  //       priorityController.clear();
+                  //       deadlineController.clear();
+                  //
+                  //       setState(() {
+                  //         selectedEmployeeName = null;
+                  //         selectedEmployeeId = null;
+                  //         selectedDeadline = DateTime.now();
+                  //         context.dropDownProviderRead.setValue(
+                  //           'priority',
+                  //           null,
+                  //         );
+                  //       });
+                  //     } catch (e) {
+                  //       KSnackBar.failure(context, 'Failed to assign task: $e');
+                  //     }
+                  //   }
+                  // },
                   onPressed: () async {
+                    // ✅ CAPTURE VALUES IMMEDIATELY at the start
+                    final namesString = selectedEmployees
+                        .map((e) => e.empName)
+                        .join(', ');
+
+                    final idsString = selectedEmployees
+                        .map((e) => e.webUserId.toString())
+                        .join(',');
+
+                    print("🔵 Captured Names: $namesString");
+                    print("🔵 Captured IDs: $idsString");
                     //Immediately close dropdown (even before validation)
                     dropdownKey.currentState?.closeDropdown();
+
                     if (formKey.currentState!.validate()) {
                       final hiveService = GetIt.I<HiveStorageService>();
                       final webUserId = hiveService
                           .employeeDetails?['web_user_id']
                           ?.toString();
-                      final assignedToName = selectedEmployeeName;
-                      final assignedToId = selectedEmployeeId;
                       final priority = context.dropDownProviderRead.getValue(
                         'priority',
                       );
+                      final assignedByName = assignedByController.text.trim();
 
-                      final assignedByName = assignedByController.text
-                          .trim(); // <-- get dynamic name
-
-                      if (webUserId == null ||
-                          assignedToName == null ||
-                          assignedToId == null ||
-                          priority == null ||
-                          assignedByName.isEmpty) {
-                        KSnackBar.failure(
-                          context,
-                          'Missing required information',
-                        );
-                        return;
-                      }
-                      // ✅ Check selected employees
                       if (webUserId == null ||
                           selectedEmployees.isEmpty ||
                           priority == null ||
@@ -330,12 +439,9 @@ class _AddTaskState extends State<AddTask> {
                         return;
                       }
 
-                      // If multiple employees selected, you can choose first or send as comma separated
-                      final assignedToName2 = selectedEmployees
-                          .map((e) => e.empName)
-                          .join(', ');
-                      final assignedToId2 = selectedEmployees.first
-                          .toString(); // or handle multiple
+                      print("🟢 Using Names: $namesString");
+                      print("🟢 Using IDs: $idsString");
+                      // e.g. "1005,1006"
 
                       final taskEntity = HomeAddTaskEntity(
                         webUserId: int.parse(webUserId),
@@ -345,8 +451,11 @@ class _AddTaskState extends State<AddTask> {
                         description: descriptionController.text.trim(),
                         assignedBy: assignedByName,
                         assignedById: int.parse(webUserId),
-                        assignedTo: assignedToName,
-                        assignedToId: int.parse(assignedToId),
+                        assignedTo: namesString, // ✅ changed here!
+                        // assignedToId: int.parse(
+                        //   selectedEmployees.first.empId.toString(),
+                        // ),
+                        assignedToId: idsString,
                         priority: priority,
                         deadline: DateFormat(
                           'yyyy-MM-dd',
@@ -361,7 +470,8 @@ class _AddTaskState extends State<AddTask> {
                           context,
                           'Task assigned successfully',
                         );
-                        // Clear dropdown selections (after success)
+
+                        // Clear dropdown selections
                         dropdownKey.currentState?.clearSelection();
 
                         // ✅ Clear all fields
