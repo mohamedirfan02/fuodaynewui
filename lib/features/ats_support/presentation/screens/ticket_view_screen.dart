@@ -150,7 +150,6 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                     ),
                   ],
                 ),
-
               ),
             ),
             KVerticalSpacer(height: 24.h),
@@ -176,7 +175,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                           width: 40,
                           fit: BoxFit.contain,
                         ),
-                        SizedBox(width: 20,),
+                        SizedBox(width: 20),
                         KText(
                           text: "Deanna Jones",
                           fontWeight: FontWeight.w700,
@@ -212,14 +211,13 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                     ),
                   ],
                 ),
-
               ),
             ),
           ],
         ),
       ),
-      bottomSheet: Container(
-        height: 80.h,
+      bottomNavigationBar: Container(
+        height: 60.h,
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         margin: EdgeInsets.symmetric(vertical: 10.h),
@@ -228,7 +226,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
             backgroundColor: AppColors.primaryColor,
             height: 30.h,
             width: double.infinity,
-            icon:  SvgPicture.asset(
+            icon: SvgPicture.asset(
               AppAssetsConstants.addIcon,
               height: 20,
               width: 20,
@@ -251,7 +249,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                   return DraggableScrollableSheet(
                     expand: false,
                     initialChildSize: 0.9,
-// covers ~90% of the screen
+                    // covers ~90% of the screen
                     minChildSize: 0.5,
                     builder: (context, scrollController) {
                       return SingleChildScrollView(
@@ -261,7 +259,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                             left: 20.w,
                             right: 20.w,
                             bottom:
-                            MediaQuery.of(context).viewInsets.bottom + 20.h,
+                                MediaQuery.of(context).viewInsets.bottom + 20.h,
                             top: 10.h,
                           ),
                           child: const ComposeEmailScreen(), // ✅ Embedded here

@@ -13,6 +13,7 @@ import 'package:fuoday/features/ats_index/presentation/screen/ats_index_screen.d
 import 'package:fuoday/features/ats_job_portal/presentation/screen/ats_job_portal_screen.dart';
 import 'package:fuoday/features/ats_settings/presentation/screens/ats_settings_screen.dart';
 import 'package:fuoday/features/ats_support/presentation/screens/ats_support_screen.dart';
+import 'package:fuoday/features/ats_support/presentation/screens/new_ticket_screen.dart';
 import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_interview.dart';
 import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_screen.dart';
 import 'package:fuoday/features/attendance/presentation/screens/attendance_absent_days_details_screen.dart';
@@ -24,6 +25,7 @@ import 'package:fuoday/features/attendance/presentation/screens/total_attendance
 import 'package:fuoday/features/auth/presentation/screens/auth_forget_password_screen.dart';
 import 'package:fuoday/features/auth/presentation/screens/auth_login_screen.dart';
 import 'package:fuoday/features/auth/presentation/screens/auth_otp_screen.dart';
+import 'package:fuoday/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:fuoday/features/bottom_nav/presentation/employee_bottom_nav.dart';
 import 'package:fuoday/features/bottom_nav/presentation/recruiter_bottom_nav.dart';
 import 'package:fuoday/features/calendar/presentation/screens/calendar_screen.dart';
@@ -261,11 +263,29 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: "/authOTP",
       name: AppRouteConstants.otp,
-      pageBuilder: (context, state) => _buildPageWithTransition(
-        state: state,
-        child: AuthOtpScreen(),
-        transition: _slideFromRight,
-      ),
+      pageBuilder: (context, state) {
+        final email = state.extra as String? ?? '';
+        return _buildPageWithTransition(
+          state: state,
+          child: AuthOtpScreen(email: email),
+          transition: _slideFromRight,
+        );
+      },
+    ),
+    GoRoute(
+      path: "/resetPassword",
+      name: AppRouteConstants.resetPassword,
+      pageBuilder: (context, state) {
+        final data = state.extra as Map<String, String>;
+        return _buildPageWithTransition(
+          state: state,
+          child: AuthResetPasswordScreen(
+            email: data['email']!,
+            otp: data['otp']!,
+          ),
+          transition: _slideFromRight,
+        );
+      },
     ),
     GoRoute(
       path: "/homeEmployee",
@@ -525,6 +545,15 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) => _buildPageWithTransition(
         state: state,
         child: MyTicketViewScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/atsNewTicketScreen",
+      name: AppRouteConstants.atsNewTicketScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: NewTicketScreen(),
         transition: _slideFromRight,
       ),
     ),

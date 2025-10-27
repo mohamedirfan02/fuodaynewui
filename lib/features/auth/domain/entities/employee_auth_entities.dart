@@ -75,3 +75,42 @@ class AdminUserEntity {
     required this.companyWord,
   });
 }
+
+// forgot_password_entity.dart
+class ForgotPasswordDebugEntity {
+  final String otp;
+  final String email;
+  final String mailDriver;
+
+  const ForgotPasswordDebugEntity({
+    required this.otp,
+    required this.email,
+    required this.mailDriver,
+  });
+}
+
+class ForgotPasswordEntity {
+  final String status;
+  final String message;
+  final ForgotPasswordDebugEntity debug;
+
+  const ForgotPasswordEntity({
+    required this.status,
+    required this.message,
+    required this.debug,
+  });
+}
+
+class VerifyOtpEntity {
+  final String status;
+  final String message;
+
+  const VerifyOtpEntity({required this.status, required this.message});
+}
+
+class ResetPasswordEntity {
+  final String status;
+  final String message;
+
+  ResetPasswordEntity({required this.status, required this.message});
+}

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/constants/app_route_constants.dart';
+import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/k_my_ticket_card.dart';
+import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:go_router/go_router.dart';
 
 class SupportMyTicketTab extends StatefulWidget {
@@ -93,32 +97,62 @@ class _SupportMyTicketTabState extends State<SupportMyTicketTab> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-      child: Column(
-        children: [
-          ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: tickets.length, // ✅ 15 dummy items
-            itemBuilder: (context, index) {
-              final ticket = tickets[index];
-              return Padding(
-                padding: EdgeInsets.only(bottom: 12.h),
-                child: MyTicketCard(
-                  title: ticket['title'],
-                  date: ticket['date'],
-                  status: ticket['status'],
-                  onTap: () {
-                    GoRouter.of(
-                      context,
-                    ).pushNamed(AppRouteConstants.atsMyTicketViewScreen);
-                  },
-                ),
-              );
+    return Scaffold(
+      backgroundColor: AppColors.atsHomepageBg,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        child: Column(
+          children: [
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: tickets.length, // ✅ 15 dummy items
+              itemBuilder: (context, index) {
+                final ticket = tickets[index];
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 12.h),
+                  child: MyTicketCard(
+                    title: ticket['title'],
+                    date: ticket['date'],
+                    status: ticket['status'],
+                    onTap: () {
+                      GoRouter.of(
+                        context,
+                      ).pushNamed(AppRouteConstants.atsMyTicketViewScreen);
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 60.h,
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+        margin: EdgeInsets.symmetric(vertical: 10.h),
+        child: Center(
+          child: KAuthFilledBtn(
+            backgroundColor: AppColors.primaryColor,
+            height: 30.h,
+            width: double.infinity,
+            icon: SvgPicture.asset(
+              AppAssetsConstants.addIcon,
+              height: 18,
+              width: 18,
+              fit: BoxFit.contain,
+            ),
+            text: "New Ticket",
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w500,
+            onPressed: () {
+              GoRouter.of(
+                context,
+              ).pushNamed(AppRouteConstants.atsNewTicketScreen);
             },
           ),
-        ],
+        ),
       ),
     );
   }

@@ -108,10 +108,10 @@ class _AtsSupportScreenState extends State<AtsSupportScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     const SizedBox(width: 6),
-                                    const KText(
+                                    KText(
                                       text: "All Ticket",
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 18,
+                                      fontSize: 14.sp,
                                     ),
                                   ],
                                 ),
@@ -121,10 +121,10 @@ class _AtsSupportScreenState extends State<AtsSupportScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     const SizedBox(width: 6),
-                                    const KText(
+                                    KText(
                                       text: "My Ticket",
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 18,
+                                      fontSize: 14.sp,
                                     ),
                                   ],
                                 ),

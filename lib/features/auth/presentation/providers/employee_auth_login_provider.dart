@@ -8,7 +8,7 @@ class EmployeeAuthLoginProvider extends ChangeNotifier {
 
   EmployeeAuthLoginProvider({required this.employeeAuthLoginUseCase});
 
-    bool _isLoading = false;
+  bool _isLoading = false;
   EmployeeAuthEntity? _authEntity;
   String? _error;
 

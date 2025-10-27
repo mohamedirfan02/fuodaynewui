@@ -7,35 +7,48 @@ import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
 import 'package:fuoday/core/constants/router/app_route_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
-import 'package:fuoday/features/auth/presentation/providers/employee_auth_login_provider.dart';
-import 'package:fuoday/features/auth/presentation/providers/forgot_password_provider.dart';
+import 'package:fuoday/features/auth/presentation/providers/reset_password_provider.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart'; // 🆕 Provider package import
+import 'package:provider/provider.dart';
 
-class AuthForgetPasswordScreen extends StatefulWidget {
-  const AuthForgetPasswordScreen({super.key});
+class AuthResetPasswordScreen extends StatefulWidget {
+  final String email;
+  final String otp; // ✅ You need to pass otp from verify_otp screen
+
+  const AuthResetPasswordScreen({
+    super.key,
+    required this.email,
+    required this.otp,
+  });
 
   @override
-  State<AuthForgetPasswordScreen> createState() =>
-      _AuthForgetPasswordScreenState();
+  State<AuthResetPasswordScreen> createState() =>
+      _AuthResetPasswordScreenState();
 }
 
-class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final _formKey = GlobalKey<FormState>(); // 🆕 added form key for validation
+class _AuthResetPasswordScreenState extends State<AuthResetPasswordScreen> {
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<ForgotPasswordProvider>(
-      context,
-    ); // 🆕 access provider
-    void _sendOtp() async {
+    final provider = Provider.of<ResetPasswordProvider>(context);
+
+    // 🔹 Reset Password Button Function
+    Future<void> _resetPassword() async {
       if (_formKey.currentState!.validate()) {
         FocusScope.of(context).unfocus();
 
-        await provider.sendOtp(email: emailController.text);
+        await provider.resetPassword(
+          email: widget.email,
+          otp: widget.otp,
+          password: passwordController.text.trim(),
+          passwordConfirmation: confirmPasswordController.text.trim(),
+        );
 
         if (provider.error != null && context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -44,16 +57,18 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
               content: Text(provider.error!),
             ),
           );
-        } else if (context.mounted) {
+        } else if (provider.response != null && context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               backgroundColor: Colors.green,
-              content: Text("OTP sent successfully!"),
+              content: Text(
+                provider.response!.message ?? "Password reset successful!",
+              ),
             ),
           );
-          GoRouter.of(
-            context,
-          ).pushNamed(AppRouteConstants.otp, extra: emailController.text);
+
+          // ✅ Navigate to login screen
+          GoRouter.of(context).pushNamed(AppRouteConstants.login);
         }
       }
     }
@@ -66,15 +81,12 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
           child: Column(
             children: [
               SizedBox(height: 40.h),
-
-              /// App Logo
               KSvg(
                 svgPath: AppAssetsConstants.splashLogo,
                 height: 100.h,
                 width: 100.w,
                 boxFit: BoxFit.cover,
               ),
-
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -96,22 +108,20 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                           ),
                           child: IntrinsicHeight(
                             child: Form(
-                              // 🆕 wrap UI inside Form
-                              key: _formKey, // 🆕 attach validation form key
+                              key: _formKey,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(top: 30),
+                                    padding: const EdgeInsets.only(top: 30),
                                     child: KText(
-                                      text: "Recover | Reset your password",
+                                      text: "Reset Your Password",
                                       fontWeight: FontWeight.w500,
                                       fontSize: 14.sp,
                                     ),
                                   ),
                                   KVerticalSpacer(height: 20.h),
 
-                                  /// Card Container
                                   Container(
                                     margin: EdgeInsets.symmetric(
                                       horizontal: 20.w,
@@ -120,18 +130,15 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                                       horizontal: 20.w,
                                       vertical: 20.h,
                                     ),
-                                    width: double.infinity,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: AppColors.secondaryColor,
                                     ),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
                                       children: [
                                         KText(
                                           textAlign: TextAlign.center,
-                                          text: "Forgot Password",
+                                          text: "Create New Password",
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16.sp,
                                         ),
@@ -139,42 +146,59 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                                         KText(
                                           textAlign: TextAlign.center,
                                           text:
-                                              "Enter the email you used to create your account so we can send you a link to reset your password.",
+                                              "Enter and confirm your new password to securely update your account.",
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12.sp,
                                         ),
                                         KVerticalSpacer(height: 20.h),
 
-                                        /// Email Text Field
+                                        /// 🔹 New Password Field
                                         KAuthTextFormField(
-                                          controller: emailController,
-                                          suffixIcon: Icons.mail_outline,
-                                          keyboardType:
-                                              TextInputType.emailAddress,
-                                          hintText: "EMAIL ADDRESS",
+                                          controller: passwordController,
+                                          obscureText: true,
+                                          suffixIcon: Icons.lock_outline,
+                                          hintText: "NEW PASSWORD",
                                           validator: (v) {
-                                            // 🆕 added validation
                                             if (v == null || v.isEmpty) {
-                                              return "Please enter your email";
+                                              return "Please enter new password";
                                             }
-                                            if (!v.contains('@')) {
-                                              return "Enter a valid email";
+                                            if (v.length < 6) {
+                                              return "Password must be at least 6 characters";
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                        KVerticalSpacer(height: 15.h),
+
+                                        /// 🔹 Confirm Password Field
+                                        KAuthTextFormField(
+                                          controller: confirmPasswordController,
+                                          obscureText: true,
+                                          suffixIcon: Icons.lock_outline,
+                                          hintText: "CONFIRM PASSWORD",
+                                          validator: (v) {
+                                            if (v == null || v.isEmpty) {
+                                              return "Please confirm your password";
+                                            }
+                                            if (v != passwordController.text) {
+                                              return "Passwords do not match";
                                             }
                                             return null;
                                           },
                                         ),
                                         KVerticalSpacer(height: 20.h),
 
-                                        /// Send Button
+                                        /// 🔹 Reset Button
                                         KAuthFilledBtn(
-                                          isLoading: provider.isLoading,
                                           backgroundColor:
                                               AppColors.primaryColor,
                                           fontSize: 10.sp,
-                                          text: "Send",
+                                          text: provider.isLoading
+                                              ? "Resetting..."
+                                              : "Reset Password",
                                           onPressed: () {
                                             if (!provider.isLoading) {
-                                              _sendOtp(); // async function called inside sync closure
+                                              _resetPassword();
                                             }
                                           },
                                           height: 22.h,
@@ -182,7 +206,7 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                                         ),
                                         KVerticalSpacer(height: 12.h),
 
-                                        /// Back to Login Button
+                                        /// Back Button
                                         KAuthFilledBtn(
                                           backgroundColor: AppColors
                                               .primaryColor
@@ -190,7 +214,9 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                                           fontSize: 10.sp,
                                           text: "Back to Login",
                                           onPressed: () {
-                                            GoRouter.of(context).pop();
+                                            GoRouter.of(
+                                              context,
+                                            ).goNamed(AppRouteConstants.login);
                                           },
                                           height: 22.h,
                                           width: double.infinity,

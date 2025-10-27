@@ -10,6 +10,8 @@ class AppRouteConstants {
 
   // OTP Screen
   static const String otp = "otp";
+  // Reset password Screen
+  static const String resetPassword = "resetPassword";
 
   // On Boarding Screen
   static const String onBoarding = "onBoarding";
@@ -116,7 +118,10 @@ class AppRouteConstants {
       "atsCandidateInformationScreen";
 
   static const String atsJobInformationScreen = "atsJobInformationScreen";
+
   static const String atsMyTicketViewScreen = "atsMyTicketViewScreen";
+
+  static const String atsNewTicketScreen = "atsNewTicketScreen";
 
   // Preview Screen
   static const String imagePreview = "imagePreview";
