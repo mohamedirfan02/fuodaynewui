@@ -5,7 +5,7 @@ class HomeAddTaskEntity {
   final String assignedBy;
   final int assignedById;
   final String assignedTo;
-  final int assignedToId;
+  final String assignedToId;
   final String priority;
   final String deadline;
   final String project;

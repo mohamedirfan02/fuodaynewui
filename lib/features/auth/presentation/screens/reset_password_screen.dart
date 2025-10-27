@@ -81,11 +81,12 @@ class _AuthResetPasswordScreenState extends State<AuthResetPasswordScreen> {
           child: Column(
             children: [
               SizedBox(height: 40.h),
-              KSvg(
-                svgPath: AppAssetsConstants.splashLogo,
-                height: 100.h,
-                width: 100.w,
-                boxFit: BoxFit.cover,
+              //App Logo
+              Image.asset(
+                AppAssetsConstants.logo,
+                height: 150.h,
+                width: 150.w,
+                // fit: BoxFit.cover,
               ),
               Expanded(
                 child: Container(
