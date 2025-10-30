@@ -131,7 +131,7 @@ dependencies:
   excel: ^4.0.6
 
   # connectivity_plus:
-  connectivity_plus: ^6.1.4
+  connectivity_plus: ^7.0.0
 
   #equatable:
   equatable: ^2.0.7
