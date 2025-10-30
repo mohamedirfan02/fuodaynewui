@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fuoday/commons/providers/checkbox_provider.dart';
 import 'package:fuoday/commons/providers/dropdown_provider.dart';
+import 'package:fuoday/commons/widgets/k_pdf_generater_reusable_widget.dart';
 import 'package:fuoday/config/flavors/flavors_config.dart';
 import 'package:fuoday/core/providers/app_file_downloader_provider.dart';
 import 'package:fuoday/core/providers/app_file_picker_provider.dart';
@@ -129,6 +130,11 @@ import 'package:fuoday/features/management/data/repository/emp_audit_form_reposi
 import 'package:fuoday/features/management/domain/repository/emp_audit_form_repository.dart';
 import 'package:fuoday/features/management/domain/usecase/get_employees_by_managers_usecase.dart';
 import 'package:fuoday/features/management/presentation/provider/emp_audit_form_provider.dart';
+import 'package:fuoday/features/manager/data/datasources/update_leave_status_remote_data_source.dart';
+import 'package:fuoday/features/manager/data/repository/update_leave_status_repository_imp.dart';
+import 'package:fuoday/features/manager/domain/repository/update_leave_status_repository.dart';
+import 'package:fuoday/features/manager/domain/usecase/update_leave_status_usecase.dart';
+import 'package:fuoday/features/manager/presentation/provider/update_leave_status_provider.dart';
 import 'package:fuoday/features/organizations/data/datasources/remote/departmentListRemoteDataSource.dart';
 import 'package:fuoday/features/organizations/data/datasources/remote/organization_about_datasource.dart';
 import 'package:fuoday/features/organizations/data/datasources/remote/ser_ind_datasource.dart';
@@ -206,6 +212,27 @@ import 'package:fuoday/features/support/domain/repository/ticket_repository.dart
 import 'package:fuoday/features/support/domain/usecase/create_ticket_usecase.dart';
 import 'package:fuoday/features/support/domain/usecase/get_ticket_details_usecase.dart';
 import 'package:fuoday/features/support/persentation/provider/get_ticket_details_provider.dart';
+import 'package:fuoday/features/team_leader/data/datasource/AllRoleLateArrivalsReportRemoteDataSource.dart';
+import 'package:fuoday/features/team_leader/data/datasource/all_leave_requests_remote_data_source.dart';
+import 'package:fuoday/features/team_leader/data/datasource/all_role_total_attendance_report_remote_datasource.dart';
+import 'package:fuoday/features/team_leader/data/datasource/role_based_users_remote_datasource.dart';
+import 'package:fuoday/features/team_leader/data/repositories/all_leave_requests_repository_impl.dart';
+import 'package:fuoday/features/team_leader/data/repositories/all_role_total_attendance_report_repository_impl.dart';
+import 'package:fuoday/features/team_leader/data/repositories/late_arrivals_repository_impl.dart';
+import 'package:fuoday/features/team_leader/data/repositories/role_based_users_repository_impl.dart';
+import 'package:fuoday/features/team_leader/domain/repository/all_leave_requests_repository.dart';
+import 'package:fuoday/features/team_leader/domain/repository/all_role_total_attendance_report_repository.dart';
+import 'package:fuoday/features/team_leader/domain/repository/late_arrivals_repository.dart';
+import 'package:fuoday/features/team_leader/domain/repository/role_based_users_repository.dart';
+import 'package:fuoday/features/team_leader/domain/usecases/get_all_leave_requests_by_status_usecase.dart';
+import 'package:fuoday/features/team_leader/domain/usecases/get_all_role_total_attendance_report_usecase.dart';
+import 'package:fuoday/features/team_leader/domain/usecases/get_late_arrivals_usecase.dart';
+import 'package:fuoday/features/team_leader/domain/usecases/get_role_based_users_usecase.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/all_leave_requests_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/all_role_total_attendance_report_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/late_arrivals_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/role_based_users_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/widget/total_employee_pdf_generater.dart';
 import 'package:fuoday/features/team_tree/data/datasource/team_tree_remote_data_source.dart';
 import 'package:fuoday/features/team_tree/data/repositories/team_tree_repository_impl.dart';
 import 'package:fuoday/features/team_tree/domain/repository/team_tree_repository.dart';
@@ -682,6 +709,10 @@ void setUpServiceLocator() {
 
   // pdf generator service
   getIt.registerLazySingleton(() => PdfGeneratorService());
+  //Total Emp pdf generator service
+  getIt.registerLazySingleton(() => TotalEmpPdfGeneratorService());
+  //Total Emp pdf generator service
+  getIt.registerLazySingleton(() => PdfGeneratorServiceReusableWidget());
 
   // excel generator service
   getIt.registerLazySingleton(() => ExcelGeneratorService());
@@ -1266,11 +1297,156 @@ void setUpServiceLocator() {
   getIt.registerLazySingleton(
     () => ResetPasswordUseCase(repository: getIt<ResetPasswordRepository>()),
   );
-
+  //Role Based User Screens like Hr,Tl,Manager
   // 🔹 Provider
   getIt.registerFactory(
     () => ResetPasswordProvider(
       resetPasswordUseCase: getIt<ResetPasswordUseCase>(),
     ),
   );
+
+  // 🔹 Data Source
+  getIt.registerLazySingleton<RoleBasedUsersRemoteDataSource>(
+    () => RoleBasedUsersRemoteDataSource(dioService: getIt<DioService>()),
+  );
+
+  // 🔹 Repository
+  getIt.registerLazySingleton<RoleBasedUsersRepository>(
+    () => RoleBasedUsersRepositoryImpl(
+      remoteDataSource: getIt<RoleBasedUsersRemoteDataSource>(),
+    ),
+  );
+
+  // 🔹 Use Case
+  getIt.registerLazySingleton<GetRoleBasedUsersUseCase>(
+    () =>
+        GetRoleBasedUsersUseCase(repository: getIt<RoleBasedUsersRepository>()),
+  );
+
+  // 🔹 Provider
+  getIt.registerFactory<RoleBasedUsersProvider>(
+    () => RoleBasedUsersProvider(
+      getRoleBasedUsersUseCase: getIt<GetRoleBasedUsersUseCase>(),
+    ),
+  );
+
+  // 🧾 Attendance Report Screens like HR, TL, Manager
+
+  // 🔹 Data Source
+  getIt.registerLazySingleton<AllRoleTotalAttendanceReportRemoteDataSource>(
+    () => AllRoleTotalAttendanceReportRemoteDataSource(
+      dioService: getIt<DioService>(),
+    ),
+  );
+
+  // 🔹 Repository
+  getIt.registerLazySingleton<AllRoleTotalAttendanceReportRepository>(
+    () => AllRoleTotalAttendanceReportRepositoryImpl(
+      remoteDataSource: getIt<AllRoleTotalAttendanceReportRemoteDataSource>(),
+    ),
+  );
+
+  // 🔹 Use Case
+  getIt.registerLazySingleton<GetAllRoleTotalAttendanceReportUseCase>(
+    () => GetAllRoleTotalAttendanceReportUseCase(
+      repository: getIt<AllRoleTotalAttendanceReportRepository>(),
+    ),
+  );
+
+  // 🔹 Provider
+  getIt.registerFactory<AttendanceReportProvider>(
+    () => AttendanceReportProvider(
+      getAllRoleTotalAttendanceReportUseCase:
+          getIt<GetAllRoleTotalAttendanceReportUseCase>(),
+    ),
+  );
+
+  // 🔹 Late Arrival Data Source
+  getIt.registerLazySingleton<LateArrivalsRemoteDataSource >(
+        () => LateArrivalsRemoteDataSource (
+      dioService: getIt<DioService>(),
+    ),
+  );
+
+// 🔹 Repository
+  getIt.registerLazySingleton<LateArrivalsRepository >(
+        () => LateArrivalsRepositoryImpl (
+      remoteDataSource: getIt<LateArrivalsRemoteDataSource>(),
+    ),
+  );
+
+// 🔹 Use Case
+  getIt.registerLazySingleton<GetLateArrivalsUseCase >(
+        () => GetLateArrivalsUseCase (
+      repository: getIt<LateArrivalsRepository>(),
+    ),
+  );
+
+// 🔹 Provider
+  getIt.registerFactory<LateArrivalsProvider >(
+        () => LateArrivalsProvider (
+          getLateArrivalsUseCase:
+      getIt<GetLateArrivalsUseCase>(),
+    ),
+  );
+
+
+  // 🔹 Data Source
+  getIt.registerLazySingleton<AllLeaveRequestsRemoteDataSource>(
+        () => AllLeaveRequestsRemoteDataSource(
+      dioService: getIt<DioService>(),
+    ),
+  );
+
+  // 🔹 Repository
+  getIt.registerLazySingleton<AllLeaveRequestsRepository>(
+        () => AllLeaveRequestsRepositoryImpl(
+      remoteDataSource: getIt<AllLeaveRequestsRemoteDataSource>(),
+    ),
+  );
+
+  // 🔹 Use Case
+  getIt.registerLazySingleton<GetAllLeaveRequestsByStatusUseCase>(
+        () => GetAllLeaveRequestsByStatusUseCase(
+      repository: getIt<AllLeaveRequestsRepository>(),
+    ),
+  );
+
+  // 🔹 Provider
+  getIt.registerFactory<AllLeaveRequestsProvider>(
+        () => AllLeaveRequestsProvider(
+      getAllLeaveRequestsByStatusUseCase:
+      getIt<GetAllLeaveRequestsByStatusUseCase>(),
+    ),
+  );
+
+  //Manager Leave Update data source
+  // 🔹 Data Source
+  getIt.registerLazySingleton<UpdateLeaveStatusRemoteDataSource>(
+        () => UpdateLeaveStatusRemoteDataSource(
+      dioService: getIt<DioService>(),
+    ),
+  );
+
+// 🔹 Repository
+  getIt.registerLazySingleton<UpdateLeaveStatusRepository>(
+        () => UpdateLeaveStatusRepositoryImpl(
+      remoteDataSource: getIt<UpdateLeaveStatusRemoteDataSource>(),
+    ),
+  );
+
+// 🔹 Use Case
+  getIt.registerLazySingleton<UpdateLeaveStatusUseCase>(
+        () => UpdateLeaveStatusUseCase(
+      repository: getIt<UpdateLeaveStatusRepository>(),
+    ),
+  );
+
+// 🔹 Provider
+  getIt.registerFactory<UpdateLeaveStatusProvider>(
+        () => UpdateLeaveStatusProvider(
+      updateLeaveStatusUseCase: getIt<UpdateLeaveStatusUseCase>(),
+    ),
+  );
+
 }

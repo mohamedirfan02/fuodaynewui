@@ -36,7 +36,13 @@ import 'package:fuoday/features/home/presentation/screens/ats_screens/home_recru
 import 'package:fuoday/features/hr/presentation/screens/hr_screen.dart';
 import 'package:fuoday/features/leave_tracker/presentation/screens/leave_tracker_screen.dart';
 import 'package:fuoday/features/management/presentation/screens/management_screen.dart';
-import 'package:fuoday/features/manager/presentation/manager_screen.dart';
+import 'package:fuoday/features/manager/presentation/screens/manager_screen.dart';
+import 'package:fuoday/features/manager/presentation/screens/sub_screens/manager_feed_screen.dart';
+import 'package:fuoday/features/manager/presentation/screens/sub_screens/manager_late_arrival_screen.dart';
+import 'package:fuoday/features/manager/presentation/screens/sub_screens/manager_regulation_aproval_screens.dart';
+import 'package:fuoday/features/manager/presentation/screens/sub_screens/manager_total_attendace_report_screen.dart';
+import 'package:fuoday/features/manager/presentation/screens/sub_screens/manager_total_employees_screen.dart';
+import 'package:fuoday/features/manager/presentation/screens/sub_screens/manager_total_leave_request_screen.dart';
 import 'package:fuoday/features/notification/presentation/screens/notification_screen.dart';
 import 'package:fuoday/features/on_boarding/presentation/screens/on_boarding_screen.dart';
 import 'package:fuoday/features/organizations/presentation/screens/organizations_screen.dart';
@@ -52,7 +58,12 @@ import 'package:fuoday/features/profile/presentation/screens/profile_professiona
 import 'package:fuoday/features/profile/presentation/screens/profile_screen.dart';
 import 'package:fuoday/features/splash/presentation/screens/splash_screen.dart';
 import 'package:fuoday/features/support/persentation/screens/support_screen.dart';
-import 'package:fuoday/features/team_leader/presentation/team_leader_screen.dart';
+import 'package:fuoday/features/team_leader/presentation/screens/sub_screens/TL_late_arrival_screen.dart';
+import 'package:fuoday/features/team_leader/presentation/screens/sub_screens/TL_regulation_aproval_screens.dart';
+import 'package:fuoday/features/team_leader/presentation/screens/sub_screens/TL_total_attendace_report_screen.dart';
+import 'package:fuoday/features/team_leader/presentation/screens/sub_screens/TL_total_employees_screen.dart';
+import 'package:fuoday/features/team_leader/presentation/screens/sub_screens/TL_total_leave_request_screen.dart';
+import 'package:fuoday/features/team_leader/presentation/screens/team_leader_screen.dart';
 import 'package:fuoday/features/team_tree/presentation/screens/team_tree_screen.dart';
 import 'package:fuoday/features/teams/presentation/screens/teams_screen.dart';
 import 'package:fuoday/features/time_tracker/presentation/screens/time_tracker_screen.dart';
@@ -699,6 +710,7 @@ final GoRouter appRouter = GoRouter(
         transition: _slideFromRight,
       ),
     ),
+    //Team Leader Screens
     GoRoute(
       path: "/teamLeader",
       name: AppRouteConstants.teamLeader,
@@ -709,11 +721,112 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
     GoRoute(
+      path: "/tlTotalEmployeesScreen",
+      name: AppRouteConstants.tlTotalEmployeesScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: TLTotalEmployeesScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/tlTotalAttendanceScreen",
+      name: AppRouteConstants.tlTotalAttendanceScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: TLTotalAttendanceRepotScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/tlLateArrivalScreen",
+      name: AppRouteConstants.tlLateArrivalScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: TLLateArrivalScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/tlTotalLeaveRequestScreen",
+      name: AppRouteConstants.tlTotalLeaveRequestScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: TLTotalLeaveRequestScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/tlRegulationScreen",
+      name: AppRouteConstants.tlRegulationScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: TLRegulationAprovalScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+
+    //Manager  Screens
+    GoRoute(
       path: "/manager",
       name: AppRouteConstants.manager,
       pageBuilder: (context, state) => _buildPageWithTransition(
         state: state,
         child: ManagerScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/managerTotalEmployeesScreen",
+      name: AppRouteConstants.managerTotalEmployeesScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: ManagerTotalEmployeesScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/managerTotalAttendanceScreen",
+      name: AppRouteConstants.managerTotalAttendanceScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: ManagerTotalAttendanceRepotScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/managerLateArrivalScreen",
+      name: AppRouteConstants.managerLateArrivalScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: ManagerLateArrivalScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/managerTotalLeaveRequestScreen",
+      name: AppRouteConstants.managerTotalLeaveRequestScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: ManagerTotalLeaveRequestScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/managerRegulationScreen",
+      name: AppRouteConstants.managerRegulationScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: ManagerRegulationAprovalScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/managerFeedScreen",
+      name: AppRouteConstants.managerFeedScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: ManagerFeedsScreen(),
         transition: _slideFromRight,
       ),
     ),

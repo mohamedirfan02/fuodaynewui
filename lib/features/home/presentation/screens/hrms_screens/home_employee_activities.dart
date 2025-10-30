@@ -323,6 +323,16 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                               onPressed: checkInProvider.isLoading
                                   ? null
                                   : () async {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "It will be added in a future update",
+                                          ),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
                                       // Navigator.of(context).push(
                                       //   MaterialPageRoute(
                                       //     builder: (context) =>

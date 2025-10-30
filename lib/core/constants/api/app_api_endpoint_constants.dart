@@ -203,4 +203,16 @@ class AppApiEndpointConstants {
   // get All Badges
   static String getEmpDepartment(int webUserId) =>
       '$baseUrl/web-users/getemployeesbyadmin/$webUserId';
+
+  //Get role_based_users in Hr,TL,Manager Screens
+  static String getAllWebUsers(int webUserId) =>
+      '$baseUrl/hrms/hr/getallwebusers/$webUserId';
+
+  //Get role_based_users in Hr,TL,Manager Screens
+  static String getAllAttendance(int webUserId) =>
+      '$baseUrl/hrms/hr/all-attendance/$webUserId';
+
+  //Get role_based_users in Hr,TL,Manager Screens
+  static String getAllLateArrivalsReport() =>
+      '$baseUrl/hrms/attendance/late-arrivals-all';
 }

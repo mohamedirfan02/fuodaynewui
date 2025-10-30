@@ -119,37 +119,37 @@ class KDrawer extends StatelessWidget {
                 ),
 
                 // HR menu — visible only if designation is "hr"
-                if (access.toLowerCase() == 'hr')
-                  KDrawerListTile(
-                    drawerTitle: "HR",
-                    drawerListTileOnTap: () {
-                      Navigator.pop(context);
-                      GoRouter.of(context).pushNamed(AppRouteConstants.hr);
-                    },
-                    drawerLeadingIcon: Icons.hail_rounded,
-                  ),
+                //  if (access.toLowerCase() == 'hr')
+                KDrawerListTile(
+                  drawerTitle: "HR",
+                  drawerListTileOnTap: () {
+                    Navigator.pop(context);
+                    GoRouter.of(context).pushNamed(AppRouteConstants.hr);
+                  },
+                  drawerLeadingIcon: Icons.hail_rounded,
+                ),
                 // TL menu — visible only if designation is "TL"
-                if (access.toLowerCase() == 'team leader')
-                  KDrawerListTile(
-                    drawerTitle: "TL",
-                    drawerListTileOnTap: () {
-                      Navigator.pop(context);
-                      GoRouter.of(
-                        context,
-                      ).pushNamed(AppRouteConstants.teamLeader);
-                    },
-                    drawerLeadingIcon: Icons.data_exploration,
-                  ),
+                // if (access.toLowerCase() == 'team leader')
+                KDrawerListTile(
+                  drawerTitle: "TL",
+                  drawerListTileOnTap: () {
+                    Navigator.pop(context);
+                    GoRouter.of(
+                      context,
+                    ).pushNamed(AppRouteConstants.teamLeader);
+                  },
+                  drawerLeadingIcon: Icons.data_exploration,
+                ),
                 // Manager menu — visible only if designation is "Manager"
-                if (access.toLowerCase() == 'manager')
-                  KDrawerListTile(
-                    drawerTitle: "Manager",
-                    drawerListTileOnTap: () {
-                      Navigator.pop(context);
-                      GoRouter.of(context).pushNamed(AppRouteConstants.manager);
-                    },
-                    drawerLeadingIcon: Icons.data_exploration,
-                  ),
+                //if (access.toLowerCase() == 'manager')
+                KDrawerListTile(
+                  drawerTitle: "Manager",
+                  drawerListTileOnTap: () {
+                    Navigator.pop(context);
+                    GoRouter.of(context).pushNamed(AppRouteConstants.manager);
+                  },
+                  drawerLeadingIcon: Icons.data_exploration,
+                ),
 
                 // Management
                 if (access.toLowerCase() == 'management')
