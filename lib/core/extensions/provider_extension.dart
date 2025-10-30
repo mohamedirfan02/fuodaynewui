@@ -19,11 +19,16 @@ import 'package:fuoday/features/calendar/presentation/providers/shift_schedule_p
 import 'package:fuoday/features/home/presentation/provider/all_events_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/check_in_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/checkin_status_provider.dart';
+import 'package:fuoday/features/manager/presentation/provider/update_leave_status_provider.dart';
 import 'package:fuoday/features/performance/presentation/providers/employee_audit_form_provider.dart';
 import 'package:fuoday/features/performance/presentation/providers/employee_audit_provider.dart';
 import 'package:fuoday/features/performance/presentation/providers/performance_summary_provider.dart';
 import 'package:fuoday/features/performance/presentation/providers/rating_provider.dart';
 import 'package:fuoday/features/profile/presentation/providers/profile_edit_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/all_leave_requests_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/all_role_total_attendance_report_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/late_arrivals_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/role_based_users_provider.dart';
 import 'package:fuoday/features/teams/presentation/providers/team_members_provider.dart';
 import 'package:fuoday/features/teams/presentation/providers/team_project_provider.dart';
 import 'package:fuoday/features/teams/presentation/providers/team_reportees_provider.dart';
@@ -209,4 +214,35 @@ extension ProviderExtension on BuildContext {
 
   //Date Time Showing Provider
   DateTimeProvider get dateTimeProviderWatch => watch<DateTimeProvider>();
+
+  //RoleBasedUsersProvider
+  RoleBasedUsersProvider get roleBasedUsersProviderRead =>
+      read<RoleBasedUsersProvider>();
+  RoleBasedUsersProvider get roleBasedUsersProviderWatch =>
+      watch<RoleBasedUsersProvider>();
+
+  //RoleBasedUsersProvider
+  AttendanceReportProvider get roleWiseAttendanceReportProviderRead =>
+      read<AttendanceReportProvider>();
+  AttendanceReportProvider get roleWiseAttendanceReportProviderWatch =>
+      watch<AttendanceReportProvider>();
+
+
+  //AllRoleLateArrivalsReportProvider
+  LateArrivalsProvider get allRoleLateArrivalsReportProviderRead =>
+      read<LateArrivalsProvider>();
+  LateArrivalsProvider get allRoleLateArrivalsReportProviderWatch =>
+      watch<LateArrivalsProvider>();
+
+  //AllRoleLateArrivalsReportProvider
+  AllLeaveRequestsProvider get allLeaveRequestProviderRead =>
+      read<AllLeaveRequestsProvider>();
+  AllLeaveRequestsProvider get allLeaveRequestProviderWatch =>
+      watch<AllLeaveRequestsProvider>();
+
+  //AllRoleLateArrivalsReportProvider
+  UpdateLeaveStatusProvider get leaveUpdateProviderRead =>
+      read<UpdateLeaveStatusProvider>();
+  UpdateLeaveStatusProvider get leaveUpdateProviderWatch =>
+      watch<UpdateLeaveStatusProvider>();
 }

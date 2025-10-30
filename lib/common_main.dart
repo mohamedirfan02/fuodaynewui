@@ -30,6 +30,7 @@ import 'package:fuoday/features/calendar/presentation/providers/shift_schedule_p
 import 'package:fuoday/features/home/presentation/provider/all_events_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/check_in_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/recognition_provider.dart';
+import 'package:fuoday/features/manager/presentation/provider/update_leave_status_provider.dart';
 import 'package:fuoday/features/organizations/domain/usecase/GetDepartmentListUseCase.dart';
 import 'package:fuoday/features/organizations/domain/usecase/ser_ind_usecase.dart';
 import 'package:fuoday/features/organizations/presentation/providers/DepartmentListProvider.dart';
@@ -47,6 +48,10 @@ import 'package:fuoday/features/support/domain/usecase/create_ticket_usecase.dar
 import 'package:fuoday/features/support/domain/usecase/get_ticket_details_usecase.dart';
 import 'package:fuoday/features/support/persentation/provider/get_ticket_details_provider.dart';
 import 'package:fuoday/features/support/persentation/provider/ticket_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/all_leave_requests_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/all_role_total_attendance_report_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/late_arrivals_provider.dart';
+import 'package:fuoday/features/team_leader/presentation/provider/role_based_users_provider.dart';
 import 'package:fuoday/features/team_tree/presentation/provider/team_tree_provider.dart';
 import 'package:fuoday/features/teams/presentation/providers/team_members_provider.dart';
 import 'package:fuoday/features/teams/presentation/providers/team_project_provider.dart';
@@ -299,6 +304,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => getIt<VerifyOtpProvider>()),
         ChangeNotifierProvider(
           create: (context) => getIt<ResetPasswordProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => getIt<RoleBasedUsersProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => getIt<AttendanceReportProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => getIt<LateArrivalsProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => getIt<AllLeaveRequestsProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => getIt<UpdateLeaveStatusProvider>(),
         ),
       ],
       child: ScreenUtilInit(
