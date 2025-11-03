@@ -1,3 +1,4 @@
+import 'package:fuoday/core/constants/api/app_api_endpoint_constants.dart';
 import 'package:fuoday/core/service/dio_service.dart';
 import 'package:fuoday/features/team_leader/data/models/all_leave_requests_model.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
@@ -10,11 +11,13 @@ class AllLeaveRequestsRemoteDataSource {
   Future<AllLeaveRequestsModel> getAllLeavesByStatus(String status) async {
     try {
       final response = await dioService.get(
-        "https://backend.fuoday.com/api/hrms/hr/getallleavesbystatus/$status",
+        AppApiEndpointConstants.getAllLeavesByStatus(status),
+        // "https://backend.fuoday.com/api/hrms/hr/getallleavesbystatus/$status",
       );
 
       AppLoggerHelper.logInfo(
-          "✅ API Response (${response.statusCode}): ${response.data}");
+        "✅ API Response (${response.statusCode}): ${response.data}",
+      );
 
       if (response.statusCode == 200) {
         final data = response.data;

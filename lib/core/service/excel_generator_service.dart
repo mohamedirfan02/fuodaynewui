@@ -6,7 +6,7 @@ import 'package:fuoday/core/helper/app_logger_helper.dart';
 class ExcelGeneratorService {
   Future<File> generateAndSaveExcel({
     required List<Map<String, String>> data,
-    required List<String> columns,   // 👈 add this
+    required List<String> columns, // 👈 add this
     String sheetName = 'Attendance',
     String filename = 'attendance_report.xlsx',
   }) async {

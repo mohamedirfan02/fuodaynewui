@@ -1,3 +1,8 @@
+// ============================================
+// FILE 1: all_role_total_attendance_report_model.dart
+// ============================================
+
+import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/features/team_leader/domain/entities/all_role_total_attendance_report_entity.dart';
 
 /// Model for All Role Attendance Report (Raw API → Model → Entity)
@@ -16,13 +21,23 @@ class AllRoleTotalAttendanceReportModel {
   factory AllRoleTotalAttendanceReportModel.fromJson(
     Map<String, dynamic> json,
   ) {
-    return AllRoleTotalAttendanceReportModel(
-      hrSection: AttendanceGroupModel.fromJson(json['hr_section'] ?? {}),
-      managerSection: AttendanceGroupModel.fromJson(
-        json['manager_section'] ?? {},
-      ),
-      teamSection: AttendanceGroupModel.fromJson(json['team_section'] ?? {}),
-    );
+    try {
+      AppLoggerHelper.logInfo("🔄 Parsing AllRoleTotalAttendanceReportModel");
+
+      return AllRoleTotalAttendanceReportModel(
+        hrSection: AttendanceGroupModel.fromJson(json['hr_section'] ?? {}),
+        managerSection: AttendanceGroupModel.fromJson(
+          json['manager_section'] ?? {},
+        ),
+        teamSection: AttendanceGroupModel.fromJson(json['team_section'] ?? {}),
+      );
+    } catch (e, stackTrace) {
+      AppLoggerHelper.logError(
+        "❌ Error parsing AllRoleTotalAttendanceReportModel: $e",
+      );
+      AppLoggerHelper.logError("Stack trace: $stackTrace");
+      rethrow;
+    }
   }
 
   /// Convert model → domain entity
@@ -43,12 +58,21 @@ class AttendanceGroupModel {
   AttendanceGroupModel({required this.totalCount, required this.data});
 
   factory AttendanceGroupModel.fromJson(Map<String, dynamic> json) {
-    return AttendanceGroupModel(
-      totalCount: json['total_count'] ?? 0,
-      data: (json['data'] as List<dynamic>? ?? [])
-          .map((e) => AttendanceUserModel.fromJson(e))
-          .toList(),
-    );
+    try {
+      final dataList = json['data'] as List<dynamic>? ?? [];
+      AppLoggerHelper.logInfo(
+        "🔄 Parsing ${dataList.length} attendance records",
+      );
+
+      return AttendanceGroupModel(
+        totalCount: json['total_count'] ?? 0,
+        data: dataList.map((e) => AttendanceUserModel.fromJson(e)).toList(),
+      );
+    } catch (e, stackTrace) {
+      AppLoggerHelper.logError("❌ Error parsing AttendanceGroupModel: $e");
+      AppLoggerHelper.logError("Stack trace: $stackTrace");
+      rethrow;
+    }
   }
 
   AttendanceGroup toEntity() => AttendanceGroup(
@@ -84,18 +108,57 @@ class AttendanceUserModel {
   });
 
   factory AttendanceUserModel.fromJson(Map<String, dynamic> json) {
-    return AttendanceUserModel(
-      name: json['name'] ?? '',
-      empId: json['emp_id'] ?? '',
-      date: json['date'] ?? '',
-      checkin: json['checkin'],
-      checkout: json['checkout'],
-      workedHours: json['worked_hours'],
-      status: json['status'] ?? '',
-      reportingManagerId: json['reporting_manager_id'],
-      reportingManagerName: json['reporting_manager_name'],
-      teamId: json['team_id'],
+    try {
+      // Debug log to see the actual data types
+      final reportingManagerIdRaw = json['reporting_manager_id'];
+      final teamIdRaw = json['team_id'];
+
+      AppLoggerHelper.logInfo(
+        "🔍 Parsing user: ${json['name']}, "
+        "reporting_manager_id type: ${reportingManagerIdRaw.runtimeType} (value: $reportingManagerIdRaw), "
+        "team_id type: ${teamIdRaw.runtimeType} (value: $teamIdRaw)",
+      );
+
+      return AttendanceUserModel(
+        name: json['name'] ?? '',
+        empId: json['emp_id'] ?? '',
+        date: json['date'] ?? '',
+        checkin: json['checkin'],
+        checkout: json['checkout'],
+        workedHours: json['worked_hours'],
+        status: json['status'] ?? '',
+        reportingManagerId: _parseNullableInt(json['reporting_manager_id']),
+        reportingManagerName: json['reporting_manager_name'],
+        teamId: _parseNullableInt(json['team_id']),
+      );
+    } catch (e, stackTrace) {
+      AppLoggerHelper.logError(
+        "❌ Error parsing AttendanceUserModel for ${json['name']}: $e",
+      );
+      AppLoggerHelper.logError("JSON data: $json");
+      AppLoggerHelper.logError("Stack trace: $stackTrace");
+      rethrow;
+    }
+  }
+
+  /// Helper method to safely parse nullable int values
+  static int? _parseNullableInt(dynamic value) {
+    if (value == null) return null;
+
+    if (value is int) return value;
+
+    if (value is String) {
+      final trimmed = value.trim();
+      if (trimmed.isEmpty) return null;
+      return int.tryParse(trimmed);
+    }
+
+    if (value is double) return value.toInt();
+
+    AppLoggerHelper.logWarning(
+      "⚠️ Unexpected type for int parsing: ${value.runtimeType} (value: $value)",
     );
+    return null;
   }
 
   AttendanceUserEntity toEntity() => AttendanceUserEntity(

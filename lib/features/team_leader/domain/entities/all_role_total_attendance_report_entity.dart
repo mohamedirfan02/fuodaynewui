@@ -1,4 +1,9 @@
+// ============================================
+// FILE 2: all_role_total_attendance_report_entity.dart
+// ============================================
+
 import 'dart:convert';
+import 'package:fuoday/core/helper/app_logger_helper.dart';
 
 /// Root Entity representing attendance data grouped by role (HR, Manager, Team)
 class AllRoleTotalAttendanceReportEntity {
@@ -95,18 +100,41 @@ class AttendanceUserEntity {
   });
 
   factory AttendanceUserEntity.fromJson(Map<String, dynamic> json) {
-    return AttendanceUserEntity(
-      name: json['name'] ?? '',
-      empId: json['emp_id'] ?? '',
-      date: json['date'] ?? '',
-      checkin: json['checkin'],
-      checkout: json['checkout'],
-      workedHours: json['worked_hours'],
-      status: json['status'] ?? '',
-      reportingManagerId: json['reporting_manager_id'],
-      reportingManagerName: json['reporting_manager_name'],
-      teamId: json['team_id'],
-    );
+    try {
+      return AttendanceUserEntity(
+        name: json['name'] ?? '',
+        empId: json['emp_id'] ?? '',
+        date: json['date'] ?? '',
+        checkin: json['checkin'],
+        checkout: json['checkout'],
+        workedHours: json['worked_hours'],
+        status: json['status'] ?? '',
+        reportingManagerId: _parseNullableInt(json['reporting_manager_id']),
+        reportingManagerName: json['reporting_manager_name'],
+        teamId: _parseNullableInt(json['team_id']),
+      );
+    } catch (e, stackTrace) {
+      AppLoggerHelper.logError("❌ Error parsing AttendanceUserEntity: $e");
+      AppLoggerHelper.logError("Stack trace: $stackTrace");
+      rethrow;
+    }
+  }
+
+  /// Helper method to safely parse nullable int values
+  static int? _parseNullableInt(dynamic value) {
+    if (value == null) return null;
+
+    if (value is int) return value;
+
+    if (value is String) {
+      final trimmed = value.trim();
+      if (trimmed.isEmpty) return null;
+      return int.tryParse(trimmed);
+    }
+
+    if (value is double) return value.toInt();
+
+    return null;
   }
 
   Map<String, dynamic> toJson() => {

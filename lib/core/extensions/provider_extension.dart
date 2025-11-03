@@ -19,7 +19,9 @@ import 'package:fuoday/features/calendar/presentation/providers/shift_schedule_p
 import 'package:fuoday/features/home/presentation/provider/all_events_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/check_in_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/checkin_status_provider.dart';
+import 'package:fuoday/features/manager/presentation/provider/all_regulations_provider.dart';
 import 'package:fuoday/features/manager/presentation/provider/update_leave_status_provider.dart';
+import 'package:fuoday/features/manager/presentation/provider/update_regulation_status_provider.dart';
 import 'package:fuoday/features/performance/presentation/providers/employee_audit_form_provider.dart';
 import 'package:fuoday/features/performance/presentation/providers/employee_audit_provider.dart';
 import 'package:fuoday/features/performance/presentation/providers/performance_summary_provider.dart';
@@ -227,22 +229,35 @@ extension ProviderExtension on BuildContext {
   AttendanceReportProvider get roleWiseAttendanceReportProviderWatch =>
       watch<AttendanceReportProvider>();
 
-
   //AllRoleLateArrivalsReportProvider
   LateArrivalsProvider get allRoleLateArrivalsReportProviderRead =>
       read<LateArrivalsProvider>();
   LateArrivalsProvider get allRoleLateArrivalsReportProviderWatch =>
       watch<LateArrivalsProvider>();
 
-  //AllRoleLateArrivalsReportProvider
+  //AllRole Leave Request Provider
   AllLeaveRequestsProvider get allLeaveRequestProviderRead =>
       read<AllLeaveRequestsProvider>();
   AllLeaveRequestsProvider get allLeaveRequestProviderWatch =>
       watch<AllLeaveRequestsProvider>();
 
-  //AllRoleLateArrivalsReportProvider
+  //Update Leave Request Provider
   UpdateLeaveStatusProvider get leaveUpdateProviderRead =>
       read<UpdateLeaveStatusProvider>();
   UpdateLeaveStatusProvider get leaveUpdateProviderWatch =>
       watch<UpdateLeaveStatusProvider>();
+
+  //All Regulations Provider
+  AllRegulationsProvider get allRegulationsProviderRead =>
+      read<AllRegulationsProvider>();
+  AllRegulationsProvider get allRegulationsProviderWatch =>
+      watch<AllRegulationsProvider>();
+
+  //Regulation Approval Update Provider
+  UpdateRegulationStatusProvider get updateRegulationsProviderRead =>
+      read<UpdateRegulationStatusProvider>();
+  UpdateRegulationStatusProvider get updateRegulationsProviderWatch =>
+      watch<UpdateRegulationStatusProvider>();
+
+  //==================ATS PAGES====================================
 }

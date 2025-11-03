@@ -30,7 +30,9 @@ import 'package:fuoday/features/calendar/presentation/providers/shift_schedule_p
 import 'package:fuoday/features/home/presentation/provider/all_events_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/check_in_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/recognition_provider.dart';
+import 'package:fuoday/features/manager/presentation/provider/all_regulations_provider.dart';
 import 'package:fuoday/features/manager/presentation/provider/update_leave_status_provider.dart';
+import 'package:fuoday/features/manager/presentation/provider/update_regulation_status_provider.dart';
 import 'package:fuoday/features/organizations/domain/usecase/GetDepartmentListUseCase.dart';
 import 'package:fuoday/features/organizations/domain/usecase/ser_ind_usecase.dart';
 import 'package:fuoday/features/organizations/presentation/providers/DepartmentListProvider.dart';
@@ -320,6 +322,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => getIt<UpdateLeaveStatusProvider>(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => getIt<AllRegulationsProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => getIt<UpdateRegulationStatusProvider>(),
+        ),
+
+        //===============ATS PAGES====================================
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),

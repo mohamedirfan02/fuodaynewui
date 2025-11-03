@@ -130,11 +130,21 @@ import 'package:fuoday/features/management/data/repository/emp_audit_form_reposi
 import 'package:fuoday/features/management/domain/repository/emp_audit_form_repository.dart';
 import 'package:fuoday/features/management/domain/usecase/get_employees_by_managers_usecase.dart';
 import 'package:fuoday/features/management/presentation/provider/emp_audit_form_provider.dart';
+import 'package:fuoday/features/manager/data/datasources/all_regulations_remote_data_source.dart';
 import 'package:fuoday/features/manager/data/datasources/update_leave_status_remote_data_source.dart';
+import 'package:fuoday/features/manager/data/datasources/update_regulation_status_remote_data_source.dart';
+import 'package:fuoday/features/manager/data/repository/all_regulations_repository_impl.dart';
 import 'package:fuoday/features/manager/data/repository/update_leave_status_repository_imp.dart';
+import 'package:fuoday/features/manager/data/repository/update_regulation_status_repository_impl.dart';
+import 'package:fuoday/features/manager/domain/repository/all_regulations_repository.dart';
 import 'package:fuoday/features/manager/domain/repository/update_leave_status_repository.dart';
+import 'package:fuoday/features/manager/domain/repository/update_regulation_status_repository.dart';
+import 'package:fuoday/features/manager/domain/usecase/get_all_regulations_usecase.dart';
 import 'package:fuoday/features/manager/domain/usecase/update_leave_status_usecase.dart';
+import 'package:fuoday/features/manager/domain/usecase/update_regulation_status_usecase.dart';
+import 'package:fuoday/features/manager/presentation/provider/all_regulations_provider.dart';
 import 'package:fuoday/features/manager/presentation/provider/update_leave_status_provider.dart';
+import 'package:fuoday/features/manager/presentation/provider/update_regulation_status_provider.dart';
 import 'package:fuoday/features/organizations/data/datasources/remote/departmentListRemoteDataSource.dart';
 import 'package:fuoday/features/organizations/data/datasources/remote/organization_about_datasource.dart';
 import 'package:fuoday/features/organizations/data/datasources/remote/ser_ind_datasource.dart';
@@ -1362,91 +1372,136 @@ void setUpServiceLocator() {
   );
 
   // 🔹 Late Arrival Data Source
-  getIt.registerLazySingleton<LateArrivalsRemoteDataSource >(
-        () => LateArrivalsRemoteDataSource (
-      dioService: getIt<DioService>(),
-    ),
+  getIt.registerLazySingleton<LateArrivalsRemoteDataSource>(
+    () => LateArrivalsRemoteDataSource(dioService: getIt<DioService>()),
   );
 
-// 🔹 Repository
-  getIt.registerLazySingleton<LateArrivalsRepository >(
-        () => LateArrivalsRepositoryImpl (
+  // 🔹 Repository
+  getIt.registerLazySingleton<LateArrivalsRepository>(
+    () => LateArrivalsRepositoryImpl(
       remoteDataSource: getIt<LateArrivalsRemoteDataSource>(),
     ),
   );
 
-// 🔹 Use Case
-  getIt.registerLazySingleton<GetLateArrivalsUseCase >(
-        () => GetLateArrivalsUseCase (
-      repository: getIt<LateArrivalsRepository>(),
-    ),
+  // 🔹 Use Case
+  getIt.registerLazySingleton<GetLateArrivalsUseCase>(
+    () => GetLateArrivalsUseCase(repository: getIt<LateArrivalsRepository>()),
   );
 
-// 🔹 Provider
-  getIt.registerFactory<LateArrivalsProvider >(
-        () => LateArrivalsProvider (
-          getLateArrivalsUseCase:
-      getIt<GetLateArrivalsUseCase>(),
+  // 🔹 Provider
+  getIt.registerFactory<LateArrivalsProvider>(
+    () => LateArrivalsProvider(
+      getLateArrivalsUseCase: getIt<GetLateArrivalsUseCase>(),
     ),
   );
-
 
   // 🔹 Data Source
   getIt.registerLazySingleton<AllLeaveRequestsRemoteDataSource>(
-        () => AllLeaveRequestsRemoteDataSource(
-      dioService: getIt<DioService>(),
-    ),
+    () => AllLeaveRequestsRemoteDataSource(dioService: getIt<DioService>()),
   );
 
   // 🔹 Repository
   getIt.registerLazySingleton<AllLeaveRequestsRepository>(
-        () => AllLeaveRequestsRepositoryImpl(
+    () => AllLeaveRequestsRepositoryImpl(
       remoteDataSource: getIt<AllLeaveRequestsRemoteDataSource>(),
     ),
   );
 
   // 🔹 Use Case
   getIt.registerLazySingleton<GetAllLeaveRequestsByStatusUseCase>(
-        () => GetAllLeaveRequestsByStatusUseCase(
+    () => GetAllLeaveRequestsByStatusUseCase(
       repository: getIt<AllLeaveRequestsRepository>(),
     ),
   );
 
   // 🔹 Provider
   getIt.registerFactory<AllLeaveRequestsProvider>(
-        () => AllLeaveRequestsProvider(
+    () => AllLeaveRequestsProvider(
       getAllLeaveRequestsByStatusUseCase:
-      getIt<GetAllLeaveRequestsByStatusUseCase>(),
+          getIt<GetAllLeaveRequestsByStatusUseCase>(),
     ),
   );
 
   //Manager Leave Update data source
   // 🔹 Data Source
   getIt.registerLazySingleton<UpdateLeaveStatusRemoteDataSource>(
-        () => UpdateLeaveStatusRemoteDataSource(
-      dioService: getIt<DioService>(),
-    ),
+    () => UpdateLeaveStatusRemoteDataSource(dioService: getIt<DioService>()),
   );
 
-// 🔹 Repository
+  // 🔹 Repository
   getIt.registerLazySingleton<UpdateLeaveStatusRepository>(
-        () => UpdateLeaveStatusRepositoryImpl(
+    () => UpdateLeaveStatusRepositoryImpl(
       remoteDataSource: getIt<UpdateLeaveStatusRemoteDataSource>(),
     ),
   );
 
-// 🔹 Use Case
+  // 🔹 Use Case
   getIt.registerLazySingleton<UpdateLeaveStatusUseCase>(
-        () => UpdateLeaveStatusUseCase(
+    () => UpdateLeaveStatusUseCase(
       repository: getIt<UpdateLeaveStatusRepository>(),
     ),
   );
 
-// 🔹 Provider
+  // 🔹 Provider
   getIt.registerFactory<UpdateLeaveStatusProvider>(
-        () => UpdateLeaveStatusProvider(
+    () => UpdateLeaveStatusProvider(
       updateLeaveStatusUseCase: getIt<UpdateLeaveStatusUseCase>(),
     ),
   );
 
+  //All Regulation Screen in Manger Hr,Tl
+  // 🔹 Data Source
+  getIt.registerLazySingleton<AllRegulationsRemoteDataSource>(
+    () => AllRegulationsRemoteDataSource(dioService: getIt<DioService>()),
+  );
+
+  // 🔹 Repository
+  getIt.registerLazySingleton<AllRegulationsRepository>(
+    () => AllRegulationsRepositoryImpl(
+      remoteDataSource: getIt<AllRegulationsRemoteDataSource>(),
+    ),
+  );
+
+  // 🔹 Use Case
+  getIt.registerLazySingleton<GetAllRegulationsUseCase>(
+    () =>
+        GetAllRegulationsUseCase(repository: getIt<AllRegulationsRepository>()),
+  );
+
+  // 🔹 Provider
+  getIt.registerFactory<AllRegulationsProvider>(
+    () => AllRegulationsProvider(
+      getAllRegulationsUseCase: getIt<GetAllRegulationsUseCase>(),
+    ),
+  );
+
+  //Regulation Approval Update
+  // 🔹 Data Source
+  getIt.registerLazySingleton<UpdateRegulationStatusRemoteDataSource>(
+    () =>
+        UpdateRegulationStatusRemoteDataSource(dioService: getIt<DioService>()),
+  );
+
+  // 🔹 Repository
+  getIt.registerLazySingleton<UpdateRegulationStatusRepository>(
+    () => UpdateRegulationStatusRepositoryImpl(
+      remoteDataSource: getIt<UpdateRegulationStatusRemoteDataSource>(),
+    ),
+  );
+
+  // 🔹 Use Case
+  getIt.registerLazySingleton<UpdateRegulationStatusUseCase>(
+    () => UpdateRegulationStatusUseCase(
+      repository: getIt<UpdateRegulationStatusRepository>(),
+    ),
+  );
+
+  // 🔹 Provider
+  getIt.registerFactory<UpdateRegulationStatusProvider>(
+    () => UpdateRegulationStatusProvider(
+      updateRegulationStatusUseCase: getIt<UpdateRegulationStatusUseCase>(),
+    ),
+  );
+
+  //===============================ATS PAGES===========================================
 }

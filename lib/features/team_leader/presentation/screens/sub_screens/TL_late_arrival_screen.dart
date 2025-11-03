@@ -62,10 +62,13 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
   @override
   Widget build(BuildContext context) {
     final lateArrivalProvider = context.allRoleLateArrivalsReportProviderWatch;
-    final employees = lateArrivalProvider.lateArrivals?.hrSection.employees ?? [];
+    final employees =
+        lateArrivalProvider.lateArrivals?.teamSection.employees ?? [];
 
     // ✅ Convert model data → table data
-    final List<Map<String, String>> data = employees.asMap().entries.map((entry) {
+    final List<Map<String, String>> data = employees.asMap().entries.map((
+      entry,
+    ) {
       final i = entry.key + 1;
       final e = entry.value;
       return {
@@ -90,10 +93,11 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
     final List<Map<String, String>> filteredData = data.where((item) {
       final matchesName =
           selectedName == null || item['Employee'] == selectedName;
-      final matchesSearch = searchController.text.isEmpty ||
-          item['Employee']!
-              .toLowerCase()
-              .contains(searchController.text.toLowerCase());
+      final matchesSearch =
+          searchController.text.isEmpty ||
+          item['Employee']!.toLowerCase().contains(
+            searchController.text.toLowerCase(),
+          );
       return matchesName && matchesSearch;
     }).toList();
 
@@ -130,7 +134,9 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
               showModalBottomSheet(
                 context: context,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16.r),
+                  ),
                 ),
                 builder: (context) {
                   return KDownloadOptionsBottomSheet(
@@ -141,25 +147,23 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
                         return;
                       }
 
-                      final pdfService = getIt<PdfGeneratorServiceReusableWidget>();
+                      final pdfService =
+                          getIt<PdfGeneratorServiceReusableWidget>();
 
-                      final generatedFile =
-                      await pdfService.generateAndSavePdf(
+                      final generatedFile = await pdfService.generateAndSavePdf(
                         title: selectedName != null
                             ? 'Late Arrival Report - $selectedName'
                             : 'All Employee Late Arrival Report',
                         filename:
-                        'late_arrival_report_${DateTime.now().millisecondsSinceEpoch}.pdf',
+                            'late_arrival_report_${DateTime.now().millisecondsSinceEpoch}.pdf',
                         columns: List<String>.from(columns),
                         data: List<Map<String, String>>.from(filteredData),
                         adjustColumnWidth: false,
-
                       );
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content:
-                          Text("✅ PDF generated successfully!"),
+                          content: Text("✅ PDF generated successfully!"),
                         ),
                       );
                       GoRouter.of(context).pop();
@@ -224,10 +228,10 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
                       items: uniqueNames
                           .map(
                             (name) => DropdownMenuItem(
-                          value: name,
-                          child: Text(name!),
-                        ),
-                      )
+                              value: name,
+                              child: Text(name!),
+                            ),
+                          )
                           .toList(),
                       onChanged: (value) {
                         setState(() => selectedName = value);

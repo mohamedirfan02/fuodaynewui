@@ -307,80 +307,80 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                             ),
                             KVerticalSpacer(height: 8.h),
 
-                            ///Break In % Break Out
-                            KCheckInButton(
-                              text: "Break In",
-                              fontSize: 8.sp,
-                              height: 25.h,
-                              width: 100.w,
-                              backgroundColor: checkInProvider.isLoading
-                                  ? Colors.grey
-                                  : (checkinStatusProvider
-                                            .isCurrentlyCheckedIn ||
-                                        checkInProvider.isCheckedIn)
-                                  ? AppColors.checkInColor
-                                  : AppColors.checkInColor,
-                              onPressed: checkInProvider.isLoading
-                                  ? null
-                                  : () async {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            "It will be added in a future update",
-                                          ),
-                                          duration: Duration(seconds: 2),
-                                        ),
-                                      );
-                                      // Navigator.of(context).push(
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) =>
-                                      //         DropDownExample(),
-                                      //   ),
-                                      // );
-                                      // final now = DateTime.now()
-                                      //     .toIso8601String();
-                                      //
-                                      // if (checkinStatusProvider
-                                      //         .isCurrentlyCheckedIn ||
-                                      //     checkInProvider.isCheckedIn) {
-                                      //   await context.checkInProviderRead
-                                      //       .handleCheckOut(
-                                      //         userId: webUserId,
-                                      //         time: now,
-                                      //       );
-                                      //   // Stop the local stopwatch timer when checking out
-                                      //   checkInProvider.stopWatchTimer
-                                      //       .onStopTimer();
-                                      //   AppLoggerHelper.logInfo(
-                                      //     "Check Out Web User Id: $webUserId",
-                                      //   );
-                                      // } else {
-                                      //   await context.checkInProviderRead
-                                      //       .handleCheckIn(
-                                      //         userId: webUserId,
-                                      //         time: now,
-                                      //       );
-                                      //   AppLoggerHelper.logInfo(
-                                      //     "Check In Web User Id: $webUserId",
-                                      //   );
-                                      //
-                                      //   // Start the local stopwatch timer for immediate feedback
-                                      //   checkInProvider.stopWatchTimer
-                                      //       .onResetTimer();
-                                      //   checkInProvider.stopWatchTimer
-                                      //       .onStartTimer();
-                                      // }
-                                      //
-                                      // // Refresh checkin status after check-in/out
-                                      // if (webUserId > 0) {
-                                      //   await context.checkinStatusProviderRead
-                                      //       .fetchCheckinStatus(webUserId);
-                                      // }
-                                    },
-                            ),
-                            KVerticalSpacer(height: 10.h),
+                            // ///Break In % Break Out
+                            // KCheckInButton(
+                            //   text: "Break In",
+                            //   fontSize: 8.sp,
+                            //   height: 25.h,
+                            //   width: 100.w,
+                            //   backgroundColor: checkInProvider.isLoading
+                            //       ? Colors.grey
+                            //       : (checkinStatusProvider
+                            //                 .isCurrentlyCheckedIn ||
+                            //             checkInProvider.isCheckedIn)
+                            //       ? AppColors.checkInColor
+                            //       : AppColors.checkInColor,
+                            //   onPressed: checkInProvider.isLoading
+                            //       ? null
+                            //       : () async {
+                            //           ScaffoldMessenger.of(
+                            //             context,
+                            //           ).showSnackBar(
+                            //             const SnackBar(
+                            //               content: Text(
+                            //                 "It will be added in a future update",
+                            //               ),
+                            //               duration: Duration(seconds: 2),
+                            //             ),
+                            //           );
+                            //           // Navigator.of(context).push(
+                            //           //   MaterialPageRoute(
+                            //           //     builder: (context) =>
+                            //           //         DropDownExample(),
+                            //           //   ),
+                            //           // );
+                            //           // final now = DateTime.now()
+                            //           //     .toIso8601String();
+                            //           //
+                            //           // if (checkinStatusProvider
+                            //           //         .isCurrentlyCheckedIn ||
+                            //           //     checkInProvider.isCheckedIn) {
+                            //           //   await context.checkInProviderRead
+                            //           //       .handleCheckOut(
+                            //           //         userId: webUserId,
+                            //           //         time: now,
+                            //           //       );
+                            //           //   // Stop the local stopwatch timer when checking out
+                            //           //   checkInProvider.stopWatchTimer
+                            //           //       .onStopTimer();
+                            //           //   AppLoggerHelper.logInfo(
+                            //           //     "Check Out Web User Id: $webUserId",
+                            //           //   );
+                            //           // } else {
+                            //           //   await context.checkInProviderRead
+                            //           //       .handleCheckIn(
+                            //           //         userId: webUserId,
+                            //           //         time: now,
+                            //           //       );
+                            //           //   AppLoggerHelper.logInfo(
+                            //           //     "Check In Web User Id: $webUserId",
+                            //           //   );
+                            //           //
+                            //           //   // Start the local stopwatch timer for immediate feedback
+                            //           //   checkInProvider.stopWatchTimer
+                            //           //       .onResetTimer();
+                            //           //   checkInProvider.stopWatchTimer
+                            //           //       .onStartTimer();
+                            //           // }
+                            //           //
+                            //           // // Refresh checkin status after check-in/out
+                            //           // if (webUserId > 0) {
+                            //           //   await context.checkinStatusProviderRead
+                            //           //       .fetchCheckinStatus(webUserId);
+                            //           // }
+                            //         },
+                            // ),
+                            //  KVerticalSpacer(height: 10.h),
                             KAuthFilledBtn(
                               text:
                                   "Location ${checkinStatusProvider.checkinStatus?.location ?? 'onSite'}",
