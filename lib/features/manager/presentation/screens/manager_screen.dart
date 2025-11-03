@@ -38,38 +38,59 @@ class _ManagerScreenState extends State<ManagerScreen> {
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
     Future.microtask(() {
-      context.roleBasedUsersProviderRead.fetchRoleBasedUsers(webUserId);
+      final ctx = context;
+      ctx.roleBasedUsersProviderRead.fetchRoleBasedUsers(webUserId);
+      ctx.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(
+        webUserId,
+      );
+      ctx.allRoleLateArrivalsReportProviderRead.fetchLateArrivals();
+      ctx.allLeaveRequestProviderRead.fetchAllLeaveRequests("approved");
+      ctx.allRegulationsProviderRead.fetchAllRegulations(webUserId);
     });
-    // Future.microtask(() {
-    //   context.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(
-    //     webUserId,
-    //   );
-    // });
-    Future.microtask(() {
-      context.allRoleLateArrivalsReportProviderRead.fetchLateArrivals();
-    });
-
   }
 
   @override
   Widget build(BuildContext context) {
-    // Rolse Based  Details Provider
-    final provider = context.roleBasedUsersProviderWatch;
-    final employees = provider.roleBasedUsers;
-    // ✅ Fetch total employees in each group
+    // 🔹 Fetch all providers
+    final roleBasedProvider = context.roleBasedUsersProviderWatch;
+    final attendanceProvider = context.roleWiseAttendanceReportProviderWatch;
+    final lateArrivalProvider = context.allRoleLateArrivalsReportProviderWatch;
+    final regulationProvider = context.allRegulationsProviderWatch;
+    final leaveProvider = context.allLeaveRequestProviderWatch;
+
+    final employees = roleBasedProvider.roleBasedUsers;
+    final EmployeetotalAttendce = attendanceProvider.attendanceReport;
+    final EmployeelateArrival = lateArrivalProvider.lateArrivals;
+    final EmployeeleaveRequest = leaveProvider.leaveRequests;
+
     final totalTeams = employees?.manager.totalCount ?? 0;
-
-    //Fetch Total Attendance Report count
-    final totalAttendancePro = context.roleWiseAttendanceReportProviderWatch;
-    final EmployeetotalAttendce = totalAttendancePro.attendanceReport;
     final totalAttendancecount =
-        EmployeetotalAttendce?.hrSection.totalCount ?? 0;
-
-    //✅ Fetch Total Late Arrival count
-    final lateArrival = context.allRoleLateArrivalsReportProviderWatch;
-    final EmployeelateArrival = lateArrival.lateArrivals;
+        EmployeetotalAttendce?.managerSection.totalCount ?? 0;
     final totallateArrivalcount =
-        EmployeelateArrival?.teamSection.totalCount ?? 0;
+        EmployeelateArrival?.managerSection.totalCount ?? 0;
+    final totallateleaveRequest =
+        EmployeeleaveRequest?.managerSection?.totalCount ?? 0;
+
+    final isLoading =
+        roleBasedProvider.isLoading ||
+        attendanceProvider.isLoading ||
+        lateArrivalProvider.isLoading ||
+        regulationProvider.isLoading ||
+        leaveProvider.isLoading;
+    // 🔹 If still loading, show loader
+    if (isLoading) {
+      return Scaffold(
+        appBar: KAppBar(
+          title: "Manager",
+          centerTitle: true,
+          leadingIcon: Icons.arrow_back,
+          onLeadingIconPress: () {
+            GoRouter.of(context).pop();
+          },
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
 
     // Grid Attendance Data
     final List<Map<String, dynamic>> gridAttendanceData = [
@@ -83,15 +104,19 @@ class _ManagerScreenState extends State<ManagerScreen> {
         'numberOfCount': totalAttendancecount,
         'icon': Icons.speaker_notes_rounded,
       },
-      {'title': 'Late Arrival', 'numberOfCount': totallateArrivalcount, 'icon': Icons.access_time},
+      {
+        'title': 'Late Arrival',
+        'numberOfCount': totallateArrivalcount,
+        'icon': Icons.access_time,
+      },
       {
         'title': 'Total Leave Request',
-        'numberOfCount': 0,
+        'numberOfCount': totallateleaveRequest,
         'icon': Icons.leave_bags_at_home,
       },
       {
-        'title': 'Regulation Aproval',
-        'numberOfCount': 0,
+        'title': 'Regulation Approval',
+        'numberOfCount': regulationProvider.managerTotalCount,
         'icon': Icons.approval,
       },
       {'title': 'Manager Feeds', 'numberOfCount': 0, 'icon': Icons.approval},
@@ -119,7 +144,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
         initialOpen: false,
-        key: _key,
+        //key: _key,
         type: ExpandableFabType.up,
         overlayStyle: ExpandableFabOverlayStyle(
           color: AppColors.greyColor.withOpacity(0.5),
@@ -148,7 +173,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
           _buildFabWithText(
             context,
             icon: Icons.access_time_filled,
-            label: "Regulation\nAproval",
+            label: "Regulation\nApproval",
             heroTag: "punctual_arrivals",
             onPressed: () {
               GoRouter.of(

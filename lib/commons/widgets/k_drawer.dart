@@ -26,8 +26,16 @@ class KDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final employeeDetails = HiveStorageService().employeeDetails ?? {};
     final access = (employeeDetails['access'] ?? '').toString();
+    final rawAccess = (employeeDetails['access'] ?? '')
+        .toString()
+        .toLowerCase();
+    // Convert comma-separated roles into a list (like ['manager', 'tl', 'hr'])
+    final accessList = rawAccess.split(',').map((e) => e.trim()).toList();
 
-    final managementRoles = ['assistant manager-it', 'founder & ceo'];
+    // Helper functions
+    bool hasRole(String role) => accessList.contains(role);
+    bool hasAnyRole(List<String> roles) =>
+        roles.any((r) => accessList.contains(r));
 
     return Drawer(
       backgroundColor: AppColors.secondaryColor,
@@ -120,39 +128,42 @@ class KDrawer extends StatelessWidget {
 
                 // HR menu — visible only if designation is "hr"
                 //  if (access.toLowerCase() == 'hr')
-                KDrawerListTile(
-                  drawerTitle: "HR",
-                  drawerListTileOnTap: () {
-                    Navigator.pop(context);
-                    GoRouter.of(context).pushNamed(AppRouteConstants.hr);
-                  },
-                  drawerLeadingIcon: Icons.hail_rounded,
-                ),
+                if (hasRole('hr'))
+                  KDrawerListTile(
+                    drawerTitle: "HR",
+                    drawerListTileOnTap: () {
+                      Navigator.pop(context);
+                      GoRouter.of(context).pushNamed(AppRouteConstants.hr);
+                    },
+                    drawerLeadingIcon: Icons.handshake_rounded,
+                  ),
                 // TL menu — visible only if designation is "TL"
                 // if (access.toLowerCase() == 'team leader')
-                KDrawerListTile(
-                  drawerTitle: "TL",
-                  drawerListTileOnTap: () {
-                    Navigator.pop(context);
-                    GoRouter.of(
-                      context,
-                    ).pushNamed(AppRouteConstants.teamLeader);
-                  },
-                  drawerLeadingIcon: Icons.data_exploration,
-                ),
+                if (hasRole('tl'))
+                  KDrawerListTile(
+                    drawerTitle: "TL",
+                    drawerListTileOnTap: () {
+                      Navigator.pop(context);
+                      GoRouter.of(
+                        context,
+                      ).pushNamed(AppRouteConstants.teamLeader);
+                    },
+                    drawerLeadingIcon: Icons.groups,
+                  ),
                 // Manager menu — visible only if designation is "Manager"
                 //if (access.toLowerCase() == 'manager')
-                KDrawerListTile(
-                  drawerTitle: "Manager",
-                  drawerListTileOnTap: () {
-                    Navigator.pop(context);
-                    GoRouter.of(context).pushNamed(AppRouteConstants.manager);
-                  },
-                  drawerLeadingIcon: Icons.data_exploration,
-                ),
+                if (hasRole('manager'))
+                  KDrawerListTile(
+                    drawerTitle: "Manager",
+                    drawerListTileOnTap: () {
+                      Navigator.pop(context);
+                      GoRouter.of(context).pushNamed(AppRouteConstants.manager);
+                    },
+                    drawerLeadingIcon: Icons.manage_accounts_rounded,
+                  ),
 
                 // Management
-                if (access.toLowerCase() == 'management')
+                if (hasRole('management'))
                   KDrawerListTile(
                     drawerTitle: "Management",
                     drawerListTileOnTap: () {

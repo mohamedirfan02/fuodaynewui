@@ -215,4 +215,10 @@ class AppApiEndpointConstants {
   //Get role_based_users in Hr,TL,Manager Screens
   static String getAllLateArrivalsReport() =>
       '$baseUrl/hrms/attendance/late-arrivals-all';
+
+  // ✅ Get all leaves by status
+  static String getAllLeavesByStatus(String status) =>
+      '$baseUrl/hrms/hr/getallleavesbystatus/$status';
+
+  //====================ATS PAGES=====================================
 }

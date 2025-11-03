@@ -24,7 +24,8 @@ class ManagerLateArrivalScreen extends StatefulWidget {
   const ManagerLateArrivalScreen({super.key});
 
   @override
-  State<ManagerLateArrivalScreen> createState() => _ManagerLateArrivalScreenState();
+  State<ManagerLateArrivalScreen> createState() =>
+      _ManagerLateArrivalScreenState();
 }
 
 class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
@@ -66,10 +67,13 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
   Widget build(BuildContext context) {
     // ✅ Watch provider for API data
     final lateArrivalProvider = context.allRoleLateArrivalsReportProviderWatch;
-    final employees = lateArrivalProvider.lateArrivals?.hrSection.employees ?? [];
+    final employees =
+        lateArrivalProvider.lateArrivals?.hrSection.employees ?? [];
 
     // ✅ Convert model data → table data
-    final List<Map<String, String>> data = employees.asMap().entries.map((entry) {
+    final List<Map<String, String>> data = employees.asMap().entries.map((
+      entry,
+    ) {
       final i = entry.key + 1;
       final e = entry.value;
       return {
@@ -94,10 +98,11 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
     final List<Map<String, String>> filteredData = data.where((item) {
       final matchesName =
           selectedName == null || item['Employee'] == selectedName;
-      final matchesSearch = searchController.text.isEmpty ||
-          item['Employee']!
-              .toLowerCase()
-              .contains(searchController.text.toLowerCase());
+      final matchesSearch =
+          searchController.text.isEmpty ||
+          item['Employee']!.toLowerCase().contains(
+            searchController.text.toLowerCase(),
+          );
       return matchesName && matchesSearch;
     }).toList();
 
@@ -114,7 +119,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
 
     return Scaffold(
       appBar: KAppBar(
-        title: "Manager Late Arrival",
+        title: "All Employee Late Arrival",
         centerTitle: true,
         leadingIcon: Icons.arrow_back,
         onLeadingIconPress: () => GoRouter.of(context).pop(),
@@ -134,8 +139,9 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
               showModalBottomSheet(
                 context: context,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                  BorderRadius.vertical(top: Radius.circular(16.r)),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16.r),
+                  ),
                 ),
                 builder: (context) {
                   return KDownloadOptionsBottomSheet(
@@ -145,25 +151,23 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
                         return;
                       }
 
-                      final pdfService = getIt<PdfGeneratorServiceReusableWidget>();
+                      final pdfService =
+                          getIt<PdfGeneratorServiceReusableWidget>();
 
-                      final generatedFile =
-                      await pdfService.generateAndSavePdf(
+                      final generatedFile = await pdfService.generateAndSavePdf(
                         title: selectedName != null
                             ? 'Late Arrival Report - $selectedName'
                             : 'All Employee Late Arrival Report',
                         filename:
-                        'late_arrival_report_${DateTime.now().millisecondsSinceEpoch}.pdf',
+                            'late_arrival_report_${DateTime.now().millisecondsSinceEpoch}.pdf',
                         columns: List<String>.from(columns),
                         data: List<Map<String, String>>.from(filteredData),
                         adjustColumnWidth: false,
-
                       );
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content:
-                          Text("✅ PDF generated successfully!"),
+                          content: Text("✅ PDF generated successfully!"),
                         ),
                       );
                       GoRouter.of(context).pop();
@@ -181,6 +185,11 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
                         data: filteredData,
                         filename: 'Late Arrival Report.xlsx',
                         columns: columns,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("✅ PDF generated successfully!"),
+                        ),
                       );
                       await OpenFilex.open(excelFile.path);
                     },
@@ -226,10 +235,10 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
                       items: uniqueNames
                           .map(
                             (name) => DropdownMenuItem(
-                          value: name,
-                          child: Text(name!),
-                        ),
-                      )
+                              value: name,
+                              child: Text(name!),
+                            ),
+                          )
                           .toList(),
                       onChanged: (value) {
                         setState(() => selectedName = value);
@@ -275,8 +284,10 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
               else
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
-                  child:
-                  KDataTable(columnTitles: columns, rowData: filteredData),
+                  child: KDataTable(
+                    columnTitles: columns,
+                    rowData: filteredData,
+                  ),
                 ),
             ],
           ),

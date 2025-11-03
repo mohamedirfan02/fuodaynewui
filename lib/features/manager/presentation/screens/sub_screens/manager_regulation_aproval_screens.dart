@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_app_bar.dart';
-import 'package:fuoday/commons/widgets/k_data_table.dart';
+import 'package:fuoday/commons/widgets/k_download_options_bottom_sheet.dart';
 import 'package:fuoday/commons/widgets/k_drop_down_text_form_field.dart';
+import 'package:fuoday/commons/widgets/k_pdf_generater_reusable_widget.dart';
 import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
-import 'package:fuoday/core/service/pdf_generator_service.dart';
+import 'package:fuoday/core/di/injection.dart';
+import 'package:fuoday/core/extensions/provider_extension.dart';
+import 'package:fuoday/core/service/excel_generator_service.dart';
+import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
+import 'package:fuoday/features/manager/presentation/provider/update_regulation_status_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:fuoday/core/di/injection.dart';
+import 'package:data_table_2/data_table_2.dart';
+import 'package:provider/provider.dart';
 
 class ManagerRegulationAprovalScreen extends StatefulWidget {
   const ManagerRegulationAprovalScreen({super.key});
@@ -25,261 +31,533 @@ class ManagerRegulationAprovalScreen extends StatefulWidget {
 class _ManagerRegulationAprovalScreenState
     extends State<ManagerRegulationAprovalScreen> {
   final TextEditingController searchController = TextEditingController();
+  String selectedStatus = "Pending";
   String selectedType = "Leave";
-  String selectedStatus = "Approved";
+  String searchQuery = '';
+
+  late final HiveStorageService hiveService;
+  late final Map<String, dynamic>? employeeDetails;
+  late final String name;
+  late final int webUserId;
+
+  // ✅ Track updated statuses locally
+  final Map<int, String> _updatedStatuses = {};
+
+  @override
+  void initState() {
+    super.initState();
+
+    hiveService = getIt<HiveStorageService>();
+    employeeDetails = hiveService.employeeDetails;
+    name = employeeDetails?['name'] ?? "No Name";
+    webUserId =
+        int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
+
+    Future.microtask(() {
+      context.allRegulationsProviderRead.fetchAllRegulations(webUserId);
+    });
+
+    searchController.addListener(() {
+      setState(() {
+        searchQuery = searchController.text.trim();
+      });
+    });
+  }
 
   @override
   void dispose() {
+    searchController.removeListener(() {});
     searchController.dispose();
     super.dispose();
   }
 
+  // ✅ Updated method to handle approval/rejection
+  Future<void> _updateRegulationStatus(
+    int regulationId,
+    String newStatus,
+    String empName,
+  ) async {
+    final updateProvider = context.read<UpdateRegulationStatusProvider>();
+
+    try {
+      // Show loading
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(child: CircularProgressIndicator()),
+      );
+
+      final module = selectedType.toLowerCase();
+
+      await updateProvider.updateRegulation(
+        regulationId,
+        newStatus.capitalize(),
+        'Manager',
+        module,
+      );
+
+      if (mounted) Navigator.of(context).pop();
+
+      // ✅ If success, disable buttons and show updated status
+      if (updateProvider.updatedRegulation?.status == "Success") {
+        setState(() {
+          _updatedStatuses[regulationId] = newStatus.capitalize();
+        });
+
+        KSnackBar.success(
+          context,
+          "${empName} marked as ${newStatus.capitalize()}",
+        );
+      } else {
+        KSnackBar.failure(
+          context,
+          updateProvider.updatedRegulation?.message ??
+              "Failed to update regulation status",
+        );
+      }
+    } catch (e) {
+      if (mounted) Navigator.of(context).pop();
+      KSnackBar.failure(context, "Error: ${e.toString()}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Dummy Data
-    final List<Map<String, String>> dummydata = [
-      {
-        'S.No': '1',
-        'Employee ID': 'EMP001',
-        'Name': 'John Doe',
-        'Attendance Date': '2025-10-10',
-        'Check In': '09:00 AM',
-        'Check Out': '05:00 PM',
-        'Regulation Date': '2025-10-11',
-        'Status': 'Approved',
-        'Reason': 'Family function',
-      },
-      {
-        'S.No': '2',
-        'Employee ID': 'EMP002',
-        'Name': 'Jane Smith',
-        'Attendance Date': '2025-09-05',
-        'Check In': '10:00 AM',
-        'Check Out': '04:00 PM',
-        'Regulation Date': '2025-09-06',
-        'Status': 'Pending',
-        'Reason': 'Fever and cold',
-      },
-      {
-        'S.No': '3',
-        'Employee ID': 'EMP003',
-        'Name': 'Michael Johnson',
-        'Attendance Date': '2025-10-01',
-        'Check In': '08:30 AM',
-        'Check Out': '05:15 PM',
-        'Regulation Date': '2025-10-02',
-        'Status': 'Approved',
-        'Reason': 'System issue at office',
-      },
-      {
-        'S.No': '4',
-        'Employee ID': 'EMP004',
-        'Name': 'Sarah Williams',
-        'Attendance Date': '2025-08-22',
-        'Check In': '09:10 AM',
-        'Check Out': '05:30 PM',
-        'Regulation Date': '2025-08-23',
-        'Status': 'Rejected',
-        'Reason': 'Medical emergency',
-      },
-      {
-        'S.No': '5',
-        'Employee ID': 'EMP005',
-        'Name': 'David Brown',
-        'Attendance Date': '2025-09-15',
-        'Check In': '09:20 AM',
-        'Check Out': '05:00 PM',
-        'Regulation Date': '2025-09-16',
-        'Status': 'Pending',
-        'Reason': 'Personal work',
-      },
-    ];
+    final providerWatch = context.allRegulationsProviderWatch;
 
-    // ✅ Add Action Column after Reason
-    final columns = [
-      'S.No',
-      'Employee ID',
-      'Name',
-      'Attendance Date',
-      'Check In',
-      'Check Out',
-      'Regulation Date',
-      'Status',
-      'Reason',
-      'Action', // 👈 Added Action Column
-    ];
+    final filteredList = providerWatch.getFilteredData(
+      section: 'manager',
+      selectedType: selectedType,
+      selectedStatus: selectedStatus,
+      searchQuery: searchQuery,
+    );
 
-    // 🔹 Count each status
-    final approvedCount = dummydata
-        .where((item) => item['Status'] == 'Approved')
-        .length;
-    final pendingCount = dummydata
-        .where((item) => item['Status'] == 'Pending')
-        .length;
-    final rejectedCount = dummydata
-        .where((item) => item['Status'] == 'Rejected')
-        .length;
+    final columns = selectedType.toLowerCase() == 'attendance'
+        ? [
+            'S.No',
+            'Employee ID',
+            'Name',
+            'Attendance Date',
+            'Check In',
+            'Check Out',
+            'Regulation Date',
+            'Status',
+            'Reason',
+            'Action',
+          ]
+        : [
+            'S.No',
+            'Employee ID',
+            'Name',
+            'Leave Type',
+            'Start Date',
+            'End Date',
+            'Regulation Date',
+            'Status',
+            'Reason',
+            'Action',
+          ];
 
-    // 🔹 Show counts in dropdown labels
-    final statusItems = [
-      'Approved ($approvedCount)',
-      'Pending ($pendingCount)',
-      'Rejected ($rejectedCount)',
-    ];
+    final tableData = filteredList.asMap().entries.map((entry) {
+      final i = entry.key + 1;
+      final e = entry.value;
 
-    String getStatusFromDropdown(String value) {
-      return value.split(' ').first;
-    }
+      // ✅ Get locally updated status (if any)
+      final localStatus = _updatedStatuses[e.id];
+      final currentStatus = (localStatus ?? e.regulationStatus ?? '')
+          .toLowerCase();
 
-    // 🔹 Filter by selected status
-    final filteredByStatus = dummydata
-        .where(
-          (item) => item['Status'] == getStatusFromDropdown(selectedStatus),
-        )
-        .toList();
+      Widget actionWidget;
 
-    // 🔹 Search filter
-    final filteredData = filteredByStatus.where((item) {
-      final query = searchController.text.toLowerCase();
-      final empId = item['Employee ID']?.toLowerCase() ?? '';
-      final name = item['Name']?.toLowerCase() ?? '';
-      return empId.contains(query) || name.contains(query);
-    }).toList();
-
-    // ✅ Add Action Button for each row
-    final List<Map<String, dynamic>> tableData = filteredData.map((row) {
-      return {
-        ...row,
-        'Action': ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green,
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-            minimumSize: Size(70.w, 32.h),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.r),
+      if (currentStatus == 'pending') {
+        actionWidget = Row(
+          children: [
+            SizedBox(
+              height: 20.h,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                ),
+                onPressed: _updatedStatuses.containsKey(e.id)
+                    ? null
+                    : () async {
+                        await _updateRegulationStatus(
+                          e.id ?? 0,
+                          'rejected',
+                          e.empName ?? 'Employee',
+                        );
+                      },
+                child: Text(
+                  "Reject",
+                  style: TextStyle(fontSize: 10.sp, color: Colors.white),
+                ),
+              ),
             ),
+            SizedBox(width: 6.w),
+            SizedBox(
+              height: 20.h,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                ),
+                onPressed: _updatedStatuses.containsKey(e.id)
+                    ? null
+                    : () async {
+                        await _updateRegulationStatus(
+                          e.id ?? 0,
+                          'approved',
+                          e.empName ?? 'Employee',
+                        );
+                      },
+                child: Text(
+                  "Approve",
+                  style: TextStyle(fontSize: 10.sp, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        );
+      } else {
+        final color = currentStatus == 'approved' ? Colors.green : Colors.red;
+        actionWidget = Text(
+          currentStatus.capitalize(),
+          style: TextStyle(
+            fontSize: 12.sp,
+            fontWeight: FontWeight.bold,
+            color: color,
           ),
-          onPressed: () {
-            KSnackBar.success(context, "${row['Name']} Approved");
-          },
-          child: Text(
-            "Approve",
-            style: TextStyle(fontSize: 10.sp, color: Colors.white),
-          ),
-        ),
+        );
+      }
+
+      return {
+        'S.No': '$i',
+        'Employee ID': e.empId ?? '-',
+        'Name': e.empName ?? '-',
+        'Leave Type': e.displayType ?? '',
+        'Attendance Date': e.date?.toIso8601String().split("T").first ?? '-',
+        'Check In': e.checkin ?? '-',
+        'Check Out': e.checkout ?? '-',
+        'Start Date': e.from ?? '-',
+        'End Date': e.to ?? '-',
+        'Regulation Date':
+            e.regulationDate?.toIso8601String().split("T").first ?? '-',
+        'Status': e.regulationStatus ?? '-',
+        'Reason': e.reason ?? '-',
+        'Action': actionWidget,
       };
     }).toList();
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: KAppBar(
-        title: "Regulation Approval",
+        title: "Regulation Approval Request",
         centerTitle: true,
         leadingIcon: Icons.arrow_back,
         onLeadingIconPress: () => GoRouter.of(context).pop(),
       ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              KText(
+                text: "Select Type",
+                fontWeight: FontWeight.w600,
+                fontSize: 14.sp,
+              ),
+              KVerticalSpacer(height: 8.h),
+              KDropdownTextFormField<String>(
+                hintText: "Select Type",
+                value: selectedType,
+                items: ["Leave", "Attendance"],
+                onChanged: (v) {
+                  if (v != null) {
+                    setState(() {
+                      selectedType = v;
+                      searchController.clear();
+                      searchQuery = '';
+                    });
+                  }
+                },
+              ),
+              KVerticalSpacer(height: 16.h),
+              KText(
+                text: "Select Status",
+                fontWeight: FontWeight.w600,
+                fontSize: 14.sp,
+              ),
+              KVerticalSpacer(height: 8.h),
+              KDropdownTextFormField<String>(
+                hintText: "Select Status",
+                value: selectedStatus,
+                items: ["Pending", "Approved", "Rejected"],
+                onChanged: (v) {
+                  if (v != null) {
+                    setState(() {
+                      selectedStatus = v;
+                      searchController.clear();
+                      searchQuery = '';
+                    });
+                  }
+                },
+              ),
+              KVerticalSpacer(height: 16.h),
 
-      // ✅ Bottom Download Button
-      bottomNavigationBar: Container(
-        height: 60.h,
+              /// Search Field
+              KAuthTextFormField(
+                controller: searchController,
+                hintText: "Search by Name or Employee ID",
+                keyboardType: TextInputType.text,
+                suffixIcon: Icons.search,
+              ),
+              if (searchQuery.isNotEmpty)
+                Container(
+                  margin: EdgeInsets.only(top: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 8.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.search,
+                        size: 16.sp,
+                        color: AppColors.primaryColor,
+                      ),
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: Text(
+                          'Search: "$searchQuery" (${filteredList.length} records)',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: AppColors.primaryColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            searchController.clear();
+                            searchQuery = '';
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(4.w),
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryColor,
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                          child: Icon(
+                            Icons.clear,
+                            size: 14.sp,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+              KVerticalSpacer(height: 20.h),
+
+              /// Table section
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: providerWatch.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : providerWatch.errorMessage != null
+                    ? Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(16.w),
+                          child: Text(
+                            providerWatch.errorMessage!,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    : filteredList.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              size: 48.sp,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: 16.h),
+                            Text(
+                              searchQuery.isNotEmpty
+                                  ? "No results found for '$searchQuery'"
+                                  : "No Data Found",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14.sp,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      )
+                    : KDataTableRehulationScreen(
+                        columnTitles: columns,
+                        rowData: tableData,
+                      ),
+              ),
+              SizedBox(height: 80.h),
+            ],
+          ),
+        ),
+      ),
+
+      /// Download Button
+      bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         child: KAuthFilledBtn(
           backgroundColor: AppColors.primaryColor,
-          height: 40.h,
+          height: 25.h,
           width: double.infinity,
           text: "Download",
-          onPressed: () async {
-            if (filteredData.isEmpty) {
-              KSnackBar.failure(context, "No Data Found");
-            } else {
-              // Convert data for PDF (remove buttons)
-              final pdfData = filteredData.map((row) {
-                final newRow = <String, String>{};
-                row.forEach((key, value) {
-                  newRow[key] = value ?? '';
-                });
-                return newRow;
-              }).toList();
+          fontSize: 12.sp,
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+              ),
+              builder: (context) {
+                return KDownloadOptionsBottomSheet(
+                  onPdfTap: () async {
+                    if (filteredList.isEmpty) {
+                      KSnackBar.failure(context, "No Data Found");
+                      return;
+                    }
 
-              final pdfService = getIt<PdfGeneratorService>();
-              final pdfFile = await pdfService.generateAndSavePdf(
-                data: pdfData,
-                columns: columns,
-                title: 'Regulation Report',
-              );
-              await OpenFilex.open(pdfFile.path);
-            }
+                    // Convert data for PDF (excluding "Action" column)
+                    final pdfData = tableData.map((row) {
+                      final data = <String, String>{};
+                      row.forEach((key, value) {
+                        if (key != 'Action') data[key] = value.toString();
+                      });
+                      return data;
+                    }).toList();
+
+                    // Use PdfGeneratorServiceReusableWidget instead of PdfGeneratorService
+                    final pdfService =
+                        getIt<PdfGeneratorServiceReusableWidget>();
+
+                    final pdfFile = await pdfService.generateAndSavePdf(
+                      title:
+                          '${selectedType.toUpperCase()} Request Report ($selectedStatus)',
+                      filename:
+                          '${selectedType.toLowerCase()}_request_report_${DateTime.now().millisecondsSinceEpoch}.pdf',
+                      columns: columns.where((e) => e != 'Action').toList(),
+                      data: pdfData,
+                      adjustColumnWidth: false,
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("✅ PDF generated successfully!"),
+                      ),
+                    );
+
+                    GoRouter.of(context).pop();
+                    await OpenFilex.open(pdfFile.path);
+                  },
+                  onExcelTap: () async {
+                    if (filteredList.isEmpty) {
+                      KSnackBar.failure(context, "No Data Found");
+                      return;
+                    }
+
+                    // Convert data for Excel (excluding "Action" column)
+                    final excelData = tableData.map((row) {
+                      final data = <String, String>{};
+                      row.forEach((key, value) {
+                        if (key != 'Action') data[key] = value.toString();
+                      });
+                      return data;
+                    }).toList();
+
+                    final excelService = getIt<ExcelGeneratorService>();
+
+                    final excelFile = await excelService.generateAndSaveExcel(
+                      data: excelData,
+                      filename:
+                          '${selectedType.toLowerCase()}_request_report_${DateTime.now().millisecondsSinceEpoch}.xlsx',
+                      columns: columns.where((e) => e != 'Action').toList(),
+                    );
+
+                    GoRouter.of(context).pop();
+                    await OpenFilex.open(excelFile.path);
+                  },
+                );
+              },
+            );
           },
-          fontSize: 11.sp,
         ),
       ),
+    );
+  }
+}
 
-      // ✅ Main Body
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 🔹 Dropdown for Type
-            KDropdownTextFormField<String>(
-              hintText: "Select Type",
-              value: selectedType,
-              items: ["Attendance", "Leave"],
-              onChanged: (v) {
-                setState(() {
-                  selectedType = v ?? "Leave";
-                });
-              },
-            ),
+// ✅ Helper extension for capitalizing
+extension StringExtension on String {
+  String capitalize() {
+    if (isEmpty) return this;
+    return "${this[0].toUpperCase()}${substring(1)}";
+  }
+}
 
-            KVerticalSpacer(height: 16.h),
+class KDataTableRehulationScreen extends StatelessWidget {
+  final List<String> columnTitles;
+  final List<Map<String, dynamic>> rowData;
 
-            // 🔹 Dropdown for Status with Counts
-            KDropdownTextFormField<String>(
-              hintText: "Select Status",
-              value: statusItems.firstWhere(
-                (item) => item.startsWith(selectedStatus),
-                orElse: () => statusItems.first,
+  const KDataTableRehulationScreen({
+    super.key,
+    required this.columnTitles,
+    required this.rowData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DataTable2(
+      columnSpacing: 16,
+      horizontalMargin: 12,
+      minWidth: 1500,
+      headingRowColor: MaterialStateProperty.all(Colors.blueGrey.shade50),
+      columns: columnTitles
+          .map(
+            (title) => DataColumn(
+              label: Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              items: statusItems,
-              onChanged: (v) {
-                setState(() {
-                  selectedStatus = v ?? statusItems.first;
-                });
-              },
             ),
-
-            KVerticalSpacer(height: 20.h),
-
-            // 🔹 Dynamic title
-            KText(
-              text: "${getStatusFromDropdown(selectedStatus)} ${selectedType}s",
-              fontWeight: FontWeight.w600,
-              fontSize: 14.sp,
-            ),
-
-            KVerticalSpacer(height: 12.h),
-
-            // 🔹 Search bar
-            KAuthTextFormField(
-              controller: searchController,
-              hintText: "Search by Name or Employee ID",
-              suffixIcon: Icons.search,
-              onChanged: (v) => setState(() {}),
-            ),
-
-            KVerticalSpacer(height: 30.h),
-
-            // 🔹 Data Table
-            if (tableData.isEmpty)
-              const Center(child: Text("No Data Found"))
-            else
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.5,
-                child: KDataTable(columnTitles: columns, rowData: tableData),
-              ),
-          ],
-        ),
-      ),
+          )
+          .toList(),
+      rows: rowData.map((row) {
+        return DataRow(
+          cells: columnTitles.map((col) {
+            final cellValue = row[col];
+            if (cellValue is Widget) {
+              return DataCell(cellValue);
+            } else {
+              return DataCell(Text(cellValue?.toString() ?? '-'));
+            }
+          }).toList(),
+        );
+      }).toList(),
     );
   }
 }

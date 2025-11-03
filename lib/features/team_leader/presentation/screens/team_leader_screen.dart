@@ -37,22 +37,24 @@ class _TeamLeaderScreenState extends State<TeamLeaderScreen> {
     webUserId =
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
+    //  Fetch all required data in one microtask
     Future.microtask(() {
-      context.roleBasedUsersProviderRead.fetchRoleBasedUsers(webUserId);
-    });
-    //Total Role Based Attendance Get Call
-    // Future.microtask(() {
-    //   context.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(
-    //     webUserId,
-    //   );
-    // });
-    // ✅ Fetch API data using provider
-    Future.microtask(() {
-      context.allRoleLateArrivalsReportProviderRead.fetchLateArrivals();
-    });
-    Future.microtask(() {
-      // ✅ Initial API call
-      context.allLeaveRequestProviderRead.fetchAllLeaveRequests("approved");
+      final ctx = context;
+
+      // Role-based users
+      ctx.roleBasedUsersProviderRead.fetchRoleBasedUsers(webUserId);
+
+      // Late arrivals
+      ctx.allRoleLateArrivalsReportProviderRead.fetchLateArrivals();
+
+      // Leave requests
+      ctx.allLeaveRequestProviderRead.fetchAllLeaveRequests("approved");
+
+      // Regulations
+      ctx.allRegulationsProviderRead.fetchAllRegulations(webUserId);
+
+      //  Uncomment if you also need total attendance
+      // ctx.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(webUserId);
     });
   }
 
@@ -60,50 +62,57 @@ class _TeamLeaderScreenState extends State<TeamLeaderScreen> {
   Widget build(BuildContext context) {
     // Total Attendance Details Provider
 
-    final provider = context.roleBasedUsersProviderWatch;
-    final employees = provider.roleBasedUsers;
-    // ✅ Fetch total employees in each group
-    final totalTeams = employees?.teams.totalCount ?? 0;
+    final roleBasedProvider = context.roleBasedUsersProviderWatch;
+    final attendanceReportProvider =
+        context.roleWiseAttendanceReportProviderWatch;
+    final regulationsProvider = context.allRegulationsProviderWatch;
+    final lateArrivalsProvider = context.allRoleLateArrivalsReportProviderWatch;
+    final leaveRequestsProvider = context.allLeaveRequestProviderWatch;
 
-    //Fetch Total Attendance Report count
-    final totalAttendancePro = context.roleWiseAttendanceReportProviderWatch;
-    final EmployeetotalAttendce = totalAttendancePro.attendanceReport;
-    final totalAttendancecount =
-        EmployeetotalAttendce?.hrSection.totalCount ?? 0;
+    // 🔹 Role-based users data
+    final roleBasedUsers = roleBasedProvider.roleBasedUsers;
+    final totalEmployees = roleBasedUsers?.teams.totalCount ?? 0;
 
+    // 🔹 Attendance report data
+    final attendanceReport = attendanceReportProvider.attendanceReport;
+    final totalAttendanceCount = attendanceReport?.teamSection.totalCount ?? 0;
 
-    //✅ Fetch Total Late Arrival Report count
-    final lateArrival = context.allRoleLateArrivalsReportProviderWatch;
-    final EmployeelateArrival = lateArrival.lateArrivals;
-    final totallateArrivalcount =
-        EmployeelateArrival?.teamSection.totalCount ?? 0;
+    // 🔹 Late arrivals data
+    final lateArrivals = lateArrivalsProvider.lateArrivals;
+    final totalLateArrivals = lateArrivals?.teamSection.totalCount ?? 0;
 
-    //✅ Fetch Total Late Arrival Report count
-    final leaveRequest = context.allRoleLateArrivalsReportProviderWatch;
-    final EmployeeleaveRequest = leaveRequest.lateArrivals;
-    final totallateleaveRequest =
-        EmployeeleaveRequest?.hrSection.totalCount ?? 0;
-    // Grid Attendance Data
+    // 🔹 Leave requests data
+    final leaveRequests = leaveRequestsProvider.leaveRequests;
+    final totalLeaveRequests = leaveRequests?.teamSection?.totalCount ?? 0;
+
+    // 🔹 Regulations data
+    final totalRegulationApprovals = regulationsProvider.teamTotalCount;
+
+    // 🔹 Grid data
     final List<Map<String, dynamic>> gridAttendanceData = [
       {
         'title': 'Total Employees',
-        'numberOfCount': totalTeams,
+        'numberOfCount': totalEmployees,
         'icon': Icons.person,
       },
       {
         'title': 'Total Attendance Report',
-        'numberOfCount': totalAttendancecount,
+        'numberOfCount': totalAttendanceCount,
         'icon': Icons.speaker_notes_rounded,
       },
-      {'title': 'Late Arrival', 'numberOfCount': totallateArrivalcount, 'icon': Icons.access_time},
+      {
+        'title': 'Late Arrival',
+        'numberOfCount': totalLateArrivals,
+        'icon': Icons.access_time,
+      },
       {
         'title': 'Total Leave Request',
-        'numberOfCount': totallateleaveRequest,
+        'numberOfCount': totalLeaveRequests,
         'icon': Icons.leave_bags_at_home,
       },
       {
-        'title': 'Regulation Aproval',
-        'numberOfCount': 0,
+        'title': 'Regulation Approval',
+        'numberOfCount': totalRegulationApprovals,
         'icon': Icons.approval,
       },
 
@@ -118,6 +127,27 @@ class _TeamLeaderScreenState extends State<TeamLeaderScreen> {
       //   'icon': Icons.person,
       // },
     ];
+    final isLoading =
+        roleBasedProvider.isLoading ||
+        attendanceReportProvider.isLoading ||
+        regulationsProvider.isLoading ||
+        lateArrivalsProvider.isLoading ||
+        leaveRequestsProvider.isLoading;
+
+    // 🔹 If still loading, show loader
+    if (isLoading) {
+      return Scaffold(
+        appBar: KAppBar(
+          title: "Team Leader",
+          centerTitle: true,
+          leadingIcon: Icons.arrow_back,
+          onLeadingIconPress: () {
+            GoRouter.of(context).pop();
+          },
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       appBar: KAppBar(
         title: "Team Leader",
@@ -147,7 +177,7 @@ class _TeamLeaderScreenState extends State<TeamLeaderScreen> {
           _buildFabWithText(
             context,
             icon: Icons.access_time_filled,
-            label: "Regulation\nAproval",
+            label: "Regulation\nApproval",
             heroTag: "punctual_arrivals",
             onPressed: () {
               GoRouter.of(

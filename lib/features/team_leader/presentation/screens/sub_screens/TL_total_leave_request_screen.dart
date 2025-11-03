@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_app_bar.dart';
 import 'package:fuoday/commons/widgets/k_data_table.dart';
+import 'package:fuoday/commons/widgets/k_download_options_bottom_sheet.dart';
 import 'package:fuoday/commons/widgets/k_drop_down_text_form_field.dart';
+import 'package:fuoday/commons/widgets/k_pdf_generater_reusable_widget.dart';
 import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
+import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -49,40 +52,23 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
 
     final columns = ['S.No', 'Name', 'Type', 'From', 'To', 'Reason', 'Status'];
 
-    // ✅ Convert entity data → table-friendly Map
-    // final List<Map<String, String>> tableData = provider.leaveRequests
-    //     ?.requests
-    //     .asMap()
-    //     .entries
-    //     .map((entry) {
-    //   final i = entry.key + 1;
-    //   final e = entry.value;
-    //   return {
-    //     'S.No': '$i',
-    //     'Name': e.employeeName ?.toString() ?? '',
-    //     'Type': e.t ?.toString() ?? '',
-    //     'From': e.endDate ?.toString() ?? '',
-    //     'To': e.status ?.toString() ?? '',
-    //     'Reason': e.r?.toString() ?? '',
-    //     'Status': e.status ?.toString() ?? '',
-    //   };
-    // }).toList() ??
-    //     [];
-    final employees = provider.leaveRequests?.hrSection?.data ?? [];
+    final employees = provider.leaveRequests?.teamSection?.data ?? [];
 
-    final List<Map<String, String>> tableData = employees.asMap().entries.map((entry) {
-      final i = entry.key + 1;
-      final e = entry.value;
-      return  {
+    final List<Map<String, String>> tableData =
+        employees.asMap().entries.map((entry) {
+          final i = entry.key + 1;
+          final e = entry.value;
+          return {
             'S.No': '$i',
             'Name': e.name ?? '',
-            'Type': e.type?? '',
+            'Type': e.type ?? '',
             'From': (e.from ?? '').toString().split(' ').first, // ✅ fixed
             'To': (e.to ?? '').toString().split(' ').first,
-        'Reason': e.reason ?? '',
+            'Reason': e.reason ?? '',
             'Status': e.status ?? '',
           };
-        }).toList() ?? [];
+        }).toList() ??
+        [];
     // ✅ Filter by search
     final filteredData = tableData.where((item) {
       final query = searchController.text.toLowerCase();
@@ -110,17 +96,54 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
             width: double.infinity,
             text: "Download",
             onPressed: () async {
-              if (filteredData.isEmpty) {
-                KSnackBar.failure(context, "No Data Found");
-              } else {
-                final pdfService = getIt<PdfGeneratorService>();
-                final pdfFile = await pdfService.generateAndSavePdf(
-                  data: filteredData,
-                  columns: columns,
-                  title: 'Leave Request Report ($selectedStatus)',
-                );
-                await OpenFilex.open(pdfFile.path);
-              }
+              final parentContext = context; // ✅ store parent context
+
+              showModalBottomSheet(
+                context: parentContext,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16.r),
+                  ),
+                ),
+                builder: (context) {
+                  return KDownloadOptionsBottomSheet(
+                    onPdfTap: () async {
+                      if (filteredData.isEmpty) {
+                        KSnackBar.failure(context, "No Data Found");
+                      } else {
+                        final pdfService = getIt<PdfGeneratorService>();
+                        final pdfFile = await pdfService.generateAndSavePdf(
+                          data: filteredData,
+                          columns: columns,
+                          title: 'Leave Request Report ($selectedStatus)',
+                        );
+                        GoRouter.of(parentContext).pop();
+
+                        KSnackBar.success(
+                          parentContext,
+                          "PDF generated successfully!",
+                        );
+
+                        await OpenFilex.open(pdfFile.path);
+                      }
+                    },
+                    onExcelTap: () async {
+                      if (filteredData.isEmpty) {
+                        KSnackBar.failure(context, "No Data Found");
+                        return;
+                      }
+
+                      final excelService = getIt<ExcelGeneratorService>();
+                      final excelFile = await excelService.generateAndSaveExcel(
+                        data: filteredData,
+                        filename: 'Late Arrival Report.xlsx',
+                        columns: columns,
+                      );
+                      await OpenFilex.open(excelFile.path);
+                    },
+                  );
+                },
+              );
             },
             fontSize: 11.sp,
           ),
@@ -149,8 +172,9 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
                   setState(() => selectedStatus = v);
                   // ✅ Clear old data & fetch new API
                   context.allLeaveRequestProviderRead.clearData();
-                  context.allLeaveRequestProviderRead
-                      .fetchAllLeaveRequests(v.toLowerCase());
+                  context.allLeaveRequestProviderRead.fetchAllLeaveRequests(
+                    v.toLowerCase(),
+                  );
                 }
               },
             ),
@@ -181,15 +205,12 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
             else if (provider.errorMessage != null)
               Center(child: Text(provider.errorMessage!))
             else if (filteredData.isEmpty)
-                const Center(child: Text("No Data Found"))
-              else
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: KDataTable(
-                    columnTitles: columns,
-                    rowData: filteredData,
-                  ),
-                ),
+              const Center(child: Text("No Data Found"))
+            else
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: KDataTable(columnTitles: columns, rowData: filteredData),
+              ),
           ],
         ),
       ),

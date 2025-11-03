@@ -35,6 +35,7 @@ class _ManagerTotalAttendanceRepotScreenState
   // Store selected month and year
   int? selectedMonth;
   int? selectedYear;
+  String searchQuery = ''; //   Added search query state
 
   late final HiveStorageService hiveService;
   late final Map<String, dynamic>? employeeDetails;
@@ -51,7 +52,14 @@ class _ManagerTotalAttendanceRepotScreenState
     webUserId =
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
-    // ✅ Fetch attendance data once on init
+    //   Add search listener
+    searchController.addListener(() {
+      setState(() {
+        searchQuery = searchController.text.trim();
+      });
+    });
+
+    //Fetch attendance data once on init
     Future.microtask(() {
       context.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(
         webUserId,
@@ -61,6 +69,7 @@ class _ManagerTotalAttendanceRepotScreenState
 
   @override
   void dispose() {
+    searchController.removeListener(() {});
     monthYearController.dispose();
     searchController.dispose();
     super.dispose();
@@ -87,27 +96,40 @@ class _ManagerTotalAttendanceRepotScreenState
     }
   }
 
+  //   Updated to include search filter
   List<Map<String, String>> getFilteredData(List<Map<String, String>> allData) {
-    if (selectedMonth == null || selectedYear == null) {
-      return allData; // no filter
+    var filtered = allData;
+
+    // Filter by month/year
+    if (selectedMonth != null && selectedYear != null) {
+      filtered = filtered.where((row) {
+        final dateString = row['Date'] ?? '';
+        if (dateString == '-' || dateString.isEmpty) return false;
+
+        try {
+          final date = DateTime.tryParse(dateString);
+          if (date != null) {
+            return date.month == selectedMonth && date.year == selectedYear;
+          }
+        } catch (_) {
+          return false;
+        }
+
+        return false;
+      }).toList();
     }
 
-    return allData.where((row) {
-      final dateString = row['Date'] ?? '';
-      if (dateString == '-' || dateString.isEmpty) return false;
+    //   Filter by search query
+    if (searchQuery.isNotEmpty) {
+      final query = searchQuery.toLowerCase();
+      filtered = filtered.where((row) {
+        final name = (row['Name'] ?? '').toLowerCase();
+        final empId = (row['Emp ID'] ?? '').toLowerCase();
+        return name.contains(query) || empId.contains(query);
+      }).toList();
+    }
 
-      try {
-        // Try parsing YYYY-MM-DD
-        final date = DateTime.tryParse(dateString);
-        if (date != null) {
-          return date.month == selectedMonth && date.year == selectedYear;
-        }
-      } catch (_) {
-        return false;
-      }
-
-      return false;
-    }).toList();
+    return filtered;
   }
 
   // Method to get filename with month/year suffix
@@ -123,74 +145,35 @@ class _ManagerTotalAttendanceRepotScreenState
     final attendanceProvider = context.roleWiseAttendanceReportProviderWatch;
 
     final employees = attendanceProvider.attendanceReport?.hrList ?? [];
-    // Total Attendance Provider
-    // Dummy Data (for testing)
 
     // Table Columns
     final columns = [
       'S.No',
       'Date',
       'Name',
-      'Emo ID',
+      'Emp ID',
       'Checkin',
       'Checkout',
       'Worked Hours',
       'Status',
     ];
-    //final List<Map<String, String>> allData = dummydata;
-     final now = DateTime.now();
-    final tenDaysAgo = now.subtract(const Duration(days: 10));
-    // ✅ Filter only the last 10 days’ records
-    final recentEmployees = employees.where((e) {
-      final dateStr = e.date ?? '';
-      if (dateStr.isEmpty) return false;
-      final parsedDate = DateTime.tryParse(dateStr);
-      if (parsedDate == null) return false;
-      return parsedDate.isAfter(tenDaysAgo);
-    }).toList();
 
-    // ✅ Convert filtered list to displayable Map format
-    final List<Map<String, String>>
-    allData = recentEmployees.asMap().entries.map((entry)
-    // final List<Map<String, String>> allData = employees.asMap().entries.map((
-    //   entry,
-    // )
-    {
+    final List<Map<String, String>> allData = employees.asMap().entries.map((
+      entry,
+    ) {
       final i = entry.key + 1;
       final e = entry.value;
       return {
         'S.No': '$i',
-        'Date': e.date ?? '',
-        'Name': e.name ?? '-',
-        'Emp ID': e.empId ?? '',
-        'Checkin': e.checkin ?? '',
-        'Checkout': e.checkout ?? '',
-        //'Worked Hours': e.workedHours ?? '',
-        'Status': e.status ?? '',
+        'Date': e.date?.toString() ?? '-',
+        'Name': e.name?.toString() ?? '-',
+        'Emp ID': e.empId?.toString() ?? '-',
+        'Checkin': e.checkin?.toString() ?? '-',
+        'Checkout': e.checkout?.toString() ?? '-',
+        'Worked Hours': e.workedHours?.toString() ?? '-',
+        'Status': e.status?.toString() ?? '-',
       };
     }).toList();
-
-    // All Table Data (unfiltered)
-    // final List<Map<String, String>> allData =
-    //     totalAttendanceProvider.attendanceDetails?.data?.days
-    //         ?.asMap()
-    //         .entries
-    //         .map((entry) {
-    //           final index = entry.key + 1;
-    //           final day = entry.value;
-    //
-    //           return {
-    //             'S.No': '$index',
-    //             'Date': day.date ?? '-',
-    //             'Day': day.day ?? '-',
-    //             'Log on': day.checkin ?? '-',
-    //             'Log off': day.checkout ?? '-',
-    //             'Worked hours': day.workedHours ?? '-',
-    //             'Status': day.status ?? '-',
-    //           };
-    //         })
-    //         .toList() ??
-    //     [];
 
     // Filtered data for display and download
     final filteredData = getFilteredData(allData);
@@ -204,6 +187,7 @@ class _ManagerTotalAttendanceRepotScreenState
     }).toList();
 
     return Scaffold(
+      resizeToAvoidBottomInset: true, //   Handle keyboard
       appBar: KAppBar(
         title: "All Employee Attendance",
         centerTitle: true,
@@ -234,24 +218,25 @@ class _ManagerTotalAttendanceRepotScreenState
                       builder: (context) {
                         return KDownloadOptionsBottomSheet(
                           onPdfTap: () async {
-                            final pdfService = getIt<PdfGeneratorServiceReusableWidget>();
-                            // ✅ Step 2: Generate and save PDF
+                            final pdfService =
+                                getIt<PdfGeneratorServiceReusableWidget>();
+                            //   Step 2: Generate and save PDF
                             final generatedFile = await pdfService.generateAndSavePdf(
                               title:
-                              selectedMonth != null && selectedYear != null
+                                  selectedMonth != null && selectedYear != null
                                   ? 'Employee Attendance Report - ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear'
                                   : 'All Employee Attendance Report',
                               filename:
-                              'employee_attendance_report${getFilenameSuffix()}.pdf',
+                                  'employee_attendance_report${getFilenameSuffix()}.pdf',
                               columns: List<String>.from(columns),
                               data: List<Map<String, String>>.from(displayData),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text("✅ PDF generated successfully!"),
+                                content: Text("  PDF generated successfully!"),
                               ),
                             );
-                            // ✅ Step 3: Open the generated file
+                            //   Step 3: Open the generated file
                             await OpenFilex.open(generatedFile.path);
                           },
 
@@ -290,19 +275,69 @@ class _ManagerTotalAttendanceRepotScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // KText(
-                    //   text: "Search",
-                    //   fontWeight: FontWeight.w600,
-                    //   fontSize: 14.sp,
-                    // ),
-                    // KVerticalSpacer(height: 12.h),
+                    //   Search Field (removed onTap override)
                     KAuthTextFormField(
-                      onTap: () {},
-                      hintText: "Search Name",
+                      hintText: "Search by Name or Employee ID",
                       suffixIcon: Icons.search,
                       keyboardType: TextInputType.text,
                       controller: searchController,
                     ),
+
+                    //   Show search filter info and clear option
+                    if (searchQuery.isNotEmpty)
+                      Container(
+                        margin: EdgeInsets.only(top: 10.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 8.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.search,
+                              size: 16.sp,
+                              color: AppColors.primaryColor,
+                            ),
+                            SizedBox(width: 8.w),
+                            Expanded(
+                              child: Text(
+                                'Search: "$searchQuery" (${displayData.length} records)',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: AppColors.primaryColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  searchController.clear();
+                                  searchQuery = '';
+                                });
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(4.w),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(4.r),
+                                ),
+                                child: Icon(
+                                  Icons.clear,
+                                  size: 14.sp,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
                     KVerticalSpacer(height: 10.h),
                     KAuthTextFormField(
                       onTap: () {
@@ -313,11 +348,11 @@ class _ManagerTotalAttendanceRepotScreenState
                       keyboardType: TextInputType.text,
                       controller: monthYearController,
                     ),
-                    KVerticalSpacer(height: 10.h),
 
                     // Show selected filter info and clear option
                     if (selectedMonth != null && selectedYear != null)
                       Container(
+                        margin: EdgeInsets.only(top: 10.h),
                         padding: EdgeInsets.symmetric(
                           horizontal: 12.w,
                           vertical: 8.h,
@@ -377,14 +412,18 @@ class _ManagerTotalAttendanceRepotScreenState
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
-                                    Icons.calendar_today_outlined,
+                                    searchQuery.isNotEmpty
+                                        ? Icons.search_off
+                                        : Icons.calendar_today_outlined,
                                     size: 48.sp,
                                     color: Colors.grey,
                                   ),
                                   SizedBox(height: 16.h),
                                   Text(
-                                    selectedMonth != null &&
-                                            selectedYear != null
+                                    searchQuery.isNotEmpty
+                                        ? 'No results found for "$searchQuery"'
+                                        : selectedMonth != null &&
+                                              selectedYear != null
                                         ? 'No attendance data found for ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear'
                                         : 'No attendance data available',
                                     style: TextStyle(

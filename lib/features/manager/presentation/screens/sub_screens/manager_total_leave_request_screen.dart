@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_app_bar.dart';
 import 'package:fuoday/commons/widgets/k_data_table.dart';
+import 'package:fuoday/commons/widgets/k_download_options_bottom_sheet.dart';
 import 'package:fuoday/commons/widgets/k_drop_down_text_form_field.dart';
 import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
+import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/manager/presentation/provider/update_leave_status_provider.dart';
+import 'package:fuoday/features/manager/presentation/screens/sub_screens/manager_regulation_aproval_screens.dart';
 import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
 
@@ -29,6 +32,9 @@ class _ManagerTotalLeaveRequestScreenState
   final TextEditingController searchController = TextEditingController();
   String selectedStatus = "Approved";
   late final updateProvider = getIt<UpdateLeaveStatusProvider>();
+
+  // ✅ Track which leave requests were updated (id → new status)
+  final Map<int, String> _updatedStatuses = {};
 
   @override
   void initState() {
@@ -49,10 +55,11 @@ class _ManagerTotalLeaveRequestScreenState
     final provider = context.allLeaveRequestProviderWatch;
 
     final columns = ['S.No', 'Name', 'Type', 'From', 'To', 'Reason', 'Status'];
-    final employees = provider.leaveRequests?.hrSection?.data ?? [];
+    final employees = provider.leaveRequests?.managerSection?.data ?? [];
 
-    final List<Map<String, dynamic>> tableData =
-    employees.asMap().entries.map((entry) {
+    final List<Map<String, dynamic>> tableData = employees.asMap().entries.map((
+      entry,
+    ) {
       final i = entry.key + 1;
       final e = entry.value;
 
@@ -92,27 +99,82 @@ class _ManagerTotalLeaveRequestScreenState
           width: double.infinity,
           text: "Download",
           fontSize: 12.sp,
-          onPressed: () async {
-            if (filteredData.isEmpty) {
-              KSnackBar.failure(context, "No Data Found");
-              return;
-            }
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+              ),
+              builder: (context) {
+                return KDownloadOptionsBottomSheet(
+                  onPdfTap: () async {
+                    if (filteredData.isEmpty) {
+                      KSnackBar.failure(context, "No Data Found");
+                      return;
+                    }
 
-            final pdfData = filteredData.map((row) {
-              final newRow = <String, String>{};
-              row.forEach((key, value) {
-                newRow[key] = value is String ? value : value.toString();
-              });
-              return newRow;
-            }).toList();
+                    // Convert data safely for PDF
+                    final pdfData = filteredData.map((row) {
+                      final newRow = <String, String>{};
+                      row.forEach((key, value) {
+                        newRow[key] = value is String
+                            ? value
+                            : value.toString();
+                      });
+                      return newRow;
+                    }).toList();
 
-            final pdfService = getIt<PdfGeneratorService>();
-            final pdfFile = await pdfService.generateAndSavePdf(
-              data: pdfData,
-              columns: columns,
-              title: 'Leave Request Report ($selectedStatus)',
+                    final pdfService = getIt<PdfGeneratorService>();
+                    final pdfFile = await pdfService.generateAndSavePdf(
+                      data: pdfData,
+                      columns: columns,
+                      title: selectedStatus != null
+                          ? 'Leave Request Report - $selectedStatus'
+                          : 'All Leave Request Report',
+                      filename:
+                          'leave_request_report_${DateTime.now().millisecondsSinceEpoch}.pdf',
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("✅ PDF generated successfully!"),
+                      ),
+                    );
+
+                    GoRouter.of(context).pop();
+                    await OpenFilex.open(pdfFile.path);
+                  },
+                  onExcelTap: () async {
+                    if (filteredData.isEmpty) {
+                      KSnackBar.failure(context, "No Data Found");
+                      return;
+                    }
+
+                    // 🔹 Convert all dynamic values to String before passing to Excel service
+                    final excelData = filteredData.map((row) {
+                      final newRow = <String, String>{};
+                      row.forEach((key, value) {
+                        newRow[key] = value is String
+                            ? value
+                            : value.toString();
+                      });
+                      return newRow;
+                    }).toList();
+
+                    final excelService = getIt<ExcelGeneratorService>();
+                    final excelFile = await excelService.generateAndSaveExcel(
+                      data: excelData,
+                      filename:
+                          'leave_request_report_${DateTime.now().millisecondsSinceEpoch}.xlsx',
+                      columns: columns,
+                    );
+
+                    GoRouter.of(context).pop();
+                    await OpenFilex.open(excelFile.path);
+                  },
+                );
+              },
             );
-            await OpenFilex.open(pdfFile.path);
           },
         ),
       ),
@@ -137,8 +199,9 @@ class _ManagerTotalLeaveRequestScreenState
                 if (v != null) {
                   setState(() => selectedStatus = v);
                   context.allLeaveRequestProviderRead.clearData();
-                  context.allLeaveRequestProviderRead
-                      .fetchAllLeaveRequests(v.toLowerCase());
+                  context.allLeaveRequestProviderRead.fetchAllLeaveRequests(
+                    v.toLowerCase(),
+                  );
                 }
               },
             ),
@@ -169,108 +232,151 @@ class _ManagerTotalLeaveRequestScreenState
             else if (provider.errorMessage != null)
               Center(child: Text(provider.errorMessage!))
             else if (filteredData.isEmpty)
-                Center(
-                  child: Text(
-                    "No Data Found",
-                    style: TextStyle(fontSize: 12.sp, color: Colors.grey),
-                  ),
-                )
-              else
-                SizedBox(
-                  height: 400.h,
-                  child: KDataTable(
-                    columnTitles: columns,
-                    rowData: filteredData.map((e) {
-                      final currentStatus = (e['Status'] ?? '').toLowerCase();
-
-                      // ✅ Dynamic UI Update
-                      Widget statusWidget;
-                      if (currentStatus == 'pending') {
-                        statusWidget = Row(
-                          children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 6.w, vertical: 3.h),
-                                minimumSize: Size(40.w, 20.h),
-                              ),
-                              onPressed: () async {
-                                await _updateLeaveStatus(
-                                    context, e['id'], "Rejected", e['Name']);
-                                setState(() {
-                                  e['Status'] = "Rejected";
-                                });
-                              },
-                              child: Text("Reject",
-                                  style: TextStyle(
-                                      fontSize: 10.sp, color: Colors.white)),
-                            ),
-                            SizedBox(width: 6.w),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 6.w, vertical: 3.h),
-                                minimumSize: Size(60.w, 20.h),
-                              ),
-                              onPressed: () async {
-                                await _updateLeaveStatus(
-                                    context, e['id'], "Approved", e['Name']);
-                                setState(() {
-                                  e['Status'] = "Approved";
-                                });
-                              },
-                              child: Text("Approve",
-                                  style: TextStyle(
-                                      fontSize: 10.sp, color: Colors.white)),
-                            ),
-                          ],
-                        );
-                      } else {
-                        // ✅ Once updated → show color text only
-                        final color = currentStatus == 'approved'
-                            ? Colors.green
-                            : Colors.red;
-                        statusWidget = Text(
-                          e['Status'],
-                          style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.bold,
-                              color: color),
-                        );
-                      }
-
-                      return {
-                        'S.No': e['S.No'],
-                        'Name': e['Name'],
-                        'Type': e['Type'],
-                        'From': e['From'],
-                        'To': e['To'],
-                        'Reason': e['Reason'],
-                        'Status': statusWidget,
-                      };
-                    }).toList(),
-                  ),
+              Center(
+                child: Text(
+                  "No Data Found",
+                  style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                 ),
+              )
+            else
+              SizedBox(
+                height: 400.h,
+                child: KDataTable(
+                  columnTitles: columns,
+                  rowData: filteredData.map((e) {
+                    final id = e['id'] ?? 0;
+                    final currentStatus =
+                        (_updatedStatuses[id] ?? e['Status'] ?? '')
+                            .toString()
+                            .toLowerCase();
+
+                    // ✅ Dynamic UI Update
+                    Widget statusWidget;
+                    if (currentStatus == 'pending') {
+                      statusWidget = Row(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 6.w,
+                                vertical: 3.h,
+                              ),
+                              minimumSize: Size(40.w, 20.h),
+                            ),
+                            onPressed: _updatedStatuses.containsKey(id)
+                                ? null
+                                : () async {
+                                    await _updateLeaveStatus(
+                                      context,
+                                      id,
+                                      "Rejected",
+                                      e['Name'],
+                                    );
+                                  },
+                            child: Text(
+                              "Reject",
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 6.w),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 6.w,
+                                vertical: 3.h,
+                              ),
+                              minimumSize: Size(60.w, 20.h),
+                            ),
+                            onPressed: _updatedStatuses.containsKey(id)
+                                ? null
+                                : () async {
+                                    await _updateLeaveStatus(
+                                      context,
+                                      id,
+                                      "Approved",
+                                      e['Name'],
+                                    );
+                                  },
+                            child: Text(
+                              "Approve",
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      // ✅ Once updated → show color text only
+                      final color = currentStatus == 'approved'
+                          ? Colors.green
+                          : Colors.red;
+                      statusWidget = Text(
+                        currentStatus.capitalize(),
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: color,
+                        ),
+                      );
+                    }
+
+                    return {
+                      'S.No': e['S.No'],
+                      'Name': e['Name'],
+                      'Type': e['Type'],
+                      'From': e['From'],
+                      'To': e['To'],
+                      'Reason': e['Reason'],
+                      'Status': statusWidget,
+                    };
+                  }).toList(),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
 
-  /// 🔹 Update Leave Status Function
+  /// 🔹 Update Leave Status Function (Updated with local disable logic)
   Future<void> _updateLeaveStatus(
-      BuildContext context, int? id, String status, String? name) async {
+    BuildContext context,
+    int? id,
+    String status,
+    String? name,
+  ) async {
     if (id == null) return;
     try {
-      await updateProvider.updateLeave(id, status, "Manager");
-      KSnackBar.success(context, "$name marked as $status");
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(child: CircularProgressIndicator()),
+      );
 
-      // Refresh list automatically
-      context.allLeaveRequestProviderRead
-          .fetchAllLeaveRequests(selectedStatus.toLowerCase());
+      await updateProvider.updateLeave(id, status, "Manager");
+
+      if (mounted) Navigator.pop(context);
+
+      if (updateProvider.updatedLeave?.status == "Success") {
+        setState(() {
+          _updatedStatuses[id] = status;
+        });
+        KSnackBar.success(context, "$name marked as $status");
+      } else {
+        KSnackBar.failure(
+          context,
+          updateProvider.updatedLeave?.message ?? "Update failed",
+        );
+      }
     } catch (e) {
+      if (mounted) Navigator.pop(context);
       KSnackBar.failure(context, "Failed to update $name: $e");
     }
   }
