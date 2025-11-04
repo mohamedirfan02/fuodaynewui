@@ -3,21 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart' show rootBundle; //   Added
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:fuoday/core/helper/app_logger_helper.dart';
 
 /// A reusable PDF generation service for any table-based data.
 /// Works on Android, iOS, and Web (with optional web download).
-class PdfGeneratorServiceReusableWidget {
+class PdfGeneratorServiceCurrencySymbolSupportWidget {
   /// Generates a table-style PDF report and saves it locally.
-  ///
-  /// - [data] : List of maps, each representing a table row.
-  /// - [columns] : The table column names.
-  /// - [title] : Optional document title.
-  /// - [filename] : Output file name (default: 'report.pdf')
-  /// - [landscape] : Use landscape orientation (default: true).
-  /// - [addFooterInfo] : Whether to add page numbers and generated date.
-  /// - [adjustColumnWidth] : Auto-adjust column widths (default: true).
   Future<File> generateAndSavePdf({
     required List<Map<String, String>> data,
     required List<String> columns,
@@ -32,19 +25,24 @@ class PdfGeneratorServiceReusableWidget {
 
       final pdf = pw.Document();
 
+      //   Load your custom font
+      final font = pw.Font.ttf(
+        await rootBundle.load('assets/fonts/NotoSans-Regular2.ttf'),
+      );
+
       pdf.addPage(
         pw.MultiPage(
           pageFormat: landscape ? PdfPageFormat.a4.landscape : PdfPageFormat.a4,
           margin: const pw.EdgeInsets.all(20),
           footer: addFooterInfo
-              ? (context) => _buildFooter(context, data.length)
+              ? (context) => _buildFooter(context, data.length, font)
               : null,
           build: (context) => [
-            if (title != null) _buildTitle(title),
+            if (title != null) _buildTitle(title, font),
             if (data.isEmpty)
-              _buildEmptyState()
+              _buildEmptyState(font)
             else
-              _buildTable(columns, data, adjustColumnWidth),
+              _buildTable(columns, data, adjustColumnWidth, font),
           ],
         ),
       );
@@ -57,22 +55,27 @@ class PdfGeneratorServiceReusableWidget {
   }
 
   /// 📑 Title section
-  pw.Widget _buildTitle(String title) {
+  pw.Widget _buildTitle(String title, pw.Font font) {
     return pw.Container(
       margin: const pw.EdgeInsets.only(bottom: 20),
       child: pw.Text(
         title,
-        style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+        style: pw.TextStyle(
+          font: font, //   Added
+          fontSize: 20,
+          fontWeight: pw.FontWeight.bold,
+        ),
       ),
     );
   }
 
   /// 📭 Empty state
-  pw.Widget _buildEmptyState() {
+  pw.Widget _buildEmptyState(pw.Font font) {
     return pw.Center(
       child: pw.Text(
         'No records available',
         style: pw.TextStyle(
+          font: font, //   Added
           fontSize: 12,
           fontWeight: pw.FontWeight.bold,
           color: PdfColors.grey700,
@@ -86,8 +89,8 @@ class PdfGeneratorServiceReusableWidget {
     List<String> columns,
     List<Map<String, String>> data,
     bool adjust,
+    pw.Font font,
   ) {
-    //   Determine column widths based on flag
     final Map<int, pw.TableColumnWidth> columnWidths = adjust
         ? {
             for (var col in columns)
@@ -117,6 +120,7 @@ class PdfGeneratorServiceReusableWidget {
               child: pw.Text(
                 col,
                 style: pw.TextStyle(
+                  font: font, //   Added
                   fontWeight: pw.FontWeight.bold,
                   fontSize: 10,
                 ),
@@ -133,7 +137,10 @@ class PdfGeneratorServiceReusableWidget {
                 padding: const pw.EdgeInsets.all(6),
                 child: pw.Text(
                   row[col] ?? '-',
-                  style: const pw.TextStyle(fontSize: 9),
+                  style: pw.TextStyle(
+                    font: font, //   Added
+                    fontSize: 9,
+                  ),
                   textAlign: col.toLowerCase().contains('no')
                       ? pw.TextAlign.center
                       : pw.TextAlign.left,
@@ -147,7 +154,7 @@ class PdfGeneratorServiceReusableWidget {
   }
 
   /// 📆 Footer with total and page number
-  pw.Widget _buildFooter(pw.Context context, int totalRecords) {
+  pw.Widget _buildFooter(pw.Context context, int totalRecords, pw.Font font) {
     return pw.Container(
       alignment: pw.Alignment.centerRight,
       margin: const pw.EdgeInsets.only(top: 10),
@@ -156,12 +163,20 @@ class PdfGeneratorServiceReusableWidget {
         children: [
           pw.Text(
             'Total Records: $totalRecords',
-            style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold),
+            style: pw.TextStyle(
+              font: font, //   Added
+              fontSize: 9,
+              fontWeight: pw.FontWeight.bold,
+            ),
           ),
           pw.Text(
             'Page ${context.pageNumber} of ${context.pagesCount}   |   Generated: '
             '${DateFormat('dd MMM yyyy, hh:mm a').format(DateTime.now())}',
-            style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey700),
+            style: pw.TextStyle(
+              font: font, //   Added
+              fontSize: 8,
+              color: PdfColors.grey700,
+            ),
           ),
         ],
       ),

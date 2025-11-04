@@ -87,6 +87,27 @@ class AppRouteConstants {
 
   //hr screen
   static const String hr = "hr";
+  //HR TotalEmployeesScreen
+  static const String hrTotalEmployeesScreen = "hrTotalEmployeesScreen";
+
+  //HR TotalAttendanceScreen
+  static const String hrTotalAttendanceScreen = "hrTotalAttendanceScreen";
+
+  //HR LateArrivalScreen
+  static const String hrLateArrivalScreen = "hrLateArrivalScreen";
+
+  //HR TotalEmployeesScreen
+  static const String hrTotalLeaveRequestScreen = "hrTotalLeaveRequestScreen";
+
+  //HR RegulationScreen
+  static const String hrRegulationScreen = "hrRegulationScreen";
+
+  //HR Payroll Screen
+  static const String hrPayRollScreen = "hrPayRollScreen";
+
+  //HR PermissionsScreen
+  static const String hrPermissionsScreen = "hrPermissionsScreen";
+  //===========
 
   //Team Leader Screen
   static const String teamLeader = "teamLeader";

@@ -7,17 +7,11 @@ import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
-import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
-import 'package:fuoday/features/attendance/presentation/providers/total_early_arrivals_details_provider.dart';
-import 'package:fuoday/features/attendance/presentation/widgets/attendance_message_content.dart';
-import 'package:fuoday/features/attendance/presentation/widgets/attendance_punctual_arrival_card.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
-import 'package:fuoday/features/team_leader/domain/entities/role_based_users_entity.dart';
 import 'package:fuoday/features/team_leader/presentation/provider/role_based_users_provider.dart';
 import 'package:fuoday/features/team_leader/presentation/widget/total_employee_pdf_generater.dart';
 import 'package:go_router/go_router.dart';
@@ -58,9 +52,9 @@ class _ManagerTotalEmployeesScreenState
     webUserId =
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
-    Future.microtask(() {
-      context.read<RoleBasedUsersProvider>().fetchRoleBasedUsers(webUserId);
-    });
+    // Future.microtask(() {
+    //   context.read<RoleBasedUsersProvider>().fetchRoleBasedUsers(webUserId);
+    // });
 
     // Add listeners for real-time filtering
     searchController.addListener(() {
@@ -141,9 +135,9 @@ class _ManagerTotalEmployeesScreenState
 
           return {
             'S.No': '$i',
-            'Employee Id': e.empId,
-            'Name': e.empName,
-            'Email': e.email,
+            'Employee Id': e.empId?.toString() ?? '',
+            'Name': e.empName?.toString() ?? '',
+            'Email': e.email?.toString() ?? '',
             'Role': e.role.isNotEmpty
                 ? e.role[0].toUpperCase() + e.role.substring(1).toLowerCase()
                 : '-',

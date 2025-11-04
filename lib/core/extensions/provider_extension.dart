@@ -19,6 +19,7 @@ import 'package:fuoday/features/calendar/presentation/providers/shift_schedule_p
 import 'package:fuoday/features/home/presentation/provider/all_events_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/check_in_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/checkin_status_provider.dart';
+import 'package:fuoday/features/hr/presentation/provider/total_payroll_provider.dart';
 import 'package:fuoday/features/manager/presentation/provider/all_regulations_provider.dart';
 import 'package:fuoday/features/manager/presentation/provider/update_leave_status_provider.dart';
 import 'package:fuoday/features/manager/presentation/provider/update_regulation_status_provider.dart';
@@ -258,6 +259,12 @@ extension ProviderExtension on BuildContext {
       read<UpdateRegulationStatusProvider>();
   UpdateRegulationStatusProvider get updateRegulationsProviderWatch =>
       watch<UpdateRegulationStatusProvider>();
+
+  //Regulation Approval Update Provider
+  TotalPayrollProvider get totalPayrollProviderRead =>
+      read<TotalPayrollProvider>();
+  TotalPayrollProvider get totalPayrollProviderWatch =>
+      watch<TotalPayrollProvider>();
 
   //==================ATS PAGES====================================
 }

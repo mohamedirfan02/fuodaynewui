@@ -202,6 +202,8 @@ flutter:
     - assets/images/jpg/
     # env
     - .env
+    #For PDF Currency Symbol usage
+    - assets/fonts/NotoSans-Regular2.ttf
 
 
 flutter_launcher_icons:

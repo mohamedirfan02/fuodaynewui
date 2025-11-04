@@ -30,6 +30,8 @@ import 'package:fuoday/features/calendar/presentation/providers/shift_schedule_p
 import 'package:fuoday/features/home/presentation/provider/all_events_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/check_in_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/recognition_provider.dart';
+import 'package:fuoday/features/hr/presentation/provider/hr_overview_provider.dart';
+import 'package:fuoday/features/hr/presentation/provider/total_payroll_provider.dart';
 import 'package:fuoday/features/manager/presentation/provider/all_regulations_provider.dart';
 import 'package:fuoday/features/manager/presentation/provider/update_leave_status_provider.dart';
 import 'package:fuoday/features/manager/presentation/provider/update_regulation_status_provider.dart';
@@ -327,6 +329,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => getIt<UpdateRegulationStatusProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => getIt<TotalPayrollProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => getIt<HROverviewProvider>(),
         ),
 
         //===============ATS PAGES====================================

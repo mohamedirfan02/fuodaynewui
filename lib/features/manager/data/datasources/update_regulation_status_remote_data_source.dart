@@ -1,3 +1,4 @@
+import 'package:fuoday/core/constants/api/app_api_endpoint_constants.dart';
 import 'package:fuoday/core/service/dio_service.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:dio/dio.dart';
@@ -25,7 +26,8 @@ class UpdateRegulationStatusRemoteDataSource {
       AppLoggerHelper.logInfo("📤 Sending Regulation Data: $payload");
 
       final response = await dioService.post(
-        "https://backend.fuoday.com/api/hrms/hr/update-regulation-status",
+        AppApiEndpointConstants.updatRegulation,
+        // "https://backend.fuoday.com/api/hrms/hr/update-regulation-status",
         data: payload,
       );
 

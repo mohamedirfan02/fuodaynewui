@@ -33,6 +33,13 @@ import 'package:fuoday/features/feeds/presentation/screens/feeds_screen.dart';
 import 'package:fuoday/features/ats_candidate/presentation/screens/ats_candidate_information_screen.dart';
 import 'package:fuoday/features/home/presentation/screens/hrms_screens/home_employee_screen.dart';
 import 'package:fuoday/features/home/presentation/screens/ats_screens/home_recruiter_screen.dart';
+import 'package:fuoday/features/hr/presentation/screens/hr_overview_screens/he_regulation_approval_screen.dart';
+import 'package:fuoday/features/hr/presentation/screens/hr_overview_screens/hr_permission_screen.dart';
+import 'package:fuoday/features/hr/presentation/screens/hr_overview_screens/hr_total_attendance_report_screen.dart';
+import 'package:fuoday/features/hr/presentation/screens/hr_overview_screens/hr_total_employees_screen.dart';
+import 'package:fuoday/features/hr/presentation/screens/hr_overview_screens/hr_total_late_arrival_screen.dart';
+import 'package:fuoday/features/hr/presentation/screens/hr_overview_screens/hr_total_leave_request_screen.dart';
+import 'package:fuoday/features/hr/presentation/screens/hr_overview_screens/hr_total_payroll_screen.dart';
 import 'package:fuoday/features/hr/presentation/screens/hr_screen.dart';
 import 'package:fuoday/features/leave_tracker/presentation/screens/leave_tracker_screen.dart';
 import 'package:fuoday/features/management/presentation/screens/management_screen.dart';
@@ -707,6 +714,76 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) => _buildPageWithTransition(
         state: state,
         child: HRScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    //Hr Total Employees Screen
+    GoRoute(
+      path: "/hrTotalEmployeesScreen",
+      name: AppRouteConstants.hrTotalEmployeesScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: HRTotalEmployeesScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    //HR TotalLeaveRequestScreen
+    GoRoute(
+      path: "/hrTotalLeaveRequestScreen",
+      name: AppRouteConstants.hrTotalLeaveRequestScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: HRTotalLeaveRequestScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    // HR TotalAttendanceScreen
+    GoRoute(
+      path: "/hrTotalAttendanceScreen",
+      name: AppRouteConstants.hrTotalAttendanceScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: HRTotalAttendanceRepotScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    // HR LateArrivalScreen
+    GoRoute(
+      path: "/hrLateArrivalScreen",
+      name: AppRouteConstants.hrLateArrivalScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: HRLateArrivalScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    // HR LateArrivalScreen
+    GoRoute(
+      path: "/hrRegulationScreen",
+      name: AppRouteConstants.hrRegulationScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: HRRegulationAprovalScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    // HR LateArrivalScreen
+    GoRoute(
+      path: "/hrPayRollScreen",
+      name: AppRouteConstants.hrPayRollScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: HRTotalPayrollRepotScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    // HR LateArrivalScreen
+    GoRoute(
+      path: "/hrPermissionsScreen",
+      name: AppRouteConstants.hrPermissionsScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: HRPermissionsScreen(),
         transition: _slideFromRight,
       ),
     ),

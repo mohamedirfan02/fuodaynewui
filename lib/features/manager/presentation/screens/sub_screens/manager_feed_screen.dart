@@ -63,7 +63,7 @@ class _ManagerFeedsScreenState extends State<ManagerFeedsScreen> {
     super.dispose();
   }
 
-  // ✅ Filter by month/year and search query
+  //    Filter by month/year and search query
   List<Map<String, String>> getFilteredData(List<Map<String, String>> allData) {
     final query = searchController.text.trim().toLowerCase();
 
@@ -113,17 +113,17 @@ class _ManagerFeedsScreenState extends State<ManagerFeedsScreen> {
   Widget build(BuildContext context) {
     final totalAttendanceProvider = context.totalAttendanceDetailsProviderWatch;
 
-    // ✅ Dummy Data
+    //    Dummy Data
     final List<Map<String, String>> dummydata = [
-      {
-        'S.No': '1',
-        'Project': '-',
-        'Assigned By': '-',
-        'Description': '-',
-        'Progress': '-',
-        'Deadline': '-',
-        'Status': '-',
-      },
+      // {
+      //   'S.No': '1',
+      //   'Project': '-',
+      //   'Assigned By': '-',
+      //   'Description': '-',
+      //   'Progress': '-',
+      //   'Deadline': '-',
+      //   'Status': '-',
+      // },
       // {
       //   'S.No': '2',
       //   'Project': 'Payroll Integration',

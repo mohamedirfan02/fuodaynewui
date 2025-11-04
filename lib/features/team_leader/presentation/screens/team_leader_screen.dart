@@ -41,6 +41,9 @@ class _TeamLeaderScreenState extends State<TeamLeaderScreen> {
     Future.microtask(() {
       final ctx = context;
 
+      ctx.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(
+        webUserId,
+      );
       // Role-based users
       ctx.roleBasedUsersProviderRead.fetchRoleBasedUsers(webUserId);
 
@@ -52,9 +55,6 @@ class _TeamLeaderScreenState extends State<TeamLeaderScreen> {
 
       // Regulations
       ctx.allRegulationsProviderRead.fetchAllRegulations(webUserId);
-
-      //  Uncomment if you also need total attendance
-      // ctx.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(webUserId);
     });
   }
 
@@ -87,6 +87,25 @@ class _TeamLeaderScreenState extends State<TeamLeaderScreen> {
 
     // 🔹 Regulations data
     final totalRegulationApprovals = regulationsProvider.teamTotalCount;
+    //  Today’s date formatted like your API (e.g., 2025-11-05)
+    final today = DateTime.now();
+    final todayStr =
+        "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
+
+    //  Filter only today’s records where employee is “present” (not on leave)
+    final todayAttendanceList =
+        attendanceReport?.teamSection.data
+            ?.where(
+              (att) =>
+                  att.date == todayStr &&
+                  att.status != "On Leave" &&
+                  att.checkin != null,
+            )
+            .toList() ??
+        [];
+
+    // Count how many employees attended today
+    final todayAttendanceCount = todayAttendanceList.length;
 
     // 🔹 Grid data
     final List<Map<String, dynamic>> gridAttendanceData = [
@@ -97,7 +116,7 @@ class _TeamLeaderScreenState extends State<TeamLeaderScreen> {
       },
       {
         'title': 'Total Attendance Report',
-        'numberOfCount': totalAttendanceCount,
+        'numberOfCount': "$todayAttendanceCount/$totalEmployees",
         'icon': Icons.speaker_notes_rounded,
       },
       {

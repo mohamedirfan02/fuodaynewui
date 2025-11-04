@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:flutter/material.dart';
 
 class KDataTable extends StatelessWidget {
   final List<String> columnTitles;
-  final List<Map<String, dynamic>> rowData; // allow String OR Widget
+  final List<Map<String, dynamic>> rowData;
 
   const KDataTable({
     super.key,
@@ -16,17 +16,17 @@ class KDataTable extends StatelessWidget {
     return DataTable2(
       columnSpacing: 16,
       horizontalMargin: 12,
-      minWidth: 1000,
+      minWidth: 1600,
       headingRowColor: MaterialStateProperty.all(Colors.blueGrey.shade50),
       columns: columnTitles
           .map(
             (title) => DataColumn(
-          label: Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-      )
+              label: Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
           .toList(),
       rows: rowData.map((row) {
         return DataRow(

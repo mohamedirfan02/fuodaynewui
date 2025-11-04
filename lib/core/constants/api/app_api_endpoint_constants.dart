@@ -216,9 +216,21 @@ class AppApiEndpointConstants {
   static String getAllLateArrivalsReport() =>
       '$baseUrl/hrms/attendance/late-arrivals-all';
 
-  // ✅ Get all leaves by status
+  // Get all leaves by status
   static String getAllLeavesByStatus(String status) =>
       '$baseUrl/hrms/hr/getallleavesbystatus/$status';
+
+  //Get Regulation API
+  static String getAllRegulation(int webUserId) =>
+      '$baseUrl/hrms/hr/regulations/$webUserId';
+
+  //Update leave request
+  static String updateLeave = '$baseUrl/hrms/leave/updateleave';
+  //Update Regulation
+  static String updatRegulation = '$baseUrl/hrms/hr/update-regulation-status';
+
+  //  Get all Payroll in HR Tab
+  static String getTotalPayrollSummary() => '$baseUrl/hrms/hr/payroll-summary';
 
   //====================ATS PAGES=====================================
 }

@@ -4,6 +4,7 @@ import 'package:fuoday/commons/widgets/k_app_bar.dart';
 import 'package:fuoday/commons/widgets/k_data_table.dart';
 import 'package:fuoday/commons/widgets/k_download_options_bottom_sheet.dart';
 import 'package:fuoday/commons/widgets/k_pdf_generater_reusable_widget.dart';
+import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
@@ -18,16 +19,16 @@ import 'package:go_router/go_router.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:open_filex/open_filex.dart';
 
-class ManagerTotalAttendanceRepotScreen extends StatefulWidget {
-  const ManagerTotalAttendanceRepotScreen({super.key});
+class HRTotalAttendanceRepotScreen extends StatefulWidget {
+  const HRTotalAttendanceRepotScreen({super.key});
 
   @override
-  State<ManagerTotalAttendanceRepotScreen> createState() =>
-      _ManagerTotalAttendanceRepotScreenState();
+  State<HRTotalAttendanceRepotScreen> createState() =>
+      _HRTotalAttendanceRepotScreenState();
 }
 
-class _ManagerTotalAttendanceRepotScreenState
-    extends State<ManagerTotalAttendanceRepotScreen> {
+class _HRTotalAttendanceRepotScreenState
+    extends State<HRTotalAttendanceRepotScreen> {
   // Controller
   final TextEditingController monthYearController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
@@ -60,11 +61,11 @@ class _ManagerTotalAttendanceRepotScreenState
     });
 
     //Fetch attendance data once on init
-    // Future.microtask(() {
-    //   context.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(
-    //     webUserId,
-    //   );
-    // });
+    /*Future.microtask(() {
+      context.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(
+       webUserId,
+       );
+    });*/
   }
 
   @override
@@ -144,7 +145,7 @@ class _ManagerTotalAttendanceRepotScreenState
   Widget build(BuildContext context) {
     final attendanceProvider = context.roleWiseAttendanceReportProviderWatch;
 
-    final employees = attendanceProvider.attendanceReport?.managerList ?? [];
+    final employees = attendanceProvider.attendanceReport?.hrList ?? [];
 
     // Table Columns
     final columns = [
@@ -220,7 +221,7 @@ class _ManagerTotalAttendanceRepotScreenState
                           onPdfTap: () async {
                             final pdfService =
                                 getIt<PdfGeneratorServiceReusableWidget>();
-                            //   Step 2: Generate and save PDF
+                            //  Generate and save PDF
                             final generatedFile = await pdfService.generateAndSavePdf(
                               title:
                                   selectedMonth != null && selectedYear != null
@@ -231,12 +232,12 @@ class _ManagerTotalAttendanceRepotScreenState
                               columns: List<String>.from(columns),
                               data: List<Map<String, String>>.from(displayData),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("  PDF generated successfully!"),
-                              ),
+                            KSnackBar.success(
+                              context,
+                              "PDF generated successfully!",
                             );
-                            //   Step 3: Open the generated file
+
+                            //  Open the generated file
                             await OpenFilex.open(generatedFile.path);
                           },
 

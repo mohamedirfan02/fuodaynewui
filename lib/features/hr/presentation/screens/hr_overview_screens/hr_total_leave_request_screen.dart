@@ -15,33 +15,31 @@ import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/manager/presentation/provider/update_leave_status_provider.dart';
-import 'package:fuoday/features/manager/presentation/screens/sub_screens/manager_regulation_aproval_screens.dart';
 import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
 
-class ManagerTotalLeaveRequestScreen extends StatefulWidget {
-  const ManagerTotalLeaveRequestScreen({super.key});
+class HRTotalLeaveRequestScreen extends StatefulWidget {
+  const HRTotalLeaveRequestScreen({super.key});
 
   @override
-  State<ManagerTotalLeaveRequestScreen> createState() =>
-      _ManagerTotalLeaveRequestScreenState();
+  State<HRTotalLeaveRequestScreen> createState() =>
+      _HRTotalLeaveRequestScreenState();
 }
 
-class _ManagerTotalLeaveRequestScreenState
-    extends State<ManagerTotalLeaveRequestScreen> {
+class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
   final TextEditingController searchController = TextEditingController();
-  String selectedStatus = "Approved";
+  String selectedStatus = "Pending";
   late final updateProvider = getIt<UpdateLeaveStatusProvider>();
 
-  //   Track which leave requests were updated (id → new status)
+  // To track updated leave statuses
   final Map<int, String> _updatedStatuses = {};
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      context.allLeaveRequestProviderRead.fetchAllLeaveRequests("approved");
-    });
+    // Future.microtask(() {
+    //   context.allLeaveRequestProviderRead.fetchAllLeaveRequests("pending");
+    // });
   }
 
   @override
@@ -54,8 +52,21 @@ class _ManagerTotalLeaveRequestScreenState
   Widget build(BuildContext context) {
     final provider = context.allLeaveRequestProviderWatch;
 
-    final columns = ['S.No', 'Name', 'Type', 'From', 'To', 'Reason', 'Status'];
-    final employees = provider.leaveRequests?.managerSection?.data ?? [];
+    // ✅ Show "Manager Status" column only if dropdown is Pending
+    final columns = selectedStatus.toLowerCase() == "pending"
+        ? [
+            'S.No',
+            'Name',
+            'Type',
+            'From',
+            'To',
+            'Reason',
+            'Manager Status',
+            'Status',
+          ]
+        : ['S.No', 'Name', 'Type', 'From', 'To', 'Reason', 'Status'];
+
+    final employees = provider.leaveRequests?.hrSection?.data ?? [];
 
     final List<Map<String, dynamic>> tableData = employees.asMap().entries.map((
       entry,
@@ -68,17 +79,18 @@ class _ManagerTotalLeaveRequestScreenState
 
       return {
         'S.No': '$i',
-        'id': e.id?.toString() ?? '',
-        'Name': e.name?.toString() ?? '',
-        'Type': e.type?.toString() ?? '',
+        'id': e.id,
+        'Name': e.name ?? '',
+        'Type': e.type ?? '',
         'From': fromDate,
         'To': toDate,
-        'Reason': e.reason?.toString() ?? '',
+        'Reason': e.reason ?? '',
+        'Manager Status': e.managerStatus ?? '-',
         'Status': e.status ?? 'Pending',
       };
     }).toList();
 
-    // 🔍 Filter by search
+    // 🔍 Search filter
     final filteredData = tableData.where((item) {
       final query = searchController.text.toLowerCase();
       return item['Name']!.toString().toLowerCase().contains(query);
@@ -86,11 +98,12 @@ class _ManagerTotalLeaveRequestScreenState
 
     return Scaffold(
       appBar: KAppBar(
-        title: "Leave Request Details",
+        title: "HR Leave Request Details",
         centerTitle: true,
         leadingIcon: Icons.arrow_back,
         onLeadingIconPress: () => GoRouter.of(context).pop(),
       ),
+
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         child: KAuthFilledBtn(
@@ -113,13 +126,10 @@ class _ManagerTotalLeaveRequestScreenState
                       return;
                     }
 
-                    // Convert data safely for PDF
                     final pdfData = filteredData.map((row) {
                       final newRow = <String, String>{};
                       row.forEach((key, value) {
-                        newRow[key] = value is String
-                            ? value
-                            : value.toString();
+                        newRow[key] = value.toString();
                       });
                       return newRow;
                     }).toList();
@@ -128,17 +138,9 @@ class _ManagerTotalLeaveRequestScreenState
                     final pdfFile = await pdfService.generateAndSavePdf(
                       data: pdfData,
                       columns: columns,
-                      title: selectedStatus != null
-                          ? 'Leave Request Report - $selectedStatus'
-                          : 'All Leave Request Report',
+                      title: 'Leave Request Report - $selectedStatus',
                       filename:
                           'leave_request_report_${DateTime.now().millisecondsSinceEpoch}.pdf',
-                    );
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("  PDF generated successfully!"),
-                      ),
                     );
 
                     GoRouter.of(context).pop();
@@ -150,13 +152,10 @@ class _ManagerTotalLeaveRequestScreenState
                       return;
                     }
 
-                    // 🔹 Convert all dynamic values to String before passing to Excel service
                     final excelData = filteredData.map((row) {
                       final newRow = <String, String>{};
                       row.forEach((key, value) {
-                        newRow[key] = value is String
-                            ? value
-                            : value.toString();
+                        newRow[key] = value.toString();
                       });
                       return newRow;
                     }).toList();
@@ -178,6 +177,7 @@ class _ManagerTotalLeaveRequestScreenState
           },
         ),
       ),
+
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         child: Column(
@@ -207,13 +207,11 @@ class _ManagerTotalLeaveRequestScreenState
             ),
 
             KVerticalSpacer(height: 20.h),
-
             KText(
               text: "$selectedStatus Leaves",
               fontWeight: FontWeight.w600,
               fontSize: 14.sp,
             ),
-
             KVerticalSpacer(height: 12.h),
 
             // Search bar
@@ -245,12 +243,10 @@ class _ManagerTotalLeaveRequestScreenState
                   columnTitles: columns,
                   rowData: filteredData.map((e) {
                     final id = e['id'] ?? 0;
-                    final currentStatus =
-                        (_updatedStatuses[id] ?? e['Status'] ?? '')
-                            .toString()
-                            .toLowerCase();
+                    final currentStatus = (_updatedStatuses[id] ?? e['Status'])
+                        .toString()
+                        .toLowerCase();
 
-                    //   Dynamic UI Update
                     Widget statusWidget;
                     if (currentStatus == 'pending') {
                       statusWidget = Row(
@@ -313,12 +309,12 @@ class _ManagerTotalLeaveRequestScreenState
                         ],
                       );
                     } else {
-                      //   Once updated → show color text only
                       final color = currentStatus == 'approved'
                           ? Colors.green
                           : Colors.red;
                       statusWidget = Text(
-                        currentStatus.capitalize(),
+                        currentStatus[0].toUpperCase() +
+                            currentStatus.substring(1),
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
@@ -327,15 +323,29 @@ class _ManagerTotalLeaveRequestScreenState
                       );
                     }
 
-                    return {
-                      'S.No': e['S.No'],
-                      'Name': e['Name'],
-                      'Type': e['Type'],
-                      'From': e['From'],
-                      'To': e['To'],
-                      'Reason': e['Reason'],
-                      'Status': statusWidget,
-                    };
+                    // ✅ Include Manager Status only when Pending
+                    if (selectedStatus.toLowerCase() == "pending") {
+                      return {
+                        'S.No': e['S.No'],
+                        'Name': e['Name'],
+                        'Type': e['Type'],
+                        'From': e['From'],
+                        'To': e['To'],
+                        'Reason': e['Reason'],
+                        'Manager Status': e['Manager Status'],
+                        'Status': statusWidget,
+                      };
+                    } else {
+                      return {
+                        'S.No': e['S.No'],
+                        'Name': e['Name'],
+                        'Type': e['Type'],
+                        'From': e['From'],
+                        'To': e['To'],
+                        'Reason': e['Reason'],
+                        'Status': statusWidget,
+                      };
+                    }
                   }).toList(),
                 ),
               ),
@@ -345,6 +355,7 @@ class _ManagerTotalLeaveRequestScreenState
     );
   }
 
+  /// 🔹 Update Leave Status Function
   /// 🔹 Update Leave Status Function
   Future<void> _updateLeaveStatus(
     BuildContext context,
@@ -366,9 +377,9 @@ class _ManagerTotalLeaveRequestScreenState
         },
       );
 
-      await updateProvider.updateLeave(id, status, "Manager");
+      await updateProvider.updateLeave(id, status, "HR");
 
-      //   Close only the loading dialog, not the whole page
+      // ✅ Close only the loading dialog, not the whole page
       if (dialogContext != null) Navigator.of(dialogContext!).pop();
 
       if (updateProvider.updatedLeave?.status == "Success") {
@@ -383,7 +394,7 @@ class _ManagerTotalLeaveRequestScreenState
         );
       }
     } catch (e) {
-      //   Close dialog safely if error occurs
+      // ✅ Close dialog safely if error occurs
       if (Navigator.canPop(context)) Navigator.of(context).pop();
       KSnackBar.failure(context, "Failed to update $name: $e");
     }

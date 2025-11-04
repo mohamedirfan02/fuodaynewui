@@ -18,14 +18,14 @@ import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
 
-class TLTotalEmployeesScreen extends StatefulWidget {
-  const TLTotalEmployeesScreen({super.key});
+class HRTotalEmployeesScreen extends StatefulWidget {
+  const HRTotalEmployeesScreen({super.key});
 
   @override
-  State<TLTotalEmployeesScreen> createState() => _TLTotalEmployeesScreenState();
+  State<HRTotalEmployeesScreen> createState() => _HRTotalEmployeesScreenState();
 }
 
-class _TLTotalEmployeesScreenState extends State<TLTotalEmployeesScreen> {
+class _HRTotalEmployeesScreenState extends State<HRTotalEmployeesScreen> {
   // Controllers
   final TextEditingController searchController = TextEditingController();
   final TextEditingController empNameController = TextEditingController();
@@ -115,15 +115,14 @@ class _TLTotalEmployeesScreenState extends State<TLTotalEmployeesScreen> {
   Widget build(BuildContext context) {
     // Providers
     final provider = context.watch<RoleBasedUsersProvider>();
-    //final employees = provider.roleBasedUsers?.hr ?? [];
 
     final columns = ['S.No', 'Employee Id', 'Name', 'Email', 'Role'];
 
     // Original data (before filtering)
-    //     Get list and count safely
-    final employees = provider.roleBasedUsers?.teams.data ?? [];
+    // ✅ Get list and count safely
+    final employees = provider.roleBasedUsers?.hr.data ?? [];
 
-    //     Convert to table-friendly map list
+    // ✅ Convert to table-friendly map list
     final List<Map<String, String>> originalData = employees
         .asMap()
         .entries
@@ -133,9 +132,9 @@ class _TLTotalEmployeesScreenState extends State<TLTotalEmployeesScreen> {
 
           return {
             'S.No': '$i',
-            'Employee Id': e.empId.toString() ?? '-',
-            'Name': e.empName.toString() ?? '-',
-            'Email': e.email.toString() ?? '-',
+            'Employee Id': e.empId,
+            'Name': e.empName,
+            'Email': e.email,
             'Role': e.role.isNotEmpty
                 ? e.role[0].toUpperCase() + e.role.substring(1).toLowerCase()
                 : '-',
@@ -148,7 +147,7 @@ class _TLTotalEmployeesScreenState extends State<TLTotalEmployeesScreen> {
 
     return Scaffold(
       appBar: KAppBar(
-        title: "Total Employees",
+        title: "HR Total Employees",
         centerTitle: true,
         leadingIcon: Icons.arrow_back,
         onLeadingIconPress: () {
@@ -285,143 +284,127 @@ class _TLTotalEmployeesScreenState extends State<TLTotalEmployeesScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        physics: const BouncingScrollPhysics(),
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              KText(
-                text: "Search",
-                fontWeight: FontWeight.w600,
-                fontSize: 14.sp,
-              ),
-              KVerticalSpacer(height: 12.h),
+      body: provider.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              physics: const BouncingScrollPhysics(),
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    KText(
+                      text: "Search",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14.sp,
+                    ),
+                    KVerticalSpacer(height: 12.h),
 
-              // Search Text Form Field
-              KAuthTextFormField(
-                controller: searchController,
-                hintText: "Search by any field",
-                keyboardType: TextInputType.text,
-                suffixIcon: Icons.search,
-              ),
-
-              KVerticalSpacer(height: 12.h),
-
-              // Filter by text
-              KText(
-                text: "Filter by",
-                fontWeight: FontWeight.w600,
-                fontSize: 14.sp,
-              ),
-
-              KVerticalSpacer(height: 12.h),
-
-              // Start End Date TextFormField
-              Row(
-                spacing: 20.w,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Employee Name Filter
-                  Expanded(
-                    child: KAuthTextFormField(
-                      controller: empNameController,
-                      hintText: "Emp_Name",
+                    // Search Text Form Field
+                    KAuthTextFormField(
+                      controller: searchController,
+                      hintText: "Search by any field",
                       keyboardType: TextInputType.text,
-                      suffixIcon: Icons.filter_alt_outlined,
+                      suffixIcon: Icons.search,
                     ),
-                  ),
 
-                  // Employee ID Filter
-                  Expanded(
-                    child: KAuthTextFormField(
-                      controller: empIDController,
-                      hintText: "Emp_ID",
-                      keyboardType: TextInputType.text,
-                      suffixIcon: Icons.filter_alt_outlined,
+                    KVerticalSpacer(height: 12.h),
+
+                    // Filter by text
+                    KText(
+                      text: "Filter by",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14.sp,
                     ),
-                  ),
-                ],
-              ),
 
-              // Clear filters button
-              if (searchQuery.isNotEmpty ||
-                  empNameFilter.isNotEmpty ||
-                  empIDFilter.isNotEmpty)
-                Padding(
-                  padding: EdgeInsets.only(top: 12.h),
-                  child: Container(
-                    height: 35.h,
-                    width: 150.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.r),
-                      border: Border.all(color: AppColors.primaryColor),
-                    ),
-                    child: Center(
-                      child: TextButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            searchController.clear();
-                            empNameController.clear();
-                            empIDController.clear();
-                            searchQuery = '';
-                            empNameFilter = '';
-                            empIDFilter = '';
-                          });
-                        },
-                        icon: const Icon(Icons.clear),
-                        label: const Text("Clear Filters"),
-                      ),
-                    ),
-                  ),
-                ),
+                    KVerticalSpacer(height: 12.h),
 
-              KVerticalSpacer(height: 20.h),
-
-              // Results count
-              KText(
-                text:
-                    "Showing ${filteredData.length} of ${originalData.length} employees",
-                fontWeight: FontWeight.w500,
-                fontSize: 12.sp,
-                color: Colors.grey,
-              ),
-
-              KVerticalSpacer(height: 20.h),
-
-              // Table
-              if (filteredData.isEmpty)
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40.h),
-                    child: Column(
+                    // Start End Date TextFormField
+                    Row(
+                      spacing: 20.w,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.search_off, size: 48.sp, color: Colors.grey),
-                        SizedBox(height: 16.h),
-                        const Text(
-                          "No employees found matching your filters",
-                          style: TextStyle(color: Colors.grey),
+                        // Employee Name Filter
+                        Expanded(
+                          child: KAuthTextFormField(
+                            controller: empNameController,
+                            hintText: "Emp_Name",
+                            keyboardType: TextInputType.text,
+                            suffixIcon: Icons.filter_alt_outlined,
+                          ),
+                        ),
+
+                        // Employee ID Filter
+                        Expanded(
+                          child: KAuthTextFormField(
+                            controller: empIDController,
+                            hintText: "Emp_ID",
+                            keyboardType: TextInputType.text,
+                            suffixIcon: Icons.filter_alt_outlined,
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                )
-              else
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: KDataTable(
-                    columnTitles: columns,
-                    rowData: filteredData,
-                  ),
+
+                    // Clear filters button
+                    if (searchQuery.isNotEmpty ||
+                        empNameFilter.isNotEmpty ||
+                        empIDFilter.isNotEmpty)
+                      Padding(
+                        padding: EdgeInsets.only(top: 12.h),
+                        child: TextButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              searchController.clear();
+                              empNameController.clear();
+                              empIDController.clear();
+                              searchQuery = '';
+                              empNameFilter = '';
+                              empIDFilter = '';
+                            });
+                          },
+                          icon: const Icon(Icons.clear),
+                          label: const Text("Clear Filters"),
+                        ),
+                      ),
+
+                    KVerticalSpacer(height: 20.h),
+
+                    // Results count
+                    KText(
+                      text:
+                          "Showing ${filteredData.length} of ${originalData.length} employees",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12.sp,
+                      color: Colors.grey,
+                    ),
+
+                    KVerticalSpacer(height: 20.h),
+
+                    // Table
+                    if (filteredData.isEmpty)
+                      Center(
+                        child: KText(
+                          text: "Data List is Empty",
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14.sp,
+                        ),
+                      )
+                    else
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        child: KDataTable(
+                          columnTitles: columns,
+                          rowData: filteredData,
+                        ),
+                      ),
+                  ],
                 ),
-            ],
-          ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 }
