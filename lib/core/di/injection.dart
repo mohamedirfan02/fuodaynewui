@@ -108,10 +108,16 @@ import 'package:fuoday/features/home/presentation/provider/check_in_provider.dar
 import 'package:fuoday/features/home/presentation/provider/checkin_status_provider.dart';
 import 'package:fuoday/features/home/presentation/provider/recognition_provider.dart';
 import 'package:fuoday/features/hr/data/datasources/hr_overview_remote_datasource.dart';
+import 'package:fuoday/features/hr/data/datasources/total_payroll_remote_datasource.dart';
 import 'package:fuoday/features/hr/data/repository/hr_overview_repository_impl.dart';
+import 'package:fuoday/features/hr/data/repository/total_payroll_repository_impl.dart';
 import 'package:fuoday/features/hr/domain/repository/hr_overview_repository.dart';
+import 'package:fuoday/features/hr/domain/repository/total_payroll_repository.dart';
 import 'package:fuoday/features/hr/domain/usecase/get_hr_overview.dart';
+import 'package:fuoday/features/hr/domain/usecase/get_total_payroll_usecase.dart';
 import 'package:fuoday/features/hr/presentation/provider/hr_overview_provider.dart';
+import 'package:fuoday/features/hr/presentation/provider/total_payroll_provider.dart';
+import 'package:fuoday/features/hr/presentation/widgets/currency_symbol_suppport_pdf_server.dart';
 import 'package:fuoday/features/leave_tracker/data/datasources/leave_regulation_remote_data_source.dart';
 import 'package:fuoday/features/leave_tracker/data/datasources/leave_remote_data_source.dart';
 import 'package:fuoday/features/leave_tracker/data/datasources/leave_tracker_chart_remote_data_source.dart';
@@ -723,6 +729,9 @@ void setUpServiceLocator() {
   getIt.registerLazySingleton(() => TotalEmpPdfGeneratorService());
   //Total Emp pdf generator service
   getIt.registerLazySingleton(() => PdfGeneratorServiceReusableWidget());
+  getIt.registerLazySingleton(
+    () => PdfGeneratorServiceCurrencySymbolSupportWidget(),
+  );
 
   // excel generator service
   getIt.registerLazySingleton(() => ExcelGeneratorService());
@@ -1500,6 +1509,30 @@ void setUpServiceLocator() {
   getIt.registerFactory<UpdateRegulationStatusProvider>(
     () => UpdateRegulationStatusProvider(
       updateRegulationStatusUseCase: getIt<UpdateRegulationStatusUseCase>(),
+    ),
+  );
+
+  // 🔹 TotalPayroll Data Source HR Tab
+  getIt.registerLazySingleton<TotalPayrollRemoteDataSource>(
+    () => TotalPayrollRemoteDataSource(dioService: getIt<DioService>()),
+  );
+
+  // 🔹 Repository
+  getIt.registerLazySingleton<TotalPayrollRepository>(
+    () => TotalPayrollRepositoryImpl(
+      remoteDataSource: getIt<TotalPayrollRemoteDataSource>(),
+    ),
+  );
+
+  // 🔹 Use Case
+  getIt.registerLazySingleton<GetTotalPayrollUseCase>(
+    () => GetTotalPayrollUseCase(repository: getIt<TotalPayrollRepository>()),
+  );
+
+  // 🔹 Provider
+  getIt.registerFactory<TotalPayrollProvider>(
+    () => TotalPayrollProvider(
+      getTotalPayrollUseCase: getIt<GetTotalPayrollUseCase>(),
     ),
   );
 

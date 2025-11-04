@@ -34,10 +34,10 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      // ✅ Initial API call
-      context.allLeaveRequestProviderRead.fetchAllLeaveRequests("approved");
-    });
+    // Future.microtask(() {
+    //   //      Initial API call
+    //   context.allLeaveRequestProviderRead.fetchAllLeaveRequests("approved");
+    // });
   }
 
   @override
@@ -60,16 +60,16 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
           final e = entry.value;
           return {
             'S.No': '$i',
-            'Name': e.name ?? '',
-            'Type': e.type ?? '',
-            'From': (e.from ?? '').toString().split(' ').first, // ✅ fixed
+            'Name': e.name?.toString() ?? '-',
+            'Type': e.type?.toString() ?? '-',
+            'From': (e.from ?? '').toString().split(' ').first, //      fixed
             'To': (e.to ?? '').toString().split(' ').first,
-            'Reason': e.reason ?? '',
-            'Status': e.status ?? '',
+            'Reason': e.reason?.toString() ?? '-',
+            'Status': e.status?.toString() ?? '-',
           };
         }).toList() ??
         [];
-    // ✅ Filter by search
+    //      Filter by search
     final filteredData = tableData.where((item) {
       final query = searchController.text.toLowerCase();
       return item['Name']!.toLowerCase().contains(query);
@@ -83,7 +83,7 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
         onLeadingIconPress: () => GoRouter.of(context).pop(),
       ),
 
-      // ✅ Download button
+      //      Download button
       bottomNavigationBar: Container(
         height: 60.h,
         width: double.infinity,
@@ -96,7 +96,7 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
             width: double.infinity,
             text: "Download",
             onPressed: () async {
-              final parentContext = context; // ✅ store parent context
+              final parentContext = context; //      store parent context
 
               showModalBottomSheet(
                 context: parentContext,
@@ -170,7 +170,7 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
               onChanged: (v) {
                 if (v != null) {
                   setState(() => selectedStatus = v);
-                  // ✅ Clear old data & fetch new API
+                  //      Clear old data & fetch new API
                   context.allLeaveRequestProviderRead.clearData();
                   context.allLeaveRequestProviderRead.fetchAllLeaveRequests(
                     v.toLowerCase(),

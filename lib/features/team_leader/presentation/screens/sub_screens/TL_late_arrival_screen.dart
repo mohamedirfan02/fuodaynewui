@@ -47,10 +47,10 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
     webUserId =
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
-    // ✅ Fetch API data using provider
-    Future.microtask(() {
-      context.allRoleLateArrivalsReportProviderRead.fetchLateArrivals();
-    });
+    // // ✅ Fetch API data using provider
+    // Future.microtask(() {
+    //   context.allRoleLateArrivalsReportProviderRead.fetchLateArrivals();
+    // });
   }
 
   @override
@@ -73,8 +73,8 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
       final e = entry.value;
       return {
         'S.No': i.toString(),
-        'Employee': e.employeeName ?? '',
-        'Department': e.department ?? '-',
+        'Employee': e.employeeName?.toString() ?? '-',
+        'Department': e.department?.toString() ?? '-',
         'Late Days': e.lateCount?.toString() ?? '',
         'Average Late': e.averageLateMinutes?.toString() ?? '',
         'Percentage': "${e.lateArrivalPercentage?.toString()}%" ?? '',

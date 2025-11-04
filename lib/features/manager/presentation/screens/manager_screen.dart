@@ -71,6 +71,26 @@ class _ManagerScreenState extends State<ManagerScreen> {
     final totallateleaveRequest =
         EmployeeleaveRequest?.managerSection?.totalCount ?? 0;
 
+    //  Today’s date formatted like your API (e.g., 2025-11-05)
+    final today = DateTime.now();
+    final todayStr =
+        "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
+
+    //  Filter only today’s records where employee is “present” (not on leave)
+    final todayAttendanceList =
+        EmployeetotalAttendce?.managerSection.data
+            ?.where(
+              (att) =>
+                  att.date == todayStr &&
+                  att.status != "On Leave" &&
+                  att.checkin != null,
+            )
+            .toList() ??
+        [];
+
+    // Count how many employees attended today
+    final todayAttendanceCount = todayAttendanceList.length;
+
     final isLoading =
         roleBasedProvider.isLoading ||
         attendanceProvider.isLoading ||
@@ -101,7 +121,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
       },
       {
         'title': 'Total Attendance Report',
-        'numberOfCount': totalAttendancecount,
+        'numberOfCount': "$todayAttendanceCount/$totalTeams",
         'icon': Icons.speaker_notes_rounded,
       },
       {

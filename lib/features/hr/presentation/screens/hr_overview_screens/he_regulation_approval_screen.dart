@@ -20,16 +20,15 @@ import 'package:open_filex/open_filex.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:provider/provider.dart';
 
-class ManagerRegulationAprovalScreen extends StatefulWidget {
-  const ManagerRegulationAprovalScreen({super.key});
+class HRRegulationAprovalScreen extends StatefulWidget {
+  const HRRegulationAprovalScreen({super.key});
 
   @override
-  State<ManagerRegulationAprovalScreen> createState() =>
-      _ManagerRegulationAprovalScreenState();
+  State<HRRegulationAprovalScreen> createState() =>
+      _HRRegulationAprovalScreenState();
 }
 
-class _ManagerRegulationAprovalScreenState
-    extends State<ManagerRegulationAprovalScreen> {
+class _HRRegulationAprovalScreenState extends State<HRRegulationAprovalScreen> {
   final TextEditingController searchController = TextEditingController();
   String selectedStatus = "Pending";
   String selectedType = "Leave";
@@ -40,7 +39,7 @@ class _ManagerRegulationAprovalScreenState
   late final String name;
   late final int webUserId;
 
-  // ✅ Track updated statuses locally
+  // . Track updated statuses locally
   final Map<int, String> _updatedStatuses = {};
 
   @override
@@ -53,9 +52,9 @@ class _ManagerRegulationAprovalScreenState
     webUserId =
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
-    // Future.microtask(() {
-    //   context.allRegulationsProviderRead.fetchAllRegulations(webUserId);
-    // });
+    Future.microtask(() {
+      // context.allRegulationsProviderRead.fetchAllRegulations(webUserId);
+    });
 
     searchController.addListener(() {
       setState(() {
@@ -71,7 +70,7 @@ class _ManagerRegulationAprovalScreenState
     super.dispose();
   }
 
-  // ✅ Updated method to handle approval/rejection
+  // . Updated method to handle approval/rejection
   Future<void> _updateRegulationStatus(
     int regulationId,
     String newStatus,
@@ -92,16 +91,19 @@ class _ManagerRegulationAprovalScreenState
       await updateProvider.updateRegulation(
         regulationId,
         newStatus.capitalize(),
-        'Manager',
+        'HR',
         module,
       );
 
       if (mounted) Navigator.of(context).pop();
 
-      // ✅ If success, disable buttons and show updated status
+      // . If success, disable buttons and show updated status
       if (updateProvider.updatedRegulation?.status == "Success") {
         setState(() {
           _updatedStatuses[regulationId] = newStatus.capitalize();
+          Future.microtask(() {
+            context.allRegulationsProviderRead.fetchAllRegulations(webUserId);
+          });
         });
 
         KSnackBar.success(
@@ -126,7 +128,7 @@ class _ManagerRegulationAprovalScreenState
     final providerWatch = context.allRegulationsProviderWatch;
 
     final filteredList = providerWatch.getFilteredData(
-      section: 'manager',
+      section: 'hr',
       selectedType: selectedType,
       selectedStatus: selectedStatus,
       searchQuery: searchQuery,
@@ -141,6 +143,7 @@ class _ManagerRegulationAprovalScreenState
             'Check In',
             'Check Out',
             'Regulation Date',
+            'Manager Status',
             'Status',
             'Reason',
             'Action',
@@ -153,6 +156,7 @@ class _ManagerRegulationAprovalScreenState
             'Start Date',
             'End Date',
             'Regulation Date',
+            'Manager Status',
             'Status',
             'Reason',
             'Action',
@@ -162,7 +166,7 @@ class _ManagerRegulationAprovalScreenState
       final i = entry.key + 1;
       final e = entry.value;
 
-      // ✅ Get locally updated status (if any)
+      // . Get locally updated status (if any)
       final localStatus = _updatedStatuses[e.id];
       final currentStatus = (localStatus ?? e.regulationStatus ?? '')
           .toLowerCase();
@@ -233,18 +237,19 @@ class _ManagerRegulationAprovalScreenState
 
       return {
         'S.No': '$i',
-        'Employee ID': e.empId?.toString() ?? '-',
-        'Name': e.empName?.toString() ?? '-',
-        'Leave Type': e.displayType?.toString() ?? '-',
+        'Employee ID': e.empId ?? '-',
+        'Name': e.empName ?? '-',
+        'Leave Type': e.displayType ?? '',
         'Attendance Date': e.date?.toIso8601String().split("T").first ?? '-',
-        'Check In': e.checkin?.toString() ?? '-',
-        'Check Out': e.checkout?.toString() ?? '-',
-        'Start Date': e.from?.toString() ?? '-',
-        'End Date': e.to?.toString() ?? '-',
+        'Check In': e.checkin ?? '-',
+        'Check Out': e.checkout ?? '-',
+        'Start Date': e.from ?? '-',
+        'End Date': e.to ?? '-',
         'Regulation Date':
             e.regulationDate?.toIso8601String().split("T").first ?? '-',
-        'Status': e.regulationStatus?.toString() ?? '-',
-        'Reason': e.reason?.toString() ?? '-',
+        'Manager Status': e.managerRegulationStatus ?? '-',
+        'Status': e.regulationStatus ?? '-',
+        'Reason': e.reason ?? '-',
         'Action': actionWidget,
       };
     }).toList();
@@ -252,7 +257,7 @@ class _ManagerRegulationAprovalScreenState
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: KAppBar(
-        title: "Regulation Approval Request",
+        title: "HR Regulation Approval Request",
         centerTitle: true,
         leadingIcon: Icons.arrow_back,
         onLeadingIconPress: () => GoRouter.of(context).pop(),
@@ -467,7 +472,7 @@ class _ManagerRegulationAprovalScreenState
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("✅ PDF generated successfully!"),
+                        content: Text(". PDF generated successfully!"),
                       ),
                     );
 
@@ -511,7 +516,7 @@ class _ManagerRegulationAprovalScreenState
   }
 }
 
-// ✅ Helper extension for capitalizing
+// . Helper extension for capitalizing
 extension StringExtension on String {
   String capitalize() {
     if (isEmpty) return this;
@@ -534,7 +539,7 @@ class KDataTableRehulationScreen extends StatelessWidget {
     return DataTable2(
       columnSpacing: 16,
       horizontalMargin: 12,
-      minWidth: 1500,
+      minWidth: 1600,
       headingRowColor: MaterialStateProperty.all(Colors.blueGrey.shade50),
       columns: columnTitles
           .map(

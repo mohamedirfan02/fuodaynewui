@@ -1,3 +1,4 @@
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_app_bar.dart';
@@ -14,20 +15,23 @@ import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
+import 'package:fuoday/features/hr/domain/entities/total_payroll_entity.dart';
+import 'package:fuoday/features/hr/presentation/widgets/currency_symbol_suppport_pdf_server.dart'
+    show PdfGeneratorServiceCurrencySymbolSupportWidget;
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:open_filex/open_filex.dart';
 
-class ManagerTotalAttendanceRepotScreen extends StatefulWidget {
-  const ManagerTotalAttendanceRepotScreen({super.key});
+class HRTotalPayrollRepotScreen extends StatefulWidget {
+  const HRTotalPayrollRepotScreen({super.key});
 
   @override
-  State<ManagerTotalAttendanceRepotScreen> createState() =>
-      _ManagerTotalAttendanceRepotScreenState();
+  State<HRTotalPayrollRepotScreen> createState() =>
+      _HRTotalPayrollRepotScreenState();
 }
 
-class _ManagerTotalAttendanceRepotScreenState
-    extends State<ManagerTotalAttendanceRepotScreen> {
+class _HRTotalPayrollRepotScreenState extends State<HRTotalPayrollRepotScreen> {
   // Controller
   final TextEditingController monthYearController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
@@ -59,11 +63,9 @@ class _ManagerTotalAttendanceRepotScreenState
       });
     });
 
-    //Fetch attendance data once on init
+    // //Fetch attendance data once on init
     // Future.microtask(() {
-    //   context.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(
-    //     webUserId,
-    //   );
+    //   context.totalPayrollProviderRead.fetchTotalPayroll();
     // });
   }
 
@@ -142,20 +144,31 @@ class _ManagerTotalAttendanceRepotScreenState
 
   @override
   Widget build(BuildContext context) {
-    final attendanceProvider = context.roleWiseAttendanceReportProviderWatch;
+    final totoalPayrollProvider = context.totalPayrollProviderWatch;
 
-    final employees = attendanceProvider.attendanceReport?.managerList ?? [];
+    final employees = totoalPayrollProvider.totalPayroll?.data ?? [];
 
     // Table Columns
     final columns = [
       'S.No',
-      'Date',
-      'Name',
       'Emp ID',
-      'Checkin',
-      'Checkout',
-      'Worked Hours',
-      'Status',
+      'Name',
+      'Designation',
+      'Date of Joining',
+      'Total CTC',
+      'Latest Payslip Date',
+      'Gross',
+      'Basic',
+      'HRA',
+      'Medical Allowance',
+      'Other Allowance',
+      'HRA Allowance',
+      'Basic Pay',
+      'Allowance',
+      'PF',
+      'ESI',
+      'Other Tax',
+      'Net Pay',
     ];
 
     final List<Map<String, String>> allData = employees.asMap().entries.map((
@@ -163,15 +176,72 @@ class _ManagerTotalAttendanceRepotScreenState
     ) {
       final i = entry.key + 1;
       final e = entry.value;
+      final dateOfJoining = (e.dateOfJoining ?? '').toString().split('T').first;
+
+      //final totalSalary = double.tryParse(e.totalSalary ?? '0') ?? 0;
+      //
+      // final formattedSalary = NumberFormat(
+      //   '#,##,##0.00',
+      //   'en_IN',
+      // ).format(totalSalary);
+      // final totalCTC = double.tryParse(e.totalCtc ?? '0') ?? 0;
+      //
+      // final formattedTotalCTC = NumberFormat(
+      //   '#,##,##0.00',
+      //   'en_IN',
+      // ).format(totalCTC);
+      // final gross = double.tryParse(e.gross.toString() ?? '0') ?? 0;
+      //
+      // final formattedGross = NumberFormat('#,##,##0.00', 'en_IN').format(gross);
+      // // Parse & format all earnings safely
+      // String formatEarning(String? value) {
+      //   final parsed = double.tryParse(value ?? '0') ?? 0;
+      //   return NumberFormat('#,##,##0.00', 'en_IN').format(parsed);
+      // }
+      final totalSalary = double.tryParse(e.totalSalary ?? '0') ?? 0;
+      final formattedSalary = NumberFormat.currency(
+        locale: 'en_IN',
+        symbol: '₹',
+      ).format(totalSalary);
+
+      final totalCTC = double.tryParse(e.totalCtc ?? '0') ?? 0;
+      final formattedTotalCTC = NumberFormat.currency(
+        locale: 'en_IN',
+        symbol: '₹',
+      ).format(totalCTC);
+
+      final gross = double.tryParse(e.gross.toString()) ?? 0;
+      final formattedGross = NumberFormat.currency(
+        locale: 'en_IN',
+        symbol: '₹',
+      ).format(gross);
+
+      // Helper for all earnings
+      String formatEarning(String? value) {
+        final parsed = double.tryParse(value ?? '0') ?? 0;
+        return NumberFormat.currency(
+          locale: 'en_IN',
+          symbol: '₹',
+        ).format(parsed);
+      }
+
       return {
         'S.No': '$i',
-        'Date': e.date?.toString() ?? '-',
-        'Name': e.name?.toString() ?? '-',
-        'Emp ID': e.empId?.toString() ?? '-',
-        'Checkin': e.checkin?.toString() ?? '-',
-        'Checkout': e.checkout?.toString() ?? '-',
-        'Worked Hours': e.workedHours?.toString() ?? '-',
-        'Status': e.status?.toString() ?? '-',
+        'Emp ID': e.empId,
+        'Name': e.name,
+        'Designation': e.designation,
+        'Date of Joining': dateOfJoining,
+        'Total CTC': formattedTotalCTC,
+        'Latest Payslip Date': e.latestPayslipDate,
+        'Gross': formattedGross,
+        'Basic': formatEarning(e.getEarning('Basic')),
+        'HRA': formatEarning(e.getEarning('HRA')),
+        'Medical Allowance': formatEarning(e.getEarning('Medical Allowance')),
+        'Other Allowance': formatEarning(e.getEarning('Other Allowance')),
+        'PF': formatEarning(e.getDeduction('PF')),
+        'ESI': formatEarning(e.getDeduction('ESI')),
+        'Other Tax': formatEarning(e.getDeduction('Other Tax')),
+        'Net Pay': formattedSalary,
       };
     }).toList();
 
@@ -189,7 +259,7 @@ class _ManagerTotalAttendanceRepotScreenState
     return Scaffold(
       resizeToAvoidBottomInset: true, //   Handle keyboard
       appBar: KAppBar(
-        title: "All Employee Attendance",
+        title: "All Employee Payroll Summary",
         centerTitle: true,
         leadingIcon: Icons.arrow_back,
         onLeadingIconPress: () => GoRouter.of(context).pop(),
@@ -219,15 +289,17 @@ class _ManagerTotalAttendanceRepotScreenState
                         return KDownloadOptionsBottomSheet(
                           onPdfTap: () async {
                             final pdfService =
-                                getIt<PdfGeneratorServiceReusableWidget>();
+                                getIt<
+                                  PdfGeneratorServiceCurrencySymbolSupportWidget
+                                >();
                             //   Step 2: Generate and save PDF
                             final generatedFile = await pdfService.generateAndSavePdf(
                               title:
                                   selectedMonth != null && selectedYear != null
-                                  ? 'Employee Attendance Report - ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear'
-                                  : 'All Employee Attendance Report',
+                                  ? 'Employee Payroll Report - ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear'
+                                  : 'All Employee Payroll Report',
                               filename:
-                                  'employee_attendance_report${getFilenameSuffix()}.pdf',
+                                  'employee_payroll_report${getFilenameSuffix()}.pdf',
                               columns: List<String>.from(columns),
                               data: List<Map<String, String>>.from(displayData),
                             );
@@ -251,7 +323,7 @@ class _ManagerTotalAttendanceRepotScreenState
                                     displayData,
                                   ),
                                   columns: List<String>.from(columns),
-                                  filename: 'attendance_report$suffix.xlsx',
+                                  filename: 'payroll_report$suffix.xlsx',
                                 );
 
                             await OpenFilex.open(excelFile.path);
@@ -264,10 +336,10 @@ class _ManagerTotalAttendanceRepotScreenState
           ),
         ),
       ),
-      body: attendanceProvider.isLoading
+      body: totoalPayrollProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
-          : attendanceProvider.errorMessage != null
-          ? Center(child: Text(attendanceProvider.errorMessage!))
+          : totoalPayrollProvider.errorMessage != null
+          ? Center(child: Text(totoalPayrollProvider.errorMessage!))
           : SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Container(
@@ -435,7 +507,7 @@ class _ManagerTotalAttendanceRepotScreenState
                                 ],
                               ),
                             )
-                          : KDataTable(
+                          : KDataTablePayrollScreen(
                               columnTitles: columns,
                               rowData: displayData,
                             ),
@@ -444,6 +516,49 @@ class _ManagerTotalAttendanceRepotScreenState
                 ),
               ),
             ),
+    );
+  }
+}
+
+class KDataTablePayrollScreen extends StatelessWidget {
+  final List<String> columnTitles;
+  final List<Map<String, dynamic>> rowData; // allow String OR Widget
+
+  const KDataTablePayrollScreen({
+    super.key,
+    required this.columnTitles,
+    required this.rowData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DataTable2(
+      columnSpacing: 16,
+      horizontalMargin: 12,
+      minWidth: 2700,
+      headingRowColor: MaterialStateProperty.all(Colors.blueGrey.shade50),
+      columns: columnTitles
+          .map(
+            (title) => DataColumn(
+              label: Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
+          .toList(),
+      rows: rowData.map((row) {
+        return DataRow(
+          cells: columnTitles.map((col) {
+            final cellValue = row[col];
+            if (cellValue is Widget) {
+              return DataCell(cellValue);
+            } else {
+              return DataCell(Text(cellValue?.toString() ?? '-'));
+            }
+          }).toList(),
+        );
+      }).toList(),
     );
   }
 }

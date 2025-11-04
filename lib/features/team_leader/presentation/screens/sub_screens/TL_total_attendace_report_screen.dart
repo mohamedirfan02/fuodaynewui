@@ -33,7 +33,7 @@ class _TLTotalAttendanceRepotScreenState
 
   int? selectedMonth;
   int? selectedYear;
-  String searchQuery = ''; // ✅ Added search query state
+  String searchQuery = ''; //    Added search query state
 
   late final HiveStorageService hiveService;
   late final Map<String, dynamic>? employeeDetails;
@@ -50,14 +50,14 @@ class _TLTotalAttendanceRepotScreenState
     webUserId =
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
-    // ✅ Fetch attendance data once on init
-    Future.microtask(() {
-      context.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(
-        webUserId,
-      );
-    });
+    //    Fetch attendance data once on init
+    // Future.microtask(() {
+    //   context.roleWiseAttendanceReportProviderRead.fetchAllRoleAttendance(
+    //     webUserId,
+    //   );
+    // });
 
-    // ✅ Add search listener
+    //    Add search listener
     searchController.addListener(() {
       setState(() {
         searchQuery = searchController.text.trim();
@@ -92,7 +92,7 @@ class _TLTotalAttendanceRepotScreenState
     }
   }
 
-  // ✅ Updated filter to include search
+  //    Updated filter to include search
   List<Map<String, String>> getFilteredData(List<Map<String, String>> allData) {
     var filtered = allData;
 
@@ -114,7 +114,7 @@ class _TLTotalAttendanceRepotScreenState
       }).toList();
     }
 
-    // ✅ Filter by search query
+    //    Filter by search query
     if (searchQuery.isNotEmpty) {
       final query = searchQuery.toLowerCase();
       filtered = filtered.where((row) {
@@ -175,7 +175,7 @@ class _TLTotalAttendanceRepotScreenState
     ];
 
     return Scaffold(
-      resizeToAvoidBottomInset: true, // ✅ Handle keyboard
+      resizeToAvoidBottomInset: true, //    Handle keyboard
       appBar: KAppBar(
         title: "All Employee Attendance",
         centerTitle: true,
@@ -193,7 +193,7 @@ class _TLTotalAttendanceRepotScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ✅ Search Field (removed onTap override)
+                    //    Search Field (removed onTap override)
                     KAuthTextFormField(
                       hintText: "Search by Name or Employee ID",
                       suffixIcon: Icons.search,
@@ -201,7 +201,7 @@ class _TLTotalAttendanceRepotScreenState
                       controller: searchController,
                     ),
 
-                    // ✅ Search result indicator
+                    //    Search result indicator
                     if (searchQuery.isNotEmpty)
                       Padding(
                         padding: EdgeInsets.only(top: 8.h),
@@ -376,7 +376,7 @@ class _TLTotalAttendanceRepotScreenState
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text("✅ PDF generated successfully!"),
+                                content: Text("   PDF generated successfully!"),
                               ),
                             );
                             GoRouter.of(context).pop();

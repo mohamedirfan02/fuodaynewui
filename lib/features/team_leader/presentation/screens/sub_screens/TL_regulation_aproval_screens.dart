@@ -50,9 +50,9 @@ class _TLRegulationAprovalScreenState extends State<TLRegulationAprovalScreen> {
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
     //  => Fetch regulations once on init
-    Future.microtask(() {
-      context.allRegulationsProviderRead.fetchAllRegulations(webUserId);
-    });
+    // Future.microtask(() {
+    //   context.allRegulationsProviderRead.fetchAllRegulations(webUserId);
+    // });
 
     searchController.addListener(() {
       setState(() {
@@ -111,18 +111,18 @@ class _TLRegulationAprovalScreenState extends State<TLRegulationAprovalScreen> {
 
       return {
         'S.No': '$i',
-        'Employee ID': e.empId ?? '-',
-        'Name': e.empName ?? '-',
-        'Leave Type': e.displayType ?? '',
+        'Employee ID': e.empId?.toString() ?? '-',
+        'Name': e.empName?.toString() ?? '-',
+        'Leave Type': e.displayType?.toString() ?? '-',
         'Attendance Date': e.date?.toIso8601String().split("T").first ?? '-',
-        'Check In': e.checkin ?? '-',
-        'Check Out': e.checkout ?? '-',
-        'Start Date': e.from ?? '-',
-        'End Date': e.to ?? '-',
+        'Check In': e.checkin?.toString() ?? '-',
+        'Check Out': e.checkout?.toString() ?? '-',
+        'Start Date': e.from?.toString() ?? '-',
+        'End Date': e.to?.toString() ?? '-',
         'Regulation Date':
             e.regulationDate?.toIso8601String().split("T").first ?? '-',
-        'Status': e.regulationStatus ?? '-',
-        'Reason': e.reason ?? '-',
+        'Status': e.regulationStatus?.toString() ?? '-',
+        'Reason': e.reason?.toString() ?? '-',
       };
     }).toList();
 

@@ -20,15 +20,14 @@ import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
 
-class ManagerLateArrivalScreen extends StatefulWidget {
-  const ManagerLateArrivalScreen({super.key});
+class HRLateArrivalScreen extends StatefulWidget {
+  const HRLateArrivalScreen({super.key});
 
   @override
-  State<ManagerLateArrivalScreen> createState() =>
-      _ManagerLateArrivalScreenState();
+  State<HRLateArrivalScreen> createState() => _HRLateArrivalScreenState();
 }
 
-class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
+class _HRLateArrivalScreenState extends State<HRLateArrivalScreen> {
   // Controllers
   final TextEditingController searchController = TextEditingController();
 
@@ -51,7 +50,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
     webUserId =
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
-    // // ✅ Fetch API data using provider
+    //   Fetch API data using provider
     // Future.microtask(() {
     //   context.allRoleLateArrivalsReportProviderRead.fetchLateArrivals();
     // });
@@ -65,12 +64,12 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Watch provider for API data
+    //   Watch provider for API data
     final lateArrivalProvider = context.allRoleLateArrivalsReportProviderWatch;
     final employees =
-        lateArrivalProvider.lateArrivals?.managerSection.employees ?? [];
+        lateArrivalProvider.lateArrivals?.hrSection.employees ?? [];
 
-    // ✅ Convert model data → table data
+    //   Convert model data → table data
     final List<Map<String, String>> data = employees.asMap().entries.map((
       entry,
     ) {
@@ -82,8 +81,8 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
         'Department': e.department ?? '-',
         'Late Days': e.lateCount?.toString() ?? '',
         'Average Late': e.averageLateMinutes?.toString() ?? '',
-        'Late': "${e.lateArrivalPercentage?.toString()}%" ?? '',
-        'Trend': e.recordsUpdated?.toString() ?? '',
+        'Late': "${e.lateArrivalPercentage.toString()}%" ?? '',
+        'Trend': e.recordsUpdated.toString() ?? '',
       };
     }).toList();
 
@@ -94,7 +93,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
         .toSet()
         .toList();
 
-    // ✅ Filtered data (Dropdown + Search)
+    //   Filtered data (Dropdown + Search)
     final List<Map<String, String>> filteredData = data.where((item) {
       final matchesName =
           selectedName == null || item['Employee'] == selectedName;
@@ -106,7 +105,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
       return matchesName && matchesSearch;
     }).toList();
 
-    // ✅ Columns order
+    //   Columns order
     final columns = [
       'S.No',
       'Employee',
@@ -119,7 +118,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
 
     return Scaffold(
       appBar: KAppBar(
-        title: "All Employee Late Arrival",
+        title: "HR All Employee Late Arrival",
         centerTitle: true,
         leadingIcon: Icons.arrow_back,
         onLeadingIconPress: () => GoRouter.of(context).pop(),
@@ -165,11 +164,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
                         adjustColumnWidth: false,
                       );
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("✅ PDF generated successfully!"),
-                        ),
-                      );
+                      KSnackBar.success(context, "PDF Generated Successfully");
                       GoRouter.of(context).pop();
 
                       await OpenFilex.open(generatedFile.path);
@@ -188,7 +183,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("✅ PDF generated successfully!"),
+                          content: Text("  PDF generated successfully!"),
                         ),
                       );
                       await OpenFilex.open(excelFile.path);
@@ -216,7 +211,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
               ),
               KVerticalSpacer(height: 12.h),
 
-              // ✅ Dropdown + Clear Button Row
+              //   Dropdown + Clear Button Row
               Row(
                 children: [
                   Expanded(
@@ -267,7 +262,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
               ),
               KVerticalSpacer(height: 12.h),
 
-              // ✅ Search field with real-time filter
+              //   Search field with real-time filter
               KAuthTextFormField(
                 controller: searchController,
                 hintText: "Search by Name",
@@ -278,7 +273,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
 
               KVerticalSpacer(height: 40.h),
 
-              // ✅ Data Table
+              //   Data Table
               if (filteredData.isEmpty)
                 const Center(child: Text("No Data Found"))
               else
