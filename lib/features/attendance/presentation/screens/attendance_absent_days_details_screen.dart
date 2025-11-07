@@ -11,6 +11,7 @@ import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_message_content.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_punctual_arrival_card.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -66,6 +67,8 @@ class _AttendanceAbsentDaysDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
     // Providers
     final provider = context.totalAbsentDaysDetailsProviderWatch;
     final details = provider.data;
@@ -161,7 +164,7 @@ class _AttendanceAbsentDaysDetailsScreenState
           GoRouter.of(context).pop();
         },
       ),
-      bottomSheet: Container(
+      bottomNavigationBar: Container(
         height: 60.h,
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -169,7 +172,7 @@ class _AttendanceAbsentDaysDetailsScreenState
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 24.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",
             onPressed: () {
@@ -186,10 +189,14 @@ class _AttendanceAbsentDaysDetailsScreenState
                       final pdfService = getIt<PdfGeneratorService>();
 
                       final pdfFile = await pdfService.generateAndSavePdf(
-                        data: List<Map<String, String>>.from(data),   // ensure fresh copy
-                        columns: List<String>.from(columnTitles),     // 👈 pass column headers
-                        title: 'Absent Days Report',                  // unique title
-                        filename: 'absent_days_report.pdf',           // unique file name
+                        data: List<Map<String, String>>.from(
+                          data,
+                        ), // ensure fresh copy
+                        columns: List<String>.from(
+                          columnTitles,
+                        ), // 👈 pass column headers
+                        title: 'Absent Days Report', // unique title
+                        filename: 'absent_days_report.pdf', // unique file name
                       );
 
                       await OpenFilex.open(pdfFile.path);
@@ -198,9 +205,13 @@ class _AttendanceAbsentDaysDetailsScreenState
                       final excelService = getIt<ExcelGeneratorService>();
 
                       final excelFile = await excelService.generateAndSaveExcel(
-                        data: List<Map<String, String>>.from(data),   // ensure fresh copy
-                        columns: List<String>.from(columnTitles),     // 👈 pass column headers
-                        filename: 'absent_days_report.xlsx',          // unique file name
+                        data: List<Map<String, String>>.from(
+                          data,
+                        ), // ensure fresh copy
+                        columns: List<String>.from(
+                          columnTitles,
+                        ), // 👈 pass column headers
+                        filename: 'absent_days_report.xlsx', // unique file name
                       );
 
                       await OpenFilex.open(excelFile.path);
@@ -232,7 +243,9 @@ class _AttendanceAbsentDaysDetailsScreenState
                   crossAxisCount: 2, // 2 cards per row
                   mainAxisSpacing: 12.h,
                   crossAxisSpacing: 12.w,
-                  childAspectRatio: 1.2, // adjust for card height/width
+                  childAspectRatio: isTablet
+                      ? (isLandscape ? 4.8 : 2.5)
+                      : 1.2, // adjust for card height/width
                 ),
                 itemBuilder: (context, index) {
                   final item = punctualData[index];

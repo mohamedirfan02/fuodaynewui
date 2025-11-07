@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/hr/domain/entities/hr_overview_entity.dart';
 import 'package:fuoday/features/hr/presentation/provider/hr_overview_provider.dart';
 import 'package:fuoday/features/hr/presentation/screens/hr_add_events.dart';
@@ -15,6 +16,8 @@ class HROverviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
     //final stats = context.watch<HROverviewProvider>().hrOverview!.stats;
     final roleBasedProvider = context.roleBasedUsersProviderWatch;
     final attendanceProvider = context.roleWiseAttendanceReportProviderWatch;
@@ -139,11 +142,11 @@ class HROverviewWidget extends StatelessWidget {
     return GridView.builder(
       physics: const BouncingScrollPhysics(),
       shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 1.1,
+        childAspectRatio: isTablet ? (isLandscape ? 4.8 : 2.5) : 1.1, // 1.1,
       ),
       itemCount: cardData.length,
       itemBuilder: (context, index) {

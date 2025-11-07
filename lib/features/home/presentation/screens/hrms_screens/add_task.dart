@@ -8,6 +8,7 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/data/model/emp_list_model.dart';
@@ -223,15 +224,15 @@ class _AddTaskState extends State<AddTask> {
                         .map((e) => e.empName ?? '')
                         .toList();
 
-                    // ✅ CHANGE #2: Convert that list into a single string like "Yousuf","Mohamed","Malik"
+                    //   CHANGE #2: Convert that list into a single string like "Yousuf","Mohamed","Malik"
                     String namesString = selectedNames
                         .map((name) => '"$name"')
                         .join(',');
 
-                    // ✅ CHANGE #3: Print for debugging
+                    //   CHANGE #3: Print for debugging
                     print('Selected Employee Names: $namesString');
 
-                    // ✅ (Optional) if you want to keep printing all employee objects for debugging
+                    //   (Optional) if you want to keep printing all employee objects for debugging
                     print('All Employee Objects: $employees');
                   },
                 ),
@@ -333,7 +334,7 @@ class _AddTaskState extends State<AddTask> {
                   //       );
                   //       return;
                   //     }
-                  //     // ✅ Check selected employees
+                  //     //   Check selected employees
                   //     if (webUserId == null ||
                   //         selectedEmployees.isEmpty ||
                   //         priority == null ||
@@ -379,7 +380,7 @@ class _AddTaskState extends State<AddTask> {
                   //       // Clear dropdown selections (after success)
                   //       dropdownKey.currentState?.clearSelection();
                   //
-                  //       // ✅ Clear all fields
+                  //       //   Clear all fields
                   //       formKey.currentState!.reset();
                   //       assignedByController.clear();
                   //       assignDateController.clear();
@@ -404,7 +405,7 @@ class _AddTaskState extends State<AddTask> {
                   //   }
                   // },
                   onPressed: () async {
-                    // ✅ CAPTURE VALUES IMMEDIATELY at the start
+                    //  CAPTURE VALUES IMMEDIATELY at the start
                     final namesString = selectedEmployees
                         .map((e) => e.empName)
                         .join(', ');
@@ -451,7 +452,7 @@ class _AddTaskState extends State<AddTask> {
                         description: descriptionController.text.trim(),
                         assignedBy: assignedByName,
                         assignedById: int.parse(webUserId),
-                        assignedTo: namesString, // ✅ changed here!
+                        assignedTo: namesString, //   changed here!
                         // assignedToId: int.parse(
                         //   selectedEmployees.first.empId.toString(),
                         // ),
@@ -474,7 +475,7 @@ class _AddTaskState extends State<AddTask> {
                         // Clear dropdown selections
                         dropdownKey.currentState?.clearSelection();
 
-                        // ✅ Clear all fields
+                        //   Clear all fields
                         formKey.currentState!.reset();
                         assignedByController.clear();
                         assignDateController.clear();
@@ -501,7 +502,7 @@ class _AddTaskState extends State<AddTask> {
 
                   backgroundColor: AppColors.primaryColor,
                   fontSize: 10.sp,
-                  height: 26.h,
+                  height: AppResponsive.responsiveBtnHeight(context),
                 ),
               ],
             ),

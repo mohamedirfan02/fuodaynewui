@@ -9,6 +9,7 @@ import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/data/model/emp_list_model.dart';
@@ -35,7 +36,7 @@ class _SupportScreenState extends State<SupportScreen> {
   // controllers
   final TextEditingController dateMonthYearController = TextEditingController();
   final TextEditingController assignToPersonController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController userIdController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
   final TextEditingController ticketController = TextEditingController();
@@ -74,8 +75,7 @@ class _SupportScreenState extends State<SupportScreen> {
     final employeeDetails = hiveService.employeeDetails;
 
     // Dynamically get web_user_id
-    final int id =
-        int.tryParse(employeeDetails?['id']?.toString() ?? '') ?? 0;
+    final int id = int.tryParse(employeeDetails?['id']?.toString() ?? '') ?? 0;
 
     if (id == 0) {
       print("❌ Invalid or missing web_user_id from Hive");
@@ -93,12 +93,11 @@ class _SupportScreenState extends State<SupportScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     // Select Date
     Future<void> selectDate(
-        BuildContext context,
-        TextEditingController controller,
-        ) async {
+      BuildContext context,
+      TextEditingController controller,
+    ) async {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -136,7 +135,7 @@ class _SupportScreenState extends State<SupportScreen> {
             GoRouter.of(context).pop();
           },
         ),
-        bottomSheet: Container(
+        bottomNavigationBar: Container(
           height: 60.h,
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -144,7 +143,7 @@ class _SupportScreenState extends State<SupportScreen> {
           child: Center(
             child: KAuthFilledBtn(
               backgroundColor: AppColors.primaryColor,
-              height: 24.h,
+              height: AppResponsive.responsiveBtnHeight(context),
               width: double.infinity,
               text: "Raise Ticket",
               onPressed: () {
@@ -162,7 +161,7 @@ class _SupportScreenState extends State<SupportScreen> {
                         left: 20.w,
                         right: 20.w,
                         bottom:
-                        MediaQuery.of(context).viewInsets.bottom +
+                            MediaQuery.of(context).viewInsets.bottom +
                             20.h, // keyboard aware
                         top: 10.h,
                       ),
@@ -225,19 +224,27 @@ class _SupportScreenState extends State<SupportScreen> {
 
                             // Assign to employee - ✅ Fixed dropdown
                             employees.isEmpty
-                                ? const Center(child: CircularProgressIndicator())
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
                                 : KDropdownTextFormField<String>(
-                              hintText: "Select assigned person",
-                              value: selectedEmployeeName,
-                              items: employees.map((e) => e.name ?? 'Unknown').toList(), // ✅ Fixed: use .name instead of .empName
-                              onChanged: (value) {
-                                final selected = employees.firstWhere((e) => e.name == value); // ✅ Fixed: use .name
-                                setState(() {
-                                  selectedEmployeeName = selected.name; // ✅ Fixed: use .name
-                                  selectedEmployeeId = selected.id.toString(); // ✅ Fixed: use .id instead of .webUserId
-                                });
-                              },
-                            ),
+                                    hintText: "Select assigned person",
+                                    value: selectedEmployeeName,
+                                    items: employees
+                                        .map((e) => e.name ?? 'Unknown')
+                                        .toList(), // ✅ Fixed: use .name instead of .empName
+                                    onChanged: (value) {
+                                      final selected = employees.firstWhere(
+                                        (e) => e.name == value,
+                                      ); // ✅ Fixed: use .name
+                                      setState(() {
+                                        selectedEmployeeName =
+                                            selected.name; // ✅ Fixed: use .name
+                                        selectedEmployeeId = selected.id
+                                            .toString(); // ✅ Fixed: use .id instead of .webUserId
+                                      });
+                                    },
+                                  ),
 
                             KVerticalSpacer(height: 10.h),
 
@@ -286,11 +293,21 @@ class _SupportScreenState extends State<SupportScreen> {
                               textColor: AppColors.secondaryColor,
                               onPressed: () {
                                 final hiveService = getIt<HiveStorageService>();
-                                final webUserId = int.tryParse(hiveService.employeeDetails?['web_user_id']?.toString() ?? '');
+                                final webUserId = int.tryParse(
+                                  hiveService.employeeDetails?['web_user_id']
+                                          ?.toString() ??
+                                      '',
+                                );
 
-                                if (webUserId == null || selectedEmployeeId == null || selectedEmployeeName == null) {
+                                if (webUserId == null ||
+                                    selectedEmployeeId == null ||
+                                    selectedEmployeeName == null) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('❌ Missing required fields')),
+                                    const SnackBar(
+                                      content: Text(
+                                        '❌ Missing required fields',
+                                      ),
+                                    ),
                                   );
                                   return;
                                 }
@@ -301,11 +318,18 @@ class _SupportScreenState extends State<SupportScreen> {
                                   category: categoryController.text.trim(),
                                   assignedToId: int.parse(selectedEmployeeId!),
                                   assignedTo: selectedEmployeeName!,
-                                  priority: context.read<DropdownProvider>().getValue('priority') ?? '',
+                                  priority:
+                                      context.read<DropdownProvider>().getValue(
+                                        'priority',
+                                      ) ??
+                                      '',
                                   date: dateMonthYearController.text.trim(),
                                 );
 
-                                context.read<TicketProvider>().submitTicket(ticket, context);
+                                context.read<TicketProvider>().submitTicket(
+                                  ticket,
+                                  context,
+                                );
                               },
 
                               backgroundColor: AppColors.primaryColor,

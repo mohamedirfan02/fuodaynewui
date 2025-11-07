@@ -8,6 +8,7 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_card.dart';
 import 'package:fuoday/features/team_leader/presentation/widget/TL_attendance_card.dart';
 import 'package:go_router/go_router.dart';
@@ -60,6 +61,8 @@ class _TeamLeaderScreenState extends State<TeamLeaderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
     // Total Attendance Details Provider
 
     final roleBasedProvider = context.roleBasedUsersProviderWatch;
@@ -286,7 +289,9 @@ class _TeamLeaderScreenState extends State<TeamLeaderScreen> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 16.w,
                   mainAxisSpacing: 16.h,
-                  childAspectRatio: 1.15,
+                  childAspectRatio: isTablet
+                      ? (isLandscape ? 4.8 : 2.5)
+                      : 1.15, //1.3 //1.15,
                 ),
                 itemCount: gridAttendanceData.length,
                 itemBuilder: (context, index) {

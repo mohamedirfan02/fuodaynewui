@@ -13,6 +13,7 @@ import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:go_router/go_router.dart';
@@ -203,7 +204,7 @@ class _HRTotalAttendanceRepotScreenState
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 24.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: displayData.isEmpty ? "No Data to Download" : "Download",
             onPressed: displayData.isEmpty

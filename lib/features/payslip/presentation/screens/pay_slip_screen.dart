@@ -9,6 +9,7 @@ import 'package:fuoday/core/constants/api/app_api_endpoint_constants.dart';
 import 'package:fuoday/core/service/dio_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/payslip/presentation/screens/pay_roll.dart';
 import 'package:fuoday/features/payslip/presentation/screens/payslip_overview.dart';
@@ -20,8 +21,10 @@ import 'package:path_provider/path_provider.dart';
 class PaySlipScreen extends StatelessWidget {
   const PaySlipScreen({super.key});
 
-
-  Future<void> _downloadAndOpenPayslip(BuildContext context, int webUserId) async {
+  Future<void> _downloadAndOpenPayslip(
+    BuildContext context,
+    int webUserId,
+  ) async {
     try {
       final url = AppApiEndpointConstants.downloadPayslip(webUserId);
       debugPrint("Downloading PDF from: $url");
@@ -59,23 +62,18 @@ class PaySlipScreen extends StatelessWidget {
     } catch (e, stackTrace) {
       debugPrint("Unknown error: $e");
       debugPrint("Stack trace: $stackTrace");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        bottomSheet: Container(
+        bottomNavigationBar: Container(
           height: 60.h,
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -83,7 +81,7 @@ class PaySlipScreen extends StatelessWidget {
           child: Center(
             child: KAuthFilledBtn(
               backgroundColor: AppColors.primaryColor,
-              height: 24.h,
+              height: AppResponsive.responsiveBtnHeight(context),
               width: double.infinity,
               text: "Download Payslip",
               onPressed: () {
@@ -96,13 +94,16 @@ class PaySlipScreen extends StatelessWidget {
                   ),
                   builder: (context) {
                     return PdfDownloadBottomSheet(
-
                       onPdfTap: () async {
                         Navigator.pop(context); // Close bottom sheet
 
-                        final employeeDetails = HiveStorageService().employeeDetails;
-                        if (employeeDetails != null && employeeDetails['web_user_id'] != null) {
-                          final int webUserId = int.parse(employeeDetails['web_user_id'].toString());
+                        final employeeDetails =
+                            HiveStorageService().employeeDetails;
+                        if (employeeDetails != null &&
+                            employeeDetails['web_user_id'] != null) {
+                          final int webUserId = int.parse(
+                            employeeDetails['web_user_id'].toString(),
+                          );
                           await _downloadAndOpenPayslip(context, webUserId);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -137,12 +138,7 @@ class PaySlipScreen extends StatelessWidget {
                 ],
               ),
               Expanded(
-                child: TabBarView(
-                  children: [
-                    PayRoll(),
-                    PayslipOverview(),
-                  ],
-                ),
+                child: TabBarView(children: [PayRoll(), PayslipOverview()]),
               ),
             ],
           ),

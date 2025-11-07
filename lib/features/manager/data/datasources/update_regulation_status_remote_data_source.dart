@@ -29,7 +29,7 @@ class UpdateRegulationStatusRemoteDataSource {
         AppApiEndpointConstants.updatRegulation,
         // "https://backend.fuoday.com/api/hrms/hr/update-regulation-status",
         data: payload,
-      );
+      ); //https://backend.fuoday.com/api/hrms/hr/all-attendance/$webUserId';
 
       AppLoggerHelper.logInfo("✅ Regulation Update Response: ${response.data}");
 

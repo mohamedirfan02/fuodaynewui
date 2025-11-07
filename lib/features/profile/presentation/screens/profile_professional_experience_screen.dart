@@ -345,7 +345,7 @@ class _ProfileProfessionalExperienceScreenState
           GoRouter.of(context).pop();
         },
       ),
-      bottomSheet: Container(
+      bottomNavigationBar: Container(
         height: 100.h,
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),

@@ -7,6 +7,7 @@ import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
 import 'package:fuoday/core/constants/router/app_route_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/providers/forgot_password_provider.dart';
 import 'package:fuoday/features/auth/presentation/providers/verify_otp_provider.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -206,7 +207,9 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
                                     }(); // immediately invoke the async function
                                   }
                                 },
-                                height: 22.h,
+                                height: AppResponsive.responsiveBtnHeight(
+                                  context,
+                                ),
                                 width: double.infinity,
                               ),
 

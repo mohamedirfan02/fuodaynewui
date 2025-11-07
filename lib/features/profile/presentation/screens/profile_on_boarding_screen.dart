@@ -14,6 +14,7 @@ import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/core/utils/date_picker.dart';
 import 'package:fuoday/core/validators/app_validators.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -32,20 +33,16 @@ class ProfileOnBoardingScreen extends StatefulWidget {
 }
 
 class _ProfileOnBoardingScreenState extends State<ProfileOnBoardingScreen> {
-
   Future<int> _getWebUserIdFromHive() async {
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
     return int.parse(employeeDetails?['web_user_id'].toString() ?? '0');
-
   }
 
   File? _toFile(PlatformFile? file) {
     if (file == null || file.path == null) return null;
     return File(file.path!);
   }
-
-
 
   // form key
   final _formKey = GlobalKey<FormState>();
@@ -55,7 +52,6 @@ class _ProfileOnBoardingScreenState extends State<ProfileOnBoardingScreen> {
       TextEditingController();
   final TextEditingController onBoardingDateController =
       TextEditingController();
-
 
   @override
   void initState() {
@@ -92,6 +88,7 @@ class _ProfileOnBoardingScreenState extends State<ProfileOnBoardingScreen> {
 
     return true;
   }
+
   DateTime _parseDate(String input) {
     try {
       final formatter = DateFormat('d/M/yyyy');
@@ -101,9 +98,6 @@ class _ProfileOnBoardingScreenState extends State<ProfileOnBoardingScreen> {
       return DateTime.now(); // fallback or handle differently
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -567,7 +561,7 @@ class _ProfileOnBoardingScreenState extends State<ProfileOnBoardingScreen> {
                       ),
                     );
                   },
-                  height: 22.h,
+                  height: AppResponsive.responsiveBtnHeight(context),
                   width: double.infinity,
                 ),
 
@@ -577,22 +571,40 @@ class _ProfileOnBoardingScreenState extends State<ProfileOnBoardingScreen> {
                   fontSize: 10.sp,
                   text: "Submit",
                   onPressed: () async {
-                    
                     try {
                       final entity = EmployeeOnboardEntity(
                         webUserId: await _getWebUserIdFromHive(),
-                        welcomeEmailSent: _parseDate(welcomeEmailDateController.text),
-                        scheduledDate: _parseDate(onBoardingDateController.text),
-                        photo: _toFile(context.filePickerProviderRead.getFile('photo')),
-                        pan: _toFile(context.filePickerProviderRead.getFile('PAN')),
-                        passbook: _toFile(context.filePickerProviderRead.getFile('bankPassBook')),
-                        payslip: _toFile(context.filePickerProviderRead.getFile('paySlip')),
-                        offerLetter: _toFile(context.filePickerProviderRead.getFile('offerLetter')),
+                        welcomeEmailSent: _parseDate(
+                          welcomeEmailDateController.text,
+                        ),
+                        scheduledDate: _parseDate(
+                          onBoardingDateController.text,
+                        ),
+                        photo: _toFile(
+                          context.filePickerProviderRead.getFile('photo'),
+                        ),
+                        pan: _toFile(
+                          context.filePickerProviderRead.getFile('PAN'),
+                        ),
+                        passbook: _toFile(
+                          context.filePickerProviderRead.getFile(
+                            'bankPassBook',
+                          ),
+                        ),
+                        payslip: _toFile(
+                          context.filePickerProviderRead.getFile('paySlip'),
+                        ),
+                        offerLetter: _toFile(
+                          context.filePickerProviderRead.getFile('offerLetter'),
+                        ),
                       );
 
                       await getIt<OnboardEmployeeUseCase>().call(entity);
 
-                      KSnackBar.success(context, "Employee Onboarding Submitted!");
+                      KSnackBar.success(
+                        context,
+                        "Employee Onboarding Submitted!",
+                      );
                       AppLoggerHelper.logInfo("Submission successful.");
 
                       // Optional: Clear form after success
@@ -606,9 +618,7 @@ class _ProfileOnBoardingScreenState extends State<ProfileOnBoardingScreen> {
                     }
                   },
 
-
-
-                  height: 22.h,
+                  height: AppResponsive.responsiveBtnHeight(context),
                   width: double.infinity,
                 ),
               ],

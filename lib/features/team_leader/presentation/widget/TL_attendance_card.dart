@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 
 class TLAttendanceCard extends StatelessWidget {
   final String attendancePercentage;
@@ -26,11 +27,17 @@ class TLAttendanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
+    final cardWidth = isTablet
+        ? (isLandscape ? 0.48.sw : 0.47.sw)
+        : 0.45.sw; // dynamic width
+    final paddingValue = isTablet ? 18.w : 14.w;
     return Stack(
       children: [
         // Card Content
         Container(
-          width: 0.4.sw,
+          width: cardWidth, //0.4.sw,
           padding: EdgeInsets.symmetric(horizontal: 19.w, vertical: 19.h),
           decoration: BoxDecoration(
             border: Border.all(width: 0.1.w, color: AppColors.greyColor),

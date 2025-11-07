@@ -7,6 +7,7 @@ import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/dio_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 
@@ -39,10 +40,14 @@ class _HrAddEventsState extends State<HrAddEvents> {
       if (date != null) {
         final parts = date.split('-');
         if (parts.length == 3) {
-          dateController.text = "${parts[2]}/${parts[1]}/${parts[0]}"; // dd/MM/yyyy
+          dateController.text =
+              "${parts[2]}/${parts[1]}/${parts[0]}"; // dd/MM/yyyy
         }
       }
-      context.dropDownProviderRead.setValue('Events', widget.existingEvent?['event']);
+      context.dropDownProviderRead.setValue(
+        'Events',
+        widget.existingEvent?['event'],
+      );
       eventAction = widget.eventId != null ? 'Update' : 'Create';
     }
   }
@@ -62,7 +67,10 @@ class _HrAddEventsState extends State<HrAddEvents> {
     setState(() {
       eventAction = 'Create';
     });
-    context.dropDownProviderRead.setValue('priority', null); // reset dropdown<dropDownProviderWatch>().setValue('Events', null); // reset dropdown
+    context.dropDownProviderRead.setValue(
+      'priority',
+      null,
+    ); // reset dropdown<dropDownProviderWatch>().setValue('Events', null); // reset dropdown
   }
 
   Future<void> submitEvent() async {
@@ -79,7 +87,8 @@ class _HrAddEventsState extends State<HrAddEvents> {
     final action = eventAction.toLowerCase(); // create or update
 
     final dateParts = date.split('/');
-    final formattedDate = "${dateParts[2]}-${dateParts[1].padLeft(2,'0')}-${dateParts[0].padLeft(2,'0')}";
+    final formattedDate =
+        "${dateParts[2]}-${dateParts[1].padLeft(2, '0')}-${dateParts[0].padLeft(2, '0')}";
 
     final payload = {
       "web_user_id": webUserId,
@@ -94,24 +103,26 @@ class _HrAddEventsState extends State<HrAddEvents> {
     try {
       await DioService().post('/admin-users/save/event', data: payload);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Event ${action == 'create' ? 'created' : 'updated'} successfully')),
+        SnackBar(
+          content: Text(
+            'Event ${action == 'create' ? 'created' : 'updated'} successfully',
+          ),
+        ),
       );
       clearForm();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     Future<void> selectDate(
-        BuildContext context,
-        TextEditingController controller,
-        ) async {
+      BuildContext context,
+      TextEditingController controller,
+    ) async {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -163,8 +174,9 @@ class _HrAddEventsState extends State<HrAddEvents> {
                   items: const ['Celebration', 'Operation', 'Announcement'],
                   onChanged: (value) =>
                       context.dropDownProviderRead.setValue('Events', value),
-                  validator: (value) =>
-                  value == null || value.isEmpty ? "Events is required" : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Events is required"
+                      : null,
                 ),
                 const SizedBox(height: 10),
 
@@ -175,8 +187,9 @@ class _HrAddEventsState extends State<HrAddEvents> {
                   controller: titleController,
                   hintText: "Enter Title",
                   keyboardType: TextInputType.text,
-                  validator: (value) =>
-                  value == null || value.isEmpty ? "Title is required" : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Title is required"
+                      : null,
                 ),
                 const SizedBox(height: 10),
 
@@ -190,8 +203,9 @@ class _HrAddEventsState extends State<HrAddEvents> {
                   hintText: "Select date",
                   keyboardType: TextInputType.datetime,
                   suffixIcon: Icons.date_range,
-                  validator: (value) =>
-                  value == null || value.isEmpty ? "Deadline is required" : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Deadline is required"
+                      : null,
                 ),
                 const SizedBox(height: 20),
 
@@ -202,8 +216,9 @@ class _HrAddEventsState extends State<HrAddEvents> {
                   controller: descriptionController,
                   hintText: "Enter description",
                   keyboardType: TextInputType.text,
-                  validator: (value) =>
-                  value == null || value.isEmpty ? "Description is required" : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Description is required"
+                      : null,
                 ),
                 const SizedBox(height: 20),
 
@@ -243,7 +258,9 @@ class _HrAddEventsState extends State<HrAddEvents> {
 
                 // Create Event Button
                 KAuthFilledBtn(
-                  text: eventAction == 'Create' ? 'Create Event' : 'Update Event',
+                  text: eventAction == 'Create'
+                      ? 'Create Event'
+                      : 'Update Event',
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       submitEvent();
@@ -251,9 +268,8 @@ class _HrAddEventsState extends State<HrAddEvents> {
                   },
                   backgroundColor: AppColors.primaryColor,
                   fontSize: 10.sp,
-                  height: 26.h,
+                  height: AppResponsive.responsiveBtnHeight(context),
                 ),
-
               ],
             ),
           ),
@@ -262,4 +278,3 @@ class _HrAddEventsState extends State<HrAddEvents> {
     );
   }
 }
-

@@ -9,6 +9,7 @@ import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/hr/presentation/provider/hr_overview_provider.dart';
 import 'package:fuoday/features/management/domain/entities/emp_audit_form_entity.dart';
@@ -29,7 +30,6 @@ class ManagementScreen extends StatefulWidget {
 }
 
 class _ManagementScreenState extends State<ManagementScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -38,7 +38,8 @@ class _ManagementScreenState extends State<ManagementScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final hiveService = getIt<HiveStorageService>();
       final employeeDetails = hiveService.employeeDetails;
-      final webUserId = int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '0') ?? 0;
+      final webUserId =
+          int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '0') ?? 0;
 
       // Access the global provider and fetch data
       context.read<EmpAuditFormProvider>().fetchEmployeesByManagers(webUserId);
@@ -51,7 +52,6 @@ class _ManagementScreenState extends State<ManagementScreen> {
       throw Exception("Could not launch $url");
     }
   }
-
 
   // Table columns for the employee data
   final columns = [
@@ -81,7 +81,10 @@ class _ManagementScreenState extends State<ManagementScreen> {
           create: (_) {
             final provider = getIt<HROverviewProvider>();
             final webUserId =
-                int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '0') ?? 0;
+                int.tryParse(
+                  employeeDetails?['web_user_id']?.toString() ?? '0',
+                ) ??
+                0;
             provider.fetchHROverview(webUserId);
             return provider;
           },
@@ -90,7 +93,10 @@ class _ManagementScreenState extends State<ManagementScreen> {
           create: (_) {
             final provider = getIt<EmpAuditFormProvider>();
             final webUserId =
-                int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '0') ?? 0;
+                int.tryParse(
+                  employeeDetails?['web_user_id']?.toString() ?? '0',
+                ) ??
+                0;
             provider.fetchEmployeesByManagers(webUserId);
             return provider;
           },
@@ -107,7 +113,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
               GoRouter.of(context).pop();
             },
           ),
-          bottomSheet: Container(
+          bottomNavigationBar: Container(
             height: 60.h,
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -115,7 +121,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
             child: Center(
               child: KAuthFilledBtn(
                 backgroundColor: AppColors.primaryColor,
-                height: 24.h,
+                height: AppResponsive.responsiveBtnHeight(context),
                 width: double.infinity,
                 text: "View Audit Process",
                 onPressed: () {
@@ -237,9 +243,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(16.r),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
       builder: (context) {
         return Padding(
@@ -270,9 +274,15 @@ class _ManagementScreenState extends State<ManagementScreen> {
                           onPressed: () {
                             final hiveService = getIt<HiveStorageService>();
                             final employeeDetails = hiveService.employeeDetails;
-                            final webUserId = int.tryParse(
-                                employeeDetails?['web_user_id']?.toString() ?? '0') ?? 0;
-                            empAuditProvider.fetchEmployeesByManagers(webUserId);
+                            final webUserId =
+                                int.tryParse(
+                                  employeeDetails?['web_user_id']?.toString() ??
+                                      '0',
+                                ) ??
+                                0;
+                            empAuditProvider.fetchEmployeesByManagers(
+                              webUserId,
+                            );
                           },
                           child: Text('Retry'),
                         ),
@@ -351,7 +361,8 @@ class _ManagementScreenState extends State<ManagementScreen> {
         KText(
           text: label,
           fontSize: 12.sp,
-          color: AppColors.greyColor, fontWeight: FontWeight.w500,
+          color: AppColors.greyColor,
+          fontWeight: FontWeight.w500,
         ),
       ],
     );
@@ -382,7 +393,12 @@ class _ManagementScreenState extends State<ManagementScreen> {
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             textStyle: TextStyle(fontSize: 10.sp),
           ),
-          child:  KText(text: 'View', fontWeight: FontWeight.w500,color: AppColors.secondaryColor,  fontSize: 14.sp,),
+          child: KText(
+            text: 'View',
+            fontWeight: FontWeight.w500,
+            color: AppColors.secondaryColor,
+            fontSize: 14.sp,
+          ),
         ),
       };
     }).toList();
@@ -400,10 +416,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
         if (manager.employees.isNotEmpty)
           SizedBox(
             height: 200.h,
-            child: KDataTable(
-              columnTitles: columns,
-              rowData: tableData,
-            ),
+            child: KDataTable(columnTitles: columns, rowData: tableData),
           )
         else
           Container(
@@ -412,7 +425,8 @@ class _ManagementScreenState extends State<ManagementScreen> {
             child: KText(
               text: "No employees found",
               fontSize: 12.sp,
-              color: AppColors.greyColor, fontWeight: FontWeight.w500,
+              color: AppColors.greyColor,
+              fontWeight: FontWeight.w500,
             ),
           ),
         KVerticalSpacer(height: 20.h),

@@ -113,11 +113,11 @@ class AttendanceUserModel {
       final reportingManagerIdRaw = json['reporting_manager_id'];
       final teamIdRaw = json['team_id'];
 
-      AppLoggerHelper.logInfo(
-        "🔍 Parsing user: ${json['name']}, "
-        "reporting_manager_id type: ${reportingManagerIdRaw.runtimeType} (value: $reportingManagerIdRaw), "
-        "team_id type: ${teamIdRaw.runtimeType} (value: $teamIdRaw)",
-      );
+      // AppLoggerHelper.logInfo(
+      //   "🔍 Parsing user: ${json['name']}, "
+      //   "reporting_manager_id type: ${reportingManagerIdRaw.runtimeType} (value: $reportingManagerIdRaw), "
+      //   "team_id type: ${teamIdRaw.runtimeType} (value: $teamIdRaw)",
+      // );
 
       return AttendanceUserModel(
         name: json['name'] ?? '',

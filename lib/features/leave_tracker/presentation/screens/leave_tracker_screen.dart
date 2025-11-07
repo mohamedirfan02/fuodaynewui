@@ -11,6 +11,7 @@ import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/leave_tracker/domain/entities/leave_regulation_entity.dart';
@@ -31,12 +32,16 @@ class LeaveTrackerScreen extends StatefulWidget {
 
 class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final TextEditingController fromDateMonthYearController = TextEditingController();
-  final TextEditingController toDateMonthYearController = TextEditingController();
+  final TextEditingController fromDateMonthYearController =
+      TextEditingController();
+  final TextEditingController toDateMonthYearController =
+      TextEditingController();
   final TextEditingController employeeNameController = TextEditingController();
   final TextEditingController empIdController = TextEditingController();
-  final TextEditingController regulationReasonController = TextEditingController();
-  final TextEditingController regulationCommentController = TextEditingController();
+  final TextEditingController regulationReasonController =
+      TextEditingController();
+  final TextEditingController regulationCommentController =
+      TextEditingController();
   @override
   void dispose() {
     fromDateMonthYearController.dispose();
@@ -47,6 +52,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
     regulationCommentController.dispose();
     super.dispose();
   }
+
   // Method to clear all form fields
   void _clearFormFields() {
     fromDateMonthYearController.clear();
@@ -54,6 +60,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
     regulationReasonController.clear();
     regulationCommentController.clear();
   }
+
   // Method to validate form
   bool _validateForm() {
     if (fromDateMonthYearController.text.isEmpty) {
@@ -97,7 +104,6 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
         ? int.tryParse(webUserIdString) ?? 0
         : (webUserIdString ?? 0) as int;
 
-
     final entity = LeaveRegulationEntity(
       webUserId: webUserId,
       fromDate: fromDateMonthYearController.text,
@@ -124,12 +130,11 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     // Select Date
     Future<void> selectDate(
-        BuildContext context,
-        TextEditingController controller,
-        ) async {
+      BuildContext context,
+      TextEditingController controller,
+    ) async {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -155,6 +160,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
         controller.text = DateFormat('yyyy-MM-dd').format(picked);
       }
     }
+
     // Get employee details from Hive with error handling
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
@@ -165,7 +171,6 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
     final designation = employeeDetails?['designation'] ?? "No Designation";
     final email = employeeDetails?['email'] ?? "No email";
     final empId = employeeDetails?['empId'] ?? "No Employee ID";
-
 
     return DefaultTabController(
       length: 3,
@@ -184,7 +189,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
           userEmail: email,
           profileImageUrl: profilePhoto,
         ),
-        bottomSheet: Container(
+        bottomNavigationBar: Container(
           height: 60.h,
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -192,7 +197,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
           child: Center(
             child: KAuthFilledBtn(
               backgroundColor: AppColors.primaryColor,
-              height: 24.h,
+              height: AppResponsive.responsiveBtnHeight(context),
               width: double.infinity,
               text: "Edit",
               onPressed: () {
@@ -210,7 +215,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
                         left: 20.w,
                         right: 20.w,
                         bottom:
-                        MediaQuery.of(context).viewInsets.bottom +
+                            MediaQuery.of(context).viewInsets.bottom +
                             20.h, // keyboard aware
                         top: 10.h,
                       ),
@@ -265,7 +270,10 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
                             KAuthTextFormField(
                               hintText: "From Date",
                               onTap: () async {
-                                selectDate(context, fromDateMonthYearController);
+                                selectDate(
+                                  context,
+                                  fromDateMonthYearController,
+                                );
                               },
                               controller: fromDateMonthYearController,
                               keyboardType: TextInputType.datetime,
@@ -302,7 +310,9 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
                             KVerticalSpacer(height: 10.h),
                             // Cancel
                             KAuthFilledBtn(
-                              height: 24.h,
+                              height: AppResponsive.responsiveBtnHeight(
+                                context,
+                              ),
                               width: double.infinity,
                               text: "Cancel",
                               fontSize: 10.sp,
@@ -318,12 +328,15 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
 
                             // Submit
                             KAuthFilledBtn(
-                              height: 24.h,
+                              height: AppResponsive.responsiveBtnHeight(
+                                context,
+                              ),
                               fontSize: 10.sp,
                               width: double.infinity,
                               text: "Submit",
                               textColor: AppColors.secondaryColor,
-                              onPressed: _submitForm, // Updated to use the new submit method
+                              onPressed:
+                                  _submitForm, // Updated to use the new submit method
                               backgroundColor: AppColors.primaryColor,
                             ),
                           ],
@@ -364,7 +377,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
                     LeaveBalance(),
 
                     // Leave Reports
-                    LeaveReports(attendanceValues: [], months: [],),
+                    LeaveReports(attendanceValues: [], months: []),
 
                     // Leave Request
                     LeaveRequest(),

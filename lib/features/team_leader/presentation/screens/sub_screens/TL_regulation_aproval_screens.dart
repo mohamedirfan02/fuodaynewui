@@ -11,6 +11,7 @@ import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/manager/presentation/provider/all_regulations_provider.dart';
@@ -286,7 +287,7 @@ class _TLRegulationAprovalScreenState extends State<TLRegulationAprovalScreen> {
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         child: KAuthFilledBtn(
           backgroundColor: AppColors.primaryColor,
-          height: 30.h,
+          height: AppResponsive.responsiveBtnHeight(context),
           width: double.infinity,
           text: "Download Report",
           fontSize: 12.sp,

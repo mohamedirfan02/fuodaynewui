@@ -8,6 +8,7 @@ import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/core/utils/month_picker.dart';
 import 'package:fuoday/core/validators/app_validators.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -25,7 +26,6 @@ class ProfileEducationalBackgroundScreen extends StatefulWidget {
 
 class _ProfileEducationalBackgroundScreenState
     extends State<ProfileEducationalBackgroundScreen> {
-
   late final GetEducationUseCase getEducationUseCase;
   late final GetSkillsUseCase getSkillsUseCase;
 
@@ -163,7 +163,7 @@ class _ProfileEducationalBackgroundScreenState
                         onPressed: () {
                           context.profileEditProviderRead.cancelEdit();
                         },
-                        height: 22.h,
+                        height: AppResponsive.responsiveBtnHeight(context),
                         width: double.infinity,
                       )
                     : SizedBox(),
@@ -190,7 +190,7 @@ class _ProfileEducationalBackgroundScreenState
                       context.profileEditProviderRead.toggleEditMode();
                     }
                   },
-                  height: 22.h,
+                  height: AppResponsive.responsiveBtnHeight(context),
                   width: double.infinity,
                 ),
               ],

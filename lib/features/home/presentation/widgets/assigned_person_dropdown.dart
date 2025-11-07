@@ -209,7 +209,7 @@ class AssignedPersonDropdownCheckboxState
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
                                   color: AppColors.titleColor.withOpacity(
-                                    isLoading ? 0.4 : 1.0,
+                                    isLoading ? 0.4 : .7,
                                   ),
                                 ),
                                 overflow: TextOverflow.ellipsis,

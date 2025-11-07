@@ -12,6 +12,7 @@ import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/secure_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/core/validators/app_validators.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_password_text_field.dart';
@@ -55,6 +56,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
         KSnackBar.success(context, "Internet Connection Available");
       }
     });
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
+    //isTablet? (isLandscape ? 30.h : 25.h) : 22.h,
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -475,7 +479,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                 );
                                               }
                                             },
-                                            height: 22.h,
+                                            height: isTablet
+                                                ? (isLandscape ? 30.h : 25.h)
+                                                : 22.h,
                                             width: double.infinity,
                                           )
                                         else
@@ -628,7 +634,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                 );
                                               }
                                             },
-                                            height: 22.h,
+                                            height: isTablet
+                                                ? (isLandscape ? 30.h : 25.h)
+                                                : 22.h,
                                             width: double.infinity,
                                           ),
 
