@@ -9,6 +9,7 @@ import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/dio_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/domain/entities/home_feeds_project_data_entity.dart';
@@ -36,13 +37,17 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
     _homeFeedsFuture = useCase.call(webUserId!);
   }
 
-
   void _onUpdateProgress(dynamic item) {
     // Handle update progress command
     _showUpdateProgressDialog(item);
   }
+
+  //isTablet? (isLandscape ? 30.h : 25.h) : 22.h,
   void _showUpdateProgressDialog(dynamic item) {
-    final TextEditingController progressNoteController = TextEditingController();
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
+    final TextEditingController progressNoteController =
+        TextEditingController();
     final TextEditingController commandController = TextEditingController();
 
     showDialog(
@@ -51,15 +56,16 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
         builder: (context, constraints) {
           // Calculate available height considering keyboard
           final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-          final availableHeight = constraints.maxHeight - keyboardHeight - 40; // 40 for padding
+          final availableHeight =
+              constraints.maxHeight - keyboardHeight - 40; // 40 for padding
 
           return Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
             child: Container(
               width: MediaQuery.of(context).size.width * 0.9,
-              constraints: BoxConstraints(
-                maxHeight: availableHeight,
-              ),
+              constraints: BoxConstraints(maxHeight: availableHeight),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -106,10 +112,13 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                               SizedBox(height: 8.h),
                               KDropdownTextFormField<String>(
                                 hintText: "Priority",
-                                value: context.dropDownProviderWatch.getValue('status'),
+                                value: context.dropDownProviderWatch.getValue(
+                                  'status',
+                                ),
                                 items: ['Pending', 'In Progress', 'Completed'],
-                                onChanged: (value) =>
-                                    context.dropDownProviderRead.setValue('status', value),
+                                onChanged: (value) => context
+                                    .dropDownProviderRead
+                                    .setValue('status', value),
                               ),
                             ],
                           ),
@@ -161,17 +170,23 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                       text: "Update",
                       onPressed: () async {
                         final hiveService = getIt<HiveStorageService>();
-                        final webUserId = hiveService.employeeDetails?['web_user_id'];
+                        final webUserId =
+                            hiveService.employeeDetails?['web_user_id'];
                         final useCase = getIt<GetHomeFeedsProjectDataUseCase>();
-                        final status = context.dropDownProviderRead.getValue('status') ?? "Pending";
+                        final status =
+                            context.dropDownProviderRead.getValue('status') ??
+                            "Pending";
                         setState(() {
                           _homeFeedsFuture = useCase.call(webUserId!);
                         });
                         Navigator.pop(context);
 
                         await _updateTask(
-                          taskId: item.id.toString(),   // ensure your `item` has taskId
-                          webUserId: int.parse(webUserId.toString()),  // fix here
+                          taskId: item.id
+                              .toString(), // ensure your `item` has taskId
+                          webUserId: int.parse(
+                            webUserId.toString(),
+                          ), // fix here
                           status: status,
                           progress: progressNoteController.text.trim(),
                           comment: commandController.text.trim(),
@@ -179,9 +194,8 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                       },
                       backgroundColor: AppColors.primaryColor,
                       fontSize: 10.sp,
-                      height: 26.h,
+                      height: isTablet ? (isLandscape ? 30.h : 25.h) : 22.h,
                     ),
-
                   ),
                 ],
               ),
@@ -225,7 +239,7 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                 'Click to Update',
                 Icons.update,
                 AppColors.primaryColor,
-                    () => _onUpdateProgress(item),
+                () => _onUpdateProgress(item),
               ),
             ],
           ),
@@ -235,11 +249,11 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
   }
 
   Widget _buildCommandButton(
-      String label,
-      IconData icon,
-      Color color,
-      VoidCallback onPressed,
-      ) {
+    String label,
+    IconData icon,
+    Color color,
+    VoidCallback onPressed,
+  ) {
     return InkWell(
       onTap: onPressed,
       borderRadius: BorderRadius.circular(6.r),
@@ -298,12 +312,11 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -347,7 +360,11 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 10.w, top: 10.h, bottom: 10.h),
+                      padding: EdgeInsets.only(
+                        left: 10.w,
+                        top: 10.h,
+                        bottom: 10.h,
+                      ),
                       child: KText(
                         text: 'Assigned Works By You',
                         fontWeight: FontWeight.w600,
@@ -358,34 +375,38 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                     assigned.isEmpty
                         ? Center(child: Text("No assigned works"))
                         : ListView.separated(
-                      shrinkWrap: true, // ✅ allow it to take only required space
-                      physics: NeverScrollableScrollPhysics(), // ✅ disable inner scroll
-                      itemCount: assigned.length,
-                      separatorBuilder: (_, __) => KVerticalSpacer(height: 8.h),
-                      itemBuilder: (context, index) {
-                        final item = assigned[index];
-                        return KHomeEmployeeFeedsAssignedWorksTile(
-                          leadingVerticalDividerColor: AppColors.primaryColor,
-                          assignedWorksTitle: item.projectName,
-                          assignedWorkSubTitle: item.description,
-                          assignedWorkDeadLine: item.deadline,
-                          assignedBy: item.assignedBy,
-                          assignedTo: item.assignedTo,
-                          date: item.date,
-                          progress: item.progress,
-                          deadline: item.deadline,
-                          progressNote: item.progressNote,
-                          command: item.comment,
-                        );
-                      },
-                    ),
+                            shrinkWrap:
+                                true, // ✅ allow it to take only required space
+                            physics:
+                                NeverScrollableScrollPhysics(), // ✅ disable inner scroll
+                            itemCount: assigned.length,
+                            separatorBuilder: (_, __) =>
+                                KVerticalSpacer(height: 8.h),
+                            itemBuilder: (context, index) {
+                              final item = assigned[index];
+                              return KHomeEmployeeFeedsAssignedWorksTile(
+                                leadingVerticalDividerColor:
+                                    AppColors.primaryColor,
+                                assignedWorksTitle: item.projectName,
+                                assignedWorkSubTitle: item.description,
+                                assignedWorkDeadLine: item.deadline,
+                                assignedBy: item.assignedBy,
+                                assignedTo: item.assignedTo,
+                                date: item.date,
+                                progress: item.progress,
+                                deadline: item.deadline,
+                                progressNote: item.progressNote,
+                                command: item.comment,
+                              );
+                            },
+                          ),
                   ],
                 ),
               ),
 
               KVerticalSpacer(height: 14.h),
 
-// Pending Works
+              // Pending Works
               Container(
                 padding: EdgeInsets.only(bottom: 10.h),
                 width: double.infinity,
@@ -406,7 +427,11 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 10.w, top: 10.h, bottom: 10.h),
+                      padding: EdgeInsets.only(
+                        left: 10.w,
+                        top: 10.h,
+                        bottom: 10.h,
+                      ),
                       child: KText(
                         text: 'Pending Works',
                         fontWeight: FontWeight.w600,
@@ -417,34 +442,36 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                     pending.isEmpty
                         ? Center(child: Text("No pending works"))
                         : ListView.separated(
-                      shrinkWrap: true, // ✅ take only needed height
-                      physics: NeverScrollableScrollPhysics(), // ✅ disable inner scroll
-                      itemCount: pending.length,
-                      separatorBuilder: (_, __) => KVerticalSpacer(height: 8.h),
-                      itemBuilder: (context, index) {
-                        final item = pending[index];
-                        return Column(
-                          children: [
-                            KHomeEmployeeFeedsPendingWorksTile(
-                              pendingVerticalDividerColor: AppColors.primaryColor,
-                              pendingProjectTitle: item.projectName,
-                              pendingDeadline: item.deadline,
-                              pendingWorkStatus: item.progress,
-                              assignedBy: item.assignedBy,
-                              date: item.date,
-                              description: item.description,
-                              progressNote: item.progressNote,
-                              comment: item.comment,
-                            ),
-                            _buildCommandSection(item),
-                          ],
-                        );
-                      },
-                    ),
+                            shrinkWrap: true, // ✅ take only needed height
+                            physics:
+                                NeverScrollableScrollPhysics(), // ✅ disable inner scroll
+                            itemCount: pending.length,
+                            separatorBuilder: (_, __) =>
+                                KVerticalSpacer(height: 8.h),
+                            itemBuilder: (context, index) {
+                              final item = pending[index];
+                              return Column(
+                                children: [
+                                  KHomeEmployeeFeedsPendingWorksTile(
+                                    pendingVerticalDividerColor:
+                                        AppColors.primaryColor,
+                                    pendingProjectTitle: item.projectName,
+                                    pendingDeadline: item.deadline,
+                                    pendingWorkStatus: item.progress,
+                                    assignedBy: item.assignedBy,
+                                    date: item.date,
+                                    description: item.description,
+                                    progressNote: item.progressNote,
+                                    comment: item.comment,
+                                  ),
+                                  _buildCommandSection(item),
+                                ],
+                              );
+                            },
+                          ),
                   ],
                 ),
               ),
-
 
               KVerticalSpacer(height: 14.h),
             ],

@@ -7,6 +7,7 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/performance/presentation/widgets/performance_card.dart';
 import 'package:intl/intl.dart';
 
@@ -128,6 +129,8 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
     ];
 
     AppLoggerHelper.logInfo(performanceSummaryCard.toString());
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -148,11 +151,11 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
             scrollDirection: Axis.vertical,
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              childAspectRatio: 1.0,
+              childAspectRatio: isTablet ? (isLandscape ? 4.8 : 2.5) : 1.0,
             ),
             itemCount: performanceSummaryCard.length,
             itemBuilder: (context, index) {
@@ -179,11 +182,13 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
             scrollDirection: Axis.vertical,
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // 2 items per row
               crossAxisSpacing: 10, // Horizontal spacing between items
               mainAxisSpacing: 10, // Vertical spacing between items
-              childAspectRatio: 1.0, // Aspect ratio of each item (width/height)
+              childAspectRatio: isTablet
+                  ? (isLandscape ? 4.8 : 2.5)
+                  : 1.0, // Aspect ratio of each item (width/height)
             ),
             itemCount: currentGoalsCard.length,
             // Total number of items

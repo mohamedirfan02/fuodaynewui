@@ -60,14 +60,17 @@ class _TeamsListState extends State<TeamsList> {
     }).toList();
 
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          KVerticalSpacer(height: 20.h),
-          SizedBox(
-            height: 400.h,
-            child: KDataTable(columnTitles: columns, rowData: rowData),
-          ),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Column(
+          children: [
+            KVerticalSpacer(height: 20.h),
+            SizedBox(
+              height: 400.h,
+              child: KDataTable(columnTitles: columns, rowData: rowData),
+            ),
+          ],
+        ),
       ),
     );
   }

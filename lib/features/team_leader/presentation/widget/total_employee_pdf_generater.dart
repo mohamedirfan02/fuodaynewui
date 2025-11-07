@@ -9,7 +9,7 @@ class TotalEmpPdfGeneratorService {
     required List<Map<String, String>> data,
     required List<String> columns,
     String? title,
-    String filename = 'attendance_report.pdf',
+    String filename = 'total_employees_report.pdf',
   }) async {
     try {
       AppLoggerHelper.logInfo('📄 Starting PDF generation: $filename');

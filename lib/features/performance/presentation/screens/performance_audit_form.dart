@@ -13,6 +13,7 @@ import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/core/utils/file_picker.dart';
 import 'package:fuoday/core/utils/month_picker.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -621,7 +622,7 @@ class _PerformanceAuditFormState extends State<PerformanceAuditForm> {
             backgroundColor: AppColors.primaryColor,
             fontSize: 10.sp,
             fontWeight: FontWeight.w600,
-            height: 24.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Submit",
             onPressed: () async {

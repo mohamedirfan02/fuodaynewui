@@ -13,6 +13,7 @@ import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/hr/domain/entities/total_payroll_entity.dart';
@@ -178,26 +179,6 @@ class _HRTotalPayrollRepotScreenState extends State<HRTotalPayrollRepotScreen> {
       final e = entry.value;
       final dateOfJoining = (e.dateOfJoining ?? '').toString().split('T').first;
 
-      //final totalSalary = double.tryParse(e.totalSalary ?? '0') ?? 0;
-      //
-      // final formattedSalary = NumberFormat(
-      //   '#,##,##0.00',
-      //   'en_IN',
-      // ).format(totalSalary);
-      // final totalCTC = double.tryParse(e.totalCtc ?? '0') ?? 0;
-      //
-      // final formattedTotalCTC = NumberFormat(
-      //   '#,##,##0.00',
-      //   'en_IN',
-      // ).format(totalCTC);
-      // final gross = double.tryParse(e.gross.toString() ?? '0') ?? 0;
-      //
-      // final formattedGross = NumberFormat('#,##,##0.00', 'en_IN').format(gross);
-      // // Parse & format all earnings safely
-      // String formatEarning(String? value) {
-      //   final parsed = double.tryParse(value ?? '0') ?? 0;
-      //   return NumberFormat('#,##,##0.00', 'en_IN').format(parsed);
-      // }
       final totalSalary = double.tryParse(e.totalSalary ?? '0') ?? 0;
       final formattedSalary = NumberFormat.currency(
         locale: 'en_IN',
@@ -272,7 +253,7 @@ class _HRTotalPayrollRepotScreenState extends State<HRTotalPayrollRepotScreen> {
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 24.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: displayData.isEmpty ? "No Data to Download" : "Download",
             onPressed: displayData.isEmpty

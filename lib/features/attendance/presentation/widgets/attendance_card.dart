@@ -26,11 +26,20 @@ class AttendanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isTablet = size.width > 600;
+    final isLandscape = size.width > size.height;
+
+    final cardWidth = isTablet
+        ? (isLandscape ? 0.48.sw : 0.47.sw)
+        : 0.45.sw; // dynamic width
+    final paddingValue = isTablet ? 18.w : 14.w;
+
     return Stack(
       children: [
         // Card Content
         Container(
-          width: 0.4.sw,
+          width: cardWidth,
           padding: EdgeInsets.symmetric(horizontal: 19.w, vertical: 19.h),
           decoration: BoxDecoration(
             border: Border.all(width: 0.1.w, color: AppColors.greyColor),
@@ -57,11 +66,13 @@ class AttendanceCard extends StatelessWidget {
               KVerticalSpacer(height: 8.h),
 
               // Attendance Description
-              KText(
-                text: attendanceDescription,
-                fontWeight: FontWeight.w500,
-                fontSize: 10.sp,
-                color: AppColors.titleColor,
+              Expanded(
+                child: KText(
+                  text: attendanceDescription,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 10.sp,
+                  color: AppColors.titleColor,
+                ),
               ),
 
               KVerticalSpacer(height: 4.h),
@@ -91,8 +102,8 @@ class AttendanceCard extends StatelessWidget {
         ),
 
         Positioned(
-          top: 10,
-          right: 20,
+          top: 10, // isTablet ? (isLandscape ? 10 : 10) :
+          right: 20, //isTablet ? (isLandscape ? 20 : 20) :
           child: CircleAvatar(
             radius: 14.r,
             backgroundColor: AppColors.secondaryColor,

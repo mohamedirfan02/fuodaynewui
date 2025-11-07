@@ -11,6 +11,7 @@ import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_message_content.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_punctual_arrival_card.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -83,8 +84,8 @@ class _AttendanceLateArrivalDetailsScreenState
     // Apply search filter
     if (searchQuery.isNotEmpty) {
       filtered = filtered.where((row) {
-        return row.values.any((value) =>
-            value.toLowerCase().contains(searchQuery)
+        return row.values.any(
+          (value) => value.toLowerCase().contains(searchQuery),
         );
       }).toList();
     }
@@ -131,11 +132,17 @@ class _AttendanceLateArrivalDetailsScreenState
     List<String> suffixParts = [];
 
     if (startDate != null && endDate != null) {
-      suffixParts.add('${startDate!.day}-${startDate!.month}-${startDate!.year}_to_${endDate!.day}-${endDate!.month}-${endDate!.year}');
+      suffixParts.add(
+        '${startDate!.day}-${startDate!.month}-${startDate!.year}_to_${endDate!.day}-${endDate!.month}-${endDate!.year}',
+      );
     } else if (startDate != null) {
-      suffixParts.add('from_${startDate!.day}-${startDate!.month}-${startDate!.year}');
+      suffixParts.add(
+        'from_${startDate!.day}-${startDate!.month}-${startDate!.year}',
+      );
     } else if (endDate != null) {
-      suffixParts.add('until_${endDate!.day}-${endDate!.month}-${endDate!.year}');
+      suffixParts.add(
+        'until_${endDate!.day}-${endDate!.month}-${endDate!.year}',
+      );
     }
 
     if (searchQuery.isNotEmpty) {
@@ -164,6 +171,8 @@ class _AttendanceLateArrivalDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
     // Providers
     final provider = context.totalLateArrivalsDetailsProviderWatch;
     final details = provider.data;
@@ -203,22 +212,22 @@ class _AttendanceLateArrivalDetailsScreenState
 
     // All table data (unfiltered)
     final allData = (details?.lateArrivalsDetails ?? []).asMap().entries.map((
-        entry,
-        ) {
+      entry,
+    ) {
       final index = entry.key + 1;
       final record = entry.value;
 
       final dateObj = DateTime.tryParse(record.date);
       final day = dateObj != null
           ? [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ][dateObj.weekday % 7]
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+            ][dateObj.weekday % 7]
           : '-';
 
       return {
@@ -243,7 +252,7 @@ class _AttendanceLateArrivalDetailsScreenState
         leadingIcon: Icons.arrow_back,
         onLeadingIconPress: () => GoRouter.of(context).pop(),
       ),
-      bottomSheet: Container(
+      bottomNavigationBar: Container(
         height: 60.h,
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -251,10 +260,10 @@ class _AttendanceLateArrivalDetailsScreenState
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 24.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: displayData.isEmpty ? "No Data to Download" : "Download",
-            onPressed:  () {
+            onPressed: () {
               showModalBottomSheet(
                 context: context,
                 shape: RoundedRectangleBorder(
@@ -318,7 +327,7 @@ class _AttendanceLateArrivalDetailsScreenState
                   crossAxisCount: 2,
                   mainAxisSpacing: 12.h,
                   crossAxisSpacing: 12.w,
-                  childAspectRatio: 1.2,
+                  childAspectRatio: isTablet ? (isLandscape ? 4.8 : 2.5) : 1.2,
                 ),
                 itemBuilder: (context, index) {
                   final item = punctualData[index];
@@ -343,7 +352,10 @@ class _AttendanceLateArrivalDetailsScreenState
                     GestureDetector(
                       onTap: clearFilters,
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 4.h,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.primaryColor,
                           borderRadius: BorderRadius.circular(4.r),
@@ -351,11 +363,7 @@ class _AttendanceLateArrivalDetailsScreenState
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              Icons.clear,
-                              size: 12.sp,
-                              color: Colors.white,
-                            ),
+                            Icon(Icons.clear, size: 12.sp, color: Colors.white),
                             SizedBox(width: 4.w),
                             Text(
                               'Clear All',
@@ -388,7 +396,8 @@ class _AttendanceLateArrivalDetailsScreenState
                 children: [
                   Expanded(
                     child: KAuthTextFormField(
-                      onTap: () => _selectDate(context, startDateController, true),
+                      onTap: () =>
+                          _selectDate(context, startDateController, true),
                       controller: startDateController,
                       hintText: "Start Date",
                       keyboardType: TextInputType.datetime,
@@ -397,7 +406,8 @@ class _AttendanceLateArrivalDetailsScreenState
                   ),
                   Expanded(
                     child: KAuthTextFormField(
-                      onTap: () => _selectDate(context, endDateController, false),
+                      onTap: () =>
+                          _selectDate(context, endDateController, false),
                       controller: endDateController,
                       hintText: "End Date",
                       keyboardType: TextInputType.datetime,
@@ -411,7 +421,10 @@ class _AttendanceLateArrivalDetailsScreenState
               if (hasActiveFilters) ...[
                 KVerticalSpacer(height: 10.h),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 8.h,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8.r),
@@ -421,7 +434,11 @@ class _AttendanceLateArrivalDetailsScreenState
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.filter_alt, size: 16.sp, color: AppColors.primaryColor),
+                          Icon(
+                            Icons.filter_alt,
+                            size: 16.sp,
+                            color: AppColors.primaryColor,
+                          ),
                           SizedBox(width: 8.w),
                           Text(
                             'Active Filters (${displayData.length} of ${allData.length} records):',
@@ -465,48 +482,44 @@ class _AttendanceLateArrivalDetailsScreenState
               else if (error != null)
                 Center(child: Text(error))
               else if (allData.isEmpty)
-                  const Center(child: Text('No late arrival records found'))
-                else if (displayData.isEmpty && hasActiveFilters)
-                    Center(
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.search_off,
-                            size: 48.sp,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(height: 16.h),
-                          Text(
-                            'No records match your filters',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          TextButton(
-                            onPressed: clearFilters,
-                            child: Text(
-                              'Clear filters to show all records',
-                              style: TextStyle(
-                                color: AppColors.primaryColor,
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                          ),
-                        ],
+                const Center(child: Text('No late arrival records found'))
+              else if (displayData.isEmpty && hasActiveFilters)
+                Center(
+                  child: Column(
+                    children: [
+                      Icon(Icons.search_off, size: 48.sp, color: Colors.grey),
+                      SizedBox(height: 16.h),
+                      Text(
+                        'No records match your filters',
+                        style: TextStyle(fontSize: 14.sp, color: Colors.grey),
                       ),
-                    )
-                  else
-                    SizedBox(
-                      height: 600.h,
-                      child: KDataTable(columnTitles: columns, rowData: displayData),
-                    ),
+                      SizedBox(height: 8.h),
+                      TextButton(
+                        onPressed: clearFilters,
+                        child: Text(
+                          'Clear filters to show all records',
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                SizedBox(
+                  height: 600.h,
+                  child: KDataTable(
+                    columnTitles: columns,
+                    rowData: displayData,
+                  ),
+                ),
 
               AttendanceMessageContent(
                 messageContentTitle: "Performance: High",
                 messageContentSubTitle:
-                "You arrive mostly on time, consider arriving a few minutes early to be better prepared",
+                    "You arrive mostly on time, consider arriving a few minutes early to be better prepared",
               ),
             ],
           ),
@@ -516,10 +529,10 @@ class _AttendanceLateArrivalDetailsScreenState
   }
 
   Future<void> _selectDate(
-      BuildContext context,
-      TextEditingController controller,
-      bool isStartDate,
-      ) async {
+    BuildContext context,
+    TextEditingController controller,
+    bool isStartDate,
+  ) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),

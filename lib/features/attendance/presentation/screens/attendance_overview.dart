@@ -119,6 +119,9 @@ class _AttendanceOverviewState extends State<AttendanceOverview> {
         'icon': Icons.person,
       },
     ];
+    final size = MediaQuery.of(context).size;
+    final isTablet = size.width > 600;
+    final isLandscape = size.width > size.height;
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -148,7 +151,9 @@ class _AttendanceOverviewState extends State<AttendanceOverview> {
               crossAxisCount: 2,
               crossAxisSpacing: 16.w,
               mainAxisSpacing: 16.h,
-              childAspectRatio: 1.3,
+              childAspectRatio: isTablet
+                  ? (isLandscape ? 4.8 : 2.5)
+                  : 1.3, //1.3,
             ),
             itemCount: gridAttendanceData.length,
             itemBuilder: (context, index) {

@@ -17,6 +17,8 @@ class KHomeActivitiesCard extends StatelessWidget {
   final bool isBirthdayCard;
   final List<String> avatarUrls;
   final VoidCallback onTap;
+  final double? height;
+  final double? width;
 
   const KHomeActivitiesCard({
     super.key,
@@ -28,7 +30,9 @@ class KHomeActivitiesCard extends StatelessWidget {
     required this.bgChipColor,
     this.isBirthdayCard = false,
     this.avatarUrls = const [],
-    required this.onTap, // default empty
+    required this.onTap,
+    this.height,
+    this.width, // default empty
   });
 
   @override
@@ -40,8 +44,8 @@ class KHomeActivitiesCard extends StatelessWidget {
         onTap();
       },
       child: Container(
-        height: 180.h,
-        width: 180.w,
+        height: height ?? 180.h,
+        width: width ?? 180.w,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
           color: AppColors.secondaryColor,

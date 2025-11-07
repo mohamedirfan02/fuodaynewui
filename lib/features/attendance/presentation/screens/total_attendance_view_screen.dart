@@ -10,6 +10,7 @@ import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:go_router/go_router.dart';
@@ -61,9 +62,9 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
   }
 
   Future<void> selectMonthYear(
-      BuildContext context,
-      TextEditingController controller,
-      ) async {
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
     final DateTime? picked = await showMonthPicker(
       context: context,
       initialDate: DateTime.now(),
@@ -104,7 +105,6 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
     }).toList();
   }
 
-
   // Method to get filename with month/year suffix
   String getFilenameSuffix() {
     if (selectedMonth != null && selectedYear != null) {
@@ -135,21 +135,21 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
             ?.asMap()
             .entries
             .map((entry) {
-          final index = entry.key + 1;
-          final day = entry.value;
+              final index = entry.key + 1;
+              final day = entry.value;
 
-          return {
-            'S.No': '$index',
-            'Date': day.date ?? '-',
-            'Day': day.day ?? '-',
-            'Log on': day.checkin ?? '-',
-            'Log off': day.checkout ?? '-',
-            'Worked hours': day.workedHours ?? '-',
-            'Status': day.status ?? '-',
-          };
-        })
+              return {
+                'S.No': '$index',
+                'Date': day.date ?? '-',
+                'Day': day.day ?? '-',
+                'Log on': day.checkin ?? '-',
+                'Log off': day.checkout ?? '-',
+                'Worked hours': day.workedHours ?? '-',
+                'Status': day.status ?? '-',
+              };
+            })
             .toList() ??
-            [];
+        [];
 
     // Filtered data for display and download
     final filteredData = getFilteredData(allData);
@@ -169,7 +169,7 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
         leadingIcon: Icons.arrow_back,
         onLeadingIconPress: () => GoRouter.of(context).pop(),
       ),
-      bottomSheet: Container(
+      bottomNavigationBar: Container(
         height: 60.h,
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -177,55 +177,59 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 24.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: displayData.isEmpty ? "No Data to Download" : "Download",
-       onPressed: displayData.isEmpty?
-              () {}
-            : ()  {
-              showModalBottomSheet(
-                context: context,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(16.r),
-                  ),
-                ),
-                builder: (context) {
-                  return KDownloadOptionsBottomSheet(
-                    onPdfTap: () async {
-                      final pdfService = getIt<PdfGeneratorService>();
-                      final suffix = getFilenameSuffix();
+            onPressed: displayData.isEmpty
+                ? () {}
+                : () {
+                    showModalBottomSheet(
+                      context: context,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(16.r),
+                        ),
+                      ),
+                      builder: (context) {
+                        return KDownloadOptionsBottomSheet(
+                          onPdfTap: () async {
+                            final pdfService = getIt<PdfGeneratorService>();
+                            final suffix = getFilenameSuffix();
 
-                      // Use filtered data for PDF
-                      final pdfFile = await pdfService.generateAndSavePdf(
-                        data: List<Map<String, String>>.from(displayData),
-                        columns: List<String>.from(columns),
-                        title: selectedMonth != null && selectedYear != null
-                            ? 'Attendance Report - ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear'
-                            : 'Total Attendance Report',
-                        filename: 'attendance_report$suffix.pdf',
-                      );
+                            // Use filtered data for PDF
+                            final pdfFile = await pdfService.generateAndSavePdf(
+                              data: List<Map<String, String>>.from(displayData),
+                              columns: List<String>.from(columns),
+                              title:
+                                  selectedMonth != null && selectedYear != null
+                                  ? 'Attendance Report - ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear'
+                                  : 'Total Attendance Report',
+                              filename: 'attendance_report$suffix.pdf',
+                            );
 
-                      await OpenFilex.open(pdfFile.path);
-                    },
+                            await OpenFilex.open(pdfFile.path);
+                          },
 
-                    onExcelTap: () async {
-                      final excelService = getIt<ExcelGeneratorService>();
-                      final suffix = getFilenameSuffix();
+                          onExcelTap: () async {
+                            final excelService = getIt<ExcelGeneratorService>();
+                            final suffix = getFilenameSuffix();
 
-                      // Use filtered data for Excel
-                      final excelFile = await excelService.generateAndSaveExcel(
-                        data: List<Map<String, String>>.from(displayData),
-                        columns: List<String>.from(columns),
-                        filename: 'attendance_report$suffix.xlsx',
-                      );
+                            // Use filtered data for Excel
+                            final excelFile = await excelService
+                                .generateAndSaveExcel(
+                                  data: List<Map<String, String>>.from(
+                                    displayData,
+                                  ),
+                                  columns: List<String>.from(columns),
+                                  filename: 'attendance_report$suffix.xlsx',
+                                );
 
-                      await OpenFilex.open(excelFile.path);
-                    },
-                  );
-                },
-              );
-            },
+                            await OpenFilex.open(excelFile.path);
+                          },
+                        );
+                      },
+                    );
+                  },
             fontSize: 11.sp,
           ),
         ),
@@ -235,102 +239,113 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
           : totalAttendanceProvider.errorMessage != null
           ? Center(child: Text(totalAttendanceProvider.errorMessage!))
           : SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              KAuthTextFormField(
-                onTap: () {
-                  selectMonthYear(context, monthYearController);
-                },
-                hintText: "Select Month & Year",
-                suffixIcon: Icons.calendar_month_outlined,
-                keyboardType: TextInputType.text,
-                controller: monthYearController,
-              ),
-              KVerticalSpacer(height: 10.h),
+              physics: const BouncingScrollPhysics(),
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    KAuthTextFormField(
+                      onTap: () {
+                        selectMonthYear(context, monthYearController);
+                      },
+                      hintText: "Select Month & Year",
+                      suffixIcon: Icons.calendar_month_outlined,
+                      keyboardType: TextInputType.text,
+                      controller: monthYearController,
+                    ),
+                    KVerticalSpacer(height: 10.h),
 
-              // Show selected filter info and clear option
-              if (selectedMonth != null && selectedYear != null)
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.filter_alt, size: 16.sp, color: AppColors.primaryColor),
-                      SizedBox(width: 8.w),
-                      Text(
-                        'Showing: ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear (${displayData.length} records)',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.w500,
+                    // Show selected filter info and clear option
+                    if (selectedMonth != null && selectedYear != null)
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 8.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.filter_alt,
+                              size: 16.sp,
+                              color: AppColors.primaryColor,
+                            ),
+                            SizedBox(width: 8.w),
+                            Text(
+                              'Showing: ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear (${displayData.length} records)',
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedMonth = null;
+                                  selectedYear = null;
+                                  monthYearController.clear();
+                                });
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(4.w),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(4.r),
+                                ),
+                                child: Icon(
+                                  Icons.clear,
+                                  size: 14.sp,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedMonth = null;
-                            selectedYear = null;
-                            monthYearController.clear();
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(4.w),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                          child: Icon(
-                            Icons.clear,
-                            size: 14.sp,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+
+                    KVerticalSpacer(height: 20.h),
+                    SizedBox(
+                      height: 600.h,
+                      child: displayData.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.calendar_today_outlined,
+                                    size: 48.sp,
+                                    color: Colors.grey,
+                                  ),
+                                  SizedBox(height: 16.h),
+                                  Text(
+                                    selectedMonth != null &&
+                                            selectedYear != null
+                                        ? 'No attendance data found for ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear'
+                                        : 'No attendance data available',
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Colors.grey,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            )
+                          : KDataTable(
+                              columnTitles: columns,
+                              rowData: displayData,
+                            ),
+                    ),
+                  ],
                 ),
-
-              KVerticalSpacer(height: 20.h),
-              SizedBox(
-                height: 600.h,
-                child: displayData.isEmpty
-                    ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.calendar_today_outlined,
-                        size: 48.sp,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(height: 16.h),
-                      Text(
-                        selectedMonth != null && selectedYear != null
-                            ? 'No attendance data found for ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear'
-                            : 'No attendance data available',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.grey,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                )
-                    : KDataTable(columnTitles: columns, rowData: displayData),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

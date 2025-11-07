@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_linear_gradient_bg.dart';
-import 'package:fuoday/commons/widgets/k_svg.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
 import 'package:fuoday/core/constants/router/app_route_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
-import 'package:fuoday/features/auth/presentation/providers/employee_auth_login_provider.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/providers/forgot_password_provider.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart'; // 🆕 Provider package import
+import 'package:provider/provider.dart'; //   Provider package import
 
 class AuthForgetPasswordScreen extends StatefulWidget {
   const AuthForgetPasswordScreen({super.key});
@@ -24,36 +23,44 @@ class AuthForgetPasswordScreen extends StatefulWidget {
 
 class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
   final TextEditingController emailController = TextEditingController();
-  final _formKey = GlobalKey<FormState>(); // 🆕 added form key for validation
+  final _formKey = GlobalKey<FormState>(); //   added form key for validation
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ForgotPasswordProvider>(
       context,
-    ); // 🆕 access provider
+    ); //   access provider
     void _sendOtp() async {
       if (_formKey.currentState!.validate()) {
         FocusScope.of(context).unfocus();
 
-        await provider.sendOtp(email: emailController.text);
+        final currentContext = context;
 
-        if (provider.error != null && context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
+        await provider.sendOtp(email: emailController.text);
+        if (!mounted) return;
+        if (provider.error != null) {
+          ScaffoldMessenger.of(currentContext).showSnackBar(
             SnackBar(
               backgroundColor: Colors.red,
               content: Text(provider.error!),
             ),
           );
-        } else if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
+        } else {
+          if (mounted) {
+            GoRouter.of(
+              currentContext,
+            ).pushNamed(AppRouteConstants.otp, extra: emailController.text);
+          }
+          ScaffoldMessenger.of(currentContext).showSnackBar(
             const SnackBar(
               backgroundColor: Colors.green,
               content: Text("OTP sent successfully!"),
             ),
           );
-          GoRouter.of(
+          // await Future.delayed(const Duration(milliseconds: 300));
+          /* GoRouter.of(
             context,
-          ).pushNamed(AppRouteConstants.otp, extra: emailController.text);
+          ).pushNamed(AppRouteConstants.otp, extra: emailController.text);*/
         }
       }
     }
@@ -102,8 +109,8 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                           ),
                           child: IntrinsicHeight(
                             child: Form(
-                              // 🆕 wrap UI inside Form
-                              key: _formKey, // 🆕 attach validation form key
+                              //   wrap UI inside Form
+                              key: _formKey, //   attach validation form key
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -159,7 +166,7 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                                               TextInputType.emailAddress,
                                           hintText: "EMAIL ADDRESS",
                                           validator: (v) {
-                                            // 🆕 added validation
+                                            //   added validation
                                             if (v == null || v.isEmpty) {
                                               return "Please enter your email";
                                             }
@@ -183,7 +190,10 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                                               _sendOtp(); // async function called inside sync closure
                                             }
                                           },
-                                          height: 22.h,
+                                          height:
+                                              AppResponsive.responsiveBtnHeight(
+                                                context,
+                                              ),
                                           width: double.infinity,
                                         ),
                                         KVerticalSpacer(height: 12.h),
@@ -198,7 +208,10 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                                           onPressed: () {
                                             GoRouter.of(context).pop();
                                           },
-                                          height: 22.h,
+                                          height:
+                                              AppResponsive.responsiveBtnHeight(
+                                                context,
+                                              ),
                                           width: double.infinity,
                                         ),
                                       ],

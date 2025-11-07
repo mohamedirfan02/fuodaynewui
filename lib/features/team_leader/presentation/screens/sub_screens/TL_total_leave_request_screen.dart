@@ -13,6 +13,7 @@ import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:go_router/go_router.dart';
@@ -92,7 +93,7 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 24.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",
             onPressed: () async {
@@ -117,12 +118,12 @@ class _TLTotalLeaveRequestScreenState extends State<TLTotalLeaveRequestScreen> {
                           columns: columns,
                           title: 'Leave Request Report ($selectedStatus)',
                         );
-                        GoRouter.of(parentContext).pop();
 
                         KSnackBar.success(
                           parentContext,
                           "PDF generated successfully!",
                         );
+                        GoRouter.of(parentContext).pop();
 
                         await OpenFilex.open(pdfFile.path);
                       }

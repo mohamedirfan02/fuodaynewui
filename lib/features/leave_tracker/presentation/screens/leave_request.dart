@@ -8,6 +8,7 @@ import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/service/dio_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/leave_tracker/data/datasources/leave_remote_data_source.dart';
@@ -79,10 +80,13 @@ class _LeaveRequestState extends State<LeaveRequest> {
         controller.text = "${picked.day}/${picked.month}/${picked.year}";
       }
     }
-// Get the current selected leave type
-    final selectedLeaveType = context.dropDownProviderWatch.getValue('leaveType');
-    final isPermissionSelected = selectedLeaveType?.toLowerCase() == 'permission';
 
+    // Get the current selected leave type
+    final selectedLeaveType = context.dropDownProviderWatch.getValue(
+      'leaveType',
+    );
+    final isPermissionSelected =
+        selectedLeaveType?.toLowerCase() == 'permission';
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -96,7 +100,14 @@ class _LeaveRequestState extends State<LeaveRequest> {
           KDropdownTextFormField<String>(
             hintText: "Select Type",
             value: context.dropDownProviderWatch.getValue('leaveType'),
-            items: ['Sick Leave', 'Periods Leave', 'Casual Leave','UnPaid Leave','paternity leave','permission'],
+            items: [
+              'Sick Leave',
+              'Periods Leave',
+              'Casual Leave',
+              'UnPaid Leave',
+              'paternity leave',
+              'permission',
+            ],
             onChanged: (value) =>
                 context.dropDownProviderRead.setValue('leaveType', value),
           ),
@@ -106,9 +117,11 @@ class _LeaveRequestState extends State<LeaveRequest> {
             KDropdownTextFormField<String>(
               hintText: "Select timing",
               value: context.dropDownProviderWatch.getValue('permissionHour'),
-              items: ['1 Hour', '2 Hour', '3 Hour','4 Hour'],
-              onChanged: (value) =>
-                  context.dropDownProviderRead.setValue('permissionHour', value),
+              items: ['1 Hour', '2 Hour', '3 Hour', '4 Hour'],
+              onChanged: (value) => context.dropDownProviderRead.setValue(
+                'permissionHour',
+                value,
+              ),
             ),
           ],
           // Start Date TextFormField
@@ -146,7 +159,7 @@ class _LeaveRequestState extends State<LeaveRequest> {
 
           // Request Btn
           KAuthFilledBtn(
-            height: 26.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             fontSize: 10.sp,
             width: double.infinity,
             text: "Request",
@@ -158,7 +171,9 @@ class _LeaveRequestState extends State<LeaveRequest> {
               try {
                 final type = context.dropDownProviderRead.getValue('leaveType');
                 final startDate = formatDate(startDateController.text);
-                final timing = context.dropDownProviderRead.getValue('permissionHour');
+                final timing = context.dropDownProviderRead.getValue(
+                  'permissionHour',
+                );
                 final endDate = formatDate(endDateController.text);
                 final reason = reasonController.text;
 
@@ -172,7 +187,10 @@ class _LeaveRequestState extends State<LeaveRequest> {
 
                 // Additional validation for permission type
                 if (type.toLowerCase() == 'permission' && timing == null) {
-                  KSnackBar.failure(context, "Please select timing for permission");
+                  KSnackBar.failure(
+                    context,
+                    "Please select timing for permission",
+                  );
                   return;
                 }
 
@@ -187,7 +205,9 @@ class _LeaveRequestState extends State<LeaveRequest> {
                   fromDate: startDate,
                   toDate: endDate,
                   reason: reason,
-                  permissionTiming: type.toLowerCase() == 'permission' ? timing ?? '' : '', // Only send timing for permission
+                  permissionTiming: type.toLowerCase() == 'permission'
+                      ? timing ?? ''
+                      : '', // Only send timing for permission
                 );
 
                 // Show success message
@@ -201,8 +221,10 @@ class _LeaveRequestState extends State<LeaveRequest> {
                 endDateController.clear();
                 reasonController.clear();
                 context.dropDownProviderRead.setValue('leaveType', null);
-                context.dropDownProviderRead.setValue('permissionHour', null); // Clear timing too
-
+                context.dropDownProviderRead.setValue(
+                  'permissionHour',
+                  null,
+                ); // Clear timing too
               } catch (e) {
                 AppLoggerHelper.logError('Leave request error: $e');
                 KSnackBar.failure(context, "Error: ${e.toString()}");

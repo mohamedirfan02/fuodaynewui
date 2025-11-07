@@ -339,35 +339,50 @@ class MyApp extends StatelessWidget {
 
         //===============ATS PAGES====================================
       ],
-      child: ScreenUtilInit(
-        designSize: const Size(360, 690),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (context, child) {
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            title: AppEnvironment.environmentName == "DEV"
-                ? "Fuoday Dev"
-                : "Fuoday",
-            theme: ThemeData(fontFamily: GoogleFonts.inter().fontFamily),
-            // theme: ThemeData(
-            //   textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
-            // ),
-            routerConfig: appRouter,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Detect device type and orientation
+          final isTablet = constraints.maxWidth > 600;
+          final isLandscape = constraints.maxWidth > constraints.maxHeight;
+
+          // Define design size based on device type
+          final designSize = isTablet
+              ? (isLandscape
+                    ? const Size(1194, 834) // Tablet landscape
+                    : const Size(834, 1194)) // Tablet portrait
+              : const Size(360, 690); // Mobile design
+          return ScreenUtilInit(
+            //designSize: const Size(360, 690),
+            designSize: designSize,
+            minTextAdapt: true,
+            splitScreenMode: true,
             builder: (context, child) {
-              return Banner(
-                message: AppEnvironment.environmentName,
-                location: BannerLocation.topEnd,
-                color: AppEnvironment.environmentName == "DEV"
-                    ? AppColors.checkOutColor
-                    : AppColors.checkInColor,
-                textStyle: TextStyle(
-                  color: AppColors.secondaryColor,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12.0,
-                  letterSpacing: 1.0,
-                ),
-                child: child!,
+              return MaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                title: AppEnvironment.environmentName == "DEV"
+                    ? "Fuoday Dev"
+                    : "Fuoday",
+                theme: ThemeData(fontFamily: GoogleFonts.inter().fontFamily),
+                // theme: ThemeData(
+                //   textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
+                // ),
+                routerConfig: appRouter,
+                builder: (context, child) {
+                  return Banner(
+                    message: AppEnvironment.environmentName,
+                    location: BannerLocation.topEnd,
+                    color: AppEnvironment.environmentName == "DEV"
+                        ? AppColors.checkOutColor
+                        : AppColors.checkInColor,
+                    textStyle: TextStyle(
+                      color: AppColors.secondaryColor,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12.0,
+                      letterSpacing: 1.0,
+                    ),
+                    child: child!,
+                  );
+                },
               );
             },
           );

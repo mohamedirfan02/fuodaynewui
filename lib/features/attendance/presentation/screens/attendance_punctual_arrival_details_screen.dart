@@ -11,6 +11,7 @@ import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_punctual_arrivals_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_message_content.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_punctual_arrival_card.dart';
@@ -66,6 +67,9 @@ class _AttendancePunctualArrivalDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
+
     final provider = context.totalPunctualArrivalDetailsProviderWatch;
     final details = provider.details?.data;
     final isLoading = provider.isLoading;
@@ -94,22 +98,23 @@ class _AttendancePunctualArrivalDetailsScreenState
     ];
 
     // Table rows
-    final data =
-    (details?.punctualArrivalsDetails ?? []).asMap().entries.map((entry) {
+    final data = (details?.punctualArrivalsDetails ?? []).asMap().entries.map((
+      entry,
+    ) {
       final index = entry.key + 1;
       final record = entry.value;
 
       final dateObj = DateTime.tryParse(record.date ?? "");
       final day = dateObj != null
           ? [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ][dateObj.weekday % 7]
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+            ][dateObj.weekday % 7]
           : '-';
 
       return {
@@ -129,7 +134,7 @@ class _AttendancePunctualArrivalDetailsScreenState
         leadingIcon: Icons.arrow_back,
         onLeadingIconPress: () => GoRouter.of(context).pop(),
       ),
-      bottomSheet: Container(
+      bottomNavigationBar: Container(
         height: 60.h,
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -137,7 +142,7 @@ class _AttendancePunctualArrivalDetailsScreenState
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 24.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",
             onPressed: () {
@@ -193,7 +198,9 @@ class _AttendancePunctualArrivalDetailsScreenState
                   crossAxisCount: 2,
                   mainAxisSpacing: 12.h,
                   crossAxisSpacing: 12.w,
-                  childAspectRatio: 1.2,
+                  childAspectRatio: isTablet
+                      ? (isLandscape ? 4.8 : 2.5)
+                      : 1.2, //1.2,
                 ),
                 itemBuilder: (context, index) {
                   final item = punctualData[index];
@@ -254,19 +261,19 @@ class _AttendancePunctualArrivalDetailsScreenState
               else if (error != null)
                 Center(child: Text(error))
               else if (data.isEmpty)
-                  const Center(child: Text('No punctual arrival records found'))
-                else
-                  SizedBox(
-                    height: 200.h,
-                    child: KDataTable(columnTitles: columns, rowData: data),
-                  ),
+                const Center(child: Text('No punctual arrival records found'))
+              else
+                SizedBox(
+                  height: 200.h,
+                  child: KDataTable(columnTitles: columns, rowData: data),
+                ),
 
               KVerticalSpacer(height: 20.h),
 
               AttendanceMessageContent(
                 messageContentTitle: "Performance: High",
                 messageContentSubTitle:
-                "You arrive mostly on time, consider arriving a few minutes early to be better prepared",
+                    "You arrive mostly on time, consider arriving a few minutes early to be better prepared",
               ),
             ],
           ),
@@ -276,9 +283,9 @@ class _AttendancePunctualArrivalDetailsScreenState
   }
 
   Future<void> _selectDate(
-      BuildContext context,
-      TextEditingController controller,
-      ) async {
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),

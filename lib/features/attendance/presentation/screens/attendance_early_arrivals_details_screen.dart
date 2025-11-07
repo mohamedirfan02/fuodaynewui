@@ -12,6 +12,7 @@ import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_message_content.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_punctual_arrival_card.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -69,6 +70,8 @@ class _AttendanceEarlyArrivalsDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
     // Providers
     //final provider = context.totalEarlyArrivalsDetailsProviderWatch;
     final provider = context.watch<TotalEarlyArrivalsDetailsProvider>();
@@ -176,7 +179,7 @@ class _AttendanceEarlyArrivalsDetailsScreenState
           GoRouter.of(context).pop();
         },
       ),
-      bottomSheet: Container(
+      bottomNavigationBar: Container(
         height: 60.h,
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -184,7 +187,7 @@ class _AttendanceEarlyArrivalsDetailsScreenState
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 24.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",
             onPressed: () {
@@ -263,7 +266,9 @@ class _AttendanceEarlyArrivalsDetailsScreenState
                         crossAxisCount: 2, // 2 cards per row
                         mainAxisSpacing: 12.h,
                         crossAxisSpacing: 12.w,
-                        childAspectRatio: 1.2, // adjust for card height/width
+                        childAspectRatio: isTablet
+                            ? (isLandscape ? 4.8 : 2.5)
+                            : 1.2, // adjust for card height/width
                       ),
                       itemBuilder: (context, index) {
                         final item = punctualData[index];
@@ -276,7 +281,6 @@ class _AttendanceEarlyArrivalsDetailsScreenState
                     ),
 
               KVerticalSpacer(height: 10.h),
-
               // Filter & Search Options
               KText(
                 text: "Filter & Search Options",

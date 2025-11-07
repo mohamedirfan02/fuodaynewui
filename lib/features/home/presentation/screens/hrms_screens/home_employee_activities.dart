@@ -126,6 +126,8 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isTablet = size.width > 600;
     // Providers
     final checkInProvider = context.checkInProviderWatch;
     final allEventsProvider = context.allEventsProviderWatch;
@@ -388,7 +390,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                               onPressed: () {},
                               backgroundColor: AppColors.locationOnSiteColor,
                               height: 25.h,
-                              width: 120.w,
+                              width: 125.w,
                             ),
                           ],
                         ),
@@ -475,6 +477,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                         img: AppAssetsConstants.birthdayImg,
                         bg: AppColors.primaryColor,
                       ),
+
                       _buildEventCard(
                         context,
                         title: "Organizational Program",
@@ -540,13 +543,16 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
     );
   }
 
-  Widget _buildEventCard(
+  /*Widget _buildEventCard(
     BuildContext context, {
     required String title,
     required List<EventEntity> events,
     required String img,
     required Color bg,
   }) {
+    final size = MediaQuery.of(context).size;
+    final isTablet = size.width > 600;
+    final isLandscape = size.width > size.height;
     return Padding(
       padding: EdgeInsets.only(right: 12.w),
       child: KHomeActivitiesCard(
@@ -618,6 +624,108 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                     style: GoogleFonts.sora(
                       fontWeight: FontWeight.w500,
                       fontSize: 12.sp,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+        svgImage: img,
+        cardImgBgColor: bg,
+        cardTitle: title,
+        members: "${events.length} members",
+        count: "${events.length}",
+        bgChipColor: bg,
+      ),
+    );
+  }*/
+  Widget _buildEventCard(
+    BuildContext context, {
+    required String title,
+    required List<EventEntity> events,
+    required String img,
+    required Color bg,
+  }) {
+    final size = MediaQuery.of(context).size;
+    final isTablet = size.width > 600;
+    final isLandscape = size.width > size.height;
+
+    return Padding(
+      padding: EdgeInsets.only(right: isTablet ? 20.w : 12.w),
+      child: KHomeActivitiesCard(
+        height: isTablet ? (isLandscape ? 220.h : 270.h) : 180.h,
+        width: isTablet ? (isLandscape ? 280.w : 240.w) : 180.w,
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              title: KText(
+                text: title,
+                fontWeight: FontWeight.w600,
+                fontSize: isTablet ? 18.sp : 14.sp,
+              ),
+              content: SizedBox(
+                width: isTablet ? 500.w : double.maxFinite,
+                height: isTablet ? 400.h : null,
+                child: events.isEmpty
+                    ? Center(
+                        child: KText(
+                          text: "No $title available",
+                          fontWeight: FontWeight.w500,
+                          fontSize: isTablet ? 14.sp : 12.sp,
+                          color: AppColors.greyColor,
+                        ),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: events.length,
+                        separatorBuilder: (_, __) => const Divider(),
+                        itemBuilder: (_, index) {
+                          final event = events[index];
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              KText(
+                                text: event.title,
+                                fontWeight: FontWeight.w600,
+                                fontSize: isTablet ? 14.sp : 12.sp,
+                                color: AppColors.titleColor,
+                              ),
+                              KVerticalSpacer(height: 5.h),
+                              KText(
+                                text: event.description,
+                                fontWeight: FontWeight.w500,
+                                fontSize: isTablet ? 13.sp : 11.sp,
+                                color: AppColors.greyColor,
+                              ),
+                              KVerticalSpacer(height: 5.h),
+                              KText(
+                                text: DateFormat(
+                                  'dd MMM yyyy',
+                                ).format(event.date),
+                                fontWeight: FontWeight.w500,
+                                fontSize: isTablet ? 13.sp : 11.sp,
+                                color: AppColors.greyColor,
+                              ),
+                              KVerticalSpacer(height: 5.h),
+                            ],
+                          );
+                        },
+                      ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => GoRouter.of(context).pop(),
+                  child: Text(
+                    "Close",
+                    style: GoogleFonts.sora(
+                      fontWeight: FontWeight.w500,
+                      fontSize: isTablet ? 14.sp : 12.sp,
                       color: AppColors.primaryColor,
                     ),
                   ),

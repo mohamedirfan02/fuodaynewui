@@ -10,6 +10,7 @@ import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/core/utils/date_picker.dart';
 import 'package:fuoday/core/utils/image_picker.dart';
 import 'package:fuoday/core/utils/image_viewer.dart';
@@ -32,7 +33,6 @@ class ProfilePersonalDetailsScreen extends StatefulWidget {
 
 class _ProfilePersonalDetailsScreenState
     extends State<ProfilePersonalDetailsScreen> {
-
   String getFreshImageUrl(String url) {
     if (url.isEmpty) return url;
     return "$url?ts=${DateTime.now().millisecondsSinceEpoch}";
@@ -374,7 +374,7 @@ class _ProfilePersonalDetailsScreenState
                         onPressed: () {
                           context.profileEditProviderRead.cancelEdit();
                         },
-                        height: 22.h,
+                        height: AppResponsive.responsiveBtnHeight(context),
                         width: double.infinity,
                       )
                     : SizedBox(),
@@ -426,7 +426,7 @@ class _ProfilePersonalDetailsScreenState
                     }
                   },
 
-                  height: 22.h,
+                  height: AppResponsive.responsiveBtnHeight(context),
                   width: double.infinity,
                 ),
               ],
