@@ -308,3 +308,124 @@ class AssignedPersonDropdownCheckboxState
     );
   }
 }
+
+class SingleAssignedPersonDropdown extends StatefulWidget {
+  final String? label;
+  final Function(EmployeeModelEntity)? onSelectionChanged;
+  final Color? labelColor;
+  final double? labelFontSize;
+  final FontWeight? labelFontWeight;
+
+  const SingleAssignedPersonDropdown({
+    super.key,
+    this.label,
+    this.onSelectionChanged,
+    this.labelColor,
+    this.labelFontSize,
+    this.labelFontWeight,
+  });
+
+  @override
+  State<SingleAssignedPersonDropdown> createState() =>
+      _SingleAssignedPersonDropdownState();
+}
+
+class _SingleAssignedPersonDropdownState
+    extends State<SingleAssignedPersonDropdown> {
+  EmployeeModelEntity? _selectedEmployee;
+  bool _isDropdownOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final hiveService = getIt<HiveStorageService>();
+    final webUserIdStr = hiveService.employeeDetails?['web_user_id'];
+    final int? webUserId = webUserIdStr is int
+        ? webUserIdStr
+        : int.tryParse(webUserIdStr?.toString() ?? '');
+
+    if (webUserId != null) {
+      Future.microtask(() {
+        Provider.of<EmployeeDepartmentProvider>(
+          context,
+          listen: false,
+        ).fetchEmployees(webUserId);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<EmployeeDepartmentProvider>(
+      builder: (context, provider, _) {
+        final isLoading = provider.isLoading;
+        final employees = provider.employeeDepartment?.sameDepartment ?? [];
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.label != null) ...[
+              Text(
+                widget.label!,
+                style: GoogleFonts.sora(
+                  fontSize: widget.labelFontSize ?? 12.sp,
+                  fontWeight: widget.labelFontWeight ?? FontWeight.w600,
+                  color: widget.labelColor ?? AppColors.titleColor,
+                ),
+              ),
+              SizedBox(height: 6.h),
+            ],
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0.h),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.authUnderlineBorderColor),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<EmployeeModelEntity>(
+                  isExpanded: true,
+                  hint: Text(
+                    isLoading
+                        ? 'Loading...'
+                        : _selectedEmployee?.empName ??
+                              'Select assigned person',
+                    style: GoogleFonts.sora(
+                      fontSize: 12.sp,
+                      color: AppColors.titleColor.withOpacity(0.7),
+                    ),
+                  ),
+                  icon: Icon(
+                    Icons.arrow_drop_down_outlined,
+                    color: AppColors.titleColor,
+                  ),
+                  items: employees.map((emp) {
+                    return DropdownMenuItem<EmployeeModelEntity>(
+                      value: emp,
+                      child: Text(
+                        emp.empName,
+                        style: GoogleFonts.sora(
+                          fontSize: 12.sp,
+                          color: AppColors.titleColor,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (EmployeeModelEntity? value) {
+                    setState(() {
+                      _selectedEmployee = value;
+                    });
+                    if (value != null) {
+                      widget.onSelectionChanged?.call(value);
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}

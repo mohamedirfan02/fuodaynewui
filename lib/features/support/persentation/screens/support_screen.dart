@@ -7,6 +7,7 @@ import 'package:fuoday/commons/widgets/k_tab_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
+import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
@@ -14,6 +15,7 @@ import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/data/model/emp_list_model.dart';
 import 'package:fuoday/features/home/domain/usecases/emp_list_usecase.dart';
+import 'package:fuoday/features/home/presentation/widgets/assigned_person_dropdown.dart';
 import 'package:fuoday/features/support/domain/entities/ticket_entity.dart';
 import 'package:fuoday/features/support/persentation/provider/get_ticket_details_provider.dart';
 import 'package:fuoday/features/support/persentation/provider/ticket_provider.dart';
@@ -63,6 +65,7 @@ class _SupportScreenState extends State<SupportScreen> {
       final hive = getIt<HiveStorageService>();
       final id = int.parse(hive.employeeDetails?['web_user_id'] ?? '0');
       context.read<GetTicketDetailsProvider>().fetchTickets(id, context);
+      AppLoggerHelper.logInfo("✅ Web User ID $id");
     });
   }
 
@@ -76,6 +79,7 @@ class _SupportScreenState extends State<SupportScreen> {
 
     // Dynamically get web_user_id
     final int id = int.tryParse(employeeDetails?['id']?.toString() ?? '') ?? 0;
+    AppLoggerHelper.logInfo("✅ User ID $id");
 
     if (id == 0) {
       print("❌ Invalid or missing web_user_id from Hive");
@@ -223,28 +227,38 @@ class _SupportScreenState extends State<SupportScreen> {
                             KVerticalSpacer(height: 10.h),
 
                             // Assign to employee - ✅ Fixed dropdown
-                            employees.isEmpty
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : KDropdownTextFormField<String>(
-                                    hintText: "Select assigned person",
-                                    value: selectedEmployeeName,
-                                    items: employees
-                                        .map((e) => e.name ?? 'Unknown')
-                                        .toList(), // ✅ Fixed: use .name instead of .empName
-                                    onChanged: (value) {
-                                      final selected = employees.firstWhere(
-                                        (e) => e.name == value,
-                                      ); // ✅ Fixed: use .name
-                                      setState(() {
-                                        selectedEmployeeName =
-                                            selected.name; // ✅ Fixed: use .name
-                                        selectedEmployeeId = selected.id
-                                            .toString(); // ✅ Fixed: use .id instead of .webUserId
-                                      });
-                                    },
-                                  ),
+                            // employees.isEmpty
+                            //     ? const Center(
+                            //         child: CircularProgressIndicator(),
+                            //       )
+                            //     : KDropdownTextFormField<String>(
+                            //         hintText: "Select assigned person",
+                            //         value: selectedEmployeeName,
+                            //         items: employees
+                            //             .map((e) => e.name ?? 'Unknown')
+                            //             .toList(), // ✅ Fixed: use .name instead of .empName
+                            //         onChanged: (value) {
+                            //           final selected = employees.firstWhere(
+                            //             (e) => e.name == value,
+                            //           ); // ✅ Fixed: use .name
+                            //           setState(() {
+                            //             selectedEmployeeName =
+                            //                 selected.name; // ✅ Fixed: use .name
+                            //             selectedEmployeeId = selected.id
+                            //                 .toString(); // ✅ Fixed: use .id instead of .webUserId
+                            //           });
+                            //         },
+                            //       ),
+                            SingleAssignedPersonDropdown(
+                              label: "Select assigned person",
+                              onSelectionChanged: (selectedEmp) {
+                                setState(() {
+                                  selectedEmployeeName = selectedEmp.empName;
+                                  selectedEmployeeId = selectedEmp.webUserId
+                                      .toString();
+                                });
+                              },
+                            ),
 
                             KVerticalSpacer(height: 10.h),
 
@@ -330,6 +344,12 @@ class _SupportScreenState extends State<SupportScreen> {
                                   ticket,
                                   context,
                                 );
+                                dateMonthYearController.clear();
+                                assignToPersonController.clear();
+                                userIdController.clear();
+                                categoryController.clear();
+                                ticketController.clear();
+                                searchController.clear();
                               },
 
                               backgroundColor: AppColors.primaryColor,
