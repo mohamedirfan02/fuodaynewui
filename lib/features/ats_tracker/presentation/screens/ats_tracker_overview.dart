@@ -304,7 +304,7 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
         height: double.infinity,
         color: AppColors.atsHomepageBg,
         child: Padding(
-          padding: EdgeInsets.all(16.w),
+          padding: EdgeInsets.only(top: 10.h),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -334,7 +334,7 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                 ),
                 SizedBox(height: 14.h),
                 Container(
-                  padding: EdgeInsets.all(18.47.w),
+                  //padding: EdgeInsets.all(18.47.w),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
@@ -347,135 +347,78 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       // Header
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          KText(
-                            text: "Candidate List",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                            color: AppColors.titleColor,
-                          ),
-                        ],
-                      ),
-                      KVerticalSpacer(height: 20.h),
-
-                      // Date and Export Row
-                      Row(
-                        spacing: 20.w,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Filter Button
-                          Expanded(
-                            child: KAtsGlowButton(
-                              text: "Filter",
-                              textColor: AppColors.greyColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                              icon: SvgPicture.asset(
-                                AppAssetsConstants.filterIcon,
-                                height: 15,
-                                width: 15,
-                                fit: BoxFit.contain,
-                              ),
-                              onPressed: () {
-                                print("Filter button tapped");
-                              },
-                              backgroundColor: AppColors.secondaryColor,
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 10.h,
+                          left: 18.47.w,
+                          right: 18.47.w,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                KText(
+                                  text: "Candidate List",
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16.sp,
+                                  color: AppColors.titleColor,
+                                ),
+                              ],
                             ),
-                          ),
+                            KVerticalSpacer(height: 16.h),
 
-                          // Export file
-                          Expanded(
-                            child: KAtsGlowButton(
-                              text: "Interview",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                              icon: SvgPicture.asset(
-                                AppAssetsConstants.addIcon,
-                                height: 15,
-                                width: 15,
-                                fit: BoxFit.contain,
-                              ),
-                              onPressed: () {
-                                print("Candidates button tapped");
-                              },
-                              backgroundColor: AppColors.primaryColor,
+                            // Date and Export Row
+                            Row(
+                              spacing: 20.w,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // Filter Button
+                                Expanded(
+                                  child: KAtsGlowButton(
+                                    text: "Filter",
+                                    textColor: AppColors.greyColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    icon: SvgPicture.asset(
+                                      AppAssetsConstants.filterIcon,
+                                      height: 15,
+                                      width: 15,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    onPressed: () {
+                                      print("Filter button tapped");
+                                    },
+                                    backgroundColor: AppColors.secondaryColor,
+                                  ),
+                                ),
+
+                                // Export file
+                                Expanded(
+                                  child: KAtsGlowButton(
+                                    text: "Interview",
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                    icon: SvgPicture.asset(
+                                      AppAssetsConstants.addIcon,
+                                      height: 15,
+                                      width: 15,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    onPressed: () {
+                                      print("Candidates button tapped");
+                                    },
+                                    backgroundColor: AppColors.primaryColor,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            KVerticalSpacer(height: 16.h),
+                          ],
+                        ),
                       ),
-                      KVerticalSpacer(height: 16.h),
 
-                      // Data Table with paginated data<!-----Old Data Table----->
-                      // SizedBox(
-                      //   height: 330.h,
-                      //   child: KAtsDataTable(
-                      //     columnHeaders: headers,
-                      //     rowData: paginatedData,
-                      //     minWidth: 1000.w,
-                      //     showActionsColumn: false,
-                      //     showStatusColumn: false,
-                      //   ),
-                      // ),
-                      //
-                      // // Pagination
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [_buildPageNumbersRow()],
-                      // ),
-                      //
-                      // SizedBox(height: 16.w),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     KText(
-                      //       text: entriesDisplayText, // Dynamic entries text
-                      //       fontSize: 12.sp,
-                      //       color: AppColors.greyColor,
-                      //       fontWeight: FontWeight.w500,
-                      //     ),
-                      //     //SizedBox(width: 40.w),
-                      //     GestureDetector(
-                      //       onTap: () {
-                      //         // Show dropdown or bottom sheet to change items per page
-                      //         _showItemsPerPageSelector();
-                      //       },
-                      //       child: Container(
-                      //         padding: EdgeInsets.all(
-                      //           MediaQuery.of(context).size.width * 0.02,
-                      //         ),
-                      //         decoration: BoxDecoration(
-                      //           border: Border.all(
-                      //             width: 0.77.w,
-                      //             color: AppColors.greyColor.withOpacity(0.1),
-                      //           ),
-                      //           borderRadius: BorderRadius.circular(8.r),
-                      //           color: AppColors.secondaryColor,
-                      //         ),
-                      //         child: Row(
-                      //           children: [
-                      //             KText(
-                      //               text: "Show $itemsPerPage",
-                      //               fontSize:
-                      //                   MediaQuery.of(context).size.width *
-                      //                   0.025,
-                      //               color: AppColors.titleColor,
-                      //               fontWeight: FontWeight.w500,
-                      //             ),
-                      //             Icon(
-                      //               Icons.keyboard_arrow_down,
-                      //               size:
-                      //                   MediaQuery.of(context).size.width *
-                      //                   0.04,
-                      //             ),
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                       /// New Data Table
                       newData_table(columns, rows),
                     ],
@@ -502,140 +445,19 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
       ),
     );
   }
-
-  Widget _buildPageNumbersRow() {
-    int windowEnd = (pageWindowStart + pageWindowSize - 1);
-    if (windowEnd > totalPages) windowEnd = totalPages;
-
-    List<Widget> pageButtons = [];
-
-    // Previous window arrow
-    pageButtons.add(
-      IconButton(
-        icon: Icon(Icons.chevron_left, size: 16.sp),
-        onPressed: pageWindowStart > 1
-            ? () {
-                setState(() {
-                  pageWindowStart -= pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
-            : null,
-      ),
-    );
-
-    // Page numbers
-    for (int i = pageWindowStart; i <= windowEnd; i++) {
-      pageButtons.add(
-        Padding(
-          padding: EdgeInsets.only(right: 8.w),
-          child: _buildPageNumber(i),
-        ),
-      );
-    }
-
-    // Next window arrow
-    pageButtons.add(
-      IconButton(
-        icon: Icon(Icons.chevron_right, size: 16.sp),
-        onPressed: windowEnd < totalPages
-            ? () {
-                setState(() {
-                  pageWindowStart += pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
-            : null,
-      ),
-    );
-
-    return Row(children: pageButtons);
-  }
-
-  Widget _buildPageNumber(int pageNum) {
-    final isActive = pageNum == currentPage;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          currentPage = pageNum;
-        });
-      },
-      child: Container(
-        width: 32.w,
-        height: 32.w,
-        decoration: BoxDecoration(
-          color: isActive ? Color(0xFFF8F8F8) : Colors.transparent,
-          borderRadius: BorderRadius.circular(4.r),
-        ),
-        child: Center(
-          child: KText(
-            text: pageNum.toString(),
-            fontSize: 12.sp,
-            color: isActive ? Colors.black : AppColors.titleColor,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showItemsPerPageSelector() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              KText(
-                text: "Items per page",
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.titleColor,
-              ),
-              SizedBox(height: 16.h),
-              ...([5, 6, 10, 15, 20].map(
-                (count) => ListTile(
-                  title: KText(
-                    text: "Show $count items",
-                    fontSize: 14.sp,
-                    color: AppColors.titleColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  trailing: itemsPerPage == count
-                      ? Icon(Icons.check, color: AppColors.primaryColor)
-                      : null,
-                  onTap: () {
-                    setState(() {
-                      itemsPerPage = count;
-                      currentPage = 1; // Reset to first page
-                      pageWindowStart = 1; // Reset pagination window
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-              )),
-            ],
-          ),
-        );
-      },
-    );
-  }
 }
 
 /// Data Table Widget
-Padding newData_table(List<GridColumn> columns, List<DataGridRow> rows) {
-  return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: ReusableDataGrid(
-      title: 'Applicants',
-      columns: columns,
-      rows: rows,
-      allowSorting: false,
-      totalRows: rows.length,
-      initialRowsPerPage: 5,
-    ),
+ReusableDataGrid newData_table(
+  List<GridColumn> columns,
+  List<DataGridRow> rows,
+) {
+  return ReusableDataGrid(
+    title: 'Applicants',
+    columns: columns,
+    rows: rows,
+    allowSorting: false,
+    totalRows: rows.length,
+    initialRowsPerPage: 5,
   );
 }

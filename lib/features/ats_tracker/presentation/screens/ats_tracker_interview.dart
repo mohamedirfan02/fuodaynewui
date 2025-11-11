@@ -294,31 +294,31 @@ class _InterviewScreenState extends State<InterviewScreen> {
         height: double.infinity,
         color: AppColors.atsHomepageBg,
         child: Padding(
-          padding: EdgeInsets.all(16.w),
+          padding: EdgeInsets.only(top: 10.0.h),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: KText(
-                    text: "Interview",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
-                    color: AppColors.titleColor,
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: KText(
-                    text: "Manage your Interview Schedule",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.sp,
-                    color: AppColors.greyColor,
-                  ),
-                ),
-                SizedBox(height: 20.h),
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: KText(
+                //     text: "Interview",
+                //     fontWeight: FontWeight.w600,
+                //     fontSize: 16.sp,
+                //     color: AppColors.titleColor,
+                //   ),
+                // ),
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: KText(
+                //     text: "Manage your Interview Schedule",
+                //     fontWeight: FontWeight.w500,
+                //     fontSize: 14.sp,
+                //     color: AppColors.greyColor,
+                //   ),
+                // ),
+                // SizedBox(height: 20.h),
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -343,7 +343,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                 ),
                 SizedBox(height: 14.h),
                 Container(
-                  padding: EdgeInsets.all(18.47.w),
+                  // padding: EdgeInsets.all(18.47.w),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
@@ -356,66 +356,77 @@ class _InterviewScreenState extends State<InterviewScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       // Header
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          KText(
-                            text: "Candidate List",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                            color: AppColors.titleColor,
-                          ),
-                        ],
-                      ),
-                      KVerticalSpacer(height: 20.h),
-
-                      // Date and Export Row
-                      Row(
-                        spacing: 20.w,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Filter Button
-                          Expanded(
-                            child: KAtsGlowButton(
-                              text: "Filter",
-                              textColor: AppColors.greyColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                              icon: SvgPicture.asset(
-                                AppAssetsConstants.filterIcon,
-                                height: 15,
-                                width: 15,
-                                fit: BoxFit.contain,
-                              ),
-                              onPressed: () {
-                                print("Filter button tapped");
-                              },
-                              backgroundColor: AppColors.secondaryColor,
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 10.h,
+                          left: 18.47.w,
+                          right: 18.47.w,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                KText(
+                                  text: "Candidate List",
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16.sp,
+                                  color: AppColors.titleColor,
+                                ),
+                              ],
                             ),
-                          ),
+                            KVerticalSpacer(height: 16.h),
 
-                          // Export file
-                          Expanded(
-                            child: KAtsGlowButton(
-                              text: "Interview",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                              icon: SvgPicture.asset(
-                                AppAssetsConstants.addIcon,
-                                height: 15,
-                                width: 15,
-                                fit: BoxFit.contain,
-                              ),
-                              onPressed: () {
-                                print("Candidates button tapped");
-                              },
-                              backgroundColor: AppColors.primaryColor,
+                            // Date and Export Row
+                            Row(
+                              spacing: 20.w,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // Filter Button
+                                Expanded(
+                                  child: KAtsGlowButton(
+                                    text: "Filter",
+                                    textColor: AppColors.greyColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    icon: SvgPicture.asset(
+                                      AppAssetsConstants.filterIcon,
+                                      height: 15,
+                                      width: 15,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    onPressed: () {
+                                      print("Filter button tapped");
+                                    },
+                                    backgroundColor: AppColors.secondaryColor,
+                                  ),
+                                ),
+
+                                // Export file
+                                Expanded(
+                                  child: KAtsGlowButton(
+                                    text: "Interview",
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                    icon: SvgPicture.asset(
+                                      AppAssetsConstants.addIcon,
+                                      height: 15,
+                                      width: 15,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    onPressed: () {
+                                      print("Candidates button tapped");
+                                    },
+                                    backgroundColor: AppColors.primaryColor,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            KVerticalSpacer(height: 16.h),
+                          ],
+                        ),
                       ),
-                      KVerticalSpacer(height: 16.h),
                       /* <!-----------Old Data Table----------->
                       // Data Table with paginated data
                       SizedBox(
@@ -634,16 +645,16 @@ class _InterviewScreenState extends State<InterviewScreen> {
 }
 
 /// Data Table Widget
-Padding newData_table(List<GridColumn> columns, List<DataGridRow> rows) {
-  return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: ReusableDataGrid(
-      title: 'Applicants',
-      columns: columns,
-      rows: rows,
-      allowSorting: false,
-      totalRows: rows.length,
-      initialRowsPerPage: 5,
-    ),
+ReusableDataGrid newData_table(
+  List<GridColumn> columns,
+  List<DataGridRow> rows,
+) {
+  return ReusableDataGrid(
+    title: 'Applicants',
+    columns: columns,
+    rows: rows,
+    allowSorting: false,
+    totalRows: rows.length,
+    initialRowsPerPage: 5,
   );
 }

@@ -197,53 +197,56 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
               ),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            KText(
-              text:
-                  'Showing ${_pagerController.selectedPageIndex * _rowsPerPage + 1} to ${(_pagerController.selectedPageIndex + 1) * _rowsPerPage} of ${widget.totalRows} entries',
-              fontSize:
-                  MediaQuery.of(context).size.width * 0.03, // responsive font
-              color: AppColors.greyColor,
-              fontWeight: FontWeight.w500,
-            ),
-            GestureDetector(
-              onTap: () => _showRowsPerPageBottomSheet(context),
-              child: Container(
-                padding: EdgeInsets.all(
-                  MediaQuery.of(context).size.width * 0.02,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 0.8,
-                    color: AppColors.greyColor.withOpacity(0.1),
+        Padding(
+          padding: EdgeInsets.only(bottom: 16.h, left: 18.47.w, right: 18.47.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              KText(
+                text:
+                    'Showing ${_pagerController.selectedPageIndex * _rowsPerPage + 1} to ${(_pagerController.selectedPageIndex + 1) * _rowsPerPage} of ${widget.totalRows} entries',
+                fontSize:
+                    MediaQuery.of(context).size.width * 0.03, // responsive font
+                color: AppColors.greyColor,
+                fontWeight: FontWeight.w500,
+              ),
+              GestureDetector(
+                onTap: () => _showRowsPerPageBottomSheet(context),
+                child: Container(
+                  padding: EdgeInsets.all(
+                    MediaQuery.of(context).size.width * 0.02,
                   ),
-                  borderRadius: BorderRadius.circular(8),
-                  color: AppColors.secondaryColor,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    KText(
-                      text: _rowsPerPage >= widget.totalRows
-                          ? 'Show All'
-                          : 'Show $_rowsPerPage',
-                      fontSize: MediaQuery.of(context).size.width * 0.025,
-                      color: AppColors.titleColor,
-                      fontWeight: FontWeight.w500,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 0.8,
+                      color: AppColors.greyColor.withOpacity(0.1),
                     ),
-                    //const SizedBox(width: 4),
-                    Icon(
-                      Icons.keyboard_arrow_down,
-                      size: MediaQuery.of(context).size.width * 0.04,
-                      color: AppColors.titleColor,
-                    ),
-                  ],
+                    borderRadius: BorderRadius.circular(8),
+                    color: AppColors.secondaryColor,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      KText(
+                        text: _rowsPerPage >= widget.totalRows
+                            ? 'Show All'
+                            : 'Show $_rowsPerPage',
+                        fontSize: MediaQuery.of(context).size.width * 0.025,
+                        color: AppColors.titleColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      //const SizedBox(width: 4),
+                      Icon(
+                        Icons.keyboard_arrow_down,
+                        size: MediaQuery.of(context).size.width * 0.04,
+                        color: AppColors.titleColor,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
@@ -267,7 +270,7 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   width: 50,
-                  height: 5,
+                  height: 3,
                   decoration: BoxDecoration(
                     color: Colors.grey[400],
                     borderRadius: BorderRadius.circular(2.5),

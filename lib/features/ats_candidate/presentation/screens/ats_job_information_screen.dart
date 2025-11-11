@@ -6,6 +6,7 @@ import 'package:fuoday/commons/widgets/k_horizontal_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -31,20 +32,20 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
   final formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // ✅ Separate Date Controllers
+  //   Separate Date Controllers
   final TextEditingController interviewDateController = TextEditingController();
   final TextEditingController openedDateController = TextEditingController();
   final TextEditingController closedDateController = TextEditingController();
   final TextEditingController appliedDateController = TextEditingController();
 
-  // ✅ Separate Controllers for TextFields
+  //   Separate Controllers for TextFields
   final TextEditingController designationController = TextEditingController();
   final TextEditingController hiringManagerController = TextEditingController();
   final TextEditingController jobLocationController = TextEditingController();
   final TextEditingController coverLetterController = TextEditingController();
   final TextEditingController feedbackController = TextEditingController();
 
-  // ✅ Separate Date Variables
+  //   Separate Date Variables
   DateTime? interviewDate;
   DateTime? openedDate;
   DateTime? closedDate;
@@ -133,7 +134,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
         currentRoute: currentRoute,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
         child: Form(
           key: formKey,
           autovalidateMode: AutovalidateMode.onUnfocus,
@@ -146,7 +147,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 fontSize: 16.sp,
                 color: AppColors.titleColor,
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 10.h),
 
               // Job Title
               const KTitleText(title: "Job Title"),
@@ -163,7 +164,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 },
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Designation",
                 controller: designationController,
@@ -173,7 +174,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                     v == null || v.isEmpty ? "Enter designation" : null,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               const KTitleText(title: "Department"),
               KVerticalSpacer(height: 6.h),
               KDropdownTextFormField<String>(
@@ -189,7 +190,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 },
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Interview Date",
                 controller: interviewDateController,
@@ -205,7 +206,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 suffixIcon: Icons.date_range,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               const KTitleText(title: "Experience"),
               KVerticalSpacer(height: 6.h),
               KDropdownTextFormField<String>(
@@ -221,7 +222,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 },
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Date Opened",
                 controller: openedDateController,
@@ -237,7 +238,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 suffixIcon: Icons.date_range,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Date Closed",
                 controller: closedDateController,
@@ -253,7 +254,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 suffixIcon: Icons.date_range,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Date Applied",
                 controller: appliedDateController,
@@ -269,7 +270,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 suffixIcon: Icons.date_range,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               const KTitleText(title: "Role"),
               KVerticalSpacer(height: 6.h),
               KDropdownTextFormField<String>(
@@ -284,7 +285,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 },
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Hiring Manager",
                 controller: hiringManagerController,
@@ -294,7 +295,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                     v == null || v.isEmpty ? "Enter Hiring Manager" : null,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               const KTitleText(title: "Hiring Status"),
               KVerticalSpacer(height: 6.h),
               KDropdownTextFormField<String>(
@@ -309,7 +310,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 },
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Job Location",
                 controller: jobLocationController,
@@ -319,7 +320,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                     v == null || v.isEmpty ? "Enter Location" : null,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Cover Letter",
                 suffixIcon: selectedCoverLetterFile == null
@@ -367,7 +368,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                     v == null || v.isEmpty ? "Upload Cover Letter" : null,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Feedback",
                 controller: feedbackController,
@@ -398,7 +399,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                     color: AppColors.greyColor.withOpacity(.2),
                   ),
                 ),
-                height: 40.h,
+                height: 33.h,
                 width: 130.w,
                 child: Center(
                   child: Row(
@@ -430,7 +431,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
               // ),
               borderRadius: BorderRadiusGeometry.circular(8),
               backgroundColor: AppColors.primaryColor,
-              height: 30.h,
+              height: AppResponsive.responsiveBtnHeight(context),
               width: 130.w,
               text: "Save",
               fontSize: 12.sp,

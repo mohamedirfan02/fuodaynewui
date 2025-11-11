@@ -308,7 +308,7 @@ class _YesterdayCallTabState extends State<YesterdayCallTab> {
                 ),
                 SizedBox(height: 14.h),
                 Container(
-                  padding: EdgeInsets.all(18.47.w),
+                  //padding: EdgeInsets.all(18.47.w),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
@@ -321,18 +321,25 @@ class _YesterdayCallTabState extends State<YesterdayCallTab> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       // Header
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          KText(
-                            text: "Hiring Manager",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                            color: AppColors.titleColor,
-                          ),
-                        ],
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 10.h,
+                          left: 18.47.w,
+                          right: 18.47.w,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            KText(
+                              text: "Hiring Manager",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                              color: AppColors.titleColor,
+                            ),
+                          ],
+                        ),
                       ),
-                      KVerticalSpacer(height: 20.h),
+                      KVerticalSpacer(height: 10.h),
 
                       ///New Data Table
                       newDatatable(columns, rows),
@@ -348,104 +355,104 @@ class _YesterdayCallTabState extends State<YesterdayCallTab> {
   }
 
   /// Data Table Widget
-  Padding newDatatable(List<GridColumn> columns, List<DataGridRow> rows) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ReusableDataGrid(
-        title: 'Applicants',
-        columns: columns,
-        rows: rows,
-        totalRows: rows.length,
-        initialRowsPerPage: 10,
-        allowSorting: true, // 🔹 Enable sorting
-        selectionColor: Colors.red.withOpacity(0.2),
-        cellBuilder: (cell, rowIndex, actualDataIndex) {
-          if (cell.columnName == 'Status') {
-            final status = _selectedStages[actualDataIndex];
+  ReusableDataGrid newDatatable(
+    List<GridColumn> columns,
+    List<DataGridRow> rows,
+  ) {
+    return ReusableDataGrid(
+      title: 'Applicants',
+      columns: columns,
+      rows: rows,
+      totalRows: rows.length,
+      initialRowsPerPage: 10,
+      allowSorting: true, // 🔹 Enable sorting
+      selectionColor: Colors.red.withOpacity(0.2),
+      cellBuilder: (cell, rowIndex, actualDataIndex) {
+        if (cell.columnName == 'Status') {
+          final status = _selectedStages[actualDataIndex];
 
-            // 🔹 Color mapping for container & text
-            Color bgColor;
-            Color textColor;
-            switch (status.toLowerCase()) {
-              case 'selected':
-                bgColor = AppColors.checkInColor.withOpacity(.2);
-                textColor = AppColors.checkInColor;
-                break;
-              case 'rejected':
-                bgColor = AppColors.softRed.withOpacity(.2);
-                textColor = AppColors.softRed;
-                break;
-              case 'holding':
-                bgColor = Colors.yellow.withOpacity(.2);
-                textColor = Colors.yellow.shade900;
-                break;
-              default:
-                bgColor = Colors.grey.shade200;
-                textColor = Colors.black;
-            }
+          // 🔹 Color mapping for container & text
+          Color bgColor;
+          Color textColor;
+          switch (status.toLowerCase()) {
+            case 'selected':
+              bgColor = AppColors.checkInColor.withOpacity(.2);
+              textColor = AppColors.checkInColor;
+              break;
+            case 'rejected':
+              bgColor = AppColors.softRed.withOpacity(.2);
+              textColor = AppColors.softRed;
+              break;
+            case 'holding':
+              bgColor = Colors.yellow.withOpacity(.2);
+              textColor = Colors.yellow.shade900;
+              break;
+            default:
+              bgColor = Colors.grey.shade200;
+              textColor = Colors.black;
+          }
 
-            return Container(
-              // height: 20.h,
-              margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: bgColor, // 🔹 Container background color
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: DropdownButton<String>(
-                value: status,
-                underline: const SizedBox.shrink(),
-                isExpanded: true,
-                dropdownColor:
-                    Colors.white, // 🔹 White background for dropdown menu
-                iconEnabledColor: Colors.black, // 🔹 Black arrow icon
-                selectedItemBuilder: (context) {
-                  // 🔹 This controls how the selected item appears in the container
-                  return stageOptions.map((stage) {
-                    return Center(
-                      child: Text(
-                        stage,
-                        style: TextStyle(
-                          color: textColor, // 🔹 Colored text for selected item
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  }).toList();
-                },
-                items: stageOptions.map((stage) {
-                  return DropdownMenuItem(
-                    value: stage,
+          return Container(
+            // height: 20.h,
+            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: bgColor, // 🔹 Container background color
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: DropdownButton<String>(
+              value: status,
+              underline: const SizedBox.shrink(),
+              isExpanded: true,
+              dropdownColor:
+                  Colors.white, // 🔹 White background for dropdown menu
+              iconEnabledColor: Colors.black, // 🔹 Black arrow icon
+              selectedItemBuilder: (context) {
+                // 🔹 This controls how the selected item appears in the container
+                return stageOptions.map((stage) {
+                  return Center(
                     child: Text(
                       stage,
-                      style: const TextStyle(
-                        color: Colors.black, // 🔹 Black text in dropdown items
+                      style: TextStyle(
+                        color: textColor, // 🔹 Colored text for selected item
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   );
-                }).toList(),
-                onChanged: (val) {
-                  if (val != null) {
-                    setState(() {
-                      _selectedStages[actualDataIndex] = val;
-                      sampleData[actualDataIndex]['status'] = val;
-                    });
-                  }
-                },
-              ),
-            );
-          }
-
-          // Default cell display
-          return Center(
-            child: Text(
-              cell.value?.toString() ?? '',
-              style: TextStyle(fontSize: 12.sp),
+                }).toList();
+              },
+              items: stageOptions.map((stage) {
+                return DropdownMenuItem(
+                  value: stage,
+                  child: Text(
+                    stage,
+                    style: const TextStyle(
+                      color: Colors.black, // 🔹 Black text in dropdown items
+                    ),
+                  ),
+                );
+              }).toList(),
+              onChanged: (val) {
+                if (val != null) {
+                  setState(() {
+                    _selectedStages[actualDataIndex] = val;
+                    sampleData[actualDataIndex]['status'] = val;
+                  });
+                }
+              },
             ),
           );
-        },
-      ),
+        }
+
+        // Default cell display
+        return Center(
+          child: Text(
+            cell.value?.toString() ?? '',
+            style: TextStyle(fontSize: 12.sp),
+          ),
+        );
+      },
     );
   }
 }
