@@ -124,32 +124,26 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
             height: double.infinity,
             color: AppColors.atsHomepageBg,
             child: Padding(
-              padding: EdgeInsets.only(top: 16.h),
+              padding: EdgeInsets.all(16.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: KText(
-                        text: "ATS Tracker",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 24.sp,
-                        color: AppColors.titleColor,
-                      ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: KText(
+                      text: "ATS Tracker",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.sp,
+                      color: AppColors.titleColor,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: KText(
-                        text: "Manage your Interview Schedule",
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.sp,
-                        color: AppColors.greyColor,
-                      ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: KText(
+                      text: "Manage your Interview Schedule",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      color: AppColors.greyColor,
                     ),
                   ),
 
@@ -158,10 +152,10 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                            left: 20.w,
+                            left: 0.w,
                             right: 0,
-                            top: 20.h,
-                            bottom: 20.h,
+                            top: 5.h,
+                            bottom: 0.h,
                           ),
                           child: TabBar(
                             isScrollable: true,

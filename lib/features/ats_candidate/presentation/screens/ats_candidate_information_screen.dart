@@ -4,6 +4,7 @@ import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -29,32 +30,32 @@ class CandidateInformationScreen extends StatefulWidget {
 
 class _CandidateInformationScreenState
     extends State<CandidateInformationScreen> {
-  // ✅ Form Key
+  //   Form Key
   final formKey = GlobalKey<FormState>();
 
   DateTime? assignDate;
   DateTime selectedDeadline = DateTime.now();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // ✅ Added separate controllers for each text field
+  //   Added separate controllers for each text field
   final TextEditingController nameController =
-      TextEditingController(); // ✅ Added
+      TextEditingController(); //   Added
   final TextEditingController emailController =
-      TextEditingController(); // ✅ Added
+      TextEditingController(); //   Added
   final TextEditingController dobController =
-      TextEditingController(); // ✅ Added
+      TextEditingController(); //   Added
   final TextEditingController phoneController =
-      TextEditingController(); // ✅ Added
+      TextEditingController(); //   Added
   final TextEditingController statusController =
-      TextEditingController(); // ✅ Added
+      TextEditingController(); //   Added
   final TextEditingController jobTitleController =
-      TextEditingController(); // ✅ Added
+      TextEditingController(); //   Added
   final TextEditingController employerController =
-      TextEditingController(); // ✅ Added
+      TextEditingController(); //   Added
   final TextEditingController linkedinController =
-      TextEditingController(); // ✅ Added
+      TextEditingController(); //   Added
   final TextEditingController placeController =
-      TextEditingController(); // ✅ Added
+      TextEditingController(); //   Added
 
   // ⚠️ Removed duplicate use of assignedByController
   final TextEditingController assignDateController = TextEditingController();
@@ -150,9 +151,9 @@ class _CandidateInformationScreenState
           physics: const BouncingScrollPhysics(),
           child: Form(
             key: formKey,
-            autovalidateMode: AutovalidateMode.onUnfocus, // ✅ Added
+            autovalidateMode: AutovalidateMode.onUnfocus, //   Added
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.h, vertical: 30.h),
+              margin: EdgeInsets.symmetric(horizontal: 20.h, vertical: 16.h),
               decoration: BoxDecoration(color: AppColors.atsHomepageBg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,9 +167,9 @@ class _CandidateInformationScreenState
                       color: AppColors.titleColor,
                     ),
                   ),
-                  SizedBox(height: 20.h),
+                  //SizedBox(height: 16.h),
 
-                  // ✅ File Upload Section
+                  //   File Upload Section
                   KAtsUploadPickerTile(
                     backgroundcolor: AppColors.atsHomepageBg,
                     showOnlyView: context.filePickerProviderWatch.isPicked(
@@ -251,7 +252,7 @@ class _CandidateInformationScreenState
 
                   SizedBox(height: 20.h),
 
-                  // ✅ Text Fields with Validation
+                  //   Text Fields with Validation
                   KAuthTextFormField(
                     label: "Candidate Name",
                     controller: nameController,
@@ -263,7 +264,7 @@ class _CandidateInformationScreenState
                     //     : null,
                   ),
 
-                  KVerticalSpacer(height: 20.h),
+                  KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
                     label: "Email Id",
                     controller: emailController,
@@ -282,7 +283,7 @@ class _CandidateInformationScreenState
                     //},
                   ),
 
-                  KVerticalSpacer(height: 20.h),
+                  KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
                     label: "DOB",
                     onTap: () async {
@@ -303,7 +304,7 @@ class _CandidateInformationScreenState
                     //     : null,
                   ),
 
-                  KVerticalSpacer(height: 20.h),
+                  KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
                     label: "Phone Number",
                     controller: phoneController,
@@ -320,7 +321,7 @@ class _CandidateInformationScreenState
                     // },
                   ),
 
-                  KVerticalSpacer(height: 20.h),
+                  KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
                     label: "Employee Status",
                     controller: statusController,
@@ -331,7 +332,7 @@ class _CandidateInformationScreenState
                     //     : null,
                   ),
 
-                  KVerticalSpacer(height: 20.h),
+                  KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
                     label: "Current Job Title",
                     controller: jobTitleController,
@@ -342,7 +343,7 @@ class _CandidateInformationScreenState
                     //     : null,
                   ),
 
-                  KVerticalSpacer(height: 20.h),
+                  KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
                     label: "Current Employer",
                     controller: employerController,
@@ -353,7 +354,7 @@ class _CandidateInformationScreenState
                     //     : null,
                   ),
 
-                  KVerticalSpacer(height: 20.h),
+                  KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
                     label: "LinkedIn Profile",
                     controller: linkedinController,
@@ -364,7 +365,7 @@ class _CandidateInformationScreenState
                     //     : null,
                   ),
 
-                  KVerticalSpacer(height: 20.h),
+                  KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
                     label: "Place",
                     controller: placeController,
@@ -382,7 +383,7 @@ class _CandidateInformationScreenState
           ),
         ),
 
-        // ✅ Bottom Sheet with validation check
+        //   Bottom Sheet with validation check
         bottomNavigationBar: Container(
           height: 60.h,
           width: double.infinity,
@@ -396,13 +397,13 @@ class _CandidateInformationScreenState
               ),
               borderRadius: BorderRadiusGeometry.circular(8),
               backgroundColor: AppColors.primaryColor,
-              height: 35.h,
+              height: AppResponsive.responsiveBtnHeight(context),
               width: double.infinity,
               text: "Next",
               fontSize: 12.sp,
               onPressed: () {
                 if (formKey.currentState!.validate()) {
-                  debugPrint("✅ Form is valid");
+                  AppLoggerHelper.logInfo("  Form is valid");
                   GoRouter.of(
                     context,
                   ).pushNamed(AppRouteConstants.atsJobInformationScreen);

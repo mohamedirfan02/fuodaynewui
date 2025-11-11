@@ -515,7 +515,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
                             ],
                           ),
 
-                          SizedBox(height: 16.h),
+                          // SizedBox(height: 16.h),
 
                           /// 🔹 Upload Picker
                           KAtsUploadPickerTile(
@@ -642,7 +642,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
                             keyboardType: TextInputType.text,
                           ),
 
-                          SizedBox(height: 20.h),
+                          SizedBox(height: 16.h),
 
                           Align(
                             alignment: Alignment.center,
@@ -668,7 +668,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
 
                   SizedBox(height: 14.h),
                   Container(
-                    padding: EdgeInsets.all(18.47.w),
+                    // padding: EdgeInsets.all(18.47.w),
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 0.77.w,
@@ -681,70 +681,82 @@ class _CandidateScreenState extends State<CandidateScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         // Header
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            KText(
-                              text: "Candidate List",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16.sp,
-                              color: AppColors.titleColor,
-                            ),
-                          ],
-                        ),
-                        KVerticalSpacer(height: 20.h),
-
-                        // Date and Export Row
-                        Row(
-                          spacing: 20.w,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Filter Button
-                            Expanded(
-                              child: KAtsGlowButton(
-                                text: "Filter",
-                                textColor: AppColors.greyColor,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                                icon: SvgPicture.asset(
-                                  AppAssetsConstants.filterIcon,
-                                  height: 15,
-                                  width: 15,
-                                  fit: BoxFit.contain,
-                                ),
-                                onPressed: () {
-                                  print("Filter button tapped");
-                                },
-                                backgroundColor: AppColors.secondaryColor,
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10.h,
+                            left: 18.47.w,
+                            right: 18.47.w,
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  KText(
+                                    text: "Candidate List",
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16.sp,
+                                    color: AppColors.titleColor,
+                                  ),
+                                ],
                               ),
-                            ),
+                              KVerticalSpacer(height: 16.h),
 
-                            // Export file
-                            Expanded(
-                              child: KAtsGlowButton(
-                                text: "Candidates",
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
-                                icon: SvgPicture.asset(
-                                  AppAssetsConstants.addIcon,
-                                  height: 15,
-                                  width: 15,
-                                  fit: BoxFit.contain,
-                                ),
-                                onPressed: () {
-                                  print("Candidates button tapped");
-                                  GoRouter.of(context).pushNamed(
-                                    AppRouteConstants
-                                        .atsCandidateInformationScreen,
-                                  );
-                                },
-                                backgroundColor: AppColors.primaryColor,
+                              // Date and Export Row
+                              Row(
+                                spacing: 20.w,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Filter Button
+                                  Expanded(
+                                    child: KAtsGlowButton(
+                                      text: "Filter",
+                                      textColor: AppColors.greyColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      icon: SvgPicture.asset(
+                                        AppAssetsConstants.filterIcon,
+                                        height: 15,
+                                        width: 15,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      onPressed: () {
+                                        print("Filter button tapped");
+                                      },
+                                      backgroundColor: AppColors.secondaryColor,
+                                    ),
+                                  ),
+
+                                  // Export file
+                                  Expanded(
+                                    child: KAtsGlowButton(
+                                      text: "Candidates",
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                      icon: SvgPicture.asset(
+                                        AppAssetsConstants.addIcon,
+                                        height: 15,
+                                        width: 15,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      onPressed: () {
+                                        print("Candidates button tapped");
+                                        GoRouter.of(context).pushNamed(
+                                          AppRouteConstants
+                                              .atsCandidateInformationScreen,
+                                        );
+                                      },
+                                      backgroundColor: AppColors.primaryColor,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                              KVerticalSpacer(height: 16.h),
+                            ],
+                          ),
                         ),
-                        KVerticalSpacer(height: 16.h),
 
                         /// Old Data Table
                         // Data Table with paginated data
@@ -859,169 +871,169 @@ class _CandidateScreenState extends State<CandidateScreen> {
   }
 
   /// Data Table Widget
-  Padding newData_table(List<GridColumn> columns, List<DataGridRow> rows) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ReusableDataGrid(
-        title: 'Applicants',
-        allowSorting: false,
-        columns: columns,
-        rows: rows,
-        totalRows: rows.length,
-        initialRowsPerPage: 5,
-        cellBuilder: (cell, rowIndex, actualDataIndex) {
-          final value = cell.value;
-          if (cell.columnName == 'CV') {
-            final applicant = sampleData[actualDataIndex];
-            final cv = applicant['colum4'] ?? "";
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(cv),
-                SizedBox(width: 4.w),
-                Icon(
-                  Icons.download_outlined,
-                  size: 16.sp,
-                  color: AppColors.greyColor,
-                ),
-              ],
-            );
-          }
-          if (cell.columnName == 'Status') {
-            final applicant = sampleData[actualDataIndex];
-            final status = applicant['colum7'] ?? "";
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: _getStatusColor(status).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(5.r),
-                ),
+  ReusableDataGrid newData_table(
+    List<GridColumn> columns,
+    List<DataGridRow> rows,
+  ) {
+    return ReusableDataGrid(
+      title: 'Applicants',
+      allowSorting: false,
+      columns: columns,
+      rows: rows,
+      totalRows: rows.length,
+      initialRowsPerPage: 5,
+      cellBuilder: (cell, rowIndex, actualDataIndex) {
+        final value = cell.value;
+        if (cell.columnName == 'CV') {
+          final applicant = sampleData[actualDataIndex];
+          final cv = applicant['colum4'] ?? "";
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(cv),
+              SizedBox(width: 4.w),
+              Icon(
+                Icons.download_outlined,
+                size: 16.sp,
+                color: AppColors.greyColor,
+              ),
+            ],
+          );
+        }
+        if (cell.columnName == 'Status') {
+          final applicant = sampleData[actualDataIndex];
+          final status = applicant['colum7'] ?? "";
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+              decoration: BoxDecoration(
+                color: _getStatusColor(status).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(5.r),
+              ),
 
-                child: Center(
-                  child: KText(
-                    text: status,
-                    fontSize: 11.sp,
-                    fontWeight: FontWeight.w400,
-                    color: _getStatusColor(status),
-                    textAlign: TextAlign.center,
-                  ),
+              child: Center(
+                child: KText(
+                  text: status,
+                  fontSize: 11.sp,
+                  fontWeight: FontWeight.w400,
+                  color: _getStatusColor(status),
+                  textAlign: TextAlign.center,
                 ),
+              ),
+            ),
+          );
+        }
+        if (cell.columnName == 'Action') {
+          Widget _actionButton({
+            required Color color,
+            required String icon,
+            VoidCallback? onTap,
+          }) {
+            return Container(
+              width: 30.w,
+              height: 30.h,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: IconButton(
+                onPressed: onTap,
+                icon: SvgPicture.asset(
+                  icon,
+                  height: 14.h,
+                  fit: BoxFit.contain,
+                  color: Colors.white,
+                ),
+                padding: EdgeInsets.zero,
               ),
             );
           }
-          if (cell.columnName == 'Action') {
-            Widget _actionButton({
-              required Color color,
-              required String icon,
-              VoidCallback? onTap,
-            }) {
-              return Container(
-                width: 30.w,
-                height: 30.h,
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: IconButton(
-                  onPressed: onTap,
-                  icon: SvgPicture.asset(
-                    icon,
-                    height: 14.h,
-                    fit: BoxFit.contain,
-                    color: Colors.white,
-                  ),
-                  padding: EdgeInsets.zero,
-                ),
-              );
-            }
 
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _actionButton(
-                  color: AppColors.approvedColor,
-                  icon: AppAssetsConstants.eyeIcon,
-                  onTap: () {},
-                ),
-                SizedBox(width: 8.w),
-                _actionButton(
-                  color: AppColors.primaryColor,
-                  icon: AppAssetsConstants.editIcon,
-                  onTap: () {},
-                ),
-                SizedBox(width: 8.w),
-                _actionButton(
-                  color: AppColors.softRed,
-                  icon: AppAssetsConstants.deleteIcon,
-                  onTap: () {},
-                ),
-              ],
-            );
-          }
-          // Default text cells
-          return Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _actionButton(
+                color: AppColors.approvedColor,
+                icon: AppAssetsConstants.eyeIcon,
+                onTap: () {},
+              ),
+              SizedBox(width: 8.w),
+              _actionButton(
+                color: AppColors.primaryColor,
+                icon: AppAssetsConstants.editIcon,
+                onTap: () {},
+              ),
+              SizedBox(width: 8.w),
+              _actionButton(
+                color: AppColors.softRed,
+                icon: AppAssetsConstants.deleteIcon,
+                onTap: () {},
+              ),
+            ],
           );
-        },
-        // cellBuilder: (cell, rowIndex, actualDataIndex) {
-        //   final value = cell.value;
-        //   if (cell.columnName == 'SNo') {
-        //     return Container(
-        //       alignment:
-        //       Alignment.center, // Centers horizontally and vertically
-        //       child: Text(cell.value.toString(), textAlign: TextAlign.center),
-        //     );
-        //   }
-        //
-        //   //  CV column
-        //   if (cell.columnName == 'CV')
-        //     final applicant = sampleData[actualDataIndex];
-        //     final cv = applicant['colum4'] ?? "";
-        //     return Row(
-        //       children: [
-        //         Text(cv),
-        //         SizedBox(width: 4.w),
-        //         Icon(
-        //           Icons.download_outlined,
-        //           size: 16.sp,
-        //           color: AppColors.greyColor,
-        //         ),
-        //       ],
-        //     );
-        //   }
-        //
-        //
-        //   if (cell.columnName == 'Action') {
-        //     return Row(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [
-        //         _actionButton(
-        //           color: AppColors.primaryColor,
-        //           icon: AppAssetsConstants.editIcon,
-        //           onTap: () {},
-        //         ),
-        //         SizedBox(width: 8.w),
-        //         _actionButton(
-        //           color: AppColors.softRed,
-        //           icon: AppAssetsConstants.deleteIcon,
-        //           onTap: () {},
-        //         ),
-        //       ],
-        //     );
-        //   }
-
+        }
         // Default text cells
-        // return Container(
-        //   alignment: Alignment.centerLeft,
-        //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        //   child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
-        // );
-        // },
-      ),
+        return Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
+        );
+      },
+      // cellBuilder: (cell, rowIndex, actualDataIndex) {
+      //   final value = cell.value;
+      //   if (cell.columnName == 'SNo') {
+      //     return Container(
+      //       alignment:
+      //       Alignment.center, // Centers horizontally and vertically
+      //       child: Text(cell.value.toString(), textAlign: TextAlign.center),
+      //     );
+      //   }
+      //
+      //   //  CV column
+      //   if (cell.columnName == 'CV')
+      //     final applicant = sampleData[actualDataIndex];
+      //     final cv = applicant['colum4'] ?? "";
+      //     return Row(
+      //       children: [
+      //         Text(cv),
+      //         SizedBox(width: 4.w),
+      //         Icon(
+      //           Icons.download_outlined,
+      //           size: 16.sp,
+      //           color: AppColors.greyColor,
+      //         ),
+      //       ],
+      //     );
+      //   }
+      //
+      //
+      //   if (cell.columnName == 'Action') {
+      //     return Row(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       children: [
+      //         _actionButton(
+      //           color: AppColors.primaryColor,
+      //           icon: AppAssetsConstants.editIcon,
+      //           onTap: () {},
+      //         ),
+      //         SizedBox(width: 8.w),
+      //         _actionButton(
+      //           color: AppColors.softRed,
+      //           icon: AppAssetsConstants.deleteIcon,
+      //           onTap: () {},
+      //         ),
+      //       ],
+      //     );
+      //   }
+
+      // Default text cells
+      // return Container(
+      //   alignment: Alignment.centerLeft,
+      //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      //   child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
+      // );
+      // },
     );
   }
 

@@ -490,7 +490,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                         KText(
                           text: "Hello $name",
                           fontWeight: FontWeight.w600,
-                          fontSize: 24.sp,
+                          fontSize: 16.sp,
                           color: AppColors.titleColor,
                         ),
                         const SizedBox(
@@ -504,7 +504,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 8.h),
+                //SizedBox(height: 8.h),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Align(
@@ -517,17 +517,17 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20.h),
 
+                //  SizedBox(height: 20.h),
                 Expanded(
                   child: Column(
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
-                          left: 20.w,
+                          left: 3.w,
                           right: 0,
-                          top: 20.h,
-                          bottom: 20.h,
+                          top: 5.h,
+                          bottom: 0.h,
                         ),
                         child: TabBar(
                           isScrollable: true,

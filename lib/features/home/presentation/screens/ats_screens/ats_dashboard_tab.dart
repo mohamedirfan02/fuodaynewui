@@ -504,7 +504,7 @@ class _DashoardTabState extends State<DashoardTab> {
                 //   fontSize: 12.sp,
                 //   color: AppColors.greyColor,
                 // ),
-                SizedBox(height: 20.h),
+                //SizedBox(height: 20.h),
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -528,7 +528,7 @@ class _DashoardTabState extends State<DashoardTab> {
                   },
                 ),
 
-                SizedBox(height: 24.h),
+                SizedBox(height: 16.h),
 
                 RequirementStatsCard(
                   dataMap: {"Pending": 36, "Unactive": 6, "Closed": 13},
@@ -538,9 +538,14 @@ class _DashoardTabState extends State<DashoardTab> {
                     "Closed": AppColors.closed,
                   },
                 ),
-                SizedBox(height: 24.h),
+                SizedBox(height: 16.h),
+                //Applicant details Container
                 Container(
-                  padding: EdgeInsets.all(18.47.w),
+                  // padding: EdgeInsets.all(18.47.w),
+                  // padding: EdgeInsets.symmetric(
+                  //   horizontal: 18.47.w,
+                  //   vertical: 16.h,
+                  // ),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
@@ -553,93 +558,109 @@ class _DashoardTabState extends State<DashoardTab> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       // Header
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          KText(
-                            text: "Applicant details",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                            color: AppColors.titleColor,
-                          ),
-                        ],
-                      ),
-                      KVerticalSpacer(height: 20.h),
-
-                      // Date and Export Row
-                      Row(
-                        spacing: 20.w,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Start Date
-                          Expanded(
-                            child: KAtsGlowButton(
-                              text: "Date",
-                              textColor: AppColors.greyColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                              icon: SvgPicture.asset(
-                                AppAssetsConstants.dateIcon,
-                                height: 20,
-                                width: 20,
-                                fit: BoxFit.contain,
-                              ),
-                              onPressed: () {
-                                selectDate(context, dateController);
-                              },
-                              backgroundColor: AppColors.secondaryColor,
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 10.h,
+                          left: 18.47.w,
+                          right: 18.47.w,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                KText(
+                                  text: "Applicant details",
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16.sp,
+                                  color: AppColors.titleColor,
+                                ),
+                              ],
                             ),
-                          ),
+                            KVerticalSpacer(height: 16.h),
 
-                          // Export file
-                          Expanded(
-                            child: KAtsGlowButton(
-                              text: "Export",
-                              textColor: AppColors.secondaryColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                              icon: SvgPicture.asset(
-                                AppAssetsConstants.downloadIcon,
-                                height: 20,
-                                width: 20,
-                                fit: BoxFit.contain,
-                              ),
-                              onPressed: () {
-                                print("Export button tapped");
-                                // context.pushNamed(
-                                //   AppRouteConstants.atsTrackerScreen,
-                                // );
-                                // GoRouter.of(
-                                //   context,
-                                // ).pushNamed(AppRouteConstants.atsTrackerScreen);
-                              },
-                              backgroundColor: AppColors.primaryColor,
+                            // Date and Export Row
+                            Row(
+                              spacing: 20.w,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // Start Date
+                                Expanded(
+                                  child: KAtsGlowButton(
+                                    text: "Date",
+                                    textColor: AppColors.greyColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    icon: SvgPicture.asset(
+                                      AppAssetsConstants.dateIcon,
+                                      height: 20,
+                                      width: 20,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    onPressed: () {
+                                      selectDate(context, dateController);
+                                    },
+                                    backgroundColor: AppColors.secondaryColor,
+                                  ),
+                                ),
+
+                                // Export file
+                                Expanded(
+                                  child: KAtsGlowButton(
+                                    text: "Export",
+                                    textColor: AppColors.secondaryColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    icon: SvgPicture.asset(
+                                      AppAssetsConstants.downloadIcon,
+                                      height: 20,
+                                      width: 20,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    onPressed: () {
+                                      print("Export button tapped");
+                                      // context.pushNamed(
+                                      //   AppRouteConstants.atsTrackerScreen,
+                                      // );
+                                      // GoRouter.of(
+                                      //   context,
+                                      // ).pushNamed(AppRouteConstants.atsTrackerScreen);
+                                    },
+                                    backgroundColor: AppColors.primaryColor,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      KVerticalSpacer(height: 16.h),
+                            KVerticalSpacer(height: 16.h),
 
-                      // Filter Field
-                      KFilterBtn(
-                        text: "Filter",
-                        textColor: Colors.black,
-                        backgroundColor: Colors.white,
-                        borderColor: const Color.fromRGBO(233, 234, 236, 1),
-                        borderRadius: BorderRadius.circular(10.r),
-                        onPressed: () {
-                          debugPrint("Filter pressed");
-                        },
-                        icon: SvgPicture.asset(
-                          AppAssetsConstants.filterIcon,
-                          height: 16.h,
-                          width: 16.w,
-                          color: Colors.black,
+                            // Filter Field
+                            KFilterBtn(
+                              text: "Filter",
+                              textColor: Colors.black,
+                              backgroundColor: Colors.white,
+                              borderColor: const Color.fromRGBO(
+                                233,
+                                234,
+                                236,
+                                1,
+                              ),
+                              borderRadius: BorderRadius.circular(10.r),
+                              onPressed: () {
+                                debugPrint("Filter pressed");
+                              },
+                              icon: SvgPicture.asset(
+                                AppAssetsConstants.filterIcon,
+                                height: 16.h,
+                                width: 16.w,
+                                color: Colors.black,
+                              ),
+                            ),
+
+                            KVerticalSpacer(height: 10.h),
+                          ],
                         ),
                       ),
-
-                      KVerticalSpacer(height: 24.h),
 
                       ///---Old Data Table---
                       // // Applicant Table with Pagination
@@ -832,7 +853,10 @@ class _DashoardTabState extends State<DashoardTab> {
                 //   },
                 // ),
                 Container(
-                  padding: EdgeInsets.all(18.47.w),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 18.47.w,
+                    vertical: 10.0.h,
+                  ),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
@@ -847,12 +871,12 @@ class _DashoardTabState extends State<DashoardTab> {
                       // Header
                       CalendarHeader(),
 
-                      SizedBox(height: 20.h),
+                      SizedBox(height: 10.h),
 
                       // TODAY Section
                       TodaySection(),
 
-                      SizedBox(height: 24.h),
+                      SizedBox(height: 16.h),
 
                       // UPCOMING Section
                       UpcomingSection(),
@@ -867,146 +891,145 @@ class _DashoardTabState extends State<DashoardTab> {
     );
   }
 
-  Padding newData_table(List<GridColumn> columns, List<DataGridRow> rows) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ReusableDataGrid(
-        allowSorting: false, // 🔹 Enable sorting
-        title: 'Applicants',
-        columns: columns,
-        rows: rows,
-        totalRows: rows.length,
-        initialRowsPerPage: 5,
-        cellBuilder: (cell, rowIndex, actualDataIndex) {
-          final value = cell.value;
-          if (cell.columnName == 'SNo') {
-            return Container(
-              alignment:
-                  Alignment.center, // Centers horizontally and vertically
-              child: Text(cell.value.toString(), textAlign: TextAlign.center),
-            );
-          }
-          if (cell.columnName == 'Email') {
-            final applicant = applicantsData[actualDataIndex];
-            final fullName = applicant['name'] ?? "";
-            final email = applicant['email'] ?? "";
-            final color = applicant['avatarColor'] ?? Colors.grey;
+  ReusableDataGrid newData_table(
+    List<GridColumn> columns,
+    List<DataGridRow> rows,
+  ) {
+    return ReusableDataGrid(
+      allowSorting: false, // 🔹 Enable sorting
+      title: 'Applicants',
+      columns: columns,
+      rows: rows,
+      totalRows: rows.length,
+      initialRowsPerPage: 5,
+      cellBuilder: (cell, rowIndex, actualDataIndex) {
+        final value = cell.value;
+        if (cell.columnName == 'SNo') {
+          return Container(
+            alignment: Alignment.center, // Centers horizontally and vertically
+            child: Text(cell.value.toString(), textAlign: TextAlign.center),
+          );
+        }
+        if (cell.columnName == 'Email') {
+          final applicant = applicantsData[actualDataIndex];
+          final fullName = applicant['name'] ?? "";
+          final email = applicant['email'] ?? "";
+          final color = applicant['avatarColor'] ?? Colors.grey;
 
-            // Get initials from full name
-            String getInitials(String name) {
-              final parts = name.split(' ');
-              if (parts.length == 1) return parts[0][0].toUpperCase();
-              return (parts[0][0] + parts[1][0]).toUpperCase();
-            }
-
-            return Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: color,
-                    radius: 12.r,
-                    child: KText(
-                      text: getInitials(fullName),
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          KText(
-                            text: fullName,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.titleColor,
-                            textAlign: TextAlign.center,
-                          ),
-                          KText(
-                            text: email,
-                            fontSize: 11.sp,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.greyColor,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
+          // Get initials from full name
+          String getInitials(String name) {
+            final parts = name.split(' ');
+            if (parts.length == 1) return parts[0][0].toUpperCase();
+            return (parts[0][0] + parts[1][0]).toUpperCase();
           }
-          //  CV column
-          if (cell.columnName == 'CV') {
-            final applicant = applicantsData[actualDataIndex];
-            final cv = applicant['cv'] ?? "";
-            return Row(
+
+          return Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Row(
               children: [
-                Text(cv),
-                SizedBox(width: 4.w),
-                Icon(
-                  Icons.download_outlined,
-                  size: 16.sp,
-                  color: AppColors.greyColor,
-                ),
-              ],
-            );
-          }
-
-          // Stage dropdown column
-          if (cell.columnName == 'Stage') {
-            final applicant = applicantsData[actualDataIndex];
-            return DropdownButton<String>(
-              value: _selectedStages[rowIndex],
-              underline: const SizedBox.shrink(),
-              items: stageOptions.map((stage) {
-                return DropdownMenuItem(
-                  value: stage,
-                  child: Text(stage, style: TextStyle(fontSize: 12.sp)),
-                );
-              }).toList(),
-              onChanged: (val) {
-                if (val != null) {
-                  setState(() => _selectedStages[rowIndex] = val);
-                }
-              },
-            );
-          }
-
-          if (cell.columnName == 'Action') {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _actionButton(
-                  color: AppColors.primaryColor,
-                  icon: AppAssetsConstants.editIcon,
-                  onTap: () {},
+                CircleAvatar(
+                  backgroundColor: color,
+                  radius: 12.r,
+                  child: KText(
+                    text: getInitials(fullName),
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 SizedBox(width: 8.w),
-                _actionButton(
-                  color: AppColors.softRed,
-                  icon: AppAssetsConstants.deleteIcon,
-                  onTap: () {},
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        KText(
+                          text: fullName,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.titleColor,
+                          textAlign: TextAlign.center,
+                        ),
+                        KText(
+                          text: email,
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.greyColor,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
-            );
-          }
-
-          // Default text cells
-          return Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
+            ),
           );
-        },
-      ),
+        }
+        //  CV column
+        if (cell.columnName == 'CV') {
+          final applicant = applicantsData[actualDataIndex];
+          final cv = applicant['cv'] ?? "";
+          return Row(
+            children: [
+              Text(cv),
+              SizedBox(width: 4.w),
+              Icon(
+                Icons.download_outlined,
+                size: 16.sp,
+                color: AppColors.greyColor,
+              ),
+            ],
+          );
+        }
+
+        // Stage dropdown column
+        if (cell.columnName == 'Stage') {
+          final applicant = applicantsData[actualDataIndex];
+          return DropdownButton<String>(
+            value: _selectedStages[rowIndex],
+            underline: const SizedBox.shrink(),
+            items: stageOptions.map((stage) {
+              return DropdownMenuItem(
+                value: stage,
+                child: Text(stage, style: TextStyle(fontSize: 12.sp)),
+              );
+            }).toList(),
+            onChanged: (val) {
+              if (val != null) {
+                setState(() => _selectedStages[rowIndex] = val);
+              }
+            },
+          );
+        }
+
+        if (cell.columnName == 'Action') {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _actionButton(
+                color: AppColors.primaryColor,
+                icon: AppAssetsConstants.editIcon,
+                onTap: () {},
+              ),
+              SizedBox(width: 8.w),
+              _actionButton(
+                color: AppColors.softRed,
+                icon: AppAssetsConstants.deleteIcon,
+                onTap: () {},
+              ),
+            ],
+          );
+        }
+
+        // Default text cells
+        return Container(
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
+        );
+      },
     );
   }
 
