@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/providers/dropdown_provider.dart';
 import 'package:fuoday/commons/widgets/k_app_bar.dart';
 import 'package:fuoday/commons/widgets/k_drop_down_text_form_field.dart';
+import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_tab_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
@@ -60,12 +61,12 @@ class _SupportScreenState extends State<SupportScreen> {
     super.initState();
     fetchEmployees();
 
-    // ✅ Move fetchTickets to initState or use WidgetsBinding.instance.addPostFrameCallback
+    //   Move fetchTickets to initState or use WidgetsBinding.instance.addPostFrameCallback
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final hive = getIt<HiveStorageService>();
       final id = int.parse(hive.employeeDetails?['web_user_id'] ?? '0');
       context.read<GetTicketDetailsProvider>().fetchTickets(id, context);
-      AppLoggerHelper.logInfo("✅ Web User ID $id");
+      AppLoggerHelper.logInfo("  Web User ID $id");
     });
   }
 
@@ -79,7 +80,7 @@ class _SupportScreenState extends State<SupportScreen> {
 
     // Dynamically get web_user_id
     final int id = int.tryParse(employeeDetails?['id']?.toString() ?? '') ?? 0;
-    AppLoggerHelper.logInfo("✅ User ID $id");
+    AppLoggerHelper.logInfo("  User ID $id");
 
     if (id == 0) {
       print("❌ Invalid or missing web_user_id from Hive");
@@ -92,7 +93,7 @@ class _SupportScreenState extends State<SupportScreen> {
     setState(() {
       employees = result;
     });
-    print("✅ Employees fetched: ${result.length}");
+    print("  Employees fetched: ${result.length}");
   }
 
   @override
@@ -129,7 +130,7 @@ class _SupportScreenState extends State<SupportScreen> {
     }
 
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         appBar: KAppBar(
           title: "Support",
@@ -226,7 +227,7 @@ class _SupportScreenState extends State<SupportScreen> {
 
                             KVerticalSpacer(height: 10.h),
 
-                            // Assign to employee - ✅ Fixed dropdown
+                            // Assign to employee -   Fixed dropdown
                             // employees.isEmpty
                             //     ? const Center(
                             //         child: CircularProgressIndicator(),
@@ -236,16 +237,16 @@ class _SupportScreenState extends State<SupportScreen> {
                             //         value: selectedEmployeeName,
                             //         items: employees
                             //             .map((e) => e.name ?? 'Unknown')
-                            //             .toList(), // ✅ Fixed: use .name instead of .empName
+                            //             .toList(), //   Fixed: use .name instead of .empName
                             //         onChanged: (value) {
                             //           final selected = employees.firstWhere(
                             //             (e) => e.name == value,
-                            //           ); // ✅ Fixed: use .name
+                            //           ); //   Fixed: use .name
                             //           setState(() {
                             //             selectedEmployeeName =
-                            //                 selected.name; // ✅ Fixed: use .name
+                            //                 selected.name; //   Fixed: use .name
                             //             selectedEmployeeId = selected.id
-                            //                 .toString(); // ✅ Fixed: use .id instead of .webUserId
+                            //                 .toString(); //   Fixed: use .id instead of .webUserId
                             //           });
                             //         },
                             //       ),
@@ -305,7 +306,7 @@ class _SupportScreenState extends State<SupportScreen> {
                               width: double.infinity,
                               text: "Submit",
                               textColor: AppColors.secondaryColor,
-                              onPressed: () {
+                              onPressed: () async {
                                 final hiveService = getIt<HiveStorageService>();
                                 final webUserId = int.tryParse(
                                   hiveService.employeeDetails?['web_user_id']
@@ -339,17 +340,50 @@ class _SupportScreenState extends State<SupportScreen> {
                                       '',
                                   date: dateMonthYearController.text.trim(),
                                 );
+                                final navigator = Navigator.of(context);
 
-                                context.read<TicketProvider>().submitTicket(
-                                  ticket,
-                                  context,
-                                );
-                                dateMonthYearController.clear();
-                                assignToPersonController.clear();
-                                userIdController.clear();
-                                categoryController.clear();
-                                ticketController.clear();
-                                searchController.clear();
+                                final success = await context
+                                    .read<TicketProvider>()
+                                    .submitTicket(ticket);
+
+                                //  Clear only after success - check if widget is still mounted
+                                //   Handle UI based on result
+                                if (success) {
+                                  // Clear controllers
+                                  dateMonthYearController.clear();
+                                  assignToPersonController.clear();
+                                  userIdController.clear();
+                                  categoryController.clear();
+                                  ticketController.clear();
+                                  searchController.clear();
+
+                                  // Clear dropdown if context still valid
+                                  if (context.mounted) {
+                                    context.read<DropdownProvider>().clearValue(
+                                      'priority',
+                                    );
+                                    KSnackBar.success(
+                                      context,
+                                      'Ticket created successfully',
+                                    );
+                                  }
+
+                                  //   Close bottom sheet using captured navigator
+                                  Future.delayed(
+                                    const Duration(milliseconds: 500),
+                                    () {
+                                      navigator.pop();
+                                    },
+                                  );
+                                } else {
+                                  // Show error
+                                  if (context.mounted) {
+                                    KSnackBar.failure(
+                                      context,
+                                      '❌ Failed to create ticket',
+                                    );
+                                  }
+                                }
                               },
 
                               backgroundColor: AppColors.primaryColor,
@@ -412,20 +446,23 @@ class _SupportScreenState extends State<SupportScreen> {
               KVerticalSpacer(height: 30.h),
 
               // Tab Bar
-              KTabBar(
-                tabs: [
-                  // Assigned
-                  Tab(text: "Assigned"),
+              TooltipVisibility(
+                visible: false,
+                child: KTabBar(
+                  tabs: [
+                    // Assigned
+                    Tab(text: "Assigned"),
 
-                  // UnAssigned
-                  Tab(text: "UnAssigned"),
+                    // UnAssigned
+                    Tab(text: "UnAssigned"),
 
-                  // In Progress
-                  Tab(text: "InProgress"),
+                    // In Progress
+                    // Tab(text: "InProgress"),
 
-                  // Completed
-                  Tab(text: "Completed"),
-                ],
+                    // Completed
+                    Tab(text: "Completed"),
+                  ],
+                ),
               ),
 
               SizedBox(height: 30.h),
@@ -440,7 +477,7 @@ class _SupportScreenState extends State<SupportScreen> {
                     SupportUnassigned(),
 
                     // Support InProgress
-                    SupportInprogress(),
+                    // SupportInprogress(),
 
                     // Support Completed
                     SupportCompleted(),

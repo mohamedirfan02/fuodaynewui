@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_app_bar.dart';
 import 'package:fuoday/commons/widgets/k_data_table.dart';
 import 'package:fuoday/commons/widgets/k_download_options_bottom_sheet.dart';
+import 'package:fuoday/commons/widgets/k_pdf_generater_reusable_widget.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
@@ -37,6 +38,8 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
   late final Map<String, dynamic>? employeeDetails;
   late final String name;
   late final int webUserId;
+
+  String? selectedName;
 
   @override
   void initState() {
@@ -193,21 +196,41 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
                       builder: (context) {
                         return KDownloadOptionsBottomSheet(
                           onPdfTap: () async {
-                            final pdfService = getIt<PdfGeneratorService>();
-                            final suffix = getFilenameSuffix();
-
-                            // Use filtered data for PDF
-                            final pdfFile = await pdfService.generateAndSavePdf(
-                              data: List<Map<String, String>>.from(displayData),
-                              columns: List<String>.from(columns),
+                            // final pdfService = getIt<PdfGeneratorService>();
+                            // final suffix = getFilenameSuffix();
+                            //
+                            // // Use filtered data for PDF
+                            // final pdfFile = await pdfService.generateAndSavePdf(
+                            //   data: List<Map<String, String>>.from(displayData),
+                            //   columns: List<String>.from(columns),
+                            //   title:
+                            //       selectedMonth != null && selectedYear != null
+                            //       ? 'Attendance Report - ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear'
+                            //       : 'Total Attendance Report',
+                            //   filename: 'attendance_report$suffix.pdf',
+                            // );
+                            //
+                            // await OpenFilex.open(pdfFile.path);
+                            final pdfService =
+                                getIt<PdfGeneratorServiceReusableWidget>();
+                            //   Step 2: Generate and save PDF
+                            final generatedFile = await pdfService.generateAndSavePdf(
                               title:
                                   selectedMonth != null && selectedYear != null
                                   ? 'Attendance Report - ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear'
                                   : 'Total Attendance Report',
-                              filename: 'attendance_report$suffix.pdf',
+                              filename:
+                                  'attendance_report${getFilenameSuffix()}.pdf',
+                              columns: List<String>.from(columns),
+                              data: List<Map<String, String>>.from(displayData),
                             );
-
-                            await OpenFilex.open(pdfFile.path);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("  PDF generated successfully!"),
+                              ),
+                            );
+                            //   Step 3: Open the generated file
+                            await OpenFilex.open(generatedFile.path);
                           },
 
                           onExcelTap: () async {

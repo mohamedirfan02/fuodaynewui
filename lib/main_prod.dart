@@ -17,14 +17,13 @@ void main() async {
   AppEnvironment.setUpEnv(Environment.production);
 
   // ✅ Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final app = Firebase.app();
   print("🔥 Firebase initialized: ${app.name}");
 
   ///flutter build apk --flavor prod -t lib/main_prod.dart --release
 
+  ///aab file build command==> flutter build appbundle --flavor prod -t lib/main_prod.dart --release
   await Hive.initFlutter(); // Required if you're using hive_flutter
   // Open the box
   await Hive.openBox('employeeDetails');
