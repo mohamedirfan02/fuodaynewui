@@ -41,7 +41,7 @@ class _ManagerRegulationAprovalScreenState
   late final String name;
   late final int webUserId;
 
-  // ✅ Track updated statuses locally
+  //   Track updated statuses locally
   final Map<int, String> _updatedStatuses = {};
 
   @override
@@ -72,7 +72,7 @@ class _ManagerRegulationAprovalScreenState
     super.dispose();
   }
 
-  // ✅ Updated method to handle approval/rejection
+  //   Updated method to handle approval/rejection
   Future<void> _updateRegulationStatus(
     int regulationId,
     String newStatus,
@@ -99,7 +99,7 @@ class _ManagerRegulationAprovalScreenState
 
       if (mounted) Navigator.of(context).pop();
 
-      // ✅ If success, disable buttons and show updated status
+      //   If success, disable buttons and show updated status
       if (updateProvider.updatedRegulation?.status == "Success") {
         setState(() {
           _updatedStatuses[regulationId] = newStatus.capitalize();
@@ -163,7 +163,7 @@ class _ManagerRegulationAprovalScreenState
       final i = entry.key + 1;
       final e = entry.value;
 
-      // ✅ Get locally updated status (if any)
+      //   Get locally updated status (if any)
       final localStatus = _updatedStatuses[e.id];
       final currentStatus = (localStatus ?? e.regulationStatus ?? '')
           .toLowerCase();
@@ -468,7 +468,7 @@ class _ManagerRegulationAprovalScreenState
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("✅ PDF generated successfully!"),
+                        content: Text("  PDF generated successfully!"),
                       ),
                     );
 
@@ -512,7 +512,7 @@ class _ManagerRegulationAprovalScreenState
   }
 }
 
-// ✅ Helper extension for capitalizing
+//   Helper extension for capitalizing
 extension StringExtension on String {
   String capitalize() {
     if (isEmpty) return this;

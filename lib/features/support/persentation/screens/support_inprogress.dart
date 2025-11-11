@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
@@ -12,7 +13,11 @@ class SupportInprogress extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GetTicketDetailsProvider>(
       builder: (_, prov, __) {
-        final list = prov.grouped['in progress'] ?? [];
+        // final list = prov.grouped['in progress'] ?? [];
+        // final list = prov.grouped['inprogress'] ?? [];
+        final list = prov.grouped['inprogress'];
+        if (list == null || list is! List)
+          return const Center(child: Text('No data'));
 
         if (prov.loading) {
           return const Center(child: CircularProgressIndicator());
@@ -43,3 +48,4 @@ class SupportInprogress extends StatelessWidget {
     );
   }
 }
+*/

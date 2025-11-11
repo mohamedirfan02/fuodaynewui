@@ -367,22 +367,22 @@ class MyApp extends StatelessWidget {
                 //   textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
                 // ),
                 routerConfig: appRouter,
-                builder: (context, child) {
-                  return Banner(
-                    message: AppEnvironment.environmentName,
-                    location: BannerLocation.topEnd,
-                    color: AppEnvironment.environmentName == "DEV"
-                        ? AppColors.checkOutColor
-                        : AppColors.checkInColor,
-                    textStyle: TextStyle(
-                      color: AppColors.secondaryColor,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 12.0,
-                      letterSpacing: 1.0,
-                    ),
-                    child: child!,
-                  );
-                },
+                // builder: (context, child) {
+                //   return Banner(
+                //     message: AppEnvironment.environmentName,
+                //     location: BannerLocation.topEnd,
+                //     color: AppEnvironment.environmentName == "DEV"
+                //         ? AppColors.checkOutColor
+                //         : AppColors.checkInColor,
+                //     textStyle: TextStyle(
+                //       color: AppColors.secondaryColor,
+                //       fontWeight: FontWeight.w700,
+                //       fontSize: 12.0,
+                //       letterSpacing: 1.0,
+                //     ),
+                //     child: child!,
+                //   );
+                // },
               );
             },
           );
