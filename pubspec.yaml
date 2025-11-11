@@ -187,6 +187,12 @@ dev_dependencies:
   #flutter_launcher_icons:
   flutter_launcher_icons: ^0.14.4
 
+  #geolocator:
+  geolocator: ^14.0.2
+
+  #geocoding:
+  geocoding: ^4.0.0
+
 flutter:
   uses-material-design: true
 
