@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_drop_down_text_form_field.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:go_router/go_router.dart';
@@ -73,11 +74,7 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
           ),
           title: Row(
             children: [
-              Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 30.sp,
-              ),
+              Icon(Icons.check_circle, color: Colors.green, size: 30.sp),
               SizedBox(width: 10.w),
               Text(
                 "Success!",
@@ -124,11 +121,7 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
           ),
           title: Row(
             children: [
-              Icon(
-                Icons.error,
-                color: Colors.red,
-                size: 30.sp,
-              ),
+              Icon(Icons.error, color: Colors.red, size: 30.sp),
               SizedBox(width: 10.w),
               Text(
                 "Failed!",
@@ -210,13 +203,11 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
 
       // Show success dialog
       showSuccessDialog();
-
     } on MailerException catch (e) {
       setState(() => isSending = false);
 
       // Show error dialog
       showErrorDialog(e.toString());
-
     } catch (e) {
       setState(() => isSending = false);
 
@@ -310,9 +301,11 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
             SizedBox(height: 10.h),
             if (attachments.isNotEmpty)
               ...attachments.map(
-                    (file) => ListTile(
-                  leading: const Icon(Icons.insert_drive_file,
-                      color: AppColors.primaryColor),
+                (file) => ListTile(
+                  leading: const Icon(
+                    Icons.insert_drive_file,
+                    color: AppColors.primaryColor,
+                  ),
                   title: Text(
                     file.path.split('/').last,
                     style: TextStyle(fontSize: 12.sp),
@@ -350,7 +343,7 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
 
             // Cancel Button
             KAuthFilledBtn(
-              height: 24.h,
+              height: AppResponsive.responsiveBtnHeight(context),
               width: double.infinity,
               text: "Cancel",
               fontSize: 10.sp,
@@ -366,7 +359,7 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
 
             // Submit Button
             KAuthFilledBtn(
-              height: 24.h,
+              height: AppResponsive.responsiveBtnHeight(context),
               fontSize: 10.sp,
               width: double.infinity,
               text: isSending ? "Sending..." : "Submit",

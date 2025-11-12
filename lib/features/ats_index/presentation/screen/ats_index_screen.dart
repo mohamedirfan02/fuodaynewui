@@ -153,7 +153,7 @@ class _AtsIndexScreenState extends State<AtsIndexScreen> {
                 KText(
                   text: "Index",
                   fontWeight: FontWeight.w600,
-                  fontSize: 24.sp,
+                  fontSize: 16.sp,
                   color: AppColors.titleColor,
                 ),
                 SizedBox(height: 16.h),

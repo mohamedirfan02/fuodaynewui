@@ -11,6 +11,7 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/core/utils/image_picker.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
@@ -213,7 +214,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
         child: KAuthFilledBtn(
           borderRadius: BorderRadius.circular(8),
           backgroundColor: AppColors.primaryColor,
-          height: 30.h,
+          height: AppResponsive.responsiveBtnHeight(context),
           text: "Next",
           fontSize: 12.sp,
           suffixIcon: const Icon(

@@ -19,22 +19,22 @@ class _SupportAllTicketTabState extends State<SupportAllTicketTab> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w), //
       child: Column(
         children: [
           // Home Page Title
           Align(
             alignment: Alignment.centerLeft,
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 KText(
                   text: "Total: 1234 Tickets",
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: 16.sp,
                   color: AppColors.titleColor,
                 ),
-                const SizedBox(width: 60), // spacing between text and emoji
+                //const SizedBox(width: 60), // spacing between text and emoji
                 SvgPicture.asset(
                   AppAssetsConstants.filterIcon,
                   height: 20,
@@ -44,7 +44,7 @@ class _SupportAllTicketTabState extends State<SupportAllTicketTab> {
               ],
             ),
           ),
-          KVerticalSpacer(height: 20.h),
+          KVerticalSpacer(height: 16.h),
           TicketCard(
             title: 'My app is very buggy',
             userName: 'brentrodriguez',

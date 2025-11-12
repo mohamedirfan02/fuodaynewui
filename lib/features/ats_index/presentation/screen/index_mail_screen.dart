@@ -11,6 +11,7 @@ import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/ats_index/presentation/widgets/gmail_compose_index.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
@@ -243,7 +244,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 24.h),
+              SizedBox(height: 16.h),
               // Email Card
               Container(
                 padding: EdgeInsets.all(16.w),
@@ -355,18 +356,18 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
           ),
         ),
       ),
-      bottomSheet: Container(
-        height: 100.h,
+      bottomNavigationBar: Container(
+        height: 60.h,
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 40.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Send Message",
-            fontSize: 14.sp,
+            fontSize: 12.sp,
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -396,7 +397,22 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                                 MediaQuery.of(context).viewInsets.bottom + 20.h,
                             top: 10.h,
                           ),
-                          child: const ComposeEmailScreen(), // ✅ Embedded here
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // ===== Top handle =====
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 8),
+                                width: 50,
+                                height: 3,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[400],
+                                  borderRadius: BorderRadius.circular(2.5),
+                                ),
+                              ),
+                              const ComposeEmailScreen(),
+                            ],
+                          ), // ✅ Embedded here
                         ),
                       );
                     },

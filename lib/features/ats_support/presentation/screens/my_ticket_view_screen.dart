@@ -8,6 +8,7 @@ import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/ats_index/presentation/widgets/gmail_compose_index.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/add_response_dialog.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/k_details.dart';
@@ -86,7 +87,7 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
               ticketId: '1234',
               department: 'Information technology',
             ),
-            KVerticalSpacer(height: 24.h),
+            KVerticalSpacer(height: 10.h),
             Align(
               alignment: Alignment.centerLeft,
               child: KText(
@@ -96,7 +97,7 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
                 color: AppColors.atsTittleText,
               ),
             ),
-            KVerticalSpacer(height: 24.h),
+            KVerticalSpacer(height: 10.h),
             // Type Drop Down TextForm Field
             KDropdownTextFormField<String>(
               hintText: "Select Status",
@@ -105,7 +106,7 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
               onChanged: (value) =>
                   context.dropDownProviderRead.setValue('leaveType', value),
             ),
-            KVerticalSpacer(height: 24.h),
+            KVerticalSpacer(height: 16.h),
             Align(
               alignment: Alignment.centerLeft,
               child: KText(
@@ -115,7 +116,7 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
                 color: AppColors.atsTittleText,
               ),
             ),
-            KVerticalSpacer(height: 24.h),
+            KVerticalSpacer(height: 10.h),
 
             // Type Drop Down TextForm Field
             KDropdownTextFormField<String>(
@@ -125,7 +126,7 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
               onChanged: (value) =>
                   context.dropDownProviderRead.setValue('priority', value),
             ),
-            KVerticalSpacer(height: 24.h),
+            KVerticalSpacer(height: 16.h),
             Container(
               width: 343.w,
               height: 248.h,
@@ -174,7 +175,7 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
                 ),
               ),
             ),
-            KVerticalSpacer(height: 24.h),
+            KVerticalSpacer(height: 16.h),
 
             Container(
               width: 343.w,
@@ -246,12 +247,12 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 30.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             icon: SvgPicture.asset(
               AppAssetsConstants.addIcon,
-              height: 18,
-              width: 18,
+              height: 16,
+              width: 16,
               fit: BoxFit.contain,
             ),
             text: "Add Response",

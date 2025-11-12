@@ -89,10 +89,10 @@ class _AtsSupportScreenState extends State<AtsSupportScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                            left: 20.w,
+                            left: 0.w,
                             right: 0,
-                            top: 20.h,
-                            bottom: 20.h,
+                            top: 0.h,
+                            bottom: 10.h,
                           ),
                           child: TabBar(
                             isScrollable: true,
@@ -111,7 +111,7 @@ class _AtsSupportScreenState extends State<AtsSupportScreen> {
                                     KText(
                                       text: "All Ticket",
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 14.sp,
+                                      fontSize: 12.sp,
                                     ),
                                   ],
                                 ),
@@ -124,7 +124,7 @@ class _AtsSupportScreenState extends State<AtsSupportScreen> {
                                     KText(
                                       text: "My Ticket",
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 14.sp,
+                                      fontSize: 12.sp,
                                     ),
                                   ],
                                 ),

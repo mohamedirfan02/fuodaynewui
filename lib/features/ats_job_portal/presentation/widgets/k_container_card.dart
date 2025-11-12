@@ -26,15 +26,12 @@ class JobCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 327.w,
-      height: 190.h,
+      height: 150.h,
       padding: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
         color: AppColors.secondaryColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: const Color(0xFFD0D5DD),
-          width: 1.w,
-        ),
+        border: Border.all(color: const Color(0xFFD0D5DD), width: 1.w),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,16 +43,13 @@ class JobCard extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 20.sp,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.titleColor
+                  color: AppColors.titleColor,
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12.w,
-                  vertical: 4.h,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: statusBackgroundColor,
                   borderRadius: BorderRadius.circular(12.r),
@@ -71,35 +65,35 @@ class JobCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 8.h),
 
           // Subtitle
           Text(
             subtitle,
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 12.sp,
               fontWeight: FontWeight.w500,
               color: AppColors.greyColor,
             ),
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 8.h),
 
           // Candidates Info
           Text(
             candidatesInfo,
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 12.sp,
               fontWeight: FontWeight.w500,
               color: AppColors.greyColor,
             ),
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 8.h),
 
           // Time Info
           Text(
             timeInfo,
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 12.sp,
               fontWeight: FontWeight.w500,
               color: AppColors.greyColor,
             ),
@@ -109,4 +103,3 @@ class JobCard extends StatelessWidget {
     );
   }
 }
-

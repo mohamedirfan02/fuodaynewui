@@ -476,7 +476,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
           height: double.infinity,
           color: AppColors.atsHomepageBg,
           child: Padding(
-            padding: EdgeInsets.only(top: 20.h),
+            padding: EdgeInsets.only(top: 16.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
