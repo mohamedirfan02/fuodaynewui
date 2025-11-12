@@ -125,7 +125,7 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
                           children: [
                             KText(
                               text: "Job Portal",
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               fontSize: 16.sp,
                               color: AppColors.titleColor,
                             ),
@@ -135,8 +135,8 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
                       //SizedBox(height: 8.h),
                       KText(
                         text: "Manage your Interview Schedule",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.sp,
                         color: AppColors.greyColor,
                       ),
                       SizedBox(height: 20.h),
