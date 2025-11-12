@@ -365,7 +365,7 @@ class _HiringTabState extends State<HiringTab> {
                         padding: EdgeInsets.only(
                           top: 10.h,
                           left: 18.47.w,
-                          right: 18.47.w,
+                          right: 18.46.w,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
