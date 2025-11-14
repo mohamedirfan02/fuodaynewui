@@ -27,6 +27,18 @@ class AppResponsive {
     }
   }
 
+  /// Reusable method to get responsive crossAxisCount
+  static int responsiveCrossAxisCount(BuildContext context) {
+    final isTablet = isTabletDevice(context);
+    final isLandscape = isLandscapeMode(context);
+
+    if (isTablet) {
+      return isLandscape ? 4 : 3; // Tablet landscape = 4, portrait = 3
+    } else {
+      return 2; // Mobile
+    }
+  }
+
   // Optional renaming helpers for better readability
   static bool isTabletDevice(BuildContext context) => isTablet(context);
   static bool isLandscapeMode(BuildContext context) => isLandscape(context);

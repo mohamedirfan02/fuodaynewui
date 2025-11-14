@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
@@ -18,13 +20,17 @@ class RequirementStatsCard extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final totalJobs = dataMap.values.fold<double>(0, (a, b) => a + b).toInt();
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
 
     // Scale factor for adaptive UI
     final scale = screenWidth / 375; // 375 is base iPhone width from Figma
 
     return Container(
       width: screenWidth * 0.87, // ≈ 327 from 375
-      height: screenHeight * 0.45, // adaptive height
+      height: isTablet
+          ? (isLandscape ? screenHeight * 1 : screenHeight * 0.55)
+          : screenHeight * 0.45, // adaptive height
       padding: EdgeInsets.all(18 * scale),
       decoration: BoxDecoration(
         border: Border.all(
@@ -44,7 +50,7 @@ class RequirementStatsCard extends StatelessWidget {
               KText(
                 text: "Total Requirement",
                 fontWeight: FontWeight.w600,
-                fontSize: 16 * scale,
+                fontSize: 16.sp,
                 color: AppColors.titleColor,
               ),
               InkWell(
@@ -56,17 +62,17 @@ class RequirementStatsCard extends StatelessWidget {
                     KText(
                       text: "See all",
                       fontWeight: FontWeight.w500,
-                      fontSize: 11 * scale,
+                      fontSize: 16.sp,
                       color: AppColors.subTitleColor,
                     ),
                     Icon(
                       Icons.arrow_forward_ios,
-                      size: 12 * scale,
+                      size: 16.sp,
                       color: AppColors.titleColor,
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
 
@@ -75,8 +81,12 @@ class RequirementStatsCard extends StatelessWidget {
           // Pie chart
           Center(
             child: SizedBox(
-              width: screenWidth * 0.4,
-              height: screenWidth * 0.4,
+              width: isTablet
+                  ? (isLandscape ? screenHeight * 0.4 : screenHeight * 0.3)
+                  : screenWidth * 0.4,
+              height: isTablet
+                  ? (isLandscape ? screenHeight * 0.4 : screenHeight * 0.3)
+                  : screenWidth * 0.4,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -84,7 +94,9 @@ class RequirementStatsCard extends StatelessWidget {
                     dataMap: dataMap,
                     colorList: colorMap.values.toList(),
                     chartType: ChartType.ring,
-                    ringStrokeWidth: 20 * scale,
+                    ringStrokeWidth: isTablet
+                        ? (isLandscape ? 10 * scale : 17 * scale)
+                        : 20 * scale,
                     chartValuesOptions: const ChartValuesOptions(
                       showChartValues: false,
                     ),
@@ -94,8 +106,16 @@ class RequirementStatsCard extends StatelessWidget {
 
                   // Inner circle
                   Container(
-                    width: screenWidth * 0.22,
-                    height: screenWidth * 0.22,
+                    width: isTablet
+                        ? (isLandscape
+                              ? screenHeight * 0.25
+                              : screenHeight * 0.18)
+                        : screenWidth * 0.22,
+                    height: isTablet
+                        ? (isLandscape
+                              ? screenHeight * 0.25
+                              : screenHeight * 0.18)
+                        : screenWidth * 0.22,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppColors.secondaryColor,
@@ -114,14 +134,18 @@ class RequirementStatsCard extends StatelessWidget {
                         KText(
                           text: totalJobs.toString(),
                           fontWeight: FontWeight.w700,
-                          fontSize: 14 * scale,
+                          fontSize: isTablet
+                              ? (isLandscape ? 12 * scale : 14 * scale)
+                              : 14 * scale,
                           color: AppColors.titleColor,
                         ),
                         SizedBox(height: 2 * scale),
                         KText(
                           text: "Total Jobs",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10 * scale,
+                          fontSize: isTablet
+                              ? (isLandscape ? 8 * scale : 10 * scale)
+                              : 10 * scale,
                           color: AppColors.subTitleColor,
                         ),
                       ],
@@ -160,14 +184,14 @@ class RequirementStatsCard extends StatelessWidget {
                         child: KText(
                           text: label,
                           fontWeight: FontWeight.w500,
-                          fontSize: 12 * scale,
+                          fontSize: 16.sp,
                           color: AppColors.titleColor,
                         ),
                       ),
                       KText(
                         text: value.toString(),
                         fontWeight: FontWeight.w600,
-                        fontSize: 12 * scale,
+                        fontSize: 16.sp,
                         color: AppColors.titleColor,
                       ),
                     ],

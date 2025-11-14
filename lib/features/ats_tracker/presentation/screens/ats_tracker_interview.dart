@@ -11,6 +11,7 @@ import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -323,7 +324,9 @@ class _InterviewScreenState extends State<InterviewScreen> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                    crossAxisCount: AppResponsive.responsiveCrossAxisCount(
+                      context,
+                    ),
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
                     childAspectRatio: 155 / 113,

@@ -16,6 +16,7 @@ import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/ats_candidate/widgets/k_ats_file_upload_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
@@ -434,7 +435,9 @@ class _CandidateScreenState extends State<CandidateScreen> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                      crossAxisCount: AppResponsive.responsiveCrossAxisCount(
+                        context,
+                      ),
                       crossAxisSpacing: 10.w,
                       mainAxisSpacing: 10.h,
                       childAspectRatio: 155 / 113,
