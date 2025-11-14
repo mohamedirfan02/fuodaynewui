@@ -15,7 +15,7 @@ class ReusableDataGrid extends StatefulWidget {
   final Widget Function(DataGridCell cell, int rowIndex, int actualDataIndex)?
   cellBuilder;
   final bool allowSorting; // 🔹 New parameter
-  final Color? selectionColor; // 🔹 New parameter
+  final Color? selectionColor; // 🔹 New parameterS
 
   const ReusableDataGrid({
     super.key,
@@ -205,8 +205,8 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
               KText(
                 text:
                     'Showing ${_pagerController.selectedPageIndex * _rowsPerPage + 1} to ${(_pagerController.selectedPageIndex + 1) * _rowsPerPage} of ${widget.totalRows} entries',
-                fontSize:
-                    MediaQuery.of(context).size.width * 0.03, // responsive font
+                fontSize: 12
+                    .sp, // responsive font......MediaQuery.of(context).size.width * 0.03
                 color: AppColors.greyColor,
                 fontWeight: FontWeight.w500,
               ),
@@ -231,14 +231,14 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                         text: _rowsPerPage >= widget.totalRows
                             ? 'Show All'
                             : 'Show $_rowsPerPage',
-                        fontSize: MediaQuery.of(context).size.width * 0.025,
+                        fontSize: 10.sp,
                         color: AppColors.titleColor,
                         fontWeight: FontWeight.w500,
                       ),
                       //const SizedBox(width: 4),
                       Icon(
                         Icons.keyboard_arrow_down,
-                        size: MediaQuery.of(context).size.width * 0.04,
+                        size: 15.h,
                         color: AppColors.titleColor,
                       ),
                     ],

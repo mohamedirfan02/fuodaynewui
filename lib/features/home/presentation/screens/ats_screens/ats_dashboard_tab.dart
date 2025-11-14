@@ -12,6 +12,7 @@ import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
@@ -507,9 +508,11 @@ class _DashoardTabState extends State<DashoardTab> {
                 //SizedBox(height: 20.h),
                 GridView.builder(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                    crossAxisCount: AppResponsive.responsiveCrossAxisCount(
+                      context,
+                    ),
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
                     childAspectRatio: 155 / 113,
@@ -646,6 +649,7 @@ class _DashoardTabState extends State<DashoardTab> {
                                 1,
                               ),
                               borderRadius: BorderRadius.circular(10.r),
+
                               onPressed: () {
                                 debugPrint("Filter pressed");
                               },
