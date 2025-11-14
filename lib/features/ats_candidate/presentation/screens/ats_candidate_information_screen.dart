@@ -409,7 +409,7 @@ class _CandidateInformationScreenState
                   ).pushNamed(AppRouteConstants.atsJobInformationScreen);
                   // KSnackBar.success(context, "Form is valid. Proceeding...");
                 } else {
-                  debugPrint("❌ Form has errors  ");
+                  debugPrint("❌ Form has error");
                   KSnackBar.failure(
                     context,
                     "Please correct the errors above.",
