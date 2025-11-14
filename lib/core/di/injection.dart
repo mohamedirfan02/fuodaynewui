@@ -13,9 +13,14 @@ import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/service/secure_storage_service.dart';
 import 'package:fuoday/core/utils/file_picker.dart';
 import 'package:fuoday/features/ats_candidate/data/datasource/remote/candidates_remote_data_source.dart';
+import 'package:fuoday/features/ats_candidate/data/datasource/remote/candidates_remote_datasource.dart';
+import 'package:fuoday/features/ats_candidate/data/repository/candidates_action_repository_impl.dart';
 import 'package:fuoday/features/ats_candidate/data/repository/candidates_repository_impl.dart';
+import 'package:fuoday/features/ats_candidate/domain/repository/candidates_action.dart';
 import 'package:fuoday/features/ats_candidate/domain/repository/candidates_repository.dart';
+import 'package:fuoday/features/ats_candidate/domain/usecase/action_on_candidate_usecase.dart';
 import 'package:fuoday/features/ats_candidate/domain/usecase/get_candidates_usecase.dart';
+import 'package:fuoday/features/ats_candidate/presentation/provider/candidate_action_provider.dart';
 import 'package:fuoday/features/ats_candidate/presentation/provider/candidates_provider.dart';
 import 'package:fuoday/features/attendance/data/datasources/local/total_absent_details_local_data_source.dart';
 import 'package:fuoday/features/attendance/data/datasources/local/total_attendance_details_local_data_source.dart';
@@ -1566,6 +1571,33 @@ void setUpServiceLocator() {
   getIt.registerFactory<CandidatesProvider>(
         () => CandidatesProvider(
       getCandidatesUseCase: getIt<GetCandidatesUseCase>(),
+    ),
+  );
+
+
+  // 🔹 Data Source
+  getIt.registerLazySingleton<CandidatesActionRemoteDataSource>(
+        () => CandidatesActionRemoteDataSourceImpl(dioService: getIt<DioService>()),
+  );
+
+  // 🔹 Repository
+  getIt.registerLazySingleton<CandidatesActionRepository>(
+        () => CandidatesActionRepositoryImpl(
+      remoteDataSource: getIt<CandidatesActionRemoteDataSource>(),
+    ),
+  );
+
+  // 🔹 Use Case
+  getIt.registerLazySingleton<ActionOnCandidateUseCase>(
+        () => ActionOnCandidateUseCase(
+      repository: getIt<CandidatesActionRepository>(),
+    ),
+  );
+
+  // 🔹 Provider
+  getIt.registerFactory<CandidateActionProvider>(
+        () => CandidateActionProvider(
+      actionOnCandidateUseCase: getIt<ActionOnCandidateUseCase>(),
     ),
   );
 }

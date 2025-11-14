@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,8 +18,8 @@ import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/ats_candidate/domain/entities/candidate_entity.dart';
+import 'package:fuoday/features/ats_candidate/presentation/provider/candidate_action_provider.dart';
 import 'package:fuoday/features/ats_candidate/presentation/provider/candidates_provider.dart';
-import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/ats_candidate/widgets/k_ats_file_upload_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
@@ -41,7 +40,7 @@ class CandidateScreen extends StatefulWidget {
 
 class _CandidateScreenState extends State<CandidateScreen> {
   final TextEditingController jobDescriptionController =
-      TextEditingController();
+  TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
@@ -91,208 +90,11 @@ class _CandidateScreenState extends State<CandidateScreen> {
   void _fetchCandidates() {
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
-    final webUserId = employeeDetails?['web_user_id']?.toString() ?? '54';
+    final webUserId = employeeDetails?['web_user_id']?.toString() ?? '';
 
     context.read<CandidatesProvider>().fetchCandidates(webUserId);
   }
-  // Sample data for candidates
-  final List<Map<String, dynamic>> sampleData = [
-    {
-      "sno": 1,
-      "name": "Aarav Sharma",
-      "colum3": "15-09-2025",
-      "colum4": "aarav_cv.pdf",
-      "showDownload": true,
-      "colum5": "Fresher",
-      "colum6": "Flutter Developer",
-      "colum7": "Selected",
-      "avatarColor": Colors.blue,
-      "initials": "AS",
-    },
-    {
-      "sno": 2,
-      "name": "Priya Verma",
-      "colum3": "16-09-2025",
-      "colum4": "priya_cv.pdf",
-      "colum5": "2 yrs",
-      "colum6": "test@gmail.com",
-      "colum7": "On Hold",
-      "colum8": "jeeva",
-      "avatarColor": Colors.purple,
-      "initials": "PV",
-      "showDownload": true,
-    },
-    {
-      "sno": 3,
-      "name": "Rohan Gupta",
-      "colum3": "3216549870",
-      "colum4": "rohan_cv.pdf",
-      "colum5": "1 yr",
-      "colum6": "test@gmail.com",
-      "colum7": "Rejected",
-      "colum8": "raja",
-      "avatarColor": Colors.orange,
-      "initials": "RG",
-      "showDownload": true,
-    },
-    {
-      "sno": 4,
-      "name": "Neha Singh",
-      "colum3": "3216549870",
-      "colum4": "neha_cv.pdf",
-      "colum5": "3 yrs",
-      "colum6": "test@gmail.com",
-      "colum7": "In Progress",
-      "colum8": "raj",
-      "avatarColor": Colors.green,
-      "initials": "NS",
-      "showDownload": true,
-    },
-    {
-      "sno": 5,
-      "name": "Arjun Mehta",
-      "colum3": "19-09-2025",
-      "colum4": "arjun_cv.pdf",
-      "colum5": "Fresher",
-      "colum6": "QA Engineer",
-      "colum7": "L1 60%",
-      "avatarColor": Colors.red,
-      "initials": "AM",
-      "showDownload": true,
-    },
-    {
-      "sno": 6,
-      "name": "Simran Kaur",
-      "colum3": "20-09-2025",
-      "colum4": "simran_cv.pdf",
-      "colum5": "4 yrs",
-      "colum6": "Project Manager",
-      "colum7": "HR Round",
-      "avatarColor": Colors.teal,
-      "initials": "SK",
-      "showDownload": true,
-    },
-    {
-      "sno": 7,
-      "name": "Vikram Rao",
-      "colum3": "21-09-2025",
-      "colum4": "vikram_cv.pdf",
-      "colum5": "2 yrs",
-      "colum6": "Data Analyst",
-      "colum7": "L2 70%",
-      "avatarColor": Colors.cyan,
-      "initials": "VR",
-      "showDownload": true,
-    },
-    {
-      "sno": 8,
-      "name": "Ananya Nair",
-      "colum3": "22-09-2025",
-      "colum4": "ananya_cv.pdf",
-      "colum5": "Fresher",
-      "colum6": "AI Engineer",
-      "colum7": "Selected",
-      "avatarColor": Colors.indigo,
-      "initials": "AN",
-      "showDownload": true,
-    },
-    {
-      "sno": 9,
-      "name": "Karan Patel",
-      "colum3": "23-09-2025",
-      "colum4": "karan_cv.pdf",
-      "colum5": "5 yrs",
-      "colum6": "DevOps Engineer",
-      "colum7": "L3 95%",
-      "avatarColor": Colors.deepOrange,
-      "initials": "KP",
-      "showDownload": true,
-    },
-    {
-      "sno": 10,
-      "name": "Meera Iyer",
-      "colum3": "24-09-2025",
-      "colum4": "meera_cv.pdf",
-      "colum5": "1 yr",
-      "colum6": "Business Analyst",
-      "colum7": "On Hold",
-      "avatarColor": Colors.pink,
-      "initials": "MI",
-      "showDownload": true,
-    },
-    {
-      "sno": 11,
-      "name": "Rahul Kumar",
-      "colum3": "25-09-2025",
-      "colum4": "rahul_cv.pdf",
-      "colum5": "3 yrs",
-      "colum6": "Mobile Developer",
-      "colum7": "Selected",
-      "avatarColor": Colors.brown,
-      "initials": "RK",
-      "showDownload": true,
-    },
-    {
-      "sno": 12,
-      "name": "Sneha Reddy",
-      "colum3": "26-09-2025",
-      "colum4": "sneha_cv.pdf",
-      "colum5": "2 yrs",
-      "colum6": "Frontend Developer",
-      "colum7": "In Progress",
-      "avatarColor": Colors.amber,
-      "initials": "SR",
-      "showDownload": true,
-    },
-    {
-      "sno": 13,
-      "name": "Amit Agarwal",
-      "colum3": "27-09-2025",
-      "colum4": "amit_cv.pdf",
-      "colum5": "4 yrs",
-      "colum6": "Tech Lead",
-      "colum7": "HR Round",
-      "avatarColor": Colors.lightBlue,
-      "initials": "AA",
-      "showDownload": true,
-    },
-    {
-      "sno": 14,
-      "name": "Pooja Jain",
-      "colum3": "28-09-2025",
-      "colum4": "pooja_cv.pdf",
-      "colum5": "1 yr",
-      "colum6": "Content Writer",
-      "colum7": "On Hold",
-      "avatarColor": Colors.deepPurple,
-      "initials": "PJ",
-      "showDownload": true,
-    },
-    {
-      "sno": 15,
-      "name": "Rajesh Mishra",
-      "colum3": "29-09-2025",
-      "colum4": "rajesh_cv.pdf",
-      "colum5": "6 yrs",
-      "colum6": "System Admin",
-      "colum7": "Rejected",
-      "avatarColor": Colors.lime,
-      "initials": "RM",
-      "showDownload": true,
-    },
-    {
-      "sno": 16,
-      "name": "Rajesh Mishra",
-      "colum3": "29-09-2025",
-      "colum4": "rajesh_cv.pdf",
-      "colum5": "6 yrs",
-      "colum6": "System Admin",
-      "colum7": "Rejected",
-      "avatarColor": Colors.lime,
-      "initials": "RM",
-      "showDownload": true,
-    },
-  ];
+
 
   // Build DataGridRows from applicantsData
   List<DataGridRow> _buildRows(List<CandidateEntity> candidates) {
@@ -345,34 +147,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
     ];
   }
 
-  // Getter methods for pagination
-  int get totalPages => (sampleData.length / itemsPerPage).ceil();
 
-  List<Map<String, dynamic>> get paginatedData {
-    int totalPagesCount = (sampleData.length / itemsPerPage).ceil();
-
-    // Ensure currentPage is within range
-    if (currentPage > totalPagesCount) currentPage = totalPagesCount;
-    if (currentPage < 1) currentPage = 1;
-
-    int startIndex = (currentPage - 1) * itemsPerPage;
-    int endIndex = startIndex + itemsPerPage;
-    if (startIndex >= sampleData.length) return []; // safe guard
-    if (endIndex > sampleData.length) endIndex = sampleData.length;
-
-    return sampleData.sublist(startIndex, endIndex);
-  }
-
-  // Calculate display text for showing entries
-  String get entriesDisplayText {
-    if (sampleData.isEmpty) return "Showing 0 to 0 of 0 entries";
-
-    int startIndex = (currentPage - 1) * itemsPerPage + 1;
-    int endIndex = currentPage * itemsPerPage;
-    if (endIndex > sampleData.length) endIndex = sampleData.length;
-
-    return "Showing $startIndex to $endIndex of ${sampleData.length} entries";
-  }
 
   @override
   void dispose() {
@@ -993,8 +768,23 @@ class _CandidateScreenState extends State<CandidateScreen> {
               _actionButton(
                 color: AppColors.softRed,
                 icon: AppAssetsConstants.deleteIcon,
-                onTap: () {},
+                onTap: () {
+                  final provider = context.read<CandidateActionProvider>();
+
+                  provider.deleteCandidate( candidate.id).then((success) {
+                    if (success) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Candidate deleted successfully")),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Deletion failed")),
+                      );
+                    }
+                  });
+                },
               ),
+
             ],
           );
         }
@@ -1029,4 +819,4 @@ class _CandidateScreenState extends State<CandidateScreen> {
     );
   }
 
-  }
+}

@@ -239,4 +239,7 @@ class AppApiEndpointConstants {
   // Get ATS Candidates
   static String getCandidates(String webUserId) =>
       '$baseUrl/ats/candidates/getcandidates?web_user_id=$webUserId';
+
+  // Candidate Save (Add / Edit / Delete)
+  static String get candidateActions => "$baseUrl/ats/candidates/save";
 }
