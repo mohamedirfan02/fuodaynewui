@@ -121,7 +121,6 @@ class AppColors {
   static const Color chipColor = Color(0xFFD1D7E8);
   static const Color approvedColor = Color(0xFF009F00);
   static const Color pendingColor = Color(0xFFFFCF28);
-  static const Color TestColor = Color(0xFFFFCF28);
 
   // attendance card light color
   static const Color attendanceCardTextLightColor = Color(0xFFC6CEE4);
