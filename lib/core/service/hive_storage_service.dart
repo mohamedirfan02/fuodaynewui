@@ -1,9 +1,11 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:fuoday/core/constants/storage/app_hive_storage_constants.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
 
 class HiveStorageService {
   static final HiveStorageService _instance = HiveStorageService._internal();
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   factory HiveStorageService() => _instance;
 
@@ -12,6 +14,15 @@ class HiveStorageService {
   late Box _authBox;
   late Box _onBoardingBox;
   late Box _employeeDetailsBox;
+
+
+  Future<void> clearAll() async {
+    await secureStorage.deleteAll(); // Clears encrypted values
+    await Hive.box(AppHiveStorageConstants.authBoxKey).clear();
+    await Hive.box(AppHiveStorageConstants.employeeDetailsBoxKey).clear();
+    await Hive.box(AppHiveStorageConstants.onBoardingBoxKey).clear();
+  }
+
 
   /// Initialize Hive boxes
   Future<void> init() async {

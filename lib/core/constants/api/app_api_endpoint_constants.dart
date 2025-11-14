@@ -232,5 +232,11 @@ class AppApiEndpointConstants {
   //  Get all Payroll in HR Tab
   static String getTotalPayrollSummary() => '$baseUrl/hrms/hr/payroll-summary';
 
+
+
   //====================ATS PAGES=====================================
+
+  // Get ATS Candidates
+  static String getCandidates(String webUserId) =>
+      '$baseUrl/ats/candidates/getcandidates?web_user_id=$webUserId';
 }

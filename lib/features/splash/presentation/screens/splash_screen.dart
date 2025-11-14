@@ -4,6 +4,7 @@ import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
 import 'package:fuoday/core/constants/router/app_route_constants.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 
 //
 // class SplashScreen extends StatefulWidget {
@@ -65,34 +66,53 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
+
   @override
   void initState() {
     super.initState();
     _navigate();
   }
+  Future<bool> _validateSecureStorage(HiveStorageService storage) async {
+    try {
+      // Try reading secure data
+      await storage.secureStorage.read(key: "authToken");
+      return true;
+    } catch (e) {
+      debugPrint("❌ Secure Storage Corrupted: $e");
+      return false;
+    }
+  }
+
+
 
   Future<void> _navigate() async {
-    // Wait a little to mimic splash delay
     await Future.delayed(const Duration(seconds: 2));
 
     final storage = HiveStorageService();
+
+    // 🔥 Step 1: Validate secure storage (fix BAD_DECRYPT)
+    final isSecureDataValid = await _validateSecureStorage(storage);
+
+    if (!isSecureDataValid) {
+      // corrupted keystore → clear all
+      await storage.clearAll();
+    }
+
     final isOnBoarded = storage.isOnBoardingInStatus;
     final isLoggedIn = storage.isAuthLoggedStatus;
-    final userRole = storage.userRole; // "employee" or "recruiter"
+    final userRole = storage.userRole;
 
-    debugPrint(
-      "🟢 isOnBoarded: $isOnBoarded | isLoggedIn: $isLoggedIn | userRole: $userRole",
-    );
+    debugPrint("🟢 isOnBoarded: $isOnBoarded | isLoggedIn: $isLoggedIn | userRole: $userRole");
 
+    // Navigation Logic
     if (isOnBoarded && isLoggedIn) {
       if (userRole == "recruiter") {
-        GoRouter.of(
-          context,
-        ).pushReplacementNamed(AppRouteConstants.homeRecruiter);
+        GoRouter.of(context)
+            .pushReplacementNamed(AppRouteConstants.homeRecruiter);
       } else {
-        GoRouter.of(
-          context,
-        ).pushReplacementNamed(AppRouteConstants.employeeBottomNav);
+        GoRouter.of(context)
+            .pushReplacementNamed(AppRouteConstants.employeeBottomNav);
       }
     } else if (isOnBoarded && !isLoggedIn) {
       GoRouter.of(context).pushReplacementNamed(AppRouteConstants.login);
@@ -100,6 +120,7 @@ class _SplashScreenState extends State<SplashScreen> {
       GoRouter.of(context).pushReplacementNamed(AppRouteConstants.onBoarding);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -67,6 +67,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'features/ats_candidate/presentation/provider/candidates_provider.dart';
 import 'features/attendance/presentation/providers/date_time_provider.dart';
 import 'features/bottom_nav/providers/recruiter_bottom_nav_provider.dart';
 import 'features/home/presentation/provider/badge_provider.dart';
@@ -336,8 +337,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => getIt<HROverviewProvider>(),
         ),
-
         //===============ATS PAGES====================================
+        ChangeNotifierProvider(
+          create: (context) => getIt<CandidatesProvider>(),
+        ),
+
+
       ],
       child: LayoutBuilder(
         builder: (context, constraints) {
