@@ -7,11 +7,7 @@ class KChatList extends StatelessWidget {
   final List<Map<String, dynamic>> conversations;
   final Function(Map<String, dynamic>)? onItemTap;
 
-  const KChatList({
-    super.key,
-    required this.conversations,
-    this.onItemTap,
-  });
+  const KChatList({super.key, required this.conversations, this.onItemTap});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +36,10 @@ class KChatList extends StatelessWidget {
     );
   }
 
-  Widget _buildChatItem(BuildContext context, Map<String, dynamic> conversation) {
+  Widget _buildChatItem(
+    BuildContext context,
+    Map<String, dynamic> conversation,
+  ) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
@@ -72,7 +71,11 @@ class KChatList extends StatelessWidget {
                   ? NetworkImage(avatarUrl)
                   : null,
               child: avatarUrl == null || avatarUrl.isEmpty
-                  ? Icon(Icons.person, size: width * 0.06, color: Colors.grey.shade600)
+                  ? Icon(
+                      Icons.person,
+                      size: width * 0.06,
+                      color: Colors.grey.shade600,
+                    )
                   : null,
             ),
             SizedBox(width: width * 0.03),
@@ -91,7 +94,7 @@ class KChatList extends StatelessWidget {
                         child: KText(
                           text: name,
                           fontWeight: FontWeight.w500,
-                          fontSize: width * 0.03,
+                          fontSize: width * 0.03, //
                           color: Colors.black87,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

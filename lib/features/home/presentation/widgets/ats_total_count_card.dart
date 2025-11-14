@@ -32,12 +32,16 @@ class AtsTotalCountCard extends StatelessWidget {
       height: 103.h,
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
-        border: Border.all(width: 0.5.w, color: AppColors.greyColor.withOpacity(0.3)),
+        border: Border.all(
+          width: 0.5.w,
+          color: AppColors.greyColor.withOpacity(0.3),
+        ),
         borderRadius: BorderRadius.circular(12.r),
         color: AppColors.secondaryColor.withOpacity(1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           // ✅ Dynamic Icon
           CircleAvatar(
@@ -69,7 +73,11 @@ class AtsTotalCountCard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.arrow_upward, color: employeePercentageColor, size: 12.sp),
+                      Icon(
+                        Icons.arrow_upward,
+                        color: employeePercentageColor,
+                        size: 12.sp,
+                      ),
                       SizedBox(width: 2.w),
                       Text(
                         growthText!,
@@ -115,4 +123,3 @@ class AtsTotalCountCard extends StatelessWidget {
     return Icon(Icons.help_outline, size: 16.sp, color: AppColors.titleColor);
   }
 }
-

@@ -22,6 +22,8 @@ class TicketViewScreen extends StatefulWidget {
 class _TicketViewScreenState extends State<TicketViewScreen> {
   @override
   Widget build(BuildContext context) {
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       appBar: AppBar(
@@ -107,7 +109,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
             KVerticalSpacer(height: 16.h),
             Container(
               width: 343.w,
-              height: 248.h,
+              height: isTablet ? (isLandscape ? 255.h : 248.h) : 248.h,
               decoration: BoxDecoration(
                 color: AppColors.secondaryColor,
                 borderRadius: BorderRadius.circular(16.r),
@@ -157,7 +159,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
 
             Container(
               width: 343.w,
-              height: 248.h,
+              height: isTablet ? (isLandscape ? 280.h : 248.h) : 248.h,
               decoration: BoxDecoration(
                 color: AppColors.chatBg,
                 borderRadius: BorderRadius.circular(16.r),

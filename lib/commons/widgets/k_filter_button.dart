@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class KFilterBtn extends StatelessWidget {
@@ -37,6 +38,8 @@ class KFilterBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = AppResponsive.isTablet(context);
+    final isLandscape = AppResponsive.isLandscape(context);
     return SizedBox(
       height: height.h,
       width: width.w,
@@ -47,7 +50,7 @@ class KFilterBtn extends StatelessWidget {
           elevation: 0,
           padding: EdgeInsets.symmetric(
             horizontal: 20.w,
-            vertical: MediaQuery.of(context).size.height * 0.015,
+            vertical: isTablet ? 0 : MediaQuery.of(context).size.height * 0.015,
           ),
           side: BorderSide(color: borderColor, width: borderWidth),
         ),
