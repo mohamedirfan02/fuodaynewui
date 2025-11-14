@@ -332,7 +332,7 @@ class _OnboardingTabState extends State<OnboardingTab> {
                 ),
                 SizedBox(height: 14.h),
                 Container(
-                  padding: EdgeInsets.all(18.47.w),
+                  //padding: EdgeInsets.all(18.47.w),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
@@ -345,18 +345,25 @@ class _OnboardingTabState extends State<OnboardingTab> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       // Header
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          KText(
-                            text: "Candidate List",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                            color: AppColors.titleColor,
-                          ),
-                        ],
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 10.h,
+                          left: 18.47.w,
+                          right: 18.47.w,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            KText(
+                              text: "Candidate List",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                              color: AppColors.titleColor,
+                            ),
+                          ],
+                        ),
                       ),
-                      KVerticalSpacer(height: 20.h),
+                      KVerticalSpacer(height: 16.h),
 
                       // Data Table with paginated data
                       /* <!-----------Old Data Table----------->
@@ -561,16 +568,16 @@ class _OnboardingTabState extends State<OnboardingTab> {
 }
 
 /// Data Table Widget
-Padding newDatatable(List<GridColumn> columns, List<DataGridRow> rows) {
-  return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: ReusableDataGrid(
-      title: 'Applicants',
-      columns: columns,
-      rows: rows,
-      allowSorting: false,
-      totalRows: rows.length,
-      initialRowsPerPage: 5,
-    ),
+ReusableDataGrid newDatatable(
+  List<GridColumn> columns,
+  List<DataGridRow> rows,
+) {
+  return ReusableDataGrid(
+    title: 'Applicants',
+    columns: columns,
+    rows: rows,
+    allowSorting: false,
+    totalRows: rows.length,
+    initialRowsPerPage: 5,
   );
 }

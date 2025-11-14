@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
+import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 
 class AddResponseDialog extends StatelessWidget {
   const AddResponseDialog({super.key});
@@ -99,28 +102,14 @@ class AddResponseDialog extends StatelessWidget {
             const SizedBox(height: 20),
 
             // Add Response Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  "Add Response",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            KAuthFilledBtn(
+              backgroundColor: AppColors.primaryColor,
+              text: "Add Response",
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              height: AppResponsive.responsiveBtnHeight(context),
+              fontSize: 12.sp,
             ),
           ],
         ),

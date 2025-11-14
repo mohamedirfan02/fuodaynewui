@@ -11,6 +11,7 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/core/utils/image_picker.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
@@ -69,7 +70,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
         currentRoute: currentRoute,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
         child: Form(
           key: formKey,
           autovalidateMode: AutovalidateMode.onUnfocus,
@@ -82,7 +83,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
                 fontSize: 16.sp,
                 color: AppColors.titleColor,
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 14.h),
 
               const KTitleText(title: "Priority Level"),
               KVerticalSpacer(height: 6.h),
@@ -97,7 +98,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
                     : null,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               const KTitleText(title: "Department"),
               KVerticalSpacer(height: 6.h),
               KDropdownTextFormField<String>(
@@ -111,7 +112,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
                     : null,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Phone Number",
                 controller: phoneController,
@@ -122,7 +123,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
                     v == null || v.isEmpty ? "Enter Phone number" : null,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Subject",
                 controller: subjectController,
@@ -132,7 +133,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
                     v == null || v.isEmpty ? "Enter Subject" : null,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               KAuthTextFormField(
                 label: "Issue",
                 controller: issueController,
@@ -141,7 +142,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
                 validator: (v) => v == null || v.isEmpty ? "Enter Issue" : null,
               ),
 
-              KVerticalSpacer(height: 20.h),
+              KVerticalSpacer(height: 16.h),
               const KTitleText(title: "Upload Image"),
               KVerticalSpacer(height: 6.h),
 
@@ -213,7 +214,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
         child: KAuthFilledBtn(
           borderRadius: BorderRadius.circular(8),
           backgroundColor: AppColors.primaryColor,
-          height: 30.h,
+          height: AppResponsive.responsiveBtnHeight(context),
           text: "Next",
           fontSize: 12.sp,
           suffixIcon: const Icon(

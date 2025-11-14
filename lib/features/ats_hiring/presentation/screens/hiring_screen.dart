@@ -109,7 +109,7 @@ class _HiringScreenState extends State<HiringScreen> {
             height: double.infinity,
             color: AppColors.atsHomepageBg,
             child: Padding(
-              padding: EdgeInsets.only(top: 20.h),
+              padding: EdgeInsets.only(top: 16.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -120,12 +120,12 @@ class _HiringScreenState extends State<HiringScreen> {
                       child: KText(
                         text: "Hiring",
                         fontWeight: FontWeight.w600,
-                        fontSize: 24.sp,
+                        fontSize: 16.sp,
                         color: AppColors.titleColor,
                       ),
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  //SizedBox(height: 8.h),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Align(
@@ -138,17 +138,17 @@ class _HiringScreenState extends State<HiringScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.h),
 
+                  SizedBox(height: 10.h),
                   Expanded(
                     child: Column(
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                            left: 20.w,
+                            left: 0.w,
                             right: 0,
-                            top: 20.h,
-                            bottom: 20.h,
+                            top: 0.h,
+                            bottom: 5.h,
                           ),
                           child: TabBar(
                             isScrollable: true,

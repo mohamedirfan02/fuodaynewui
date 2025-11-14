@@ -131,7 +131,7 @@ class TicketCard extends StatelessWidget {
               ],
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: 16.h),
             Divider(color: AppColors.lightGreyColor, thickness: 1, height: 1),
 
             SizedBox(height: 16.h),

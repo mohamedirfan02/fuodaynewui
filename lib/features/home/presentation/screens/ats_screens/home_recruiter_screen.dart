@@ -476,7 +476,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
           height: double.infinity,
           color: AppColors.atsHomepageBg,
           child: Padding(
-            padding: EdgeInsets.only(top: 20.h),
+            padding: EdgeInsets.only(top: 16.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -556,11 +556,16 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  SvgPicture.asset(
+                                  /*SvgPicture.asset(
                                     AppAssetsConstants.callLogIcon,
                                     height: 20,
                                     width: 20,
                                     fit: BoxFit.contain,
+                                  ),*/
+                                  Icon(
+                                    Icons.phone_in_talk_outlined,
+                                    color: Colors.black,
+                                    //size: 20,
                                   ),
                                   const SizedBox(width: 6),
                                   const Text("Total Call Made Today"),

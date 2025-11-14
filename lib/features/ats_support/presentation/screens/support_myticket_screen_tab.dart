@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/k_my_ticket_card.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:go_router/go_router.dart';
@@ -106,7 +107,7 @@ class _SupportMyTicketTabState extends State<SupportMyTicketTab> {
             ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: tickets.length, // ✅ 15 dummy items
+              itemCount: tickets.length, // 15 dummy items
               itemBuilder: (context, index) {
                 final ticket = tickets[index];
                 return Padding(
@@ -135,12 +136,12 @@ class _SupportMyTicketTabState extends State<SupportMyTicketTab> {
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 30.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             icon: SvgPicture.asset(
               AppAssetsConstants.addIcon,
-              height: 18,
-              width: 18,
+              height: 16,
+              width: 16,
               fit: BoxFit.contain,
             ),
             text: "New Ticket",

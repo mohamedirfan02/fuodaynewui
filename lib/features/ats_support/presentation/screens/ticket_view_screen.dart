@@ -7,6 +7,7 @@ import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/ats_index/presentation/widgets/gmail_compose_index.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/k_details.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -84,7 +85,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
               ticketId: '1234',
               department: 'Information technology',
             ),
-            KVerticalSpacer(height: 24.h),
+            KVerticalSpacer(height: 16.h),
             Align(
               alignment: Alignment.centerLeft,
               child: KText(
@@ -94,7 +95,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                 color: AppColors.atsTittleText,
               ),
             ),
-            KVerticalSpacer(height: 24.h),
+            KVerticalSpacer(height: 10.h),
             // Type Drop Down TextForm Field
             KDropdownTextFormField<String>(
               hintText: "Select Status",
@@ -103,7 +104,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
               onChanged: (value) =>
                   context.dropDownProviderRead.setValue('leaveType', value),
             ),
-            KVerticalSpacer(height: 24.h),
+            KVerticalSpacer(height: 16.h),
             Container(
               width: 343.w,
               height: 248.h,
@@ -152,7 +153,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                 ),
               ),
             ),
-            KVerticalSpacer(height: 24.h),
+            KVerticalSpacer(height: 16.h),
 
             Container(
               width: 343.w,
@@ -224,16 +225,16 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
         child: Center(
           child: KAuthFilledBtn(
             backgroundColor: AppColors.primaryColor,
-            height: 30.h,
+            height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             icon: SvgPicture.asset(
               AppAssetsConstants.addIcon,
-              height: 20,
-              width: 20,
+              height: 16,
+              width: 16,
               fit: BoxFit.contain,
             ),
             text: "Add Response",
-            fontSize: 14.sp,
+            fontSize: 12.sp,
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -262,7 +263,21 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                                 MediaQuery.of(context).viewInsets.bottom + 20.h,
                             top: 10.h,
                           ),
-                          child: const ComposeEmailScreen(), // ✅ Embedded here
+                          child: Column(
+                            children: [
+                              // ===== Top handle =====
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 8),
+                                width: 50,
+                                height: 3,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[400],
+                                  borderRadius: BorderRadius.circular(2.5),
+                                ),
+                              ),
+                              const ComposeEmailScreen(),
+                            ],
+                          ), // ✅ Embedded here
                         ),
                       );
                     },

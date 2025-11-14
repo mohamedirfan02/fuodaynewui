@@ -348,7 +348,7 @@ class _HiringTabState extends State<HiringTab> {
                 ),
                 SizedBox(height: 14.h),
                 Container(
-                  padding: EdgeInsets.all(18.47.w),
+                  // padding: EdgeInsets.all(18.47.w),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
@@ -361,18 +361,25 @@ class _HiringTabState extends State<HiringTab> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       // Header
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          KText(
-                            text: "Hiring List",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                            color: AppColors.titleColor,
-                          ),
-                        ],
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 11.h,
+                          left: 18.47.w,
+                          right: 18.46.w,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            KText(
+                              text: "Hiring List",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                              color: AppColors.titleColor,
+                            ),
+                          ],
+                        ),
                       ),
-                      KVerticalSpacer(height: 20.h),
+                      KVerticalSpacer(height: 16.h),
                       /* <!-----------Old Data Table----------->
                       // Data Table with paginated data
                       SizedBox(
@@ -587,16 +594,16 @@ class _HiringTabState extends State<HiringTab> {
 }
 
 /// Data Table Widget
-Padding newData_table(List<GridColumn> columns, List<DataGridRow> rows) {
-  return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: ReusableDataGrid(
-      title: 'Applicants',
-      columns: columns,
-      rows: rows,
-      allowSorting: false,
-      totalRows: rows.length,
-      initialRowsPerPage: 5,
-    ),
+ReusableDataGrid newData_table(
+  List<GridColumn> columns,
+  List<DataGridRow> rows,
+) {
+  return ReusableDataGrid(
+    title: 'Applicants',
+    columns: columns,
+    rows: rows,
+    allowSorting: false,
+    totalRows: rows.length,
+    initialRowsPerPage: 5,
   );
 }
