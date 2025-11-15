@@ -478,6 +478,9 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
 
   // Widget to display submitted badges
   Widget _buildSubmittedBadgesDisplay() {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     if (_submittedBadges.isEmpty) {
       return Container(
         padding: EdgeInsets.all(20.w),
@@ -485,7 +488,7 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
           text: '', //No badges added yet. Click the edit icon to add badges.
           fontWeight: FontWeight.w400,
           fontSize: 14.sp,
-          color: AppColors.secondaryColor,
+          color: theme.secondaryHeaderColor, //AppColors.secondaryColor,
         ),
       );
     }
@@ -511,10 +514,10 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      AppColors.secondaryColor.withOpacity(0.1),
+                      theme.secondaryHeaderColor.withOpacity(0.1),
 
                       /// color for card
-                      AppColors.secondaryColor.withOpacity(0.05),
+                      theme.secondaryHeaderColor.withOpacity(0.05),
                     ],
                   ),
                 ),
@@ -530,7 +533,10 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                             text: badge['title'] ?? 'Untitled Badge',
                             fontWeight: FontWeight.w600,
                             fontSize: 14.sp,
-                            color: AppColors.titleColor,
+                            color: theme
+                                .textTheme
+                                .headlineLarge
+                                ?.color, //AppColors.titleColor,
                           ),
                         ),
                         // GestureDetector(
@@ -556,59 +562,77 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                                       badge['imagePath'],
                                       width: double.infinity,
                                       fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                            return Container(
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.greyColor
-                                                    .withOpacity(0.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.r),
-                                              ),
-                                              child: Icon(
-                                                Icons.broken_image,
-                                                color: AppColors.greyColor,
-                                                size: 32.sp,
-                                              ),
-                                            );
-                                          },
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Container(
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: theme
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.color
+                                                ?.withOpacity(
+                                                  0.2,
+                                                ), //AppColors.greyColor,
+                                            borderRadius: BorderRadius.circular(
+                                              8.r,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.broken_image,
+                                            color: theme
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.color, //AppColors.greyColor,
+                                            size: 32.sp,
+                                          ),
+                                        );
+                                      },
                                     )
                                   : Image.file(
                                       File(badge['imagePath']),
                                       width: double.infinity,
                                       fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                            return Container(
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.greyColor
-                                                    .withOpacity(0.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.r),
-                                              ),
-                                              child: Icon(
-                                                Icons.broken_image,
-                                                color: AppColors.greyColor,
-                                                size: 32.sp,
-                                              ),
-                                            );
-                                          },
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Container(
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: theme
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.color
+                                                ?.withOpacity(0.2),
+                                            borderRadius: BorderRadius.circular(
+                                              8.r,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.broken_image,
+                                            color: theme
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.color, //AppColors.greyColor,
+                                            size: 32.sp,
+                                          ),
+                                        );
+                                      },
                                     ),
                             )
                           : Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                color: AppColors.greyColor.withOpacity(0.1),
+                                color: theme.textTheme.bodyLarge?.color
+                                    ?.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8.r),
                                 border: Border.all(
-                                  color: AppColors.greyColor.withOpacity(0.3),
+                                  color:
+                                      theme.textTheme.bodyLarge?.color
+                                          ?.withOpacity(0.3) ??
+                                      AppColors.greyColor,
                                 ),
                               ),
                               child: Icon(
                                 Icons.badge_outlined,
-                                color: AppColors.primaryColor,
+                                color: theme.primaryColor,
                                 size: 32.sp,
                               ),
                             ),
@@ -623,7 +647,10 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                         badge['description'],
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: AppColors.greyColor,
+                          color: theme
+                              .textTheme
+                              .bodyLarge
+                              ?.color, //AppColors.greyColor,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -648,6 +675,9 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
       width: double.infinity,
@@ -657,10 +687,12 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
           color: AppColors.greyColor.withOpacity(0.3),
         ),
         borderRadius: BorderRadius.circular(8.r),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: AppColors.employeeGradientColor,
+          colors: isDark
+              ? AppColors.employeeGradientColorDark
+              : AppColors.employeeGradientColor,
         ),
       ),
       child: Column(
@@ -704,7 +736,7 @@ class _RecognitionWallWidgetState extends State<RecognitionWallWidget> {
                 'Recognizing our team\'s extraordinary efforts, we express heartfelt gratitude for your dedication, hard work, and the positive impact you bring daily',
             fontWeight: FontWeight.w400,
             fontSize: 14.sp,
-            color: AppColors.secondaryColor,
+            color: AppColors.secondaryColor, //theme.secondaryHeaderColor,
           ),
         ],
       ),

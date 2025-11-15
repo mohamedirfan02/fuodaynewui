@@ -31,6 +31,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     // Get employee details from Hive with error handling
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
@@ -91,10 +94,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: AppColors.greyColor.withOpacity(0.3),
                   ),
                   borderRadius: BorderRadius.circular(8.r),
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: AppColors.cardGradientColor,
+                    colors: isDark
+                        ? AppColors.cardGradientColorDark
+                        : AppColors.cardGradientColor,
                   ),
                 ),
                 child: Column(
@@ -106,7 +111,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       text: name,
                       fontWeight: FontWeight.w600,
                       fontSize: 14.sp,
-                      color: AppColors.titleColor,
+                      color: theme
+                          .textTheme
+                          .headlineLarge
+                          ?.color, //AppColors.titleColor,
                     ),
 
                     KVerticalSpacer(height: 6.h),
@@ -115,7 +123,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       text: "Employee ID: $empId",
                       fontWeight: FontWeight.w500,
                       fontSize: 12.sp,
-                      color: AppColors.greyColor,
+                      color: theme
+                          .textTheme
+                          .bodyLarge
+                          ?.color, //AppColors.greyColor,
                     ),
 
                     KVerticalSpacer(height: 3.h),
@@ -125,7 +136,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       text: "Phone No: 636909876",
                       fontWeight: FontWeight.w500,
                       fontSize: 12.sp,
-                      color: AppColors.greyColor,
+                      color: theme
+                          .textTheme
+                          .bodyLarge
+                          ?.color, //AppColors.greyColor,
                     ),
                   ],
                 ),
