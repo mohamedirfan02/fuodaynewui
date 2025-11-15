@@ -35,11 +35,17 @@ class ProfileListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: borderColor ?? AppColors.greyColor.withOpacity(0.5),
+            color:
+                borderColor ??
+                theme.textTheme.bodyLarge?.color?.withOpacity(0.5) ??
+                AppColors.greyColor.withOpacity(0.5),
             width: borderWidth ?? 0.6,
           ),
         ),
@@ -50,18 +56,27 @@ class ProfileListTile extends StatelessWidget {
             padding ?? EdgeInsets.symmetric(horizontal: 16.w, vertical: 3.h),
         leading: Icon(
           leadingIcon,
-          color: leadingIconColor ?? AppColors.titleColor,
+          color:
+              leadingIconColor ??
+              theme.textTheme.headlineLarge?.color, //AppColors.titleColor,,
         ),
         title: Text(title),
         titleTextStyle: GoogleFonts.sora(
           fontWeight: FontWeight.w600,
-          color: titleColor ?? AppColors.titleColor,
+          color:
+              titleColor ??
+              theme.textTheme.headlineLarge?.color, //AppColors.titleColor,
           fontSize: fontSize ?? 12.sp,
         ),
         trailing: showTrailingIcon
             ? Icon(
                 trailingIcon ?? Icons.arrow_forward_ios,
-                color: trailingIconColor ?? AppColors.titleColor,
+                color:
+                    trailingIconColor ??
+                    theme
+                        .textTheme
+                        .headlineLarge
+                        ?.color, //AppColors.titleColor,
               )
             : null,
       ),

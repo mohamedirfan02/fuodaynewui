@@ -122,6 +122,9 @@ class _ProfilePersonalDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     // Get employee details from Hive with error handling
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
@@ -226,16 +229,20 @@ class _ProfilePersonalDetailsScreenState
                               width: 40.w,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: AppColors.secondaryColor,
+                                color: theme
+                                    .secondaryHeaderColor, //AppColors.secondaryColor,
                                 border: Border.all(
-                                  color: AppColors.greyColor,
+                                  color:
+                                      theme.textTheme.bodyLarge?.color ??
+                                      AppColors
+                                          .greyColor, //AppColors.greyColor,
                                   width: 1,
                                 ),
                               ),
                               child: Center(
                                 child: Icon(
                                   Icons.camera_alt,
-                                  color: AppColors.primaryColor,
+                                  color: theme.primaryColor,
                                 ),
                               ),
                             ),
@@ -366,9 +373,7 @@ class _ProfilePersonalDetailsScreenState
                 // Cancel Btn
                 context.profileEditProviderWatch.isEditMode
                     ? KAuthFilledBtn(
-                        backgroundColor: AppColors.primaryColor.withOpacity(
-                          0.4,
-                        ),
+                        backgroundColor: theme.primaryColor.withOpacity(0.4),
                         fontSize: 10.sp,
                         text: "Cancel",
                         onPressed: () {
@@ -383,7 +388,7 @@ class _ProfilePersonalDetailsScreenState
 
                 // Back to Login Btn
                 KAuthFilledBtn(
-                  backgroundColor: AppColors.primaryColor,
+                  backgroundColor: theme.primaryColor,
                   fontSize: 10.sp,
                   text: context.profileEditProviderWatch.isEditMode
                       ? "Submit"
