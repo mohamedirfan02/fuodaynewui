@@ -29,6 +29,7 @@ class KAppBarWithDrawer extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AppBar(
       centerTitle: !showUserInfo,
       // Center title only when user info is not shown
@@ -44,15 +45,14 @@ class KAppBarWithDrawer extends StatelessWidget implements PreferredSizeWidget {
                 ),
               );
             },
-            icon: Icon(Icons.notifications, color: AppColors.secondaryColor),
+            icon: Icon(Icons.notifications, color: theme.secondaryHeaderColor),
           ),
         ),
-
       ],
-      backgroundColor: backgroundColor ?? AppColors.primaryColor,
+      backgroundColor: backgroundColor ?? theme.primaryColor,
       leading: IconButton(
         onPressed: onDrawerPressed ?? () {},
-        icon: Icon(Icons.menu, color: iconColor ?? AppColors.secondaryColor),
+        icon: Icon(Icons.menu, color: iconColor ?? theme.secondaryHeaderColor),
       ),
       title: showUserInfo
           ? Row(
@@ -75,14 +75,14 @@ class KAppBarWithDrawer extends StatelessWidget implements PreferredSizeWidget {
                         text: userName,
                         fontWeight: FontWeight.w600,
                         fontSize: 12.sp,
-                        color: AppColors.secondaryColor,
+                        color: theme.secondaryHeaderColor,
                       ),
                       // Person Designation
                       KText(
                         text: userDesignation,
                         fontWeight: FontWeight.w500,
                         fontSize: 10.sp,
-                        color: AppColors.secondaryColor,
+                        color: theme.secondaryHeaderColor,
                       ),
                     ],
                   ),

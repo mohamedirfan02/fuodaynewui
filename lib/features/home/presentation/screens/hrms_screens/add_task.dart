@@ -95,6 +95,8 @@ class _AddTaskState extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     // Select Date
     Future<void> selectDate(
       BuildContext context,
@@ -140,7 +142,7 @@ class _AddTaskState extends State<AddTask> {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.secondaryColor,
+      backgroundColor: theme.secondaryHeaderColor, //theme.secondaryHeaderColor,
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         physics: const BouncingScrollPhysics(),
@@ -185,6 +187,7 @@ class _AddTaskState extends State<AddTask> {
                   text: "Assigned Person",
                   fontWeight: FontWeight.w600,
                   fontSize: 12.sp,
+                  color: theme.textTheme.headlineLarge?.color,
                 ),
 
                 KVerticalSpacer(height: 6.h),
@@ -267,6 +270,7 @@ class _AddTaskState extends State<AddTask> {
                   text: "Priority",
                   fontWeight: FontWeight.w600,
                   fontSize: 12.sp,
+                  color: theme.textTheme.headlineLarge?.color,
                 ),
 
                 KVerticalSpacer(height: 6.h),

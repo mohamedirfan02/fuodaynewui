@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   //   // Option 1: Deep blue to bright blue gradient
@@ -128,74 +129,149 @@ class AppColors {
   /// for dark mode color //////////////////////
 
   // // 🌙 Dark Mode Colors
-  // static const List<Color> employeeGradientColorDark = [
-  //   Color(0xFF2C0030),
-  //   Color(0xFF22075E),
-  //   Color(0xFF0F1150),
-  //   Color(0xFF4A0C7D),
-  //   Color(0xFF2B0A52),
-  // ];
-  //
-  // static const List<Color> cardGradientColorDark = [
-  //   Color(0xFF1E1E1E),
-  //   Color(0xFF2C2C2C),
-  //   Color(0xFF121212),
-  // ];
-  //
-  // static const List<Color> recruiterGradientColorDark = [
-  //   Color(0xFF1C3A8C), // muted blue
-  //   Color(0xFF27305C), // deep navy
-  // ];
-  //
-  // static const Color transparentColorDark = Colors.transparent;
-  //
-  // // Primary Color (darker variant)
-  // static const Color primaryColorDark = Color(0xFFA678D6);
-  //
-  // // Secondary Color
-  // static const Color secondaryColorDark = Color(0xFF1E1E1E);
-  //
-  // // Title Color
-  // static const Color titleColorDark = Color(0xFFFFFFFF);
-  //
-  // // Subtitle Color
-  // static const Color subTitleColorDark = Color(0xFF88A8FF);
-  //
-  // // Auth Background
-  // static const Color authBgColorDark = Color(0xFF121212);
-  //
-  // // Onboarding
-  // static const Color onBoardingBgColorDark = Color(0xFF1E1E1E);
-  // static const Color onBoardingTextColorDark = Color(0xFF5584FF);
-  //
-  // // Auth TextField Colors
-  // static const Color authTextFieldSuffixIconColorDark = Color(0xFF8A8A8A);
-  // static const Color authUnderlineBorderColorDark = Color(0xFF707070);
-  // static const Color softRedDark = Color(0xFFEF9A9A);
-  //
-  // // Text Button
-  // static const Color textBtnColorDark = Color(0xFF6C78FF);
-  //
-  // // Auth Button
-  // static const Color authBtnColorDark = Color(0xFF3A66D7);
-  // static const Color authBackToLoginColorDark = Color(0xFF375E89);
-  //
-  // // Card Border
-  // static const Color cardBorderColorDark = Color(0xFF3A3A3A);
-  // static const Color organizationalColorDark = Color(0xFFE6C94C);
-  // static const Color announcementColorDark = Color(0xFF4CAF70);
-  //
-  // // Check-in/out
-  // static const Color checkInColorDark = Color(0xFF66BB6A);
-  // static const Color checkOutColorDark = Color(0xFFE57373);
-  // static const Color locationOnSiteColorDark = Color(0xFF4A6BFF);
-  //
-  // // Neutral Colors
-  // static const Color greyColorDark = Color(0xFFB0B0B0);
-  // static const Color chipColorDark = Color(0xFF3E3E3E);
-  // static const Color approvedColorDark = Color(0xFF81C784);
-  // static const Color pendingColorDark = Color(0xFFFFE082);
-  //
-  // // Attendance Card Light Text (in dark mode = muted gray)
-  // static const Color attendanceCardTextLightColorDark = Color(0xFF9DA7C5);
+  static const List<Color> employeeGradientColorDark = [
+    Color(0xFF2C0030),
+    Color(0xFF22075E),
+    Color(0xFF0F1150),
+    Color(0xFF4A0C7D),
+    Color(0xFF2B0A52),
+  ];
+
+  static const List<Color> cardGradientColorDark = [
+    Color(0xFF1E1E1E),
+    Color(0xFF2C2C2C),
+    Color(0xFF121212),
+  ];
+
+  static const List<Color> recruiterGradientColorDark = [
+    Color(0xFF1C3A8C), // muted blue
+    Color(0xFF27305C), // deep navy
+  ];
+
+  static const Color transparentColorDark = Colors.transparent;
+
+  // Primary Color (darker variant)
+  static const Color primaryColorDark = Color(0xFFA678D6);
+
+  // Secondary Color
+  static const Color secondaryColorDark = Color(0xFF1E1E1E);
+
+  // Title Color
+  static const Color titleColorDark = Color(0xFFFFFFFF);
+
+  // Subtitle Color
+  static const Color subTitleColorDark = Color(0xFF88A8FF);
+
+  // Auth Background
+  static const Color authBgColorDark = Color(0xFF121212);
+
+  // Onboarding
+  static const Color onBoardingBgColorDark = Color(0xFF1E1E1E);
+  static const Color onBoardingTextColorDark = Color(0xFF5584FF);
+
+  // Auth TextField Colors
+  static const Color authTextFieldSuffixIconColorDark = Color(0xFF8A8A8A);
+  static const Color authUnderlineBorderColorDark = Color(0xFF707070);
+  static const Color softRedDark = Color(0xFFEF9A9A);
+
+  // Text Button
+  static const Color textBtnColorDark = Color(0xFF6C78FF);
+
+  // Auth Button
+  static const Color authBtnColorDark = Color(0xFF3A66D7);
+  static const Color authBackToLoginColorDark = Color(0xFF375E89);
+
+  // Card Border
+  static const Color cardBorderColorDark = Color(0xFF3A3A3A);
+  static const Color organizationalColorDark = Color(0xFFE6C94C);
+  static const Color announcementColorDark = Color(0xFF4CAF70);
+
+  // Check-in/out
+  static const Color checkInColorDark = Color(0xFF66BB6A);
+  static const Color checkOutColorDark = Color(0xFFE57373);
+  static const Color locationOnSiteColorDark = Color(0xFF4A6BFF);
+
+  // Neutral Colors
+  static const Color greyColorDark = Color(0xFFB0B0B0);
+  static const Color chipColorDark = Color(0xFF3E3E3E);
+  static const Color approvedColorDark = Color(0xFF81C784);
+  static const Color pendingColorDark = Color(0xFFFFE082);
+
+  // Attendance Card Light Text (in dark mode = muted gray)
+  static const Color attendanceCardTextLightColorDark = Color(0xFF9DA7C5);
+}
+
+class AppTheme {
+  // ======================= LIGHT THEME ========================= //
+  static ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    fontFamily: GoogleFonts.inter().fontFamily,
+
+    scaffoldBackgroundColor: AppColors.atsHomepageBg, // your bg color
+
+    primaryColor: AppColors.primaryColor,
+    secondaryHeaderColor: AppColors.secondaryColor,
+
+    cardColor: Colors.white,
+    dividerColor: AppColors.lightGreyColor,
+
+    textTheme: TextTheme(
+      headlineLarge: TextStyle(color: AppColors.titleColor),
+      bodyLarge: TextStyle(color: AppColors.greyColor),
+    ),
+
+    inputDecorationTheme: InputDecorationTheme(
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.authUnderlineBorderColor),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.subTitleColor),
+      ),
+      suffixIconColor: AppColors.authTextFieldSuffixIconColor,
+    ),
+
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.authBtnColor,
+        foregroundColor: AppColors.secondaryColor,
+      ),
+    ),
+  );
+
+  // ======================= DARK THEME ========================= //
+  // ======================= DARK THEME ========================= //
+  static ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    fontFamily: GoogleFonts.inter().fontFamily,
+
+    scaffoldBackgroundColor: AppColors.authBgColorDark,
+
+    primaryColor: AppColors.primaryColorDark,
+    secondaryHeaderColor: AppColors.secondaryColorDark,
+
+    cardColor: AppColors.secondaryColorDark,
+    dividerColor: AppColors.greyColorDark,
+
+    textTheme: TextTheme(
+      headlineLarge: TextStyle(color: AppColors.titleColorDark),
+      bodyLarge: TextStyle(color: AppColors.attendanceCardTextLightColorDark),
+    ),
+
+    inputDecorationTheme: InputDecorationTheme(
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.authUnderlineBorderColorDark),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.subTitleColorDark),
+      ),
+      suffixIconColor: AppColors.authTextFieldSuffixIconColorDark,
+    ),
+
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.authBtnColorDark,
+        foregroundColor: AppColors.secondaryColorDark,
+      ),
+    ),
+  );
 }

@@ -35,6 +35,9 @@ class LeaveBalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding:
@@ -42,13 +45,18 @@ class LeaveBalanceCard extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(
           width: borderWidth ?? 0.1.w,
-          color: borderColor ?? AppColors.greyColor,
+          color:
+              borderColor ??
+              theme.textTheme.bodyLarge?.color ??
+              AppColors.greyColor,
         ),
         borderRadius: borderRadius ?? BorderRadius.circular(8.r),
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: gradientColors ?? AppColors.cardGradientColor,
+          colors: isDark
+              ? AppColors.cardGradientColorDark
+              : AppColors.cardGradientColor,
         ),
       ),
       child: Column(

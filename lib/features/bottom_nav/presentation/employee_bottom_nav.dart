@@ -10,6 +10,7 @@ class EmployeeBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     // Bottom Nav Provider
     final bottomNavProvider = context.bottomNavProviderWatch;
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: bottomNavProvider.currentPage,
@@ -22,8 +23,8 @@ class EmployeeBottomNav extends StatelessWidget {
         selectedIconTheme: IconThemeData(size: 24.h),
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        selectedItemColor: AppColors.primaryColor,
-        unselectedItemColor: Colors.black,
+        selectedItemColor: theme.primaryColor,
+        unselectedItemColor: theme.textTheme.headlineLarge?.color,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.message_outlined),

@@ -24,6 +24,9 @@ class KDropdownTextFormField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return DropdownButtonFormField2<T>(
       value: value,
       isExpanded: true,
@@ -32,12 +35,16 @@ class KDropdownTextFormField<T> extends StatelessWidget {
         hintStyle: GoogleFonts.sora(
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
-          color: AppColors.titleColor.withOpacity(0.6),
+          color: theme.textTheme.headlineLarge?.color?.withOpacity(.7),
         ),
 
         border: const OutlineInputBorder(),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.authUnderlineBorderColor),
+          borderSide: BorderSide(
+            color:
+                theme.inputDecorationTheme.enabledBorder?.borderSide.color ??
+                AppColors.authUnderlineBorderColor,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.primaryColor, width: 2.w),
@@ -61,7 +68,7 @@ class KDropdownTextFormField<T> extends StatelessWidget {
                 style: GoogleFonts.sora(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.titleColor,
+                  color: theme.textTheme.headlineLarge?.color,
                 ),
               ),
             ),
@@ -72,7 +79,7 @@ class KDropdownTextFormField<T> extends StatelessWidget {
         elevation: 3,
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.secondaryHeaderColor,
           borderRadius: BorderRadius.circular(8.r),
         ),
       ),

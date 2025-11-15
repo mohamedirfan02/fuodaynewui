@@ -362,7 +362,10 @@ class MyApp extends StatelessWidget {
                 title: AppEnvironment.environmentName == "DEV"
                     ? "Fuoday Dev"
                     : "Fuoday",
-                theme: ThemeData(fontFamily: GoogleFonts.inter().fontFamily),
+                // theme: ThemeData(fontFamily: GoogleFonts.inter().fontFamily),
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: ThemeMode.system,
                 // theme: ThemeData(
                 //   textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
                 // ),

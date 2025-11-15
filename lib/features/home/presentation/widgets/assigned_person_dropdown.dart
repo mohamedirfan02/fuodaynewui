@@ -134,6 +134,7 @@ class AssignedPersonDropdownCheckboxState
   Widget build(BuildContext context) {
     return Consumer<EmployeeDepartmentProvider>(
       builder: (context, provider, _) {
+        final theme = Theme.of(context);
         final isLoading = provider.isLoading;
         final employees = provider.employeeDepartment?.sameDepartment ?? [];
 
@@ -187,8 +188,13 @@ class AssignedPersonDropdownCheckboxState
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: _isDropdownOpen
-                                ? AppColors.primaryColor
-                                : AppColors.authUnderlineBorderColor,
+                                ? theme.primaryColor
+                                : theme
+                                          .inputDecorationTheme
+                                          .enabledBorder
+                                          ?.borderSide
+                                          .color ??
+                                      AppColors.authUnderlineBorderColor,
                             width: _isDropdownOpen ? 2.w : 1.w,
                           ),
                           borderRadius: BorderRadius.circular(5),
@@ -208,9 +214,8 @@ class AssignedPersonDropdownCheckboxState
                                 style: GoogleFonts.sora(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
-                                  color: AppColors.titleColor.withOpacity(
-                                    isLoading ? 0.4 : .7,
-                                  ),
+                                  color: theme.textTheme.headlineLarge?.color
+                                      ?.withOpacity(isLoading ? 0.4 : .7),
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -220,9 +225,8 @@ class AssignedPersonDropdownCheckboxState
                               duration: const Duration(milliseconds: 300),
                               child: Icon(
                                 Icons.arrow_drop_down_outlined,
-                                color: isLoading
-                                    ? AppColors.titleColor.withOpacity(0.4)
-                                    : AppColors.titleColor,
+                                color: theme.textTheme.headlineLarge?.color
+                                    ?.withOpacity(isLoading ? 0.4 : .6),
                               ),
                             ),
                           ],
@@ -243,10 +247,16 @@ class AssignedPersonDropdownCheckboxState
                                   padding: EdgeInsets.all(8.w),
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: AppColors.authUnderlineBorderColor,
+                                      color:
+                                          theme
+                                              .inputDecorationTheme
+                                              .enabledBorder
+                                              ?.borderSide
+                                              .color ??
+                                          AppColors.authUnderlineBorderColor,
                                     ),
                                     borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white,
+                                    color: theme.secondaryHeaderColor,
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.08),
@@ -267,7 +277,10 @@ class AssignedPersonDropdownCheckboxState
                                             style: GoogleFonts.sora(
                                               fontSize: 12.sp,
                                               fontWeight: FontWeight.w500,
-                                              color: AppColors.titleColor,
+                                              color: theme
+                                                  .textTheme
+                                                  .headlineLarge
+                                                  ?.color,
                                             ),
                                           ),
                                           subtitle: Text(
@@ -275,8 +288,13 @@ class AssignedPersonDropdownCheckboxState
                                             style: GoogleFonts.sora(
                                               fontSize: 10.sp,
                                               fontWeight: FontWeight.w400,
-                                              color: AppColors.titleColor
-                                                  .withOpacity(0.6),
+                                              color: theme
+                                                  .textTheme
+                                                  .headlineLarge
+                                                  ?.color
+                                                  ?.withOpacity(
+                                                    isLoading ? 0.4 : .6,
+                                                  ),
                                             ),
                                           ),
                                           value: isSelected,
@@ -284,8 +302,12 @@ class AssignedPersonDropdownCheckboxState
                                             emp,
                                             value ?? false,
                                           ),
-                                          activeColor: AppColors.primaryColor,
-                                          checkColor: Colors.white,
+                                          activeColor: theme.primaryColor,
+                                          checkColor: theme
+                                              .textTheme
+                                              .headlineLarge
+                                              ?.color,
+
                                           contentPadding: EdgeInsets.symmetric(
                                             horizontal: 4.w,
                                             vertical: 2.h,
@@ -361,6 +383,7 @@ class _SingleAssignedPersonDropdownState
       builder: (context, provider, _) {
         final isLoading = provider.isLoading;
         final employees = provider.employeeDepartment?.sameDepartment ?? [];
+        final theme = Theme.of(context);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -393,7 +416,9 @@ class _SingleAssignedPersonDropdownState
                               'Select assigned person',
                     style: GoogleFonts.sora(
                       fontSize: 12.sp,
-                      color: AppColors.titleColor.withOpacity(0.7),
+                      color: theme.textTheme.headlineLarge?.color?.withOpacity(
+                        0.7,
+                      ),
                     ),
                   ),
                   icon: Icon(

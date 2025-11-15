@@ -24,6 +24,8 @@ class KDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
     final employeeDetails = HiveStorageService().employeeDetails ?? {};
     final access = (employeeDetails['access'] ?? '').toString();
     final rawAccess = (employeeDetails['access'] ?? '')
@@ -38,21 +40,21 @@ class KDrawer extends StatelessWidget {
         roles.any((r) => accessList.contains(r));
 
     return Drawer(
-      backgroundColor: AppColors.secondaryColor,
+      backgroundColor: theme.secondaryHeaderColor, //AppColors.secondaryColor
       child: Column(
         children: [
           // Profile Header
           UserAccountsDrawerHeader(
-            decoration: BoxDecoration(color: AppColors.primaryColor),
+            decoration: BoxDecoration(color: primaryColor),
             accountName: KText(
               text: userName ?? "No name",
-              color: AppColors.secondaryColor,
+              color: theme.secondaryHeaderColor,
               fontWeight: FontWeight.w600,
               fontSize: 14.sp,
             ),
             accountEmail: KText(
               text: userEmail ?? "No email",
-              color: AppColors.secondaryColor,
+              color: theme.secondaryHeaderColor,
               fontWeight: FontWeight.w500,
               fontSize: 12.sp,
             ),
@@ -100,7 +102,7 @@ class KDrawer extends StatelessWidget {
                   drawerLeadingIcon: Icons.account_tree_outlined,
                 ),
 
-                _buildDivider(),
+                _buildDivider(context),
 
                 // Attendance
                 KDrawerListTile(
@@ -197,7 +199,7 @@ class KDrawer extends StatelessWidget {
                   drawerLeadingIcon: Icons.quick_contacts_dialer,
                 ),
 
-                _buildDivider(),
+                _buildDivider(context),
 
                 // Support
                 KDrawerListTile(
@@ -225,10 +227,15 @@ class KDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildDivider() {
+  Widget _buildDivider(context) {
+    final theme = Theme.of(context);
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 40.w),
-      child: Divider(color: AppColors.subTitleColor.withOpacity(0.2)),
+      child: Divider(
+        color: theme.inputDecorationTheme.focusedBorder?.borderSide.color
+            .withOpacity(0.2),
+      ), //AppColors.subTitleColor
     );
   }
 

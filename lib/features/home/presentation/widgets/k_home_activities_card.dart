@@ -37,6 +37,8 @@ class KHomeActivitiesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         HapticFeedback.mediumImpact();
@@ -48,8 +50,13 @@ class KHomeActivitiesCard extends StatelessWidget {
         width: width ?? 180.w,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color: AppColors.secondaryColor,
-          border: Border.all(color: AppColors.cardBorderColor, width: 1.w),
+          color: theme.secondaryHeaderColor,
+          border: Border.all(
+            color: isDark
+                ? AppColors.cardBorderColorDark
+                : AppColors.cardBorderColor,
+            width: 1.w,
+          ),
         ),
         child: Column(
           spacing: 8.h,
@@ -84,6 +91,7 @@ class KHomeActivitiesCard extends StatelessWidget {
                     text: cardTitle,
                     fontWeight: FontWeight.w600,
                     fontSize: 12.sp,
+                    color: theme.textTheme.headlineLarge?.color,
                   ),
 
                   Row(
@@ -95,7 +103,7 @@ class KHomeActivitiesCard extends StatelessWidget {
                         backgroundColor: bgChipColor,
                         labelStyle: GoogleFonts.sora(
                           fontWeight: FontWeight.w500,
-                          color: AppColors.secondaryColor,
+                          color: theme.secondaryHeaderColor,
                         ),
                       ),
 
@@ -126,7 +134,7 @@ class KHomeActivitiesCard extends StatelessWidget {
                               backgroundColor: bgChipColor,
                               labelStyle: GoogleFonts.sora(
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.secondaryColor,
+                                color: theme.secondaryHeaderColor,
                               ),
                             ),
                     ],

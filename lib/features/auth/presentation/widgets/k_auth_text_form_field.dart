@@ -45,6 +45,9 @@ class KAuthTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -57,7 +60,7 @@ class KAuthTextFormField extends StatelessWidget {
                 style: GoogleFonts.sora(
                   fontSize: labelFontSize ?? 12.sp,
                   fontWeight: labelFontWeight ?? FontWeight.w600,
-                  color: labelColor ?? AppColors.titleColor,
+                  color: labelColor ?? theme.textTheme.headlineLarge?.color,
                 ),
               ),
               if (isRequiredStar)
@@ -81,7 +84,7 @@ class KAuthTextFormField extends StatelessWidget {
           style: GoogleFonts.sora(
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
-            color: AppColors.titleColor,
+            color: theme.textTheme.headlineLarge?.color,
           ),
           controller: controller,
           obscureText: obscureText,
@@ -93,33 +96,47 @@ class KAuthTextFormField extends StatelessWidget {
                 ? GoogleFonts.sora(
                     fontSize: labelFontSize ?? 12.sp,
                     fontWeight: labelFontWeight ?? FontWeight.w500,
-                    color: labelColor ?? AppColors.titleColor.withOpacity(0.7),
+                    color:
+                        labelColor ??
+                        theme.textTheme.headlineLarge?.color?.withOpacity(0.7),
                   )
                 : null,
             floatingLabelStyle: floatingLabel
                 ? GoogleFonts.sora(
                     fontSize: (labelFontSize ?? 12.sp) + 1,
                     fontWeight: labelFontWeight ?? FontWeight.w600,
-                    color: labelColor ?? AppColors.primaryColor,
+                    color: labelColor ?? theme.primaryColor,
                   )
                 : null,
             suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
             border: const OutlineInputBorder(),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.authUnderlineBorderColor),
+              borderSide: BorderSide(
+                color:
+                    theme
+                        .inputDecorationTheme
+                        .enabledBorder
+                        ?.borderSide
+                        .color ??
+                    AppColors.authUnderlineBorderColor,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.primaryColor, width: 2.w),
+              borderSide: BorderSide(color: theme.primaryColor, width: 2.w),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: AppColors.checkOutColor,
+                color: isDark
+                    ? AppColors.checkOutColorDark
+                    : AppColors.checkOutColor,
                 width: 1.w,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: AppColors.checkOutColor,
+                color: isDark
+                    ? AppColors.checkOutColorDark
+                    : AppColors.checkOutColor,
                 width: 2.w,
               ),
             ),
