@@ -88,7 +88,8 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
         AppLoggerHelper.logWarning('Location services are disabled');
         return {
           'success': false,
-          'message': '❌ Location services are disabled. Please enable location services in your device settings.',
+          'message':
+              '❌ Location services are disabled. Please enable location services in your device settings.',
         };
       }
 
@@ -104,7 +105,8 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
           AppLoggerHelper.logWarning('Location permission denied');
           return {
             'success': false,
-            'message': ' Location permission denied. Please grant location permission to check in.',
+            'message':
+                ' Location permission denied. Please grant location permission to check in.',
           };
         }
       }
@@ -113,7 +115,8 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
         AppLoggerHelper.logWarning('Location permission permanently denied');
         return {
           'success': false,
-          'message': ' Location permission permanently denied. Please enable it in app settings.',
+          'message':
+              ' Location permission permanently denied. Please enable it in app settings.',
         };
       }
 
@@ -124,7 +127,9 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
         timeLimit: const Duration(seconds: 10),
       );
 
-      AppLoggerHelper.logInfo('Position obtained: ${position.latitude}, ${position.longitude}');
+      AppLoggerHelper.logInfo(
+        'Position obtained: ${position.latitude}, ${position.longitude}',
+      );
 
       // Get place name
       List<Placemark> placemarks = [];
@@ -171,10 +176,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
       }
     } catch (e) {
       AppLoggerHelper.logError("Location error: $e");
-      return {
-        'success': false,
-        'message': ' Failed to get location: $e',
-      };
+      return {'success': false, 'message': ' Failed to get location: $e'};
     }
   }
 
@@ -191,9 +193,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      builder: (context) => const Center(child: CircularProgressIndicator()),
     );
 
     try {
@@ -204,10 +204,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
         // ✅ Check-out (no location validation needed)
         Navigator.of(context).pop(); // Close loading dialog
 
-        await checkInProvider.handleCheckOut(
-          userId: webUserId,
-          time: now,
-        );
+        await checkInProvider.handleCheckOut(userId: webUserId, time: now);
         checkInProvider.stopWatchTimer.onStopTimer();
         AppLoggerHelper.logInfo("Check Out Web User Id: $webUserId");
 
@@ -228,10 +225,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
 
         if (locationResult['success']) {
           // Location validated, proceed with check-in
-          await checkInProvider.handleCheckIn(
-            userId: webUserId,
-            time: now,
-          );
+          await checkInProvider.handleCheckIn(userId: webUserId, time: now);
           AppLoggerHelper.logInfo("Check In Web User Id: $webUserId");
 
           // Start the local stopwatch timer for immediate feedback
@@ -337,6 +331,8 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isTablet = size.width > 600;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     // Providers
     final checkInProvider = context.checkInProviderWatch;
     final allEventsProvider = context.allEventsProviderWatch;
@@ -370,14 +366,14 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                 text: "Welcome, $name!",
                 fontWeight: FontWeight.w600,
                 fontSize: 14.sp,
-                color: AppColors.titleColor,
+                color: theme.textTheme.headlineLarge?.color,
               ),
               KVerticalSpacer(height: 10.h),
               KText(
                 text: "Your work is going to fill a large part of your life...",
                 fontWeight: FontWeight.w500,
                 fontSize: 10.sp,
-                color: AppColors.titleColor,
+                color: theme.textTheme.headlineLarge?.color,
               ),
               KVerticalSpacer(height: 20.h),
 
@@ -389,7 +385,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                   width: 200.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.r),
-                    color: AppColors.primaryColor,
+                    color: theme.primaryColor,
                   ),
                   child: Column(
                     children: [
@@ -397,54 +393,55 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                       if (checkinStatusProvider.isLoading)
                         const CircularProgressIndicator(color: Colors.white)
                       else if (checkinStatusProvider.isCurrentlyCheckedIn)
-                      // Show real-time working duration from API checkin time
+                        // Show real-time working duration from API checkin time
                         KText(
                           text: checkinStatusProvider.formattedWorkingDuration,
                           fontWeight: FontWeight.w500,
                           fontSize: 17.sp,
-                          color: AppColors.secondaryColor,
+                          color: theme.secondaryHeaderColor,
                         )
                       else if (checkInProvider.isCheckedIn)
                         // Show local stopwatch when checked in locally but not via API
-                          StreamBuilder<int>(
-                            stream: checkInProvider.stopWatchTimer.rawTime,
-                            initialData: 0,
-                            builder: (_, snapshot) {
-                              final rawTime = snapshot.data ?? 0;
-                              final duration = Duration(milliseconds: rawTime);
+                        StreamBuilder<int>(
+                          stream: checkInProvider.stopWatchTimer.rawTime,
+                          initialData: 0,
+                          builder: (_, snapshot) {
+                            final rawTime = snapshot.data ?? 0;
+                            final duration = Duration(milliseconds: rawTime);
 
-                              final hours = duration.inHours;
-                              final minutes = duration.inMinutes.remainder(60);
-                              final seconds = duration.inSeconds.remainder(60);
+                            final hours = duration.inHours;
+                            final minutes = duration.inMinutes.remainder(60);
+                            final seconds = duration.inSeconds.remainder(60);
 
-                              final formattedTime =
-                                  '${hours.toString().padLeft(1, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+                            final formattedTime =
+                                '${hours.toString().padLeft(1, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
 
-                              return KText(
-                                text: formattedTime,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17.sp,
-                                color: AppColors.secondaryColor,
-                              );
-                            },
-                          )
-                        else
+                            return KText(
+                              text: formattedTime,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17.sp,
+                              color: theme.secondaryHeaderColor,
+                            );
+                          },
+                        )
+                      else
                         // Show 00:00:00 when not checked in
-                          KText(
-                            text: "00:00:00",
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17.sp,
-                            color: AppColors.secondaryColor,
-                          ),
+                        KText(
+                          text: "00:00:00",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17.sp,
+                          color: theme.secondaryHeaderColor,
+                        ),
 
                       KVerticalSpacer(height: 8.h),
 
                       /// ✅ Check-in/out button with location validation
                       KCheckInButton(
+                        textColor: theme.secondaryHeaderColor,
                         text: checkInProvider.isLoading
                             ? "Loading..."
                             : (checkinStatusProvider.isCurrentlyCheckedIn ||
-                            checkInProvider.isCheckedIn)
+                                  checkInProvider.isCheckedIn)
                             ? "Check Out"
                             : "Check In",
                         fontSize: 8.sp,
@@ -453,8 +450,12 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                         backgroundColor: checkInProvider.isLoading
                             ? Colors.grey
                             : (checkinStatusProvider.isCurrentlyCheckedIn ||
-                            checkInProvider.isCheckedIn)
-                            ? AppColors.checkOutColor
+                                  checkInProvider.isCheckedIn)
+                            ? isDark
+                                  ? AppColors.checkOutColorDark
+                                  : AppColors.checkOutColor
+                            : isDark
+                            ? AppColors.checkInColorDark
                             : AppColors.checkInColor,
                         onPressed: checkInProvider.isLoading
                             ? null
@@ -478,17 +479,20 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                                   : "Status : Not Checked In",
                               fontWeight: FontWeight.w500,
                               fontSize: 10.sp,
-                              color: AppColors.secondaryColor,
+                              color: theme.secondaryHeaderColor,
                             ),
                             KVerticalSpacer(height: 8.h),
                             KAuthFilledBtn(
                               text:
-                              "Location ${checkinStatusProvider.checkinStatus?.location ?? 'onSite'}",
+                                  "Location ${checkinStatusProvider.checkinStatus?.location ?? 'onSite'}",
                               fontSize: 8.sp,
                               onPressed: () {},
-                              backgroundColor: AppColors.locationOnSiteColor,
+                              backgroundColor: isDark
+                                  ? AppColors.locationOnSiteColorDark
+                                  : AppColors.locationOnSiteColor,
                               height: 25.h,
                               width: 125.w,
+                              textColor: theme.secondaryHeaderColor,
                             ),
                           ],
                         ),
@@ -503,14 +507,14 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                             children: [
                               Icon(
                                 Icons.login,
-                                color: AppColors.secondaryColor,
+                                color: theme.secondaryHeaderColor,
                               ),
                               KText(
                                 text:
-                                checkinStatusProvider.formattedCheckinTime,
+                                    checkinStatusProvider.formattedCheckinTime,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 10.sp,
-                                color: AppColors.secondaryColor,
+                                color: theme.secondaryHeaderColor,
                               ),
                             ],
                           ),
@@ -518,14 +522,14 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                             children: [
                               Icon(
                                 Icons.logout,
-                                color: AppColors.secondaryColor,
+                                color: theme.secondaryHeaderColor,
                               ),
                               KText(
                                 text:
-                                checkinStatusProvider.formattedCheckoutTime,
+                                    checkinStatusProvider.formattedCheckoutTime,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 10.sp,
-                                color: AppColors.secondaryColor,
+                                color: theme.secondaryHeaderColor,
                               ),
                             ],
                           ),
@@ -546,9 +550,12 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                     text: "Events All",
                     fontWeight: FontWeight.w600,
                     fontSize: 14.sp,
-                    color: AppColors.titleColor,
+                    color: theme.textTheme.headlineLarge?.color,
                   ),
-                  Icon(Icons.event, color: AppColors.titleColor),
+                  Icon(
+                    Icons.event,
+                    color: theme.textTheme.headlineLarge?.color,
+                  ),
                 ],
               ),
               KVerticalSpacer(height: 10.h),
@@ -573,7 +580,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                         title: "Celebrations",
                         events: allEventsProvider.celebrations,
                         img: AppAssetsConstants.birthdayImg,
-                        bg: AppColors.primaryColor,
+                        bg: theme.primaryColor,
                       ),
 
                       _buildEventCard(
@@ -581,14 +588,18 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                         title: "Organizational Program",
                         events: allEventsProvider.organizationalPrograms,
                         img: AppAssetsConstants.organizationalProgramImg,
-                        bg: AppColors.organizationalColor,
+                        bg: isDark
+                            ? AppColors.organizationalColorDark
+                            : AppColors.organizationalColor,
                       ),
                       _buildEventCard(
                         context,
                         title: "Announcements",
                         events: allEventsProvider.announcements,
                         img: AppAssetsConstants.announcementsImg,
-                        bg: AppColors.announcementColor,
+                        bg: isDark
+                            ? AppColors.announcementColorDark
+                            : AppColors.announcementColor,
                       ),
                     ],
                   ),
@@ -600,7 +611,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                 text: "Recognition Wall :",
                 fontWeight: FontWeight.w800,
                 fontSize: 14,
-                color: AppColors.titleColor,
+                color: theme.textTheme.headlineLarge?.color,
               ),
 
               KVerticalSpacer(height: 10.h),
@@ -608,7 +619,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
               // Use the reusable Recognition Wall Widget
               RecognitionWallWidget(
                 description:
-                'Recognizing our team\'s extraordinary efforts, we express heartfelt gratitude for your dedication, hard work, and the positive impact you bring daily',
+                    'Recognizing our team\'s extraordinary efforts, we express heartfelt gratitude for your dedication, hard work, and the positive impact you bring daily',
                 onBadgesSubmitted: _handleBadgesSubmitted,
                 onBadgesUpdated: _handleBadgesUpdated,
               ),
@@ -625,7 +636,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                     ),
                     child: KText(
                       text:
-                      'Checkin Status Error: ${checkinStatusProvider.error}',
+                          'Checkin Status Error: ${checkinStatusProvider.error}',
                       fontWeight: FontWeight.w500,
                       color: Colors.red,
                       fontSize: 10.sp,
@@ -640,15 +651,16 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
   }
 
   Widget _buildEventCard(
-      BuildContext context, {
-        required String title,
-        required List<EventEntity> events,
-        required String img,
-        required Color bg,
-      }) {
+    BuildContext context, {
+    required String title,
+    required List<EventEntity> events,
+    required String img,
+    required Color bg,
+  }) {
     final size = MediaQuery.of(context).size;
     final isTablet = size.width > 600;
     final isLandscape = size.width > size.height;
+    final theme = Theme.of(context);
 
     return Padding(
       padding: EdgeInsets.only(right: isTablet ? 20.w : 12.w),
@@ -666,55 +678,57 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                 text: title,
                 fontWeight: FontWeight.w600,
                 fontSize: isTablet ? 18.sp : 14.sp,
+                color: theme.textTheme.headlineLarge?.color,
               ),
               content: SizedBox(
                 width: isTablet ? 500.w : double.maxFinite,
                 height: isTablet ? 400.h : null,
                 child: events.isEmpty
                     ? Center(
-                  child: KText(
-                    text: "No $title available",
-                    fontWeight: FontWeight.w500,
-                    fontSize: isTablet ? 14.sp : 12.sp,
-                    color: AppColors.greyColor,
-                  ),
-                )
-                    : ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: events.length,
-                  separatorBuilder: (_, __) => const Divider(),
-                  itemBuilder: (_, index) {
-                    final event = events[index];
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        KText(
-                          text: event.title,
-                          fontWeight: FontWeight.w600,
+                        child: KText(
+                          text: "No $title available",
+                          fontWeight: FontWeight.w500,
                           fontSize: isTablet ? 14.sp : 12.sp,
-                          color: AppColors.titleColor,
+                          color: theme.textTheme.bodyLarge?.color,
                         ),
-                        KVerticalSpacer(height: 5.h),
-                        KText(
-                          text: event.description,
-                          fontWeight: FontWeight.w500,
-                          fontSize: isTablet ? 13.sp : 11.sp,
-                          color: AppColors.greyColor,
-                        ),
-                        KVerticalSpacer(height: 5.h),
-                        KText(
-                          text: DateFormat(
-                            'dd MMM yyyy',
-                          ).format(event.date),
-                          fontWeight: FontWeight.w500,
-                          fontSize: isTablet ? 13.sp : 11.sp,
-                          color: AppColors.greyColor,
-                        ),
-                        KVerticalSpacer(height: 5.h),
-                      ],
-                    );
-                  },
-                ),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: events.length,
+                        separatorBuilder: (_, __) => const Divider(),
+                        itemBuilder: (_, index) {
+                          final theme = Theme.of(context);
+                          final event = events[index];
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              KText(
+                                text: event.title,
+                                fontWeight: FontWeight.w600,
+                                fontSize: isTablet ? 14.sp : 12.sp,
+                                color: theme.textTheme.headlineLarge?.color,
+                              ),
+                              KVerticalSpacer(height: 5.h),
+                              KText(
+                                text: event.description,
+                                fontWeight: FontWeight.w500,
+                                fontSize: isTablet ? 13.sp : 11.sp,
+                                color: theme.textTheme.bodyLarge?.color,
+                              ),
+                              KVerticalSpacer(height: 5.h),
+                              KText(
+                                text: DateFormat(
+                                  'dd MMM yyyy',
+                                ).format(event.date),
+                                fontWeight: FontWeight.w500,
+                                fontSize: isTablet ? 13.sp : 11.sp,
+                                color: theme.textTheme.bodyLarge?.color,
+                              ),
+                              KVerticalSpacer(height: 5.h),
+                            ],
+                          );
+                        },
+                      ),
               ),
               actions: [
                 TextButton(
@@ -724,7 +738,7 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                     style: GoogleFonts.sora(
                       fontWeight: FontWeight.w500,
                       fontSize: isTablet ? 14.sp : 12.sp,
-                      color: AppColors.primaryColor,
+                      color: theme.primaryColor,
                     ),
                   ),
                 ),

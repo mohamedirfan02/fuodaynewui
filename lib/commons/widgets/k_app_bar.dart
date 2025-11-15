@@ -24,8 +24,9 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AppBar(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: theme.primaryColor, // AppColors.primaryColor,
       centerTitle: centerTitle,
       elevation: 0,
       title: Column(
@@ -37,7 +38,7 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
           Text(
             title,
             style: GoogleFonts.sora(
-              color: AppColors.secondaryColor,
+              color: theme.secondaryHeaderColor,
               fontSize: 13.sp,
               fontWeight: FontWeight.w600,
             ),
@@ -46,7 +47,10 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
             Text(
               subtitle!,
               style: GoogleFonts.sora(
-                color: AppColors.secondaryColor.withOpacity(0.8),
+                color: theme.secondaryHeaderColor.withOpacity(
+                  0.8,
+                ), //                color: AppColors.secondaryColor.withOpacity(0.8),
+
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w400,
               ),
@@ -58,7 +62,7 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
           onLeadingIconPress();
           HapticFeedback.mediumImpact();
         },
-        icon: Icon(leadingIcon, color: AppColors.secondaryColor),
+        icon: Icon(leadingIcon, color: theme.secondaryHeaderColor),
       ),
       actions: actionsWidgets,
     );

@@ -27,7 +27,9 @@ class _LeaveBalanceState extends State<LeaveBalance> {
   }
 
   Future<void> _loadLeaveData() async {
-    final webUserId = getIt<HiveStorageService>().employeeDetails?['web_user_id']?.toString();
+    final webUserId = getIt<HiveStorageService>()
+        .employeeDetails?['web_user_id']
+        ?.toString();
     if (webUserId == null) return;
 
     final data = await getLeaveSummaryUseCase(webUserId);
@@ -42,19 +44,19 @@ class _LeaveBalanceState extends State<LeaveBalance> {
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : ListView.separated(
-      itemBuilder: (context, index) {
-        final item = leaveSummary[index];
-        return LeaveBalanceCard(
-          usedAmount: item.taken.toDouble(),
-          totalAmount: item.allowed.toDouble(),
-          title: item.type,
-          usedLabel: "Taken",
-          unusedLabel: "Remaining",
-          chartSize: 140.w,
-        );
-      },
-      separatorBuilder: (context, index) => KVerticalSpacer(height: 10.h),
-      itemCount: leaveSummary.length,
-    );
+            itemBuilder: (context, index) {
+              final item = leaveSummary[index];
+              return LeaveBalanceCard(
+                usedAmount: item.taken.toDouble(),
+                totalAmount: item.allowed.toDouble(),
+                title: item.type,
+                usedLabel: "Taken",
+                unusedLabel: "Remaining",
+                chartSize: 140.w,
+              );
+            },
+            separatorBuilder: (context, index) => KVerticalSpacer(height: 10.h),
+            itemCount: leaveSummary.length,
+          );
   }
 }

@@ -9,7 +9,7 @@ class KText extends StatelessWidget {
   final Color? color;
   final bool isUnderline;
   final Color? underlineColor;
-  // 🔥 Add new optional parameters
+  // Add new optional parameters
   final int? maxLines;
   final TextOverflow? overflow;
 
@@ -22,21 +22,22 @@ class KText extends StatelessWidget {
     this.color,
     this.isUnderline = false,
     this.underlineColor,
-    this.maxLines,         // ✅ not required
-    this.overflow,         // ✅ not required
+    this.maxLines, // not required
+    this.overflow, // not required
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Text(
       text,
       textAlign: textAlign,
-      maxLines: maxLines,   // ✅ applied
-      overflow: overflow,   // ✅ applied
+      maxLines: maxLines, // applied
+      overflow: overflow, // applied
       style: GoogleFonts.inter(
         fontWeight: fontWeight,
         fontSize: fontSize,
-        color: color,
+        color: color ?? theme.secondaryHeaderColor,
         decoration: isUnderline ? TextDecoration.underline : null,
         decorationColor: underlineColor,
       ),

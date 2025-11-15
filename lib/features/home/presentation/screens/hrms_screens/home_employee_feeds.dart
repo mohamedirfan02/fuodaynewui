@@ -207,26 +207,44 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
   }
 
   Widget _buildCommandSection(dynamic item) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       margin: EdgeInsets.only(top: 8.h),
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+        color: isDark
+            ? Color(0xFF2A2D32) // dark background
+            : Colors.grey[50],
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: Colors.grey[300]!, width: 0.5),
+        border: Border.all(
+          color: isDark
+              ? Color(0xFF3A3F45) // dark border
+              : Colors.grey[300]!,
+          width: 0.5,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.settings, size: 12.sp, color: AppColors.subTitleColor),
+              Icon(
+                Icons.settings,
+                size: 12.sp,
+                color:
+                    theme.inputDecorationTheme.focusedBorder?.borderSide.color,
+              ),
               SizedBox(width: 4.w),
               KText(
                 text: 'Comment Section',
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w500,
-                color: AppColors.subTitleColor,
+                color: theme
+                    .inputDecorationTheme
+                    .focusedBorder
+                    ?.borderSide
+                    .color, //AppColors.subTitleColor,
               ),
             ],
           ),
@@ -238,7 +256,7 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
               _buildCommandButton(
                 'Click to Update',
                 Icons.update,
-                AppColors.primaryColor,
+                theme.primaryColor,
                 () => _onUpdateProgress(item),
               ),
             ],
@@ -320,8 +338,11 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          theme.secondaryHeaderColor, //Theme.of(context).secondaryHeaderColor
       body: FutureBuilder<HomeFeedsProjectDataEntity>(
         future: _homeFeedsFuture,
         builder: (context, snapshot) {
@@ -345,16 +366,23 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFFD1D7E8),
-                      Color(0xFFEFF1F7),
-                      Colors.white,
-                    ],
+                    colors: isDark
+                        ? [
+                            Color(0xFF2E323A),
+                            Color(0xFF3A3F47),
+                            Color(0xFF4A4F57),
+                          ]
+                        : [Color(0xFFD1D7E8), Color(0xFFEFF1F7), Colors.white],
                   ),
-                  border: Border.all(color: AppColors.titleColor, width: 0.2.w),
+                  border: Border.all(
+                    color:
+                        theme.textTheme.headlineLarge?.color ??
+                        AppColors.titleColor,
+                    width: 0.2.w,
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -368,7 +396,11 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                       child: KText(
                         text: 'Assigned Works By You',
                         fontWeight: FontWeight.w600,
-                        color: AppColors.subTitleColor,
+                        color: theme
+                            .inputDecorationTheme
+                            .focusedBorder
+                            ?.borderSide
+                            .color,
                         fontSize: 12.sp,
                       ),
                     ),
@@ -385,8 +417,7 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                             itemBuilder: (context, index) {
                               final item = assigned[index];
                               return KHomeEmployeeFeedsAssignedWorksTile(
-                                leadingVerticalDividerColor:
-                                    AppColors.primaryColor,
+                                leadingVerticalDividerColor: theme.primaryColor,
                                 assignedWorksTitle: item.projectName,
                                 assignedWorkSubTitle: item.description,
                                 assignedWorkDeadLine: item.deadline,
@@ -412,14 +443,16 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFFD1D7E8),
-                      Color(0xFFEFF1F7),
-                      Colors.white,
-                    ],
+                    colors: isDark
+                        ? const [
+                            Color(0xFF2E323A),
+                            Color(0xFF3A3F47),
+                            Color(0xFF4A4F57),
+                          ]
+                        : [Color(0xFFD1D7E8), Color(0xFFEFF1F7), Colors.white],
                   ),
                   border: Border.all(color: AppColors.titleColor, width: 0.2.w),
                 ),
@@ -435,7 +468,11 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                       child: KText(
                         text: 'Pending Works',
                         fontWeight: FontWeight.w600,
-                        color: AppColors.subTitleColor,
+                        color: theme
+                            .inputDecorationTheme
+                            .focusedBorder
+                            ?.borderSide
+                            .color,
                         fontSize: 12.sp,
                       ),
                     ),
@@ -454,7 +491,7 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                                 children: [
                                   KHomeEmployeeFeedsPendingWorksTile(
                                     pendingVerticalDividerColor:
-                                        AppColors.primaryColor,
+                                        theme.primaryColor,
                                     pendingProjectTitle: item.projectName,
                                     pendingDeadline: item.deadline,
                                     pendingWorkStatus: item.progress,

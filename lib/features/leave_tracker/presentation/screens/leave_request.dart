@@ -50,6 +50,7 @@ class _LeaveRequestState extends State<LeaveRequest> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     // Select Date
     Future<void> selectDate(
       BuildContext context,
@@ -230,7 +231,7 @@ class _LeaveRequestState extends State<LeaveRequest> {
                 KSnackBar.failure(context, "Error: ${e.toString()}");
               }
             },
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
           ),
         ],
       ),

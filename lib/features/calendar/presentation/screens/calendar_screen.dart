@@ -17,31 +17,38 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   late String selectedMonth;
   DateTime? _currentViewDate;
-
 
   // default holiday for sunday
   List<Appointment> _getSundayHolidays(DateTime monthDate) {
     final List<Appointment> sundays = [];
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     // Start from the first day of the month
     DateTime firstDay = DateTime(monthDate.year, monthDate.month, 1);
 
     // Find the first Sunday in the month
-    DateTime firstSunday =
-    firstDay.add(Duration(days: (DateTime.sunday - firstDay.weekday) % 7));
+    DateTime firstSunday = firstDay.add(
+      Duration(days: (DateTime.sunday - firstDay.weekday) % 7),
+    );
 
     // Loop through all Sundays in the month
-    for (DateTime d = firstSunday;
-    d.month == monthDate.month;
-    d = d.add(const Duration(days: 7))) {
+    for (
+      DateTime d = firstSunday;
+      d.month == monthDate.month;
+      d = d.add(const Duration(days: 7))
+    ) {
       sundays.add(
         Appointment(
           startTime: DateTime(d.year, d.month, d.day, 0, 0),
           endTime: DateTime(d.year, d.month, d.day, 23, 59),
           subject: "Holiday (Sunday)",
-          color: Colors.redAccent, // 🔴 Highlighted holiday color
+          color: isDark
+              ? AppColors.checkOutColorDark
+              : AppColors.checkOutColor, // 🔴 Highlighted holiday color
         ),
       );
     }
@@ -51,6 +58,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   List<Appointment> _buildAppointments(List shifts, DateTime monthDate) {
     final List<Appointment> appointments = [];
+    final theme = Theme.of(context);
 
     for (var shift in shifts) {
       final startDate = DateTime.tryParse(shift.startDate ?? shift.date ?? '');
@@ -59,9 +67,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
       final shiftEnd = shift.shiftEnd ?? '18:00';
 
       if (startDate != null && endDate != null) {
-        for (DateTime d = startDate;
-        !d.isAfter(endDate);
-        d = d.add(const Duration(days: 1))) {
+        for (
+          DateTime d = startDate;
+          !d.isAfter(endDate);
+          d = d.add(const Duration(days: 1))
+        ) {
           appointments.add(
             Appointment(
               startTime: parseShiftDate(
@@ -73,7 +83,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 shiftEnd,
               ),
               subject: '${shift.empName} ($shiftStart - $shiftEnd)',
-              color: AppColors.primaryColor,
+              color: theme.primaryColor,
               isAllDay: false,
             ),
           );
@@ -97,7 +107,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
       return DateTime.now();
     }
   }
-
 
   @override
   void initState() {
@@ -142,6 +151,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
 
@@ -171,29 +182,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
         padding: const EdgeInsets.all(12.0),
         child: provider.isLoading
             ? const Center(child: CircularProgressIndicator())
-            :  SfCalendar(
-          view: CalendarView.month,
-          dataSource: ShiftAppointmentDataSource(
-            _buildAppointments(
-              provider.shifts,
-              _currentViewDate ?? DateTime.now(),
-            ),
-          ),
-        initialDisplayDate: _currentViewDate,
-        onViewChanged: _onViewChanged,
-        showNavigationArrow: true,
-        showWeekNumber: true,
-        showTodayButton: true,
-        showCurrentTimeIndicator: true,
-        showDatePickerButton: true,
-        todayHighlightColor: AppColors.primaryColor,
-        monthViewSettings: const MonthViewSettings(
-          showAgenda: true,
-          appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-        ),
+            : SfCalendar(
+                view: CalendarView.month,
+                dataSource: ShiftAppointmentDataSource(
+                  _buildAppointments(
+                    provider.shifts,
+                    _currentViewDate ?? DateTime.now(),
+                  ),
+                ),
+                initialDisplayDate: _currentViewDate,
+                onViewChanged: _onViewChanged,
+                showNavigationArrow: true,
+                showWeekNumber: true,
+                showTodayButton: true,
+                showCurrentTimeIndicator: true,
+                showDatePickerButton: true,
+                todayHighlightColor: theme.primaryColor,
+                monthViewSettings: const MonthViewSettings(
+                  showAgenda: true,
+                  appointmentDisplayMode:
+                      MonthAppointmentDisplayMode.appointment,
+                ),
+              ),
       ),
-
-    ),
     );
   }
 }

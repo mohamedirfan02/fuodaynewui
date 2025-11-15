@@ -134,7 +134,8 @@ class _HomeEmployeeScreenState extends State<HomeEmployeeScreen> {
                         topLeft: Radius.circular(20.r),
                         topRight: Radius.circular(20.r),
                       ),
-                      color: AppColors.secondaryColor,
+                      // color: AppColors.secondaryColor,
+                      color: Theme.of(context).secondaryHeaderColor,
                     ),
                     child: Column(
                       children: [

@@ -4,7 +4,6 @@ import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class KHomeEmployeeFeedsPendingWorksTile extends StatelessWidget {
   final Color pendingVerticalDividerColor;
   final String pendingProjectTitle;
@@ -31,6 +30,8 @@ class KHomeEmployeeFeedsPendingWorksTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return IntrinsicHeight(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -64,7 +65,7 @@ class KHomeEmployeeFeedsPendingWorksTile extends StatelessWidget {
                           pendingProjectTitle,
                           style: GoogleFonts.sora(
                             fontWeight: FontWeight.w600,
-                            color: AppColors.titleColor,
+                            color: theme.textTheme.headlineLarge?.color,
                             fontSize: 12.sp,
                           ),
                         ),
@@ -77,7 +78,7 @@ class KHomeEmployeeFeedsPendingWorksTile extends StatelessWidget {
                           vertical: 4.h,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryColor.withOpacity(0.1),
+                          color: theme.primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                         child: Text(
@@ -85,7 +86,7 @@ class KHomeEmployeeFeedsPendingWorksTile extends StatelessWidget {
                           style: GoogleFonts.sora(
                             fontSize: 9.sp,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.primaryColor,
+                            color: theme.primaryColor,
                           ),
                         ),
                       ),
@@ -117,16 +118,21 @@ class KHomeEmployeeFeedsPendingWorksTile extends StatelessWidget {
                         text: "Project Status: $pendingWorkStatus",
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
-                      ),SizedBox(height: 2.h),
+                        color: theme.textTheme.headlineLarge?.color,
+                      ),
+                      SizedBox(height: 2.h),
                       KText(
                         text: "Progress Note: ${progressNote ?? 'N/A'}",
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
-                      ),SizedBox(height: 2.h),
+                        color: theme.textTheme.headlineLarge?.color,
+                      ),
+                      SizedBox(height: 2.h),
                       KText(
                         text: "Comment: ${comment ?? 'No comment'}",
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
+                        color: theme.textTheme.headlineLarge?.color,
                       ),
                     ],
                   ),

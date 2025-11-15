@@ -17,7 +17,6 @@ class KHomeEmployeeFeedsAssignedWorksTile extends StatelessWidget {
   final String? progressNote;
   final String? command;
 
-
   const KHomeEmployeeFeedsAssignedWorksTile({
     super.key,
     required this.leadingVerticalDividerColor,
@@ -29,12 +28,14 @@ class KHomeEmployeeFeedsAssignedWorksTile extends StatelessWidget {
     required this.date,
     required this.progress,
     required this.deadline,
-     this.progressNote,
-     this.command,
+    this.progressNote,
+    this.command,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return IntrinsicHeight(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -69,7 +70,7 @@ class KHomeEmployeeFeedsAssignedWorksTile extends StatelessWidget {
                           assignedWorksTitle,
                           style: GoogleFonts.sora(
                             fontWeight: FontWeight.w600,
-                            color: AppColors.titleColor,
+                            color: theme.textTheme.headlineLarge?.color,
                             fontSize: 12.sp,
                           ),
                         ),
@@ -77,9 +78,12 @@ class KHomeEmployeeFeedsAssignedWorksTile extends StatelessWidget {
 
                       // Assigned Date on right
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 4.h,
+                        ),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryColor.withOpacity(0.1),
+                          color: theme.primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                         child: Text(
@@ -87,7 +91,7 @@ class KHomeEmployeeFeedsAssignedWorksTile extends StatelessWidget {
                           style: GoogleFonts.sora(
                             fontSize: 9.sp,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.primaryColor,
+                            color: theme.primaryColor,
                           ),
                         ),
                       ),
@@ -101,18 +105,18 @@ class KHomeEmployeeFeedsAssignedWorksTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          "Task : $assignedWorkSubTitle",
-                          style: GoogleFonts.sora(fontSize: 10.sp)
+                        "Task : $assignedWorkSubTitle",
+                        style: GoogleFonts.sora(fontSize: 10.sp),
                       ),
                       SizedBox(height: 2.h),
                       Text(
-                          "Assigned To: $assignedTo",
-                          style: GoogleFonts.sora(fontSize: 10.sp)
+                        "Assigned To: $assignedTo",
+                        style: GoogleFonts.sora(fontSize: 10.sp),
                       ),
                       SizedBox(height: 2.h),
                       Text(
-                          "Deadline: $deadline",
-                          style: GoogleFonts.sora(fontSize: 10.sp)
+                        "Deadline: $deadline",
+                        style: GoogleFonts.sora(fontSize: 10.sp),
                       ),
 
                       SizedBox(height: 4.h),
@@ -120,18 +124,22 @@ class KHomeEmployeeFeedsAssignedWorksTile extends StatelessWidget {
                         text: "Progress Note: $progressNote",
                         fontWeight: FontWeight.w500,
                         fontSize: 10.sp,
+                        color: theme.textTheme.headlineLarge?.color,
                       ),
                       SizedBox(height: 4.h),
                       KText(
                         text: "reason: $command",
                         fontWeight: FontWeight.w500,
                         fontSize: 10.sp,
+                        color: theme.textTheme.headlineLarge?.color,
                       ),
                       SizedBox(height: 4.h),
                       KText(
                         text: "Status: $progress",
                         fontWeight: FontWeight.w600,
-                        color: AppColors.softRed,
+                        color: isDark
+                            ? AppColors.softRedDark
+                            : AppColors.softRed,
                         fontSize: 10.sp,
                       ),
                     ],

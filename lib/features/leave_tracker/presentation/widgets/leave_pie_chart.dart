@@ -28,6 +28,8 @@ class LeavePieChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final double clampedUsed = usedAmount.clamp(0.0, totalAmount);
     final double availableAmount = totalAmount - clampedUsed;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -40,7 +42,7 @@ class LeavePieChart extends StatelessWidget {
               style: GoogleFonts.sora(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.titleColor,
+                color: theme.textTheme.headlineLarge?.color,
               ),
             ),
           ),
@@ -57,7 +59,7 @@ class LeavePieChart extends StatelessWidget {
                   startDegreeOffset: -90,
                   sections: [
                     PieChartSectionData(
-                      color: AppColors.primaryColor,
+                      color: theme.primaryColor,
                       value: clampedUsed,
                       title: '',
                       radius: 20.r,
@@ -77,7 +79,7 @@ class LeavePieChart extends StatelessWidget {
                 style: GoogleFonts.sora(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.titleColor,
+                  color: theme.textTheme.headlineLarge?.color,
                 ),
               ),
             ],
@@ -91,19 +93,22 @@ class LeavePieChart extends StatelessWidget {
           alignment: WrapAlignment.center,
           children: [
             _buildLegendItem(
-              AppColors.primaryColor,
+              theme.primaryColor,
               '${usedLabel!} (${clampedUsed.toStringAsFixed(clampedUsed == clampedUsed.toInt() ? 0 : 1)})',
+              context,
               showCircle: true,
             ),
             _buildLegendItem(
               Colors.grey.shade300,
               '${unusedLabel!} (${availableAmount.toStringAsFixed(availableAmount == availableAmount.toInt() ? 0 : 1)})',
+              context,
               showCircle: true,
             ),
             if (totalLabel != null)
               _buildLegendItem(
                 Colors.transparent,
                 totalLabel!,
+                context,
                 showCircle: false,
               ),
           ],
@@ -112,7 +117,14 @@ class LeavePieChart extends StatelessWidget {
     );
   }
 
-  Widget _buildLegendItem(Color color, String label, {bool showCircle = true}) {
+  Widget _buildLegendItem(
+    Color color,
+    String label,
+    BuildContext context, {
+    bool showCircle = true,
+  }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -130,7 +142,7 @@ class LeavePieChart extends StatelessWidget {
             style: GoogleFonts.sora(
               fontSize: 12.sp,
               fontWeight: FontWeight.w400,
-              color: AppColors.titleColor,
+              color: theme.textTheme.headlineLarge?.color,
             ),
             overflow: TextOverflow.ellipsis,
           ),

@@ -18,12 +18,16 @@ class KDrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ListTile(
-      leading: Icon(drawerLeadingIcon, color: AppColors.titleColor),
+      leading: Icon(
+        drawerLeadingIcon,
+        color: theme.textTheme.headlineLarge?.color,
+      ),
       title: Text(drawerTitle),
       titleTextStyle: GoogleFonts.sora(
         fontWeight: FontWeight.w500,
-        color: AppColors.titleColor,
+        color: theme.textTheme.headlineLarge?.color,
         fontSize: 12.sp,
       ),
       onTap: () {

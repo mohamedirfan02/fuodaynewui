@@ -1,5 +1,6 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:fuoday/core/themes/app_colors.dart';
 
 class KDataTable extends StatelessWidget {
   final List<String> columnTitles;
@@ -13,11 +14,16 @@ class KDataTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return DataTable2(
+      headingTextStyle: TextStyle(color: theme.textTheme.headlineLarge?.color),
       columnSpacing: 16,
       horizontalMargin: 12,
       minWidth: 1600,
-      headingRowColor: MaterialStateProperty.all(Colors.blueGrey.shade50),
+      headingRowColor: WidgetStateProperty.all(
+        isDark ? const Color(0xFF2A2D32) : Colors.blueGrey.shade50,
+      ),
       columns: columnTitles
           .map(
             (title) => DataColumn(

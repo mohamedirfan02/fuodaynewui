@@ -130,6 +130,8 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     // Select Date
     Future<void> selectDate(
       BuildContext context,
@@ -146,9 +148,11 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
           return Theme(
             data: Theme.of(context).copyWith(
               colorScheme: ColorScheme.light(
-                primary: AppColors.primaryColor,
-                onPrimary: AppColors.secondaryColor,
-                onSurface: AppColors.titleColor,
+                primary: theme.primaryColor,
+                onPrimary: theme.secondaryHeaderColor,
+                onSurface:
+                    theme.textTheme.headlineLarge?.color ??
+                    AppColors.titleColor,
               ),
             ),
             child: child!,
@@ -196,7 +200,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
           margin: EdgeInsets.symmetric(vertical: 10.h),
           child: Center(
             child: KAuthFilledBtn(
-              backgroundColor: AppColors.primaryColor,
+              backgroundColor: theme.primaryColor,
               height: AppResponsive.responsiveBtnHeight(context),
               width: double.infinity,
               text: "Edit",
@@ -232,7 +236,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
                                 width: 40.w,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.r),
-                                  color: AppColors.greyColor,
+                                  color: theme.textTheme.bodyLarge?.color,
                                 ),
                               ),
                             ),
@@ -244,6 +248,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
                               text: "Leave Regulation",
                               fontWeight: FontWeight.w600,
                               fontSize: 14.sp,
+                              color: theme.textTheme.headlineLarge?.color,
                             ),
 
                             KVerticalSpacer(height: 10.h),
@@ -316,12 +321,13 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
                               width: double.infinity,
                               text: "Cancel",
                               fontSize: 10.sp,
-                              textColor: AppColors.primaryColor,
+                              textColor: theme.primaryColor,
                               onPressed: () {
                                 GoRouter.of(context).pop();
                               },
-                              backgroundColor: AppColors.primaryColor
-                                  .withOpacity(0.4),
+                              backgroundColor: theme.primaryColor.withOpacity(
+                                0.4,
+                              ),
                             ),
 
                             SizedBox(height: 12.h),
@@ -334,7 +340,7 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
                               fontSize: 10.sp,
                               width: double.infinity,
                               text: "Submit",
-                              textColor: AppColors.secondaryColor,
+                              textColor: theme.secondaryHeaderColor,
                               onPressed:
                                   _submitForm, // Updated to use the new submit method
                               backgroundColor: AppColors.primaryColor,
