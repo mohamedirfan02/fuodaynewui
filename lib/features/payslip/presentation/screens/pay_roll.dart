@@ -61,6 +61,8 @@ class _PayRollState extends State<PayRoll> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     // Show loading indicator
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -75,14 +77,15 @@ class _PayRollState extends State<PayRoll> {
             Icon(
               Icons.error_outline,
               size: 48.w,
-              color: AppColors.greyColor,
+              color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
             ),
             KVerticalSpacer(height: 16.h),
             KText(
               text: errorMessage!,
               fontSize: 14.sp,
-              color: AppColors.greyColor,
-              textAlign: TextAlign.center, fontWeight: FontWeight.w500,
+              color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
+              textAlign: TextAlign.center,
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),
@@ -98,13 +101,14 @@ class _PayRollState extends State<PayRoll> {
             Icon(
               Icons.receipt_long_outlined,
               size: 48.w,
-              color: AppColors.greyColor,
+              color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
             ),
             KVerticalSpacer(height: 16.h),
             KText(
               text: "No payroll data found",
               fontSize: 14.sp,
-              color: AppColors.greyColor, fontWeight: FontWeight.w500,
+              color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),
@@ -220,7 +224,7 @@ class _PayRollState extends State<PayRoll> {
             child: KText(
               text: "Coming soon",
               fontWeight: FontWeight.w500,
-              color: AppColors.greyColor,
+              color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
               fontSize: 14.sp,
             ),
           ),
@@ -230,10 +234,7 @@ class _PayRollState extends State<PayRoll> {
           // Data Table with real payroll data
           SizedBox(
             height: 200.h,
-            child: KDataTable(
-              columnTitles: columns,
-              rowData: data,
-            ),
+            child: KDataTable(columnTitles: columns, rowData: data),
           ),
 
           KVerticalSpacer(height: 20.h),

@@ -37,7 +37,7 @@ class KText extends StatelessWidget {
       style: GoogleFonts.inter(
         fontWeight: fontWeight,
         fontSize: fontSize,
-        color: color ?? theme.secondaryHeaderColor,
+        color: color ?? theme.textTheme.headlineLarge?.color, //,
         decoration: isUnderline ? TextDecoration.underline : null,
         decorationColor: underlineColor,
       ),

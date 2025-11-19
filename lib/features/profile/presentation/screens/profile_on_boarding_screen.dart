@@ -101,6 +101,8 @@ class _ProfileOnBoardingScreenState extends State<ProfileOnBoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: KAppBar(
         title: "On Boarding",
@@ -529,7 +531,7 @@ class _ProfileOnBoardingScreenState extends State<ProfileOnBoardingScreen> {
 
                 // Cancel Btn
                 KAuthFilledBtn(
-                  backgroundColor: AppColors.primaryColor.withOpacity(0.4),
+                  backgroundColor: theme.primaryColor.withOpacity(0.4),
                   fontSize: 10.sp,
                   text: "Cancel",
                   onPressed: () {
@@ -567,7 +569,7 @@ class _ProfileOnBoardingScreenState extends State<ProfileOnBoardingScreen> {
 
                 // Submit Btn
                 KAuthFilledBtn(
-                  backgroundColor: AppColors.primaryColor,
+                  backgroundColor: theme.primaryColor,
                   fontSize: 10.sp,
                   text: "Submit",
                   onPressed: () async {

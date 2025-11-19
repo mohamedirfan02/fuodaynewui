@@ -30,6 +30,9 @@ class KUploadPickerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Stack(
       children: [
         Column(
@@ -48,7 +51,9 @@ class KUploadPickerTile extends StatelessWidget {
                 options: RoundedRectDottedBorderOptions(
                   dashPattern: [5, 5],
                   strokeWidth: 1,
-                  color: AppColors.greyColor,
+                  color:
+                      theme.textTheme.bodyLarge?.color ??
+                      AppColors.greyColor, //AppColors.greyColor,
                   radius: Radius.circular(8.r),
                 ),
                 child: Container(
@@ -56,10 +61,12 @@ class KUploadPickerTile extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.r),
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: AppColors.cardGradientColor,
+                      colors: isDark
+                          ? AppColors.cardGradientColorDark
+                          : AppColors.cardGradientColor,
                     ),
                   ),
                   child: Center(
@@ -69,12 +76,16 @@ class KUploadPickerTile extends StatelessWidget {
                       children: [
                         Icon(
                           uploadPickerIcon,
-                          color: AppColors.greyColor.withOpacity(0.8),
+                          color: theme.textTheme.bodyLarge?.color?.withOpacity(
+                            0.8,
+                          ),
                           size: 22.h,
                         ),
                         KText(
                           textAlign: TextAlign.center,
-                          color: AppColors.greyColor.withOpacity(0.8),
+                          color: theme.textTheme.bodyLarge?.color?.withOpacity(
+                            0.8,
+                          ),
                           text: description,
                           fontWeight: FontWeight.w500,
                           fontSize: 12.sp,
@@ -105,13 +116,13 @@ class KUploadPickerTile extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.remove_red_eye,
-                        color: AppColors.greyColor,
+                        color: theme.textTheme.bodyLarge?.color,
                         size: 12.w,
                       ),
                       KText(
                         text: "View",
                         fontWeight: FontWeight.w500,
-                        color: AppColors.greyColor,
+                        color: theme.textTheme.bodyLarge?.color,
                         fontSize: 10.sp,
                       ),
                     ],
@@ -126,13 +137,13 @@ class KUploadPickerTile extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.cancel,
-                        color: AppColors.greyColor,
+                        color: theme.textTheme.bodyLarge?.color,
                         size: 12.w,
                       ),
                       KText(
                         text: "Cancel",
                         fontWeight: FontWeight.w500,
-                        color: AppColors.greyColor,
+                        color: theme.textTheme.bodyLarge?.color,
                         fontSize: 10.sp,
                       ),
                     ],

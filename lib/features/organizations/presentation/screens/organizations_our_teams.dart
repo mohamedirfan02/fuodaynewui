@@ -35,12 +35,11 @@ class _OrganizationsOurTeamsState extends State<OrganizationsOurTeams> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     final departmentProvider = context.watch<DepartmentListProvider>();
-
 
     if (departmentProvider.isLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -64,9 +63,9 @@ class _OrganizationsOurTeamsState extends State<OrganizationsOurTeams> {
               fontWeight: FontWeight.w600,
               fontSize: 16.sp,
               textAlign: TextAlign.start,
-              color: AppColors.primaryColor,
+              color: theme.primaryColor,
               isUnderline: true,
-              underlineColor: AppColors.primaryColor,
+              underlineColor: theme.primaryColor,
             ),
             KVerticalSpacer(height: 14.h),
 
@@ -83,14 +82,18 @@ class _OrganizationsOurTeamsState extends State<OrganizationsOurTeams> {
                     teamTotalMemberCount: members.length.toString(),
                   ),
                   KVerticalSpacer(height: 10.h),
-                  ...members.map(
+                  ...members
+                      .map(
                         (member) => OrganizationsTeamMemberTile(
-                      leadingAvatarBgColor: AppColors.primaryColor,
-                      teamMemberNameFirstLetter: member.name.isNotEmpty ? member.name[0] : '',
-                      teamMemberName: member.name,
-                      teamMemberDesignation: member.designation,
-                    ),
-                  ).toList(),
+                          leadingAvatarBgColor: AppColors.primaryColor,
+                          teamMemberNameFirstLetter: member.name.isNotEmpty
+                              ? member.name[0]
+                              : '',
+                          teamMemberName: member.name,
+                          teamMemberDesignation: member.designation,
+                        ),
+                      )
+                      .toList(),
                   KVerticalSpacer(height: 14.h),
                 ],
               );
@@ -101,4 +104,3 @@ class _OrganizationsOurTeamsState extends State<OrganizationsOurTeams> {
     );
   }
 }
-

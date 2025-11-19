@@ -70,6 +70,8 @@ class PaySlipScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -80,7 +82,7 @@ class PaySlipScreen extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 10.h),
           child: Center(
             child: KAuthFilledBtn(
-              backgroundColor: AppColors.primaryColor,
+              backgroundColor: theme.primaryColor,
               height: AppResponsive.responsiveBtnHeight(context),
               width: double.infinity,
               text: "Download Payslip",

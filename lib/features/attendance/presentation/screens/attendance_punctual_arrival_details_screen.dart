@@ -12,7 +12,6 @@ import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
-import 'package:fuoday/features/attendance/presentation/providers/total_punctual_arrivals_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_message_content.dart';
 import 'package:fuoday/features/attendance/presentation/widgets/attendance_punctual_arrival_card.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -126,6 +125,9 @@ class _AttendancePunctualArrivalDetailsScreenState
         'Status': record.currentStatus ?? '-',
       };
     }).toList();
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       appBar: KAppBar(
@@ -141,7 +143,7 @@ class _AttendancePunctualArrivalDetailsScreenState
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",
@@ -286,6 +288,8 @@ class _AttendancePunctualArrivalDetailsScreenState
     BuildContext context,
     TextEditingController controller,
   ) async {
+    //App Theme Data
+    final theme = Theme.of(context);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -295,9 +299,13 @@ class _AttendancePunctualArrivalDetailsScreenState
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: AppColors.primaryColor,
-              onPrimary: AppColors.secondaryColor,
-              onSurface: AppColors.titleColor,
+              surface: theme.scaffoldBackgroundColor, // DatePicker background
+              surfaceBright: theme.scaffoldBackgroundColor,
+              surfaceContainerHighest: theme.scaffoldBackgroundColor,
+              primary: theme.primaryColor,
+              onPrimary: theme.secondaryHeaderColor, //AppColors.secondaryColor,
+              onSurface:
+                  theme.textTheme.headlineLarge?.color ?? AppColors.titleColor,
             ),
           ),
           child: child!,

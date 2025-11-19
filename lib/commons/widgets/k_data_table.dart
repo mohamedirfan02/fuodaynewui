@@ -1,6 +1,5 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 
 class KDataTable extends StatelessWidget {
   final List<String> columnTitles;

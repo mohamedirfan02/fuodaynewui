@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_linear_gradient_bg.dart';
-import 'package:fuoday/commons/widgets/k_svg.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
@@ -17,9 +16,14 @@ class OnBoardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
       body: KLinearGradientBg(
-        gradientColor: AppColors.employeeGradientColor,
+        gradientColor: isDark
+            ? AppColors.employeeGradientColorDark
+            : AppColors.employeeGradientColor, //Employee Card,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -31,7 +35,7 @@ class OnBoardingScreen extends StatelessWidget {
                 AppAssetsConstants.logo,
                 height: 250.h,
                 width: 250.w,
-               // fit: BoxFit.cover,
+                // fit: BoxFit.cover,
               ),
             ),
 
@@ -49,15 +53,21 @@ class OnBoardingScreen extends StatelessWidget {
                         "Welcome to FUODay! Streamline your day and track everything in one place.",
                     fontWeight: FontWeight.w500,
                     fontSize: 13.sp,
-                    color: AppColors.secondaryColor,
+                    color: isDark
+                        ? Colors.white60
+                        : Colors.white, //AppColors.secondaryColor,
                   ),
 
                   // Get Stated Btn
                   OnBoardingBtn(
                     btnText: "Get Started",
                     btnTextFontSize: 13.sp,
-                    bgColor: AppColors.onBoardingBgColor,
-                    textColor: AppColors.onBoardingTextColor,
+                    bgColor: isDark
+                        ? AppColors.onBoardingBgColorDark
+                        : AppColors.onBoardingBgColor,
+                    textColor: isDark
+                        ? AppColors.onBoardingTextColorDark
+                        : AppColors.onBoardingTextColor,
                     onTap: () async {
                       // Set onboarding status to true
                       await HiveStorageService().setOnBoardingIn(true);

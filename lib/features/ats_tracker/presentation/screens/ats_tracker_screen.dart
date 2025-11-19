@@ -56,6 +56,8 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     // Get employee details from Hive with error handling
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
@@ -122,7 +124,7 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
           body: Container(
             width: double.infinity,
             height: double.infinity,
-            color: AppColors.atsHomepageBg,
+            color: theme.scaffoldBackgroundColor,
             child: Padding(
               padding: EdgeInsets.all(16.w),
               child: Column(
@@ -134,7 +136,10 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
                       text: "ATS Tracker",
                       fontWeight: FontWeight.w600,
                       fontSize: 16.sp,
-                      color: AppColors.titleColor,
+                      color: theme
+                          .textTheme
+                          .headlineLarge
+                          ?.color, //AppColors.titleColor,
                     ),
                   ),
                   Align(

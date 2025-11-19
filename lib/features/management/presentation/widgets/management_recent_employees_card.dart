@@ -20,27 +20,35 @@ class ManagementRecentEmployeesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
       decoration: BoxDecoration(
-        border: Border.all(width: 0.1.w, color: AppColors.greyColor),
+        border: Border.all(
+          width: 0.1.w,
+          color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+        ), //BORDER COLOR),
         borderRadius: BorderRadius.circular(8.r),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: AppColors.cardGradientColor,
+          colors: isDark
+              ? AppColors.cardGradientColorDark
+              : AppColors.cardGradientColor, //Card Gradiant
         ),
       ),
 
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: theme.primaryColor,
           child: Center(
             child: KText(
               text: leadingEmployeeFirstLetter,
               fontWeight: FontWeight.w600,
               fontSize: 14.sp,
-              color: AppColors.secondaryColor,
+              color: theme.secondaryHeaderColor, //AppColors.secondaryColor,
             ),
           ),
         ),
@@ -54,7 +62,7 @@ class ManagementRecentEmployeesCard extends StatelessWidget {
               text: "DOJ",
               fontWeight: FontWeight.w600,
               fontSize: 10.sp,
-              color: AppColors.titleColor,
+              //color: AppColors.titleColor,
             ),
 
             // employee Join Date
@@ -62,7 +70,7 @@ class ManagementRecentEmployeesCard extends StatelessWidget {
               text: employeeJoinDate,
               fontWeight: FontWeight.w600,
               fontSize: 10.sp,
-              color: AppColors.primaryColor,
+              //  color: AppColors.primaryColor,
             ),
           ],
         ),
@@ -72,12 +80,16 @@ class ManagementRecentEmployeesCard extends StatelessWidget {
 
         titleTextStyle: GoogleFonts.sora(
           fontWeight: FontWeight.w600,
-          color: AppColors.titleColor,
+          color: theme.textTheme.headlineLarge?.color, //AppColors.titleColor,
           fontSize: 13.sp,
         ),
         subtitleTextStyle: GoogleFonts.sora(
           fontWeight: FontWeight.w500,
-          color: AppColors.subTitleColor,
+          color: theme
+              .inputDecorationTheme
+              .focusedBorder
+              ?.borderSide
+              .color, //subTitleColor
           fontSize: 10.sp,
         ),
       ),

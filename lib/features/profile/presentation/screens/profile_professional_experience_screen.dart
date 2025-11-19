@@ -180,6 +180,9 @@ class _ProfileProfessionalExperienceScreenState
   }
 
   Widget _buildExperienceCard(int index) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final experience = _experiences[index];
 
     return Card(
@@ -200,7 +203,10 @@ class _ProfileProfessionalExperienceScreenState
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.titleColor,
+                    color: theme
+                        .textTheme
+                        .headlineLarge
+                        ?.color, //AppColors.titleColor,
                   ),
                 ),
                 if (_experiences.length > 1)
@@ -208,7 +214,9 @@ class _ProfileProfessionalExperienceScreenState
                     onPressed: () => _removeExperience(index),
                     icon: Icon(
                       Icons.delete_outline,
-                      color: Colors.red,
+                      color: isDark
+                          ? AppColors.checkOutColorDark
+                          : AppColors.checkOutColor,
                       size: 20.sp,
                     ),
                     constraints: const BoxConstraints(),
@@ -326,6 +334,9 @@ class _ProfileProfessionalExperienceScreenState
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
       appBar: KAppBar(
         actionsWidgets: [
@@ -333,7 +344,7 @@ class _ProfileProfessionalExperienceScreenState
             onPressed: _addNewExperience,
             icon: Icon(
               Icons.add_circle_outlined,
-              color: AppColors.secondaryColor,
+              color: theme.secondaryHeaderColor, //AppColors.secondaryColor,
             ),
             tooltip: 'Add New Experience',
           ),
@@ -354,7 +365,9 @@ class _ProfileProfessionalExperienceScreenState
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: isDark
+                  ? Colors.white.withOpacity(0.1)
+                  : Colors.black.withOpacity(0.1),
               blurRadius: 4,
               offset: const Offset(0, -2),
             ),
@@ -365,7 +378,7 @@ class _ProfileProfessionalExperienceScreenState
             spacing: 12.h,
             children: [
               KAuthFilledBtn(
-                backgroundColor: AppColors.primaryColor.withOpacity(0.4),
+                backgroundColor: theme.primaryColor.withOpacity(0.4),
                 fontSize: 10.sp,
                 text: "Cancel",
                 onPressed: () {
@@ -377,7 +390,7 @@ class _ProfileProfessionalExperienceScreenState
 
               // Submit Button
               KAuthFilledBtn(
-                backgroundColor: AppColors.primaryColor,
+                backgroundColor: theme.primaryColor,
                 fontSize: 10.sp,
                 text:
                     "Submit (${_experiences.length} Experience${_experiences.length > 1 ? 's' : ''})",
@@ -404,7 +417,10 @@ class _ProfileProfessionalExperienceScreenState
                 // Header text
                 Text(
                   'Add your professional experiences below. You can add multiple experiences by tapping the + button.',
-                  style: TextStyle(fontSize: 12.sp, color: AppColors.greyColor),
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: theme.textTheme.bodyLarge?.color,
+                  ), //AppColors.greyColor,),
                 ),
 
                 SizedBox(height: 20.h),
@@ -421,8 +437,8 @@ class _ProfileProfessionalExperienceScreenState
                     icon: const Icon(Icons.add),
                     label: const Text('Add Another Experience'),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.primaryColor,
-                      side: BorderSide(color: AppColors.primaryColor),
+                      foregroundColor: theme.primaryColor,
+                      side: BorderSide(color: theme.primaryColor),
                       padding: EdgeInsets.symmetric(
                         horizontal: 20.w,
                         vertical: 12.h,

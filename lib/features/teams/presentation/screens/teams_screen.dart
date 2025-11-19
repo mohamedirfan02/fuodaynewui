@@ -23,6 +23,9 @@ class TeamsScreen extends StatefulWidget {
 class _TeamsScreenState extends State<TeamsScreen> {
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     // Get employee details from Hive with error handling
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
@@ -39,22 +42,31 @@ class _TeamsScreenState extends State<TeamsScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: AppColors.primaryColor,
-          title: Text("Teams"),
+          backgroundColor: theme.primaryColor,
+          title: KText(
+            text: "Teams",
+            fontWeight: FontWeight.bold,
+            fontSize: 14.sp,
+          ),
           titleTextStyle: GoogleFonts.sora(
             fontSize: 13.sp,
             fontWeight: FontWeight.w500,
-            color: AppColors.secondaryColor,
+            color: theme.secondaryHeaderColor, //AppColors.secondaryColor,
           ),
           leading: IconButton(
             onPressed: () {
               GoRouter.of(context).pop();
             },
-            icon: Icon(Icons.arrow_back, color: AppColors.secondaryColor),
+            icon: Icon(
+              Icons.arrow_back,
+              color: theme.secondaryHeaderColor,
+            ), //AppColors.secondaryColor,),
           ),
         ),
         body: KLinearGradientBg(
-          gradientColor: AppColors.employeeGradientColor,
+          gradientColor: isDark
+              ? AppColors.employeeGradientColorDark
+              : AppColors.employeeGradientColor,
           child: Padding(
             padding: EdgeInsets.only(top: 30.h),
             child: Column(
@@ -110,7 +122,8 @@ class _TeamsScreenState extends State<TeamsScreen> {
                         topLeft: Radius.circular(20.r),
                         topRight: Radius.circular(20.r),
                       ),
-                      color: AppColors.secondaryColor,
+                      color: theme
+                          .secondaryHeaderColor, //AppColors.secondaryColor,,
                     ),
                     child: Column(
                       children: [
@@ -126,13 +139,14 @@ class _TeamsScreenState extends State<TeamsScreen> {
                             isScrollable: true,
                             dividerColor: AppColors.transparentColor,
                             indicator: BoxDecoration(
-                              color: AppColors.primaryColor,
+                              color: theme.primaryColor,
                               borderRadius: BorderRadius.circular(15),
                             ),
                             indicatorColor: AppColors.transparentColor,
                             indicatorSize: TabBarIndicatorSize.tab,
-                            unselectedLabelColor: AppColors.primaryColor,
-                            labelColor: AppColors.secondaryColor,
+                            unselectedLabelColor: theme.primaryColor,
+                            labelColor: theme
+                                .secondaryHeaderColor, //AppColors.secondaryColor,
                             labelStyle: GoogleFonts.sora(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w600,

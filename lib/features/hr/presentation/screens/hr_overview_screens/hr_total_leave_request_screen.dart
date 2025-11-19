@@ -51,9 +51,12 @@ class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final provider = context.allLeaveRequestProviderWatch;
 
-    // ✅ Show "Manager Status" column only if dropdown is Pending
+    //   Show "Manager Status" column only if dropdown is Pending
     final columns = selectedStatus.toLowerCase() == "pending"
         ? [
             'S.No',
@@ -108,7 +111,7 @@ class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         child: KAuthFilledBtn(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: theme.primaryColor,
           height: AppResponsive.responsiveBtnHeight(context),
           width: double.infinity,
           text: "Download",
@@ -234,7 +237,10 @@ class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
               Center(
                 child: Text(
                   "No Data Found",
-                  style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: theme.textTheme.bodyLarge?.color,
+                  ), //AppColors.greyColor,),
                 ),
               )
             else
@@ -254,7 +260,9 @@ class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
                         children: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
+                              backgroundColor: isDark
+                                  ? AppColors.checkOutColorDark
+                                  : AppColors.checkOutColor,
                               padding: EdgeInsets.symmetric(
                                 horizontal: 6.w,
                                 vertical: 3.h,
@@ -275,14 +283,18 @@ class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
                               "Reject",
                               style: TextStyle(
                                 fontSize: 10.sp,
-                                color: Colors.white,
+                                color: theme
+                                    .secondaryHeaderColor, //AppColors.secondaryColor,
                               ),
                             ),
                           ),
                           SizedBox(width: 6.w),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
+                              backgroundColor: theme
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.color, //AppColors.greyColor,
                               padding: EdgeInsets.symmetric(
                                 horizontal: 6.w,
                                 vertical: 3.h,
@@ -303,7 +315,10 @@ class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
                               "Approve",
                               style: TextStyle(
                                 fontSize: 10.sp,
-                                color: Colors.white,
+                                color: theme
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.color, //AppColors.greyColor,,
                               ),
                             ),
                           ),
@@ -311,8 +326,12 @@ class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
                       );
                     } else {
                       final color = currentStatus == 'approved'
-                          ? Colors.green
-                          : Colors.red;
+                          ? isDark
+                                ? AppColors.checkInColorDark
+                                : AppColors.checkInColor
+                          : isDark
+                          ? AppColors.checkOutColorDark
+                          : AppColors.checkOutColor;
                       statusWidget = Text(
                         currentStatus[0].toUpperCase() +
                             currentStatus.substring(1),
@@ -324,7 +343,7 @@ class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
                       );
                     }
 
-                    // ✅ Include Manager Status only when Pending
+                    //   Include Manager Status only when Pending
                     if (selectedStatus.toLowerCase() == "pending") {
                       return {
                         'S.No': e['S.No'],
@@ -380,7 +399,7 @@ class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
 
       await updateProvider.updateLeave(id, status, "HR");
 
-      // ✅ Close only the loading dialog, not the whole page
+      //   Close only the loading dialog, not the whole page
       if (dialogContext != null) Navigator.of(dialogContext!).pop();
 
       if (updateProvider.updatedLeave?.status == "Success") {
@@ -395,7 +414,7 @@ class _HRTotalLeaveRequestScreenState extends State<HRTotalLeaveRequestScreen> {
         );
       }
     } catch (e) {
-      // ✅ Close dialog safely if error occurs
+      //   Close dialog safely if error occurs
       if (Navigator.canPop(context)) Navigator.of(context).pop();
       KSnackBar.failure(context, "Failed to update $name: $e");
     }

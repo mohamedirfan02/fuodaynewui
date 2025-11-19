@@ -34,6 +34,8 @@ class _TeamsReporteesState extends State<TeamsReportees> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     // ✅ TeamMembersProvider
     final teamMembersProvider = context.teamMemberProviderWatch;
     final internetCheckerProvider = context.appInternetCheckerProviderWatch;
@@ -57,7 +59,8 @@ class _TeamsReporteesState extends State<TeamsReportees> {
             text: "Direct Report",
             fontWeight: FontWeight.w600,
             fontSize: 14.sp,
-            color: AppColors.titleColor,
+            color:
+                theme.textTheme.headlineLarge?.color, //AppColors.titleColor,,
           ),
 
           KVerticalSpacer(height: 12.h),
@@ -69,29 +72,29 @@ class _TeamsReporteesState extends State<TeamsReportees> {
               child: Center(child: Text('❌ ${teamMembersProvider.error}')),
             )
           else if (teamMembersProvider.teamMembers.isEmpty)
-              const Expanded(
-                child: Center(child: Text('No direct reports available.')),
-              )
-            else
-              Expanded(
-                child: ListView.separated(
-                  itemCount: teamMembersProvider.teamMembers.length,
-                  itemBuilder: (context, index) {
-                    final member = teamMembersProvider.teamMembers[index];
-                    return KTeamDirectReportTile(
-                      personName: member.name,
-                      personRole: member.designation,
-                      personContact: member.department,
-                      avatarPersonFirstLetter: member.name.isNotEmpty
-                          ? member.name[0]
-                          : '?',
-                      avatarBgColor: AppColors.primaryColor,
-                    );
-                  },
-                  separatorBuilder: (context, index) =>
-                      KVerticalSpacer(height: 10.h),
-                ),
+            const Expanded(
+              child: Center(child: Text('No direct reports available.')),
+            )
+          else
+            Expanded(
+              child: ListView.separated(
+                itemCount: teamMembersProvider.teamMembers.length,
+                itemBuilder: (context, index) {
+                  final member = teamMembersProvider.teamMembers[index];
+                  return KTeamDirectReportTile(
+                    personName: member.name,
+                    personRole: member.designation,
+                    personContact: member.department,
+                    avatarPersonFirstLetter: member.name.isNotEmpty
+                        ? member.name[0]
+                        : '?',
+                    avatarBgColor: theme.primaryColor,
+                  );
+                },
+                separatorBuilder: (context, index) =>
+                    KVerticalSpacer(height: 10.h),
               ),
+            ),
         ],
       ),
     );

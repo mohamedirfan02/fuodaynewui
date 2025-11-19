@@ -46,6 +46,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     // Internet Checker Provider
     final internetCheckerProvider = context.appInternetCheckerProviderWatch;
 
@@ -58,12 +61,15 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
     });
     final isTablet = AppResponsive.isTablet(context);
     final isLandscape = AppResponsive.isLandscape(context);
+
     //isTablet? (isLandscape ? 30.h : 25.h) : 22.h,
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: KLinearGradientBg(
-        gradientColor: AppColors.employeeGradientColor,
+        gradientColor: isDark
+            ? AppColors.employeeGradientColorDark
+            : AppColors.employeeGradientColor, //Employee Card
         child: SafeArea(
           child: Form(
             key: formKey,
@@ -83,7 +89,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: AppColors.authBgColor,
+                      color: theme.scaffoldBackgroundColor,
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(20.r),
                       ),
@@ -115,7 +121,11 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                   KText(
                                     text: "Login Now",
                                     fontWeight: FontWeight.w500,
-                                    color: AppColors.subTitleColor,
+                                    color: theme
+                                        .inputDecorationTheme
+                                        .focusedBorder
+                                        ?.borderSide
+                                        .color, //AppColors.subTitleColor,
                                     fontSize: 14.sp,
                                   ),
 
@@ -143,8 +153,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                     context
                                                         .slidingSegmentProviderWatch
                                                         .isRecruiter
-                                                    ? AppColors.primaryColor
-                                                    : AppColors.secondaryColor,
+                                                    ? theme.primaryColor
+                                                    : theme
+                                                          .secondaryHeaderColor, //AppColors.secondaryColor,
                                               ),
                                               SizedBox(width: 10.w),
                                               KText(
@@ -155,8 +166,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                     context
                                                         .slidingSegmentProviderWatch
                                                         .isRecruiter
-                                                    ? AppColors.primaryColor
-                                                    : AppColors.secondaryColor,
+                                                    ? theme.primaryColor
+                                                    : theme
+                                                          .secondaryHeaderColor,
                                               ),
                                             ],
                                           ),
@@ -175,8 +187,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                     context
                                                         .slidingSegmentProviderWatch
                                                         .isEmployee
-                                                    ? AppColors.primaryColor
-                                                    : AppColors.secondaryColor,
+                                                    ? theme.primaryColor
+                                                    : theme
+                                                          .secondaryHeaderColor,
                                               ),
                                               SizedBox(width: 10.w),
                                               KText(
@@ -187,15 +200,17 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                     context
                                                         .slidingSegmentProviderWatch
                                                         .isEmployee
-                                                    ? AppColors.primaryColor
-                                                    : AppColors.secondaryColor,
+                                                    ? theme.primaryColor
+                                                    : theme
+                                                          .secondaryHeaderColor,
                                               ),
                                             ],
                                           ),
                                         ),
                                       },
-                                      backgroundColor: AppColors.secondaryColor,
-                                      thumbColor: AppColors.primaryColor,
+                                      backgroundColor:
+                                          theme.secondaryHeaderColor,
+                                      thumbColor: theme.primaryColor,
                                       groupValue: context
                                           .slidingSegmentProviderRead
                                           .selectedIndex,
@@ -219,7 +234,8 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      color: AppColors.secondaryColor,
+                                      color: theme
+                                          .secondaryHeaderColor, //AppColors.secondaryColor
                                     ),
                                     child: Column(
                                       crossAxisAlignment:
@@ -298,7 +314,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                             fontWeight: FontWeight.w600,
                                             fontSize: 12.sp,
                                             textAlign: TextAlign.end,
-                                            textColor: AppColors.textBtnColor,
+                                            textColor: isDark
+                                                ? AppColors.textBtnColorDark
+                                                : AppColors.textBtnColor,
                                           ),
                                         ),
 
@@ -313,8 +331,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                 .isLoading,
                                             fontSize: 10.sp,
                                             text: "Employee Login",
-                                            backgroundColor:
-                                                AppColors.primaryColor,
+                                            backgroundColor: theme.primaryColor,
                                             onPressed: () async {
                                               // Internet Checker Provider
                                               if (!internetCheckerProvider
@@ -491,8 +508,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                 .isLoading,
                                             fontSize: 10.sp,
                                             text: "Recruiter Login",
-                                            backgroundColor:
-                                                AppColors.primaryColor,
+                                            backgroundColor: theme.primaryColor,
                                             onPressed: () async {
                                               if (!formKey.currentState!
                                                   .validate()) {

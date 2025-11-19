@@ -35,6 +35,8 @@ class _OrganizationsImageCarouselState
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     return Column(
       children: [
         // Carousel Slider
@@ -98,8 +100,10 @@ class _OrganizationsImageCarouselState
               dotHeight: 4.h,
               spacing: 8.w,
               radius: 2.r,
-              dotColor: AppColors.greyColor.withOpacity(0.5),
-              activeDotColor: AppColors.primaryColor,
+              dotColor:
+                  theme.textTheme.bodyLarge?.color?.withOpacity(0.5) ??
+                  AppColors.greyColor.withOpacity(0.5),
+              activeDotColor: theme.primaryColor,
               paintStyle: PaintingStyle.fill,
             ),
           ),

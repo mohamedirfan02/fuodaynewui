@@ -15,17 +15,25 @@ class AttendanceMessageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 90.h),
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
       width: double.infinity,
       decoration: BoxDecoration(
-        border: Border.all(width: 0.1.w, color: AppColors.greyColor),
+        border: Border.all(
+          width: 0.1.w,
+          color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+        ),
         borderRadius: BorderRadius.circular(8.r),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: AppColors.cardGradientColor,
+          colors: isDark
+              ? AppColors.cardGradientColorDark
+              : AppColors.cardGradientColor,
         ),
       ),
       child: Column(
@@ -38,14 +46,14 @@ class AttendanceMessageContent extends StatelessWidget {
             text: messageContentTitle,
             fontWeight: FontWeight.w600,
             fontSize: 13.sp,
-            color: AppColors.primaryColor,
+            color: theme.primaryColor,
           ),
 
           // description
           KText(
             text: messageContentSubTitle,
             fontWeight: FontWeight.w500,
-            color: AppColors.greyColor,
+            color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
             fontSize: 11.sp,
           ),
         ],

@@ -45,6 +45,9 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,7 +58,9 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
             style: GoogleFonts.sora(
               fontSize: widget.labelFontSize ?? 12.sp,
               fontWeight: widget.labelFontWeight ?? FontWeight.w600,
-              color: widget.labelColor ?? AppColors.titleColor,
+              color:
+                  widget.labelColor ??
+                  theme.textTheme.headlineLarge?.color, //AppColors.titleColor,,
             ),
           ),
           SizedBox(height: 6.h),
@@ -69,13 +74,15 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
           style: GoogleFonts.sora(
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
-            color: AppColors.titleColor,
+            color:
+                theme.textTheme.headlineLarge?.color, //AppColors.titleColor,,
           ),
           controller: widget.controller,
           obscureText: _obscureText,
           keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
             hintText: widget.hintText ?? 'Password',
+            hintStyle: TextStyle(color: theme.textTheme.headlineLarge?.color),
             labelText: widget.floatingLabel ? widget.label : null,
             // floating label
             labelStyle: widget.floatingLabel
@@ -84,43 +91,60 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
                     fontWeight: widget.labelFontWeight ?? FontWeight.w500,
                     color:
                         widget.labelColor ??
-                        AppColors.titleColor.withOpacity(0.7),
+                        theme.textTheme.headlineLarge?.color?.withOpacity(0.7),
                   )
                 : null,
             floatingLabelStyle: widget.floatingLabel
                 ? GoogleFonts.sora(
                     fontSize: (widget.labelFontSize ?? 12.sp) + 1,
                     fontWeight: widget.labelFontWeight ?? FontWeight.w600,
-                    color: widget.labelColor ?? AppColors.primaryColor,
+                    color: widget.labelColor ?? theme.primaryColor,
                   )
                 : null,
             suffixIcon: IconButton(
               onPressed: _togglePasswordVisibility,
               icon: Icon(
                 _obscureText ? Icons.visibility_off : Icons.visibility,
-                color: AppColors.titleColor,
+                color: theme.textTheme.headlineLarge?.color?.withOpacity(0.7),
               ),
             ),
             border: const OutlineInputBorder(),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.authUnderlineBorderColor),
+              borderSide: BorderSide(
+                color:
+                    theme
+                        .inputDecorationTheme
+                        .enabledBorder
+                        ?.borderSide
+                        .color ??
+                    AppColors.authUnderlineBorderColor,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.primaryColor, width: 2.w),
+              borderSide: BorderSide(color: theme.primaryColor, width: 2.w),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: AppColors.checkOutColor,
+                color: isDark
+                    ? AppColors.checkOutColorDark
+                    : AppColors.checkOutColor,
                 width: 1.w,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: AppColors.checkOutColor,
+                color: isDark
+                    ? AppColors.checkOutColorDark
+                    : AppColors.checkOutColor,
                 width: 2.w,
               ),
             ),
-            errorStyle: GoogleFonts.sora(fontSize: 10.sp, color: Colors.red),
+            errorStyle: GoogleFonts.sora(
+              fontSize: 10.sp,
+              color: isDark
+                  ? AppColors.checkOutColorDark
+                  : AppColors.checkOutColor,
+            ),
           ),
         ),
       ],

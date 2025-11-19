@@ -16,6 +16,8 @@ class AttendanceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -31,11 +33,13 @@ class AttendanceScreen extends StatelessWidget {
         floatingActionButton: ExpandableFab(
           type: ExpandableFabType.up,
           overlayStyle: ExpandableFabOverlayStyle(
-            color: AppColors.greyColor.withOpacity(0.5),
+            color: theme.textTheme.bodyLarge?.color?.withOpacity(
+              0.5,
+            ), //AppColors.greyColor,
           ),
 
           openButtonBuilder: DefaultFloatingActionButtonBuilder(
-            child: Icon(Icons.menu, color: AppColors.secondaryColor),
+            child: Icon(Icons.menu, color: theme.secondaryHeaderColor),
             fabSize: ExpandableFabSize.regular,
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -105,13 +109,14 @@ class AttendanceScreen extends StatelessWidget {
               TabBar(
                 dividerColor: AppColors.transparentColor,
                 indicator: BoxDecoration(
-                  color: AppColors.primaryColor,
+                  color: theme.primaryColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 indicatorColor: AppColors.transparentColor,
                 indicatorSize: TabBarIndicatorSize.tab,
-                unselectedLabelColor: AppColors.primaryColor,
-                labelColor: AppColors.secondaryColor,
+                unselectedLabelColor: theme.primaryColor,
+                labelColor:
+                    theme.secondaryHeaderColor, //AppColors.secondaryColor,
                 labelStyle: GoogleFonts.sora(
                   fontSize: 10.sp,
                   fontWeight: FontWeight.bold,

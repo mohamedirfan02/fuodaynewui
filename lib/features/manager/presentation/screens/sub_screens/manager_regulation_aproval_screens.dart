@@ -124,6 +124,9 @@ class _ManagerRegulationAprovalScreenState
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final providerWatch = context.allRegulationsProviderWatch;
 
     final filteredList = providerWatch.getFilteredData(
@@ -177,7 +180,9 @@ class _ManagerRegulationAprovalScreenState
               height: 20.h,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: isDark
+                      ? AppColors.checkInColorDark
+                      : AppColors.checkOutColor,
                   padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
                 ),
                 onPressed: _updatedStatuses.containsKey(e.id)
@@ -191,7 +196,10 @@ class _ManagerRegulationAprovalScreenState
                       },
                 child: Text(
                   "Reject",
-                  style: TextStyle(fontSize: 10.sp, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    color: theme.secondaryHeaderColor,
+                  ), //AppColors.secondaryColor),
                 ),
               ),
             ),
@@ -221,7 +229,13 @@ class _ManagerRegulationAprovalScreenState
           ],
         );
       } else {
-        final color = currentStatus == 'approved' ? Colors.green : Colors.red;
+        final color = currentStatus == 'approved'
+            ? isDark
+                  ? AppColors.checkInColorDark
+                  : AppColors.checkInColor
+            : isDark
+            ? AppColors.checkInColorDark
+            : AppColors.checkOutColor;
         actionWidget = Text(
           currentStatus.capitalize(),
           style: TextStyle(
@@ -322,7 +336,7 @@ class _ManagerRegulationAprovalScreenState
                     vertical: 8.h,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.1),
+                    color: theme.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Row(
@@ -330,7 +344,7 @@ class _ManagerRegulationAprovalScreenState
                       Icon(
                         Icons.search,
                         size: 16.sp,
-                        color: AppColors.primaryColor,
+                        color: theme.primaryColor,
                       ),
                       SizedBox(width: 8.w),
                       Expanded(
@@ -338,7 +352,7 @@ class _ManagerRegulationAprovalScreenState
                           'Search: "$searchQuery" (${filteredList.length} records)',
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: AppColors.primaryColor,
+                            color: theme.primaryColor,
                             fontWeight: FontWeight.w500,
                           ),
                           overflow: TextOverflow.ellipsis,
@@ -354,13 +368,14 @@ class _ManagerRegulationAprovalScreenState
                         child: Container(
                           padding: EdgeInsets.all(4.w),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
+                            color: theme.primaryColor,
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           child: Icon(
                             Icons.clear,
                             size: 14.sp,
-                            color: Colors.white,
+                            color: theme
+                                .secondaryHeaderColor, //AppColors.secondaryColor,
                           ),
                         ),
                       ),
@@ -393,7 +408,10 @@ class _ManagerRegulationAprovalScreenState
                             Icon(
                               Icons.search_off,
                               size: 48.sp,
-                              color: Colors.grey,
+                              color: theme
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.color, //                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .greyColor,,
                             ),
                             SizedBox(height: 16.h),
                             Text(
@@ -401,7 +419,10 @@ class _ManagerRegulationAprovalScreenState
                                   ? "No results found for '$searchQuery'"
                                   : "No Data Found",
                               style: TextStyle(
-                                color: Colors.grey,
+                                color: theme
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.color, //AppColors.greyColor,
                                 fontSize: 14.sp,
                               ),
                               textAlign: TextAlign.center,
@@ -424,7 +445,7 @@ class _ManagerRegulationAprovalScreenState
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         child: KAuthFilledBtn(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: theme.primaryColor,
           height: AppResponsive.responsiveBtnHeight(context),
           width: double.infinity,
           text: "Download",
@@ -465,12 +486,7 @@ class _ManagerRegulationAprovalScreenState
                       data: pdfData,
                       adjustColumnWidth: false,
                     );
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("  PDF generated successfully!"),
-                      ),
-                    );
+                    KSnackBar.success(context, "PDF generated successfully!");
 
                     GoRouter.of(context).pop();
                     await OpenFilex.open(pdfFile.path);

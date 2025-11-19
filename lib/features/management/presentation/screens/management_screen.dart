@@ -14,7 +14,6 @@ import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart
 import 'package:fuoday/features/hr/presentation/provider/hr_overview_provider.dart';
 import 'package:fuoday/features/management/domain/entities/emp_audit_form_entity.dart';
 import 'package:fuoday/features/management/presentation/provider/emp_audit_form_provider.dart';
-import 'package:fuoday/features/management/presentation/screens/management_overview.dart';
 import 'package:fuoday/features/management/presentation/screens/management_view_open_positions.dart';
 import 'package:fuoday/features/management/presentation/screens/management_view_projects.dart';
 import 'package:fuoday/features/management/presentation/screens/management_view_recent_employees.dart';
@@ -66,6 +65,9 @@ class _ManagementScreenState extends State<ManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
 
@@ -120,7 +122,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
             margin: EdgeInsets.symmetric(vertical: 10.h),
             child: Center(
               child: KAuthFilledBtn(
-                backgroundColor: AppColors.primaryColor,
+                backgroundColor: theme.primaryColor,
                 height: AppResponsive.responsiveBtnHeight(context),
                 width: double.infinity,
                 text: "View Audit Process",
@@ -160,7 +162,12 @@ class _ManagementScreenState extends State<ManagementScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(
                           width: 1.w,
-                          color: AppColors.greyColor.withOpacity(0.3),
+                          color:
+                              theme.textTheme.bodyLarge?.color?.withOpacity(
+                                0.3,
+                              ) ??
+                              AppColors
+                                  .greyColor, //BORDER COLORAppColors.greyColor.withOpacity(0.3),
                         ),
                         borderRadius: BorderRadius.circular(8.r),
                         gradient: const LinearGradient(
@@ -176,28 +183,28 @@ class _ManagementScreenState extends State<ManagementScreen> {
                             text: name,
                             fontWeight: FontWeight.w600,
                             fontSize: 14.sp,
-                            color: AppColors.titleColor,
+                            //   color: AppColors.titleColor,
                           ),
                           KVerticalSpacer(height: 3.h),
                           KText(
                             text: "Designation: $designation",
                             fontWeight: FontWeight.w500,
                             fontSize: 10.sp,
-                            color: AppColors.titleColor,
+                            // color: AppColors.titleColor,
                           ),
                           KVerticalSpacer(height: 3.h),
                           KText(
                             text: "Employee id: $empId",
                             fontWeight: FontWeight.w500,
                             fontSize: 10.sp,
-                            color: AppColors.titleColor,
+                            // color: AppColors.titleColor,
                           ),
                           KVerticalSpacer(height: 3.h),
                           KText(
                             text: email,
                             fontWeight: FontWeight.w500,
                             fontSize: 10.sp,
-                            color: AppColors.titleColor,
+                            // color: AppColors.titleColor,
                           ),
                         ],
                       ),

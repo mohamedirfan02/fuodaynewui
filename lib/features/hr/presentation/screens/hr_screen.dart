@@ -14,7 +14,6 @@ import 'package:fuoday/features/hr/presentation/screens/hr_view_open_positions.d
 import 'package:fuoday/features/hr/presentation/screens/hr_view_recent_employees.dart';
 import 'package:go_router/go_router.dart';
 
-import 'hr_add_events.dart';
 import 'package:provider/provider.dart';
 import '../provider/hr_overview_provider.dart';
 
@@ -59,6 +58,9 @@ class _HRScreenState extends State<HRScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final roleBasedProvider = context.roleBasedUsersProviderWatch;
     final attendanceProvider = context.roleWiseAttendanceReportProviderWatch;
     final lateArrivalProvider = context.allRoleLateArrivalsReportProviderWatch;
@@ -148,13 +150,19 @@ class _HRScreenState extends State<HRScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(
                           width: 1.w,
-                          color: AppColors.greyColor.withOpacity(0.3),
+                          color:
+                              theme.textTheme.bodyLarge?.color?.withOpacity(
+                                0.3,
+                              ) ??
+                              AppColors.greyColor,
                         ),
                         borderRadius: BorderRadius.circular(8.r),
-                        gradient: const LinearGradient(
+                        gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: AppColors.cardGradientColor,
+                          colors: isDark
+                              ? AppColors.cardGradientColorDark
+                              : AppColors.cardGradientColor, //Card Gradiant
                         ),
                       ),
                       child: Column(
@@ -164,28 +172,31 @@ class _HRScreenState extends State<HRScreen> {
                             text: name,
                             fontWeight: FontWeight.w600,
                             fontSize: 14.sp,
-                            color: AppColors.titleColor,
+                            color: theme
+                                .textTheme
+                                .headlineLarge
+                                ?.color, //AppColors.titleColor,
                           ),
                           KVerticalSpacer(height: 3.h),
                           KText(
                             text: "Designation: $designation",
                             fontWeight: FontWeight.w500,
                             fontSize: 10.sp,
-                            color: AppColors.titleColor,
+                            // color: AppColors.titleColor,
                           ),
                           KVerticalSpacer(height: 3.h),
                           KText(
                             text: "Employee id: $empId",
                             fontWeight: FontWeight.w500,
                             fontSize: 10.sp,
-                            color: AppColors.titleColor,
+                            //  color: AppColors.titleColor,
                           ),
                           KVerticalSpacer(height: 3.h),
                           KText(
                             text: email,
                             fontWeight: FontWeight.w500,
                             fontSize: 10.sp,
-                            color: AppColors.titleColor,
+                            // color: AppColors.titleColor,
                           ),
                         ],
                       ),

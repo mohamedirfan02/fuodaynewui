@@ -17,11 +17,12 @@ class OrganizationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
 
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
     final logoUrl = employeeDetails?['logo'] ?? ''; // fallback if null
-
 
     return DefaultTabController(
       length: 3,
@@ -44,27 +45,28 @@ class OrganizationsScreen extends StatelessWidget {
             Center(
               child: logoUrl.isNotEmpty
                   ? Image.network(
-                logoUrl,
-                height: 120.h,
-                width: 120.w,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    AppAssetsConstants.logo, // fallback if network image fails
-                    height: 120.h,
-                    width: 120.w,
-                    fit: BoxFit.cover,
-                  );
-                },
-              )
+                      logoUrl,
+                      height: 120.h,
+                      width: 120.w,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          AppAssetsConstants
+                              .logo, // fallback if network image fails
+                          height: 120.h,
+                          width: 120.w,
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    )
                   : Image.asset(
-                AppAssetsConstants.logo, // show default if logoUrl is empty
-                height: 120.h,
-                width: 120.w,
-                fit: BoxFit.cover,
-              ),
+                      AppAssetsConstants
+                          .logo, // show default if logoUrl is empty
+                      height: 120.h,
+                      width: 120.w,
+                      fit: BoxFit.cover,
+                    ),
             ),
-
 
             // TabBar
             Padding(
@@ -72,13 +74,14 @@ class OrganizationsScreen extends StatelessWidget {
               child: TabBar(
                 dividerColor: AppColors.transparentColor,
                 indicator: BoxDecoration(
-                  color: AppColors.primaryColor,
+                  color: theme.primaryColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 indicatorColor: AppColors.transparentColor,
                 indicatorSize: TabBarIndicatorSize.tab,
-                unselectedLabelColor: AppColors.primaryColor,
-                labelColor: AppColors.secondaryColor,
+                unselectedLabelColor: theme.primaryColor,
+                labelColor:
+                    theme.secondaryHeaderColor, //AppColors.secondaryColor,
                 labelStyle: GoogleFonts.sora(
                   fontSize: 10.sp,
                   fontWeight: FontWeight.bold,

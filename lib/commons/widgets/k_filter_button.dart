@@ -39,7 +39,7 @@ class KFilterBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isTablet = AppResponsive.isTablet(context);
-    final isLandscape = AppResponsive.isLandscape(context);
+    // final isLandscape = AppResponsive.isLandscape(context);
     return SizedBox(
       height: height.h,
       width: width.w,

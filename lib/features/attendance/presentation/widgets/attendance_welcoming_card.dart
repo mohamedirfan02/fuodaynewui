@@ -25,16 +25,21 @@ class AttendanceWelcomingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(width: 1.w, color: AppColors.greyColor),
         borderRadius: BorderRadius.circular(8.r),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: AppColors.cardGradientColor,
+          colors: isDark
+              ? AppColors.cardGradientColorDark
+              : AppColors.cardGradientColor,
         ),
       ),
       child: Column(
@@ -71,7 +76,10 @@ class AttendanceWelcomingCard extends StatelessWidget {
                             text: attendanceCardTime,
                             fontWeight: FontWeight.w600,
                             fontSize: 14.sp,
-                            color: AppColors.attendanceCardTextLightColor,
+                            color: isDark
+                                ? AppColors.attendanceCardTextLightColorDark
+                                : AppColors
+                                      .attendanceCardTextLightColor, //theme.textTheme.bodyLarge?.color,
                           ),
 
                           // Welcoming TExt
@@ -79,7 +87,9 @@ class AttendanceWelcomingCard extends StatelessWidget {
                             text: attendanceCardTimeMessage,
                             fontWeight: FontWeight.w600,
                             fontSize: 12.sp,
-                            color: AppColors.attendanceCardTextLightColor,
+                            color: isDark
+                                ? AppColors.attendanceCardTextLightColorDark
+                                : AppColors.attendanceCardTextLightColor,
                           ),
                         ],
                       ),
@@ -93,7 +103,10 @@ class AttendanceWelcomingCard extends StatelessWidget {
                     text: attendanceDay,
                     fontWeight: FontWeight.w600,
                     fontSize: 14.sp,
-                    color: AppColors.titleColor,
+                    color: theme
+                        .textTheme
+                        .headlineLarge
+                        ?.color, //AppColors.titleColor,
                   ),
 
                   KVerticalSpacer(height: 2.h),
@@ -103,7 +116,7 @@ class AttendanceWelcomingCard extends StatelessWidget {
                     text: attendanceDate,
                     fontWeight: FontWeight.w500,
                     fontSize: 12.sp,
-                    color: AppColors.titleColor,
+                    color: theme.textTheme.headlineLarge?.color,
                   ),
                 ],
               ),
@@ -130,7 +143,7 @@ class AttendanceWelcomingCard extends StatelessWidget {
             onPressed: () {
               onViewAttendance();
             },
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: 23.h,
             fontSize: 10.sp,
           ),

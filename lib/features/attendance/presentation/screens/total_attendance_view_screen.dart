@@ -118,6 +118,8 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     // Total Attendance Provider
     final totalAttendanceProvider = context.totalAttendanceDetailsProviderWatch;
 
@@ -179,7 +181,7 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: displayData.isEmpty ? "No Data to Download" : "Download",
@@ -287,7 +289,7 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
                           vertical: 8.h,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryColor.withOpacity(0.1),
+                          color: theme.primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         child: Row(
@@ -295,14 +297,14 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
                             Icon(
                               Icons.filter_alt,
                               size: 16.sp,
-                              color: AppColors.primaryColor,
+                              color: theme.primaryColor,
                             ),
                             SizedBox(width: 8.w),
                             Text(
                               'Showing: ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear (${displayData.length} records)',
                               style: TextStyle(
                                 fontSize: 12.sp,
-                                color: AppColors.primaryColor,
+                                color: theme.primaryColor,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -318,7 +320,7 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
                               child: Container(
                                 padding: EdgeInsets.all(4.w),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
+                                  color: theme.primaryColor,
                                   borderRadius: BorderRadius.circular(4.r),
                                 ),
                                 child: Icon(
@@ -343,7 +345,10 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
                                   Icon(
                                     Icons.calendar_today_outlined,
                                     size: 48.sp,
-                                    color: Colors.grey,
+                                    color: theme
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.color, //AppColors.greyColor,,
                                   ),
                                   SizedBox(height: 16.h),
                                   Text(
@@ -353,7 +358,7 @@ class _TotalAttendanceViewScreenState extends State<TotalAttendanceViewScreen> {
                                         : 'No attendance data available',
                                     style: TextStyle(
                                       fontSize: 14.sp,
-                                      color: Colors.grey,
+                                      color: theme.textTheme.bodyLarge?.color,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),

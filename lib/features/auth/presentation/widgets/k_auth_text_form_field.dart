@@ -140,7 +140,12 @@ class KAuthTextFormField extends StatelessWidget {
                 width: 2.w,
               ),
             ),
-            errorStyle: GoogleFonts.sora(fontSize: 10.sp, color: Colors.red),
+            errorStyle: GoogleFonts.sora(
+              fontSize: 10.sp,
+              color: isDark
+                  ? AppColors.checkOutColorDark
+                  : AppColors.checkOutColor,
+            ),
           ),
         ),
       ],

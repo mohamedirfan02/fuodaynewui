@@ -25,7 +25,6 @@ class KDropdownTextFormField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return DropdownButtonFormField2<T>(
       value: value,

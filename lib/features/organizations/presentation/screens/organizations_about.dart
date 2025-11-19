@@ -19,8 +19,6 @@ class OrganizationsAbout extends StatefulWidget {
 
 class _OrganizationsAboutState extends State<OrganizationsAbout> {
   @override
-
-
   void initState() {
     super.initState();
 
@@ -39,6 +37,9 @@ class _OrganizationsAboutState extends State<OrganizationsAbout> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Consumer<OrganizationAboutProvider>(
       builder: (context, provider, _) {
         if (provider.isLoading) {
@@ -62,16 +63,19 @@ class _OrganizationsAboutState extends State<OrganizationsAbout> {
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
                 textAlign: TextAlign.start,
-                color: AppColors.primaryColor,
+                color: theme.primaryColor,
                 isUnderline: true,
-                underlineColor: AppColors.primaryColor,
+                underlineColor: theme.primaryColor,
               ),
               KVerticalSpacer(height: 14.h),
               KText(
                 text: about.aboutDescription,
                 fontWeight: FontWeight.w500,
                 fontSize: 12.sp,
-                color: AppColors.titleColor,
+                color: theme
+                    .textTheme
+                    .headlineLarge
+                    ?.color, //AppColors.titleColor,
                 textAlign: TextAlign.justify,
               ),
 
@@ -81,19 +85,19 @@ class _OrganizationsAboutState extends State<OrganizationsAbout> {
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
                 textAlign: TextAlign.start,
-                color: AppColors.primaryColor,
+                color: theme.primaryColor,
                 isUnderline: true,
-                underlineColor: AppColors.primaryColor,
+                underlineColor: theme.primaryColor,
               ),
               KVerticalSpacer(height: 10.h),
 
               ...about.achievements.map(
-                    (achieve) => Padding(
+                (achieve) => Padding(
                   padding: EdgeInsets.only(bottom: 6.h),
                   child: OrganizationsAchievementsValueCard(
                     leadingIconData: Icons.celebration,
                     achievementDescription: achieve,
-                    leadingIconColor: AppColors.primaryColor,
+                    leadingIconColor: theme.primaryColor,
                   ),
                 ),
               ),
@@ -104,19 +108,19 @@ class _OrganizationsAboutState extends State<OrganizationsAbout> {
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
                 textAlign: TextAlign.start,
-                color: AppColors.primaryColor,
+                color: theme.primaryColor,
                 isUnderline: true,
-                underlineColor: AppColors.primaryColor,
+                underlineColor: theme.primaryColor,
               ),
               KVerticalSpacer(height: 10.h),
 
               ...about.values.map(
-                    (value) => Padding(
+                (value) => Padding(
                   padding: EdgeInsets.only(bottom: 6.h),
                   child: OrganizationsAchievementsValueCard(
                     leadingIconData: Icons.lightbulb,
                     achievementDescription: value,
-                    leadingIconColor: AppColors.primaryColor,
+                    leadingIconColor: theme.primaryColor,
                   ),
                 ),
               ),
@@ -127,9 +131,9 @@ class _OrganizationsAboutState extends State<OrganizationsAbout> {
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
                 textAlign: TextAlign.start,
-                color: AppColors.primaryColor,
+                color: theme.primaryColor,
                 isUnderline: true,
-                underlineColor: AppColors.primaryColor,
+                underlineColor: theme.primaryColor,
               ),
               KVerticalSpacer(height: 14.h),
               KText(
@@ -138,7 +142,10 @@ class _OrganizationsAboutState extends State<OrganizationsAbout> {
                     : "We collaborate with a diverse range of clients who trust us to deliver innovative and effective solutions.",
                 fontWeight: FontWeight.w500,
                 fontSize: 12.sp,
-                color: AppColors.titleColor,
+                color: theme
+                    .textTheme
+                    .headlineLarge
+                    ?.color, //AppColors.titleColor,
                 textAlign: TextAlign.justify,
               ),
 

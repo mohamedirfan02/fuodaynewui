@@ -16,6 +16,9 @@ class HROverviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final isTablet = AppResponsive.isTablet(context);
     final isLandscape = AppResponsive.isLandscape(context);
     //final stats = context.watch<HROverviewProvider>().hrOverview!.stats;
@@ -207,7 +210,8 @@ class HROverviewWidget extends StatelessWidget {
                   builder: (context) => Container(
                     height: MediaQuery.of(context).size.height * 0.9,
                     decoration: BoxDecoration(
-                      color: AppColors.secondaryColor,
+                      color: theme
+                          .secondaryHeaderColor, //AppColors.secondaryColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),

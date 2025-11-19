@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/features/hr/domain/entities/hr_overview_entity.dart';
 import 'package:fuoday/features/hr/presentation/provider/hr_overview_provider.dart';
 import 'package:fuoday/features/management/presentation/widgets/management_open_positions_card.dart';
 import 'package:provider/provider.dart';
 
 class ManagementViewOpenPositions extends StatelessWidget {
-  const ManagementViewOpenPositions({super.key, required HROverviewEntity hrOverview});
+  const ManagementViewOpenPositions({
+    super.key,
+    required HROverviewEntity hrOverview,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final positions = context.watch<HROverviewProvider>().hrOverview!.openPositions;
+    final positions = context
+        .watch<HROverviewProvider>()
+        .hrOverview!
+        .openPositions;
 
     return ListView.separated(
       physics: const BouncingScrollPhysics(),
@@ -23,7 +27,7 @@ class ManagementViewOpenPositions extends StatelessWidget {
         return ManagementOpenPositionsCard(
           openPositonJobDesignation: p.title,
           openPositionJobDescription:
-          "Posted at: ${p.postedAt}, Openings: ${p.noOfOpenings}",
+              "Posted at: ${p.postedAt}, Openings: ${p.noOfOpenings}",
         );
       },
     );

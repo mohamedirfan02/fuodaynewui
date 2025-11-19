@@ -143,6 +143,9 @@ class _ManagerTotalAttendanceRepotScreenState
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final attendanceProvider = context.roleWiseAttendanceReportProviderWatch;
 
     final employees = attendanceProvider.attendanceReport?.managerList ?? [];
@@ -202,7 +205,7 @@ class _ManagerTotalAttendanceRepotScreenState
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: displayData.isEmpty ? "No Data to Download" : "Download",
@@ -293,7 +296,7 @@ class _ManagerTotalAttendanceRepotScreenState
                           vertical: 8.h,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryColor.withOpacity(0.1),
+                          color: theme.primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         child: Row(
@@ -301,7 +304,7 @@ class _ManagerTotalAttendanceRepotScreenState
                             Icon(
                               Icons.search,
                               size: 16.sp,
-                              color: AppColors.primaryColor,
+                              color: theme.primaryColor,
                             ),
                             SizedBox(width: 8.w),
                             Expanded(
@@ -309,7 +312,7 @@ class _ManagerTotalAttendanceRepotScreenState
                                 'Search: "$searchQuery" (${displayData.length} records)',
                                 style: TextStyle(
                                   fontSize: 12.sp,
-                                  color: AppColors.primaryColor,
+                                  color: theme.primaryColor,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -325,13 +328,14 @@ class _ManagerTotalAttendanceRepotScreenState
                               child: Container(
                                 padding: EdgeInsets.all(4.w),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
+                                  color: theme.primaryColor,
                                   borderRadius: BorderRadius.circular(4.r),
                                 ),
                                 child: Icon(
                                   Icons.clear,
                                   size: 14.sp,
-                                  color: Colors.white,
+                                  color: theme
+                                      .secondaryHeaderColor, //AppColors.secondaryColor
                                 ),
                               ),
                             ),
@@ -359,7 +363,7 @@ class _ManagerTotalAttendanceRepotScreenState
                           vertical: 8.h,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryColor.withOpacity(0.1),
+                          color: theme.primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         child: Row(
@@ -367,14 +371,14 @@ class _ManagerTotalAttendanceRepotScreenState
                             Icon(
                               Icons.filter_alt,
                               size: 16.sp,
-                              color: AppColors.primaryColor,
+                              color: theme.primaryColor,
                             ),
                             SizedBox(width: 8.w),
                             Text(
                               'Showing: ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear (${displayData.length} records)',
                               style: TextStyle(
                                 fontSize: 12.sp,
-                                color: AppColors.primaryColor,
+                                color: theme.primaryColor,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -390,13 +394,14 @@ class _ManagerTotalAttendanceRepotScreenState
                               child: Container(
                                 padding: EdgeInsets.all(4.w),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
+                                  color: theme.primaryColor,
                                   borderRadius: BorderRadius.circular(4.r),
                                 ),
                                 child: Icon(
                                   Icons.clear,
                                   size: 14.sp,
-                                  color: Colors.white,
+                                  color: theme
+                                      .secondaryHeaderColor, //AppColors.secondaryColor,
                                 ),
                               ),
                             ),
@@ -417,7 +422,10 @@ class _ManagerTotalAttendanceRepotScreenState
                                         ? Icons.search_off
                                         : Icons.calendar_today_outlined,
                                     size: 48.sp,
-                                    color: Colors.grey,
+                                    color: theme
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.color, //AppColors.greyColor,
                                   ),
                                   SizedBox(height: 16.h),
                                   Text(
@@ -429,7 +437,10 @@ class _ManagerTotalAttendanceRepotScreenState
                                         : 'No attendance data available',
                                     style: TextStyle(
                                       fontSize: 14.sp,
-                                      color: Colors.grey,
+                                      color: theme
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color, //AppColors.greyColor,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),

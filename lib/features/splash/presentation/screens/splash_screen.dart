@@ -4,7 +4,6 @@ import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
 import 'package:fuoday/core/constants/router/app_route_constants.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
 
 //
 // class SplashScreen extends StatefulWidget {
@@ -66,13 +65,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-
   @override
   void initState() {
     super.initState();
     _navigate();
   }
+
   Future<bool> _validateSecureStorage(HiveStorageService storage) async {
     try {
       // Try reading secure data
@@ -83,8 +81,6 @@ class _SplashScreenState extends State<SplashScreen> {
       return false;
     }
   }
-
-
 
   Future<void> _navigate() async {
     await Future.delayed(const Duration(seconds: 2));
@@ -103,16 +99,20 @@ class _SplashScreenState extends State<SplashScreen> {
     final isLoggedIn = storage.isAuthLoggedStatus;
     final userRole = storage.userRole;
 
-    debugPrint("🟢 isOnBoarded: $isOnBoarded | isLoggedIn: $isLoggedIn | userRole: $userRole");
+    debugPrint(
+      "🟢 isOnBoarded: $isOnBoarded | isLoggedIn: $isLoggedIn | userRole: $userRole",
+    );
 
     // Navigation Logic
     if (isOnBoarded && isLoggedIn) {
       if (userRole == "recruiter") {
-        GoRouter.of(context)
-            .pushReplacementNamed(AppRouteConstants.homeRecruiter);
+        GoRouter.of(
+          context,
+        ).pushReplacementNamed(AppRouteConstants.homeRecruiter);
       } else {
-        GoRouter.of(context)
-            .pushReplacementNamed(AppRouteConstants.employeeBottomNav);
+        GoRouter.of(
+          context,
+        ).pushReplacementNamed(AppRouteConstants.employeeBottomNav);
       }
     } else if (isOnBoarded && !isLoggedIn) {
       GoRouter.of(context).pushReplacementNamed(AppRouteConstants.login);
@@ -120,7 +120,6 @@ class _SplashScreenState extends State<SplashScreen> {
       GoRouter.of(context).pushReplacementNamed(AppRouteConstants.onBoarding);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

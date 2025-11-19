@@ -16,6 +16,8 @@ class OrganizationsTeamDesignationMemberCountHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -26,7 +28,7 @@ class OrganizationsTeamDesignationMemberCountHeading extends StatelessWidget {
           fontWeight: FontWeight.w600,
           fontSize: 14.sp,
           textAlign: TextAlign.start,
-          color: AppColors.titleColor,
+          color: theme.textTheme.headlineLarge?.color, //AppColors.titleColor,
         ),
 
         Text.rich(
@@ -42,7 +44,7 @@ class OrganizationsTeamDesignationMemberCountHeading extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primaryColor,
+                  color: theme.primaryColor,
                 ),
               ),
             ],

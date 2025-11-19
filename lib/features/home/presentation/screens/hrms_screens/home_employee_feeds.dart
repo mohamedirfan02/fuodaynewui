@@ -54,6 +54,8 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
       context: context,
       builder: (context) => LayoutBuilder(
         builder: (context, constraints) {
+          //App Theme Data
+          final theme = Theme.of(context);
           // Calculate available height considering keyboard
           final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
           final availableHeight =
@@ -79,7 +81,7 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                             text: 'Update Your Task',
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.titleColor,
+                            // color: AppColors.titleColor,
                           ),
                         ),
                         IconButton(
@@ -107,7 +109,7 @@ class _HomeEmployeeFeedsState extends State<HomeEmployeeFeeds> {
                                 text: 'Status',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.titleColor,
+                                // color: AppColors.titleColor,
                               ),
                               SizedBox(height: 8.h),
                               KDropdownTextFormField<String>(

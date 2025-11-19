@@ -5,19 +5,29 @@ import 'package:google_fonts/google_fonts.dart';
 
 class KSnackBar {
   static void success(BuildContext context, String message) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     _showSnackBar(
       context,
       message,
-      backgroundColor: AppColors.checkInColor,
+      backgroundColor: isDark
+          ? AppColors.checkInColorDark
+          : AppColors.checkInColor,
       icon: Icons.check_circle_outline,
     );
   }
 
   static void failure(BuildContext context, String message) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     _showSnackBar(
       context,
       message,
-      backgroundColor: AppColors.checkOutColor,
+      backgroundColor: isDark
+          ? AppColors.checkOutColorDark
+          : AppColors.checkOutColor,
       icon: Icons.error_outline,
     );
   }
@@ -28,17 +38,23 @@ class KSnackBar {
     required Color backgroundColor,
     required IconData icon,
   }) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    // final isDark = theme.brightness == Brightness.dark;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
           spacing: 12.w,
           children: [
-            Icon(icon, color: AppColors.secondaryColor),
+            Icon(
+              icon,
+              color: theme.secondaryHeaderColor,
+            ), //AppColors.secondaryColor),
 
             Expanded(
               child: Text(
                 message,
-                style: GoogleFonts.sora(color: AppColors.secondaryColor),
+                style: GoogleFonts.sora(color: theme.secondaryHeaderColor),
               ),
             ),
           ],
@@ -46,7 +62,7 @@ class KSnackBar {
         backgroundColor: backgroundColor,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 3),
-        closeIconColor: AppColors.secondaryColor,
+        closeIconColor: theme.secondaryHeaderColor,
         showCloseIcon: true,
         dismissDirection: DismissDirection.down,
       ),

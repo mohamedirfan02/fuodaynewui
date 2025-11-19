@@ -379,6 +379,8 @@ class _SingleAssignedPersonDropdownState
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     return Consumer<EmployeeDepartmentProvider>(
       builder: (context, provider, _) {
         final isLoading = provider.isLoading;
@@ -394,7 +396,12 @@ class _SingleAssignedPersonDropdownState
                 style: GoogleFonts.sora(
                   fontSize: widget.labelFontSize ?? 12.sp,
                   fontWeight: widget.labelFontWeight ?? FontWeight.w600,
-                  color: widget.labelColor ?? AppColors.titleColor,
+                  color:
+                      widget.labelColor ??
+                      theme
+                          .textTheme
+                          .headlineLarge
+                          ?.color, //AppColors.titleColor,,
                 ),
               ),
               SizedBox(height: 6.h),
@@ -423,7 +430,10 @@ class _SingleAssignedPersonDropdownState
                   ),
                   icon: Icon(
                     Icons.arrow_drop_down_outlined,
-                    color: AppColors.titleColor,
+                    color: theme
+                        .textTheme
+                        .bodyLarge
+                        ?.color, //AppColors.greyColor,, //AppColors.titleColor,,
                   ),
                   items: employees.map((emp) {
                     return DropdownMenuItem<EmployeeModelEntity>(

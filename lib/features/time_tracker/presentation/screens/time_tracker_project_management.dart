@@ -13,12 +13,7 @@ class TimeTrackerProjectManagement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final columns = [
-      'S.No',
-      'Daily work progress',
-      'Team Members',
-      'Deadline',
-    ];
+    final columns = ['S.No', 'Daily work progress', 'Team Members', 'Deadline'];
 
     final rowData = data.asMap().entries.map((entry) {
       final i = entry.key;
@@ -61,7 +56,6 @@ class TimeTrackerProjectManagement extends StatelessWidget {
       };
     }).toList();
 
-
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
@@ -71,7 +65,7 @@ class TimeTrackerProjectManagement extends StatelessWidget {
             text: "Project Management",
             fontWeight: FontWeight.w600,
             fontSize: 13.sp,
-            color: AppColors.titleColor,
+            //   color: AppColors.titleColor,
           ),
           SizedBox(height: 10.h),
           SizedBox(

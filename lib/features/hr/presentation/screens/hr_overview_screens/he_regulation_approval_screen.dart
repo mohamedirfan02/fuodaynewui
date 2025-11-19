@@ -11,7 +11,6 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/manager/presentation/provider/update_regulation_status_provider.dart';
@@ -125,6 +124,9 @@ class _HRRegulationAprovalScreenState extends State<HRRegulationAprovalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final providerWatch = context.allRegulationsProviderWatch;
 
     final filteredList = providerWatch.getFilteredData(
@@ -326,7 +328,7 @@ class _HRRegulationAprovalScreenState extends State<HRRegulationAprovalScreen> {
                     vertical: 8.h,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.1),
+                    color: theme.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Row(
@@ -334,7 +336,7 @@ class _HRRegulationAprovalScreenState extends State<HRRegulationAprovalScreen> {
                       Icon(
                         Icons.search,
                         size: 16.sp,
-                        color: AppColors.primaryColor,
+                        color: theme.primaryColor,
                       ),
                       SizedBox(width: 8.w),
                       Expanded(
@@ -342,7 +344,7 @@ class _HRRegulationAprovalScreenState extends State<HRRegulationAprovalScreen> {
                           'Search: "$searchQuery" (${filteredList.length} records)',
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: AppColors.primaryColor,
+                            color: theme.primaryColor,
                             fontWeight: FontWeight.w500,
                           ),
                           overflow: TextOverflow.ellipsis,
@@ -358,7 +360,7 @@ class _HRRegulationAprovalScreenState extends State<HRRegulationAprovalScreen> {
                         child: Container(
                           padding: EdgeInsets.all(4.w),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
+                            color: theme.primaryColor,
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           child: Icon(
@@ -397,7 +399,7 @@ class _HRRegulationAprovalScreenState extends State<HRRegulationAprovalScreen> {
                             Icon(
                               Icons.search_off,
                               size: 48.sp,
-                              color: Colors.grey,
+                              color: theme.textTheme.bodyLarge?.color,
                             ),
                             SizedBox(height: 16.h),
                             Text(
@@ -405,7 +407,10 @@ class _HRRegulationAprovalScreenState extends State<HRRegulationAprovalScreen> {
                                   ? "No results found for '$searchQuery'"
                                   : "No Data Found",
                               style: TextStyle(
-                                color: Colors.grey,
+                                color: theme
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.color, //AppColors.greyColor,,
                                 fontSize: 14.sp,
                               ),
                               textAlign: TextAlign.center,
@@ -428,7 +433,7 @@ class _HRRegulationAprovalScreenState extends State<HRRegulationAprovalScreen> {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         child: KAuthFilledBtn(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: theme.primaryColor,
           height: 25.h,
           width: double.infinity,
           text: "Download",
@@ -472,7 +477,7 @@ class _HRRegulationAprovalScreenState extends State<HRRegulationAprovalScreen> {
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text(". PDF generated successfully!"),
+                        content: Text("PDF generated successfully!"),
                       ),
                     );
 

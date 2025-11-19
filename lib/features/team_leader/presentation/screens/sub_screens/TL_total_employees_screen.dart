@@ -9,7 +9,6 @@ import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
@@ -114,6 +113,8 @@ class _TLTotalEmployeesScreenState extends State<TLTotalEmployeesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     // Providers
     final provider = context.watch<RoleBasedUsersProvider>();
     //final employees = provider.roleBasedUsers?.hr ?? [];
@@ -163,7 +164,7 @@ class _TLTotalEmployeesScreenState extends State<TLTotalEmployeesScreen> {
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",
@@ -359,7 +360,7 @@ class _TLTotalEmployeesScreenState extends State<TLTotalEmployeesScreen> {
                     width: 150.w,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5.r),
-                      border: Border.all(color: AppColors.primaryColor),
+                      border: Border.all(color: theme.primaryColor),
                     ),
                     child: Center(
                       child: TextButton.icon(
@@ -388,7 +389,7 @@ class _TLTotalEmployeesScreenState extends State<TLTotalEmployeesScreen> {
                     "Showing ${filteredData.length} of ${originalData.length} employees",
                 fontWeight: FontWeight.w500,
                 fontSize: 12.sp,
-                color: Colors.grey,
+                color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
               ),
 
               KVerticalSpacer(height: 20.h),
@@ -400,11 +401,17 @@ class _TLTotalEmployeesScreenState extends State<TLTotalEmployeesScreen> {
                     padding: EdgeInsets.symmetric(vertical: 40.h),
                     child: Column(
                       children: [
-                        Icon(Icons.search_off, size: 48.sp, color: Colors.grey),
+                        Icon(
+                          Icons.search_off,
+                          size: 48.sp,
+                          color: theme.textTheme.bodyLarge?.color,
+                        ), //AppColors.greyColor,),
                         SizedBox(height: 16.h),
-                        const Text(
+                        Text(
                           "No employees found matching your filters",
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(
+                            color: theme.textTheme.bodyLarge?.color,
+                          ), //AppColors.greyColor,),
                         ),
                       ],
                     ),

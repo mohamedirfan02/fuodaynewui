@@ -13,10 +13,12 @@ class OrganizationsServiceIndustries extends StatefulWidget {
   const OrganizationsServiceIndustries({super.key});
 
   @override
-  State<OrganizationsServiceIndustries> createState() => _OrganizationsServiceIndustriesState();
+  State<OrganizationsServiceIndustries> createState() =>
+      _OrganizationsServiceIndustriesState();
 }
 
-class _OrganizationsServiceIndustriesState extends State<OrganizationsServiceIndustries> {
+class _OrganizationsServiceIndustriesState
+    extends State<OrganizationsServiceIndustries> {
   @override
   @override
   void initState() {
@@ -28,14 +30,18 @@ class _OrganizationsServiceIndustriesState extends State<OrganizationsServiceInd
 
     if (webUserId != null) {
       Future.microtask(() {
-        context.read<ServicesAndIndustriesProvider>().getServicesAndIndustries(webUserId);
+        context.read<ServicesAndIndustriesProvider>().getServicesAndIndustries(
+          webUserId,
+        );
       });
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final provider = context.watch<ServicesAndIndustriesProvider>();
 
     if (provider.isLoading) {
@@ -58,31 +64,33 @@ class _OrganizationsServiceIndustriesState extends State<OrganizationsServiceInd
             fontWeight: FontWeight.w600,
             fontSize: 16.sp,
             textAlign: TextAlign.start,
-            color: AppColors.primaryColor,
+            color: theme.primaryColor,
             isUnderline: true,
-            underlineColor: AppColors.primaryColor,
+            underlineColor: theme.primaryColor,
           ),
           KVerticalSpacer(height: 14.h),
           KText(
             text: data?.servicesDescription ?? '',
             fontWeight: FontWeight.w500,
             fontSize: 12.sp,
-            color: AppColors.titleColor,
+            color: theme.textTheme.headlineLarge?.color, //AppColors.titleColor,
             textAlign: TextAlign.justify,
           ),
           KVerticalSpacer(height: 14.h),
 
           /// Services List
-          ...?data?.services.map((service) => Padding(
-            padding: EdgeInsets.only(bottom: 8.h),
-            child: OrganizationsAchievementsValueCard(
-              leadingIconData: Icons.check_circle,
-              achievementDescription: service.name,
-              leadingIconColor: AppColors.primaryColor,
-              isSubTitle: true,
-              subTitle: service.description,
+          ...?data?.services.map(
+            (service) => Padding(
+              padding: EdgeInsets.only(bottom: 8.h),
+              child: OrganizationsAchievementsValueCard(
+                leadingIconData: Icons.check_circle,
+                achievementDescription: service.name,
+                leadingIconColor: AppColors.primaryColor,
+                isSubTitle: true,
+                subTitle: service.description,
+              ),
             ),
-          )),
+          ),
 
           KVerticalSpacer(height: 20.h),
           KText(
@@ -90,31 +98,33 @@ class _OrganizationsServiceIndustriesState extends State<OrganizationsServiceInd
             fontWeight: FontWeight.w600,
             fontSize: 16.sp,
             textAlign: TextAlign.start,
-            color: AppColors.primaryColor,
+            color: theme.primaryColor,
             isUnderline: true,
-            underlineColor: AppColors.primaryColor,
+            underlineColor: theme.primaryColor,
           ),
           KVerticalSpacer(height: 14.h),
           KText(
             text: data?.industriesDescription ?? '',
             fontWeight: FontWeight.w500,
             fontSize: 12.sp,
-            color: AppColors.titleColor,
+            color: theme.textTheme.headlineLarge?.color, //AppColors.titleColor,
             textAlign: TextAlign.justify,
           ),
           KVerticalSpacer(height: 14.h),
 
           /// Industries List
-          ...?data?.industries.map((industry) => Padding(
-            padding: EdgeInsets.only(bottom: 8.h),
-            child: OrganizationsAchievementsValueCard(
-              leadingIconData: Icons.business,
-              achievementDescription: industry.name,
-              leadingIconColor: AppColors.primaryColor,
-              isSubTitle: true,
-              subTitle: industry.description,
+          ...?data?.industries.map(
+            (industry) => Padding(
+              padding: EdgeInsets.only(bottom: 8.h),
+              child: OrganizationsAchievementsValueCard(
+                leadingIconData: Icons.business,
+                achievementDescription: industry.name,
+                leadingIconColor: theme.primaryColor,
+                isSubTitle: true,
+                subTitle: industry.description,
+              ),
             ),
-          )),
+          ),
         ],
       ),
     );
