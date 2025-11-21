@@ -27,6 +27,9 @@ class TLAttendanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final isTablet = AppResponsive.isTablet(context);
     final isLandscape = AppResponsive.isLandscape(context);
     final cardWidth = isTablet
@@ -40,12 +43,17 @@ class TLAttendanceCard extends StatelessWidget {
           width: cardWidth, //0.4.sw,
           padding: EdgeInsets.symmetric(horizontal: 19.w, vertical: 19.h),
           decoration: BoxDecoration(
-            border: Border.all(width: 0.1.w, color: AppColors.greyColor),
+            border: Border.all(
+              width: 0.1.w,
+              color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+            ), //BORDER COLOR),
             borderRadius: BorderRadius.circular(8.r),
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: AppColors.cardGradientColor,
+              colors: isDark
+                  ? AppColors.cardGradientColorDark
+                  : AppColors.cardGradientColor, //Card Gradiant,
             ),
           ),
 
@@ -58,7 +66,7 @@ class TLAttendanceCard extends StatelessWidget {
                 text: attendanceCount,
                 fontWeight: FontWeight.w700,
                 fontSize: 16.sp,
-                color: AppColors.titleColor,
+                //color: AppColors.titleColor,
               ),
 
               KVerticalSpacer(height: 8.h),
@@ -69,7 +77,7 @@ class TLAttendanceCard extends StatelessWidget {
                   text: attendanceDescription,
                   fontWeight: FontWeight.w500,
                   fontSize: 10.sp,
-                  color: AppColors.titleColor,
+                  // color: AppColors.titleColor,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
@@ -84,13 +92,15 @@ class TLAttendanceCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 4.r,
-                    backgroundColor: AppColors.approvedColor,
+                    backgroundColor: isDark
+                        ? AppColors.approvedColorDark
+                        : AppColors.approvedColor,
                   ), // Percentage Text
                   KText(
                     text: attendancePercentage,
                     fontWeight: FontWeight.w500,
                     fontSize: 10.sp,
-                    color: AppColors.titleColor,
+                    //  color: AppColors.titleColor,
                   ),
                 ],
               ),
@@ -103,8 +113,9 @@ class TLAttendanceCard extends StatelessWidget {
           right: 20,
           child: CircleAvatar(
             radius: 14.r,
-            backgroundColor: AppColors.secondaryColor,
-            child: Icon(attendanceCardIcon, color: AppColors.primaryColor),
+            backgroundColor:
+                theme.secondaryHeaderColor, //AppColors.secondaryColor
+            child: Icon(attendanceCardIcon, color: theme.primaryColor),
           ),
         ),
       ],

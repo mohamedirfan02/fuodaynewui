@@ -22,6 +22,9 @@ class KTeamDirectReportTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Stack(
       children: [
         // Content
@@ -29,12 +32,17 @@ class KTeamDirectReportTile extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
           width: double.infinity,
           decoration: BoxDecoration(
-            border: Border.all(width: 1.w, color: AppColors.greyColor),
+            border: Border.all(
+              width: 1.w,
+              color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+            ), //AppColors.greyColor,),
             borderRadius: BorderRadius.circular(8.r),
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFFD1D7E8), Color(0xFFEFF1F7), Colors.white],
+              colors: isDark
+                  ? AppColors.cardGradientColorDark
+                  : AppColors.cardGradientColor,
             ),
           ),
           child: Column(
@@ -47,6 +55,7 @@ class KTeamDirectReportTile extends StatelessWidget {
                 text: personName,
                 fontWeight: FontWeight.w600,
                 fontSize: 14.sp,
+                color: theme.textTheme.headlineLarge?.color, //AppColors.,
               ),
 
               // Role
@@ -54,7 +63,7 @@ class KTeamDirectReportTile extends StatelessWidget {
                 text: TextSpan(
                   text: 'Role: ',
                   style: GoogleFonts.sora(
-                    color: AppColors.titleColor,
+                    color: theme.textTheme.headlineLarge?.color,
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
                   ),
@@ -62,7 +71,7 @@ class KTeamDirectReportTile extends StatelessWidget {
                     TextSpan(
                       text: personRole,
                       style: GoogleFonts.sora(
-                        color: AppColors.primaryColor,
+                        color: theme.primaryColor,
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w500,
                       ),
@@ -76,7 +85,7 @@ class KTeamDirectReportTile extends StatelessWidget {
                 text: TextSpan(
                   text: 'Contact: ',
                   style: GoogleFonts.sora(
-                    color: AppColors.titleColor,
+                    color: theme.textTheme.headlineLarge?.color,
                     fontWeight: FontWeight.w600,
                     fontSize: 12.sp,
                   ),
@@ -84,7 +93,7 @@ class KTeamDirectReportTile extends StatelessWidget {
                     TextSpan(
                       text: personContact,
                       style: GoogleFonts.sora(
-                        color: AppColors.primaryColor,
+                        color: theme.primaryColor,
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w500,
                       ),
@@ -107,7 +116,7 @@ class KTeamDirectReportTile extends StatelessWidget {
               text: avatarPersonFirstLetter,
               fontWeight: FontWeight.w600,
               fontSize: 14.sp,
-              color: AppColors.secondaryColor,
+              color: theme.secondaryHeaderColor, //AppColors.secondaryColor
             ),
           ),
         ),

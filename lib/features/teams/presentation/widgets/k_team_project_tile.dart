@@ -24,15 +24,20 @@ class KTeamProjectTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
       decoration: BoxDecoration(
         border: Border.all(width: 1.w, color: AppColors.greyColor),
         borderRadius: BorderRadius.circular(8.r),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFFD1D7E8), Color(0xFFEFF1F7), Colors.white],
+          colors: isDark
+              ? AppColors.cardGradientColor
+              : AppColors.cardGradientColorDark,
         ),
       ),
       child: Column(
@@ -41,13 +46,19 @@ class KTeamProjectTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // Project
-          KText(text: "Project", fontWeight: FontWeight.w600, fontSize: 10.sp),
+          KText(
+            text: "Project",
+            fontWeight: FontWeight.w600,
+            fontSize: 10.sp,
+            color: theme.textTheme.headlineLarge?.color,
+          ),
 
           // Project Name
           KText(
             text: projectName,
             fontWeight: FontWeight.w600,
             fontSize: 12.sp,
+            color: theme.textTheme.headlineLarge?.color,
           ),
 
           // Domain
@@ -55,7 +66,11 @@ class KTeamProjectTile extends StatelessWidget {
             text: "Domain: $projectDomain",
             fontWeight: FontWeight.w600,
             fontSize: 10.sp,
-            color: AppColors.subTitleColor,
+            color: theme
+                .inputDecorationTheme
+                .focusedBorder
+                ?.borderSide
+                .color, //subTitleColor
           ),
 
           // Team Members
@@ -63,16 +78,18 @@ class KTeamProjectTile extends StatelessWidget {
             text: "Team Members",
             fontWeight: FontWeight.w600,
             fontSize: 12.sp,
-            color: AppColors.titleColor,
+            color: theme.textTheme.headlineLarge?.color,
           ),
 
           // Project Starting Date
           Chip(
             label: Text(projectStartMonthDate),
-            backgroundColor: AppColors.chipColor,
+            backgroundColor: isDark
+                ? AppColors.chipColorDark
+                : AppColors.chipColor,
             labelStyle: GoogleFonts.sora(
               fontWeight: FontWeight.w600,
-              color: AppColors.primaryColor,
+              color: theme.primaryColor,
             ),
           ),
 
@@ -89,7 +106,11 @@ class KTeamProjectTile extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 fontSize: 12.sp,
                 color: projectStatus
-                    ? AppColors.approvedColor
+                    ? isDark
+                          ? AppColors.approvedColorDark
+                          : AppColors.approvedColor
+                    : isDark
+                    ? AppColors.pendingColorDark
                     : AppColors.pendingColor,
               ),
 
@@ -97,7 +118,11 @@ class KTeamProjectTile extends StatelessWidget {
               Icon(
                 projectStatus ? Icons.verified_user : Icons.pending,
                 color: projectStatus
-                    ? AppColors.approvedColor
+                    ? isDark
+                          ? AppColors.approvedColorDark
+                          : AppColors.approvedColor
+                    : isDark
+                    ? AppColors.pendingColorDark
                     : AppColors.pendingColor,
               ),
             ],
@@ -109,7 +134,11 @@ class KTeamProjectTile extends StatelessWidget {
             fontWeight: FontWeight.w500,
             textAlign: TextAlign.center,
             fontSize: 12.sp,
-            color: AppColors.subTitleColor,
+            color: theme
+                .inputDecorationTheme
+                .focusedBorder
+                ?.borderSide
+                .color, //subTitleColor
           ),
         ],
       ),

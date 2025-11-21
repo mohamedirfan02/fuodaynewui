@@ -74,7 +74,7 @@ class AppFileDownloaderProvider extends ChangeNotifier {
           _isDownloading = false;
           _progress = null;
           notifyListeners();
-          if (onError != null) onError(errorMessage ?? "Unknown error");
+          if (onError != null) onError(errorMessage);
         },
       );
     } catch (e) {

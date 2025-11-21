@@ -239,7 +239,6 @@ class AppTheme {
   );
 
   // ======================= DARK THEME ========================= //
-  // ======================= DARK THEME ========================= //
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     fontFamily: GoogleFonts.inter().fontFamily,

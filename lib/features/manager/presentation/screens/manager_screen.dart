@@ -9,7 +9,6 @@ import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
-import 'package:fuoday/features/attendance/presentation/widgets/attendance_card.dart';
 import 'package:fuoday/features/team_leader/presentation/widget/TL_attendance_card.dart';
 import 'package:go_router/go_router.dart';
 
@@ -52,6 +51,9 @@ class _ManagerScreenState extends State<ManagerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final isTablet = AppResponsive.isTablet(context);
     final isLandscape = AppResponsive.isLandscape(context);
 
@@ -171,11 +173,14 @@ class _ManagerScreenState extends State<ManagerScreen> {
         //key: _key,
         type: ExpandableFabType.up,
         overlayStyle: ExpandableFabOverlayStyle(
-          color: AppColors.greyColor.withOpacity(0.5),
+          color: theme.textTheme.bodyLarge?.color?.withOpacity(0.5),
         ),
 
         openButtonBuilder: DefaultFloatingActionButtonBuilder(
-          child: Icon(Icons.menu, color: AppColors.secondaryColor),
+          child: Icon(
+            Icons.menu,
+            color: theme.secondaryHeaderColor,
+          ), //AppColors.secondaryColor),
           fabSize: ExpandableFabSize.regular,
           backgroundColor: Theme.of(context).primaryColor,
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -299,8 +304,10 @@ class _ManagerScreenState extends State<ManagerScreen> {
                     attendanceCount: item['numberOfCount'].toString(),
                     attendanceCardIcon: item['icon'],
                     attendanceDescription: item['title'],
-                    attendanceIconColor: AppColors.primaryColor,
-                    attendancePercentageColor: AppColors.checkInColor,
+                    attendanceIconColor: theme.primaryColor,
+                    attendancePercentageColor: isDark
+                        ? AppColors.checkInColorDark
+                        : AppColors.checkInColor,
                   );
                 },
               ),

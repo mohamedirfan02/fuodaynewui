@@ -18,16 +18,24 @@ class TimeTrackerOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       width: 0.4.sw,
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
       decoration: BoxDecoration(
-        border: Border.all(width: 0.1.w, color: AppColors.greyColor),
+        border: Border.all(
+          width: 0.1.w,
+          color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+        ),
         borderRadius: BorderRadius.circular(8.r),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: AppColors.cardGradientColor,
+          colors: isDark
+              ? AppColors.cardGradientColorDark
+              : AppColors.cardGradientColor,
         ),
       ),
       child: Column(
@@ -43,8 +51,12 @@ class TimeTrackerOverviewCard extends StatelessWidget {
             width: 40.w,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.secondaryColor,
-              border: Border.all(color: AppColors.greyColor.withOpacity(0.1)),
+              color: theme.secondaryHeaderColor, //AppColors.secondaryColor
+              border: Border.all(
+                color:
+                    theme.textTheme.bodyLarge?.color?.withOpacity(0.1) ??
+                    AppColors.greyColor,
+              ),
             ),
             child: Center(child: Icon(iconData, color: AppColors.primaryColor)),
           ),
@@ -56,7 +68,7 @@ class TimeTrackerOverviewCard extends StatelessWidget {
             textAlign: TextAlign.center,
             text: timeTrackerOverviewCardTitle,
             fontWeight: FontWeight.w500,
-            color: AppColors.greyColor,
+            color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
             fontSize: 10.sp,
           ),
 
@@ -67,7 +79,7 @@ class TimeTrackerOverviewCard extends StatelessWidget {
             textAlign: TextAlign.center,
             text: timeTrackerOverviewCardWorkingHours,
             fontWeight: FontWeight.w600,
-            color: AppColors.titleColor,
+            // color: AppColors.titleColor,
             fontSize: 12.sp,
           ),
         ],

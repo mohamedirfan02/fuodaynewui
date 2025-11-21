@@ -15,6 +15,9 @@ class AttendanceHistoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.r),
@@ -23,21 +26,26 @@ class AttendanceHistoryTile extends StatelessWidget {
       elevation: 0,
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: AppColors.cardGradientColor),
+          gradient: LinearGradient(
+            colors: isDark
+                ? AppColors.cardGradientColorDark
+                : AppColors.cardGradientColor,
+          ),
           borderRadius: BorderRadius.circular(12),
         ),
         child: ListTile(
           title: Text(
             attendanceTitle,
             style: GoogleFonts.sora(
-              color: AppColors.primaryColor,
+              color: theme.primaryColor,
               fontWeight: FontWeight.w600,
             ),
           ),
           subtitle: Text(
             attendanceCount,
             style: GoogleFonts.sora(
-              color: AppColors.titleColor,
+              color:
+                  theme.textTheme.headlineLarge?.color, //AppColors.titleColor,
               fontWeight: FontWeight.w700,
             ),
           ),

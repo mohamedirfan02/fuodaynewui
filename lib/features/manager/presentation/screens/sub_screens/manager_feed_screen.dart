@@ -3,14 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_app_bar.dart';
 import 'package:fuoday/commons/widgets/k_data_table.dart';
 import 'package:fuoday/commons/widgets/k_download_options_bottom_sheet.dart';
-import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
@@ -112,6 +110,9 @@ class _ManagerFeedsScreenState extends State<ManagerFeedsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final totalAttendanceProvider = context.totalAttendanceDetailsProviderWatch;
 
     //    Dummy Data
@@ -199,7 +200,7 @@ class _ManagerFeedsScreenState extends State<ManagerFeedsScreen> {
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: displayData.isEmpty ? "No Data to Download" : "Download",
@@ -281,7 +282,10 @@ class _ManagerFeedsScreenState extends State<ManagerFeedsScreen> {
                                   Icon(
                                     Icons.work_outline,
                                     size: 48.sp,
-                                    color: Colors.grey,
+                                    color: theme
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.color, //AppColors.greyColor,,
                                   ),
                                   SizedBox(height: 16.h),
                                   Text(
@@ -290,7 +294,10 @@ class _ManagerFeedsScreenState extends State<ManagerFeedsScreen> {
                                         : 'No task data available',
                                     style: TextStyle(
                                       fontSize: 14.sp,
-                                      color: Colors.grey,
+                                      color: theme
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color, //AppColors.greyColor,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),

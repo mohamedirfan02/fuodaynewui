@@ -46,10 +46,17 @@ class _TeamTreeViewState extends State<_TeamTreeView> {
   }
 
   Widget _buildEmployeeCard(String name, String role, String? imageUrl) {
+    //App Theme Data
+    final theme = Theme.of(context);
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: AppColors.subTitleColor, width: 1.w),
+        side: BorderSide(
+          color:
+              theme.inputDecorationTheme.focusedBorder?.borderSide.color ??
+              AppColors.subTitleColor,
+          width: 1.w,
+        ),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Container(
@@ -68,7 +75,8 @@ class _TeamTreeViewState extends State<_TeamTreeView> {
               text: name,
               fontWeight: FontWeight.w600,
               fontSize: 10.sp,
-              color: AppColors.titleColor,
+              color:
+                  theme.textTheme.headlineLarge?.color, //AppColors.titleColor,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 3.h),
@@ -76,7 +84,7 @@ class _TeamTreeViewState extends State<_TeamTreeView> {
               text: role,
               fontWeight: FontWeight.w500,
               fontSize: 8.sp,
-              color: AppColors.greyColor,
+              color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
               textAlign: TextAlign.center,
             ),
           ],
@@ -99,7 +107,7 @@ class _TeamTreeViewState extends State<_TeamTreeView> {
 
     // Find the root manager (CEO - Krishnakanth ST with ID 31)
     final rootTeam = data.firstWhere(
-          (team) => team.managerId == 31,
+      (team) => team.managerId == 31,
       orElse: () => data.first, // fallback to first if 31 not found
     );
 
@@ -114,8 +122,9 @@ class _TeamTreeViewState extends State<_TeamTreeView> {
 
       // Check if this employee is also a manager
       final subTeam = data.firstWhere(
-            (team) => team.managerId == emp.id,
-        orElse: () => TeamTreeEntity(managerId: 0, managerName: '', employees: []),
+        (team) => team.managerId == emp.id,
+        orElse: () =>
+            TeamTreeEntity(managerId: 0, managerName: '', employees: []),
       );
 
       if (subTeam.managerId != 0 && subTeam.employees.isNotEmpty) {
@@ -125,7 +134,11 @@ class _TeamTreeViewState extends State<_TeamTreeView> {
     }
   }
 
-  void _addSubTeam(Node managerNode, TeamTreeEntity team, List<TeamTreeEntity> allData) {
+  void _addSubTeam(
+    Node managerNode,
+    TeamTreeEntity team,
+    List<TeamTreeEntity> allData,
+  ) {
     for (var emp in team.employees) {
       final empNode = Node.Id("emp_${emp.id}");
       graph.addNode(empNode);
@@ -133,8 +146,9 @@ class _TeamTreeViewState extends State<_TeamTreeView> {
 
       // Check if this employee is also a manager
       final subTeam = allData.firstWhere(
-            (t) => t.managerId == emp.id,
-        orElse: () => TeamTreeEntity(managerId: 0, managerName: '', employees: []),
+        (t) => t.managerId == emp.id,
+        orElse: () =>
+            TeamTreeEntity(managerId: 0, managerName: '', employees: []),
       );
 
       if (subTeam.managerId != 0 && subTeam.employees.isNotEmpty) {
@@ -146,6 +160,9 @@ class _TeamTreeViewState extends State<_TeamTreeView> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final provider = context.watch<TeamTreeProvider>();
 
     if (provider.isLoading) {
@@ -188,12 +205,19 @@ class _TeamTreeViewState extends State<_TeamTreeView> {
                 builder,
                 TreeEdgeRenderer(builder),
               ),
+              paint: (Paint()
+                ..color =
+                    theme.textTheme.headlineLarge?.color ?? AppColors.titleColor
+                ..strokeWidth = 2),
+
               builder: (Node node) {
                 final nodeId = node.key!.value as String;
 
                 if (nodeId.startsWith("manager_")) {
                   final managerId = int.parse(nodeId.split("_")[1]);
-                  final manager = data.firstWhere((m) => m.managerId == managerId);
+                  final manager = data.firstWhere(
+                    (m) => m.managerId == managerId,
+                  );
                   return _buildEmployeeCard(
                     manager.managerName,
                     "CEO/Founder",
@@ -206,8 +230,12 @@ class _TeamTreeViewState extends State<_TeamTreeView> {
                       .firstWhere((e) => e.id == empId);
 
                   // Check if this employee is also a manager
-                  final isAlsoManager = data.any((team) => team.managerId == empId);
-                  final role = isAlsoManager ? "${employee.designation} / Manager" : employee.designation;
+                  final isAlsoManager = data.any(
+                    (team) => team.managerId == empId,
+                  );
+                  final role = isAlsoManager
+                      ? "${employee.designation} / Manager"
+                      : employee.designation;
 
                   return _buildEmployeeCard(
                     employee.empName,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_linear_gradient_bg.dart';
-import 'package:fuoday/commons/widgets/k_svg.dart';
+import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 
 class AuthResetPasswordScreen extends StatefulWidget {
   final String email;
-  final String otp; // ✅ You need to pass otp from verify_otp screen
+  final String otp; //   You need to pass otp from verify_otp screen
 
   const AuthResetPasswordScreen({
     super.key,
@@ -36,6 +36,9 @@ class _AuthResetPasswordScreenState extends State<AuthResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final provider = Provider.of<ResetPasswordProvider>(context);
 
     // 🔹 Reset Password Button Function
@@ -51,23 +54,11 @@ class _AuthResetPasswordScreenState extends State<AuthResetPasswordScreen> {
         );
 
         if (provider.error != null && context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(provider.error!),
-            ),
-          );
+          KSnackBar.failure(context, provider.error!);
         } else if (provider.response != null && context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.green,
-              content: Text(
-                provider.response!.message ?? "Password reset successful!",
-              ),
-            ),
-          );
+          KSnackBar.success(context, provider.response!.message);
 
-          // ✅ Navigate to login screen
+          //   Navigate to login screen
           GoRouter.of(context).pushNamed(AppRouteConstants.login);
         }
       }
@@ -76,7 +67,9 @@ class _AuthResetPasswordScreenState extends State<AuthResetPasswordScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: KLinearGradientBg(
-        gradientColor: AppColors.employeeGradientColor,
+        gradientColor: isDark
+            ? AppColors.employeeGradientColorDark
+            : AppColors.employeeGradientColor, //Employee Card,
         child: SafeArea(
           child: Column(
             children: [
@@ -92,7 +85,7 @@ class _AuthResetPasswordScreenState extends State<AuthResetPasswordScreen> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppColors.authBgColor,
+                    color: theme.scaffoldBackgroundColor,
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(30.r),
                     ),
@@ -133,7 +126,8 @@ class _AuthResetPasswordScreenState extends State<AuthResetPasswordScreen> {
                                     ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      color: AppColors.secondaryColor,
+                                      color: theme
+                                          .secondaryHeaderColor, //AppColors.secondaryColor,
                                     ),
                                     child: Column(
                                       children: [

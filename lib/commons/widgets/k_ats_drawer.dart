@@ -4,7 +4,6 @@ import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/core/constants/router/app_route_constants.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
-import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
 import 'package:go_router/go_router.dart';
@@ -26,8 +25,6 @@ class KAtsDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final employeeDetails = HiveStorageService().employeeDetails ?? {};
-
     return Drawer(
       backgroundColor: AppColors.secondaryColor,
       child: Column(

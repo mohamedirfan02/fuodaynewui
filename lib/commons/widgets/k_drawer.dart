@@ -7,7 +7,6 @@ import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/core/constants/router/app_route_constants.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 class KDrawer extends StatelessWidget {
@@ -27,7 +26,7 @@ class KDrawer extends StatelessWidget {
     final theme = Theme.of(context);
     final primaryColor = theme.primaryColor;
     final employeeDetails = HiveStorageService().employeeDetails ?? {};
-    final access = (employeeDetails['access'] ?? '').toString();
+    // final access = (employeeDetails['access'] ?? '').toString();
     final rawAccess = (employeeDetails['access'] ?? '')
         .toString()
         .toLowerCase();
@@ -36,8 +35,8 @@ class KDrawer extends StatelessWidget {
 
     // Helper functions
     bool hasRole(String role) => accessList.contains(role);
-    bool hasAnyRole(List<String> roles) =>
-        roles.any((r) => accessList.contains(r));
+    // bool hasAnyRole(List<String> roles) =>
+    //     roles.any((r) => accessList.contains(r));
 
     return Drawer(
       backgroundColor: theme.secondaryHeaderColor, //AppColors.secondaryColor

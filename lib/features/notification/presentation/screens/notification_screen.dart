@@ -65,7 +65,8 @@ class _NotificationScreenState extends State<NotificationScreen>
     NotificationItem(
       id: '1',
       title: 'Project Milestone Achieved',
-      message: 'Congratulations! Your team has successfully completed Phase 2 of the Digital Transformation project.',
+      message:
+          'Congratulations! Your team has successfully completed Phase 2 of the Digital Transformation project.',
       type: NotificationType.achievement,
       timestamp: DateTime.now().subtract(const Duration(minutes: 15)),
       isRead: false,
@@ -75,7 +76,8 @@ class _NotificationScreenState extends State<NotificationScreen>
     NotificationItem(
       id: '2',
       title: 'Executive Meeting Invitation',
-      message: 'You\'ve been invited to the quarterly board meeting. Please review the attached agenda.',
+      message:
+          'You\'ve been invited to the quarterly board meeting. Please review the attached agenda.',
       type: NotificationType.meeting,
       timestamp: DateTime.now().subtract(const Duration(minutes: 45)),
       isRead: false,
@@ -85,7 +87,8 @@ class _NotificationScreenState extends State<NotificationScreen>
     NotificationItem(
       id: '3',
       title: 'Bonus Payment Processed',
-      message: 'Your performance bonus of \$2,500 has been credited to your account.',
+      message:
+          'Your performance bonus of \$2,500 has been credited to your account.',
       type: NotificationType.financial,
       timestamp: DateTime.now().subtract(const Duration(hours: 2)),
       isRead: false,
@@ -95,7 +98,8 @@ class _NotificationScreenState extends State<NotificationScreen>
     NotificationItem(
       id: '4',
       title: 'New Team Member',
-      message: 'Sarah Johnson has joined your development team. Welcome her aboard!',
+      message:
+          'Sarah Johnson has joined your development team. Welcome her aboard!',
       type: NotificationType.social,
       timestamp: DateTime.now().subtract(const Duration(hours: 3)),
       isRead: true,
@@ -105,7 +109,8 @@ class _NotificationScreenState extends State<NotificationScreen>
     NotificationItem(
       id: '5',
       title: 'Security Alert',
-      message: 'New login detected from iPhone. If this wasn\'t you, please secure your account.',
+      message:
+          'New login detected from iPhone. If this wasn\'t you, please secure your account.',
       type: NotificationType.security,
       timestamp: DateTime.now().subtract(const Duration(hours: 5)),
       isRead: true,
@@ -115,7 +120,8 @@ class _NotificationScreenState extends State<NotificationScreen>
     NotificationItem(
       id: '6',
       title: 'Training Reminder',
-      message: 'Your AI & Machine Learning certification course starts tomorrow at 10 AM.',
+      message:
+          'Your AI & Machine Learning certification course starts tomorrow at 10 AM.',
       type: NotificationType.education,
       timestamp: DateTime.now().subtract(const Duration(days: 1)),
       isRead: false,
@@ -125,7 +131,8 @@ class _NotificationScreenState extends State<NotificationScreen>
     NotificationItem(
       id: '7',
       title: 'Holiday Announcement',
-      message: 'Company holiday declared for Christmas week. Enjoy your extended weekend!',
+      message:
+          'Company holiday declared for Christmas week. Enjoy your extended weekend!',
       type: NotificationType.announcement,
       timestamp: DateTime.now().subtract(const Duration(days: 2)),
       isRead: true,
@@ -153,6 +160,9 @@ class _NotificationScreenState extends State<NotificationScreen>
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
 
@@ -162,7 +172,9 @@ class _NotificationScreenState extends State<NotificationScreen>
     final email = employeeDetails?['email'] ?? "No email";
 
     final unreadCount = notifications.where((n) => !n.isRead).length;
-    final highPriorityCount = notifications.where((n) => !n.isRead && n.priority == NotificationPriority.high).length;
+    final highPriorityCount = notifications
+        .where((n) => !n.isRead && n.priority == NotificationPriority.high)
+        .length;
 
     // MediaQuery responsive values
     final screenWidth = MediaQuery.of(context).size.width;
@@ -172,15 +184,21 @@ class _NotificationScreenState extends State<NotificationScreen>
     final isLargeScreen = screenWidth >= 1024;
 
     // Responsive dimensions
-    final headerHorizontalPadding = isSmallScreen ? 16.0 : (isMediumScreen ? 24.0 : 32.0);
-    final headerVerticalPadding = isSmallScreen ? 16.0 : (isMediumScreen ? 20.0 : 24.0);
-    final cardHorizontalPadding = isSmallScreen ? 8.0 : (isMediumScreen ? 16.0 : 24.0);
+    final headerHorizontalPadding = isSmallScreen
+        ? 16.0
+        : (isMediumScreen ? 24.0 : 32.0);
+    final headerVerticalPadding = isSmallScreen
+        ? 16.0
+        : (isMediumScreen ? 20.0 : 24.0);
+    final cardHorizontalPadding = isSmallScreen
+        ? 8.0
+        : (isMediumScreen ? 16.0 : 24.0);
     final titleFontSize = isSmallScreen ? 24.0 : (isMediumScreen ? 28.0 : 32.0);
     final maxContentWidth = isLargeScreen ? 800.0 : double.infinity;
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: KAppBarWithDrawer(
         userName: name,
         cachedNetworkImageUrl: profilePhoto,
@@ -219,7 +237,9 @@ class _NotificationScreenState extends State<NotificationScreen>
                               Colors.white.withOpacity(0.8),
                             ],
                           ),
-                          borderRadius: BorderRadius.circular(isSmallScreen ? 16 : 20),
+                          borderRadius: BorderRadius.circular(
+                            isSmallScreen ? 16 : 20,
+                          ),
                           border: Border.all(
                             color: Colors.white.withOpacity(0.2),
                             width: 1,
@@ -241,27 +261,39 @@ class _NotificationScreenState extends State<NotificationScreen>
                           children: [
                             isSmallScreen
                                 ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildHeaderContent(titleFontSize, unreadCount, highPriorityCount, isSmallScreen),
-                                if (unreadCount > 0) ...[
-                                  const SizedBox(height: 16),
-                                  _buildMarkAllReadButton(isSmallScreen),
-                                ],
-                              ],
-                            )
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _buildHeaderContent(
+                                        titleFontSize,
+                                        unreadCount,
+                                        highPriorityCount,
+                                        isSmallScreen,
+                                      ),
+                                      if (unreadCount > 0) ...[
+                                        const SizedBox(height: 16),
+                                        _buildMarkAllReadButton(isSmallScreen),
+                                      ],
+                                    ],
+                                  )
                                 : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: _buildHeaderContent(titleFontSize, unreadCount, highPriorityCount, isSmallScreen),
-                                ),
-                                if (unreadCount > 0) ...[
-                                  const SizedBox(width: 16),
-                                  _buildMarkAllReadButton(isSmallScreen),
-                                ],
-                              ],
-                            ),
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: _buildHeaderContent(
+                                          titleFontSize,
+                                          unreadCount,
+                                          highPriorityCount,
+                                          isSmallScreen,
+                                        ),
+                                      ),
+                                      if (unreadCount > 0) ...[
+                                        const SizedBox(width: 16),
+                                        _buildMarkAllReadButton(isSmallScreen),
+                                      ],
+                                    ],
+                                  ),
                           ],
                         ),
                       ),
@@ -282,40 +314,51 @@ class _NotificationScreenState extends State<NotificationScreen>
                         child: notifications.isEmpty
                             ? _buildEmptyState(isSmallScreen)
                             : ListView.builder(
-                          padding: EdgeInsets.only(
-                              left: cardHorizontalPadding,
-                              right: cardHorizontalPadding,
-                              bottom: headerHorizontalPadding
-                          ),
-                          itemCount: notifications.length,
-                          itemBuilder: (context, index) {
-                            return AnimatedBuilder(
-                              animation: _listAnimation,
-                              builder: (context, child) {
-                                final delay = index * 0.1;
-                                final animationValue = Curves.easeOutCubic.transform(
-                                  (_listAnimation.value - delay).clamp(0.0, 1.0) / (1.0 - delay),
-                                );
+                                padding: EdgeInsets.only(
+                                  left: cardHorizontalPadding,
+                                  right: cardHorizontalPadding,
+                                  bottom: headerHorizontalPadding,
+                                ),
+                                itemCount: notifications.length,
+                                itemBuilder: (context, index) {
+                                  return AnimatedBuilder(
+                                    animation: _listAnimation,
+                                    builder: (context, child) {
+                                      final delay = index * 0.1;
+                                      final animationValue = Curves.easeOutCubic
+                                          .transform(
+                                            (_listAnimation.value - delay)
+                                                    .clamp(0.0, 1.0) /
+                                                (1.0 - delay),
+                                          );
 
-                                return Transform.translate(
-                                  offset: Offset(0, 50 * (1 - animationValue)),
-                                  child: Opacity(
-                                    opacity: animationValue,
-                                    child: Container(
-                                      margin: EdgeInsets.only(bottom: isSmallScreen ? 8 : 12),
-                                      child: PremiumNotificationCard(
-                                        notification: notifications[index],
-                                        onTap: () => _markAsRead(notifications[index].id),
-                                        isSmallScreen: isSmallScreen,
-                                        isMediumScreen: isMediumScreen,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
+                                      return Transform.translate(
+                                        offset: Offset(
+                                          0,
+                                          50 * (1 - animationValue),
+                                        ),
+                                        child: Opacity(
+                                          opacity: animationValue,
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                              bottom: isSmallScreen ? 8 : 12,
+                                            ),
+                                            child: PremiumNotificationCard(
+                                              notification:
+                                                  notifications[index],
+                                              onTap: () => _markAsRead(
+                                                notifications[index].id,
+                                              ),
+                                              isSmallScreen: isSmallScreen,
+                                              isMediumScreen: isMediumScreen,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                       ),
                     );
                   },
@@ -328,7 +371,12 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
-  Widget _buildHeaderContent(double titleFontSize, int unreadCount, int highPriorityCount, bool isSmallScreen) {
+  Widget _buildHeaderContent(
+    double titleFontSize,
+    int unreadCount,
+    int highPriorityCount,
+    bool isSmallScreen,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -408,13 +456,17 @@ class _NotificationScreenState extends State<NotificationScreen>
           onTap: _markAllAsRead,
           child: Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: isSmallScreen ? 16 : 20,
-                vertical: isSmallScreen ? 10 : 12
+              horizontal: isSmallScreen ? 16 : 20,
+              vertical: isSmallScreen ? 10 : 12,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.done_all, color: Colors.white, size: isSmallScreen ? 16 : 18),
+                Icon(
+                  Icons.done_all,
+                  color: Colors.white,
+                  size: isSmallScreen ? 16 : 18,
+                ),
                 SizedBox(width: isSmallScreen ? 4 : 6),
                 Text(
                   isSmallScreen ? 'Mark Read' : 'Mark All Read',
@@ -432,11 +484,16 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
-  Widget _buildStatsChip(String text, Color color, IconData icon, [bool isSmallScreen = false]) {
+  Widget _buildStatsChip(
+    String text,
+    Color color,
+    IconData icon, [
+    bool isSmallScreen = false,
+  ]) {
     return Container(
       padding: EdgeInsets.symmetric(
-          horizontal: isSmallScreen ? 10 : 12,
-          vertical: isSmallScreen ? 4 : 6
+        horizontal: isSmallScreen ? 10 : 12,
+        vertical: isSmallScreen ? 4 : 6,
       ),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
@@ -503,7 +560,6 @@ class _NotificationScreenState extends State<NotificationScreen>
   }
 }
 
-
 class NotificationItem {
   final String id;
   final String title;
@@ -536,8 +592,4 @@ enum NotificationType {
   announcement,
 }
 
-enum NotificationPriority {
-  high,
-  medium,
-  low,
-}
+enum NotificationPriority { high, medium, low }

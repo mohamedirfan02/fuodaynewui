@@ -22,7 +22,6 @@ import 'package:fuoday/features/support/persentation/provider/get_ticket_details
 import 'package:fuoday/features/support/persentation/provider/ticket_provider.dart';
 import 'package:fuoday/features/support/persentation/screens/support_assigned.dart';
 import 'package:fuoday/features/support/persentation/screens/support_completed.dart';
-import 'package:fuoday/features/support/persentation/screens/support_inprogress.dart';
 import 'package:fuoday/features/support/persentation/screens/support_unassigned.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -103,6 +102,9 @@ class _SupportScreenState extends State<SupportScreen> {
       BuildContext context,
       TextEditingController controller,
     ) async {
+      //App Theme Data
+      final theme = Theme.of(context);
+      final isDark = theme.brightness == Brightness.dark;
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -114,9 +116,14 @@ class _SupportScreenState extends State<SupportScreen> {
           return Theme(
             data: Theme.of(context).copyWith(
               colorScheme: ColorScheme.light(
-                primary: AppColors.primaryColor,
-                onPrimary: AppColors.secondaryColor,
-                onSurface: AppColors.titleColor,
+                surface: theme.scaffoldBackgroundColor,
+
+                primary: theme.primaryColor,
+                onPrimary:
+                    theme.secondaryHeaderColor, //AppColors.secondaryColor
+                onSurface:
+                    theme.textTheme.headlineLarge?.color ??
+                    AppColors.titleColor, //AppColors.titleColor,
               ),
             ),
             child: child!,
@@ -128,6 +135,10 @@ class _SupportScreenState extends State<SupportScreen> {
         controller.text = DateFormat('yyyy-MM-dd').format(picked);
       }
     }
+
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return DefaultTabController(
       length: 3,
@@ -147,7 +158,7 @@ class _SupportScreenState extends State<SupportScreen> {
           margin: EdgeInsets.symmetric(vertical: 10.h),
           child: Center(
             child: KAuthFilledBtn(
-              backgroundColor: AppColors.primaryColor,
+              backgroundColor: theme.primaryColor,
               height: AppResponsive.responsiveBtnHeight(context),
               width: double.infinity,
               text: "Raise Ticket",
@@ -183,7 +194,10 @@ class _SupportScreenState extends State<SupportScreen> {
                                 width: 40.w,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.r),
-                                  color: AppColors.greyColor,
+                                  color: theme
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color, //AppColors.greyColor,
                                 ),
                               ),
                             ),
@@ -289,23 +303,27 @@ class _SupportScreenState extends State<SupportScreen> {
                               width: double.infinity,
                               text: "Cancel",
                               fontSize: 10.sp,
-                              textColor: AppColors.primaryColor,
+                              textColor: theme.primaryColor,
                               onPressed: () {
                                 GoRouter.of(context).pop();
                               },
-                              backgroundColor: AppColors.primaryColor
-                                  .withOpacity(0.4),
+                              backgroundColor: theme.primaryColor.withOpacity(
+                                0.4,
+                              ),
                             ),
 
                             SizedBox(height: 12.h),
 
                             // Submit
                             KAuthFilledBtn(
-                              height: 24.h,
+                              height: AppResponsive.responsiveBtnHeight(
+                                context,
+                              ),
                               fontSize: 10.sp,
                               width: double.infinity,
                               text: "Submit",
-                              textColor: AppColors.secondaryColor,
+                              textColor: theme
+                                  .secondaryHeaderColor, //AppColors.secondaryColor,
                               onPressed: () async {
                                 final hiveService = getIt<HiveStorageService>();
                                 final webUserId = int.tryParse(
@@ -386,7 +404,7 @@ class _SupportScreenState extends State<SupportScreen> {
                                 }
                               },
 
-                              backgroundColor: AppColors.primaryColor,
+                              backgroundColor: theme.primaryColor,
                             ),
                           ],
                         ),

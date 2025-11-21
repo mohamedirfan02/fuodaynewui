@@ -20,18 +20,26 @@ class ManagementCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Stack(
       children: [
         Container(
           width: 0.4.sw,
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           decoration: BoxDecoration(
-            border: Border.all(width: 0.1.w, color: AppColors.greyColor),
+            border: Border.all(
+              width: 0.1.w,
+              color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+            ), //BORDER COLOR),
             borderRadius: BorderRadius.circular(8.r),
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: AppColors.cardGradientColor,
+              colors: isDark
+                  ? AppColors.cardGradientColorDark
+                  : AppColors.cardGradientColor, //Card Gradiant,
             ),
           ),
 
@@ -44,7 +52,7 @@ class ManagementCard extends StatelessWidget {
                 text: totalEmployeesCount,
                 fontWeight: FontWeight.w700,
                 fontSize: 16.sp,
-                color: AppColors.titleColor,
+                //color: AppColors.titleColor,
               ),
 
               KVerticalSpacer(height: 8.h),
@@ -54,7 +62,7 @@ class ManagementCard extends StatelessWidget {
                 text: description,
                 fontWeight: FontWeight.w500,
                 fontSize: 10.sp,
-                color: AppColors.titleColor,
+                // color: AppColors.titleColor,
               ),
 
               KVerticalSpacer(height: 4.h),
@@ -65,7 +73,7 @@ class ManagementCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    backgroundColor: AppColors.primaryColor,
+                    backgroundColor: theme.primaryColor,
                     radius: 3.r,
                   ),
 
@@ -74,7 +82,8 @@ class ManagementCard extends StatelessWidget {
                     text: filterByManagement,
                     fontWeight: FontWeight.w500,
                     fontSize: 10.sp,
-                    color: AppColors.greyColor,
+                    color:
+                        theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
                   ),
                 ],
               ),
@@ -87,8 +96,9 @@ class ManagementCard extends StatelessWidget {
           right: 20,
           child: CircleAvatar(
             radius: 14.r,
-            backgroundColor: AppColors.secondaryColor,
-            child: Icon(managementCardIcon, color: AppColors.primaryColor),
+            backgroundColor: theme
+                .secondaryHeaderColor, //AppColors.secondaryColorAppColors.secondaryColor,
+            child: Icon(managementCardIcon, color: theme.primaryColor),
           ),
         ),
       ],

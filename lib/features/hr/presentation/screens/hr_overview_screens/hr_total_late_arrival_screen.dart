@@ -11,15 +11,11 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/service/pdf_generator_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
-import 'package:fuoday/features/attendance/presentation/providers/total_early_arrivals_details_provider.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:provider/provider.dart';
 
 class HRLateArrivalScreen extends StatefulWidget {
   const HRLateArrivalScreen({super.key});
@@ -65,6 +61,8 @@ class _HRLateArrivalScreenState extends State<HRLateArrivalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     //   Watch provider for API data
     final lateArrivalProvider = context.allRoleLateArrivalsReportProviderWatch;
     final employees =
@@ -131,7 +129,7 @@ class _HRLateArrivalScreenState extends State<HRLateArrivalScreen> {
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",

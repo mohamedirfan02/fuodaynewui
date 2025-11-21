@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,18 +20,20 @@ class KAlertDialogBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       title: KText(
         text: title,
         fontWeight: FontWeight.w600,
         fontSize: 14.sp,
-        color: AppColors.primaryColor,
+        color: theme.primaryColor,
       ),
       content: KText(
         text: subtitle,
         fontWeight: FontWeight.w500,
-        color: AppColors.greyColor,
+        color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,,
         fontSize: 11.sp,
       ),
       actions: [
@@ -50,7 +51,7 @@ class KAlertDialogBox extends StatelessWidget {
                 style: GoogleFonts.sora(
                   fontWeight: FontWeight.w500,
                   fontSize: 12.sp,
-                  color: AppColors.primaryColor,
+                  color: theme.primaryColor,
                 ),
               ),
             ),
@@ -63,7 +64,7 @@ class KAlertDialogBox extends StatelessWidget {
                 style: GoogleFonts.sora(
                   fontWeight: FontWeight.w500,
                   fontSize: 12.sp,
-                  color: AppColors.primaryColor,
+                  color: theme.primaryColor,
                 ),
               ),
             ),

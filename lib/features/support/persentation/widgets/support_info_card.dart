@@ -27,16 +27,24 @@ class SupportInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
       decoration: BoxDecoration(
-        border: Border.all(width: 0.1.w, color: AppColors.greyColor),
+        border: Border.all(
+          width: 0.1.w,
+          color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+        ), //BORDER COLOR),
         borderRadius: BorderRadius.circular(8.r),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: AppColors.cardGradientColor,
+          colors: isDark
+              ? AppColors.cardGradientColorDark
+              : AppColors.cardGradientColor, //Card Gradiant
         ),
       ),
       child: Column(
@@ -52,7 +60,9 @@ class SupportInfoCard extends StatelessWidget {
                 text: priority,
                 fontWeight: FontWeight.w600,
                 fontSize: 12.sp,
-                color: AppColors.checkOutColor,
+                color: isDark
+                    ? AppColors.checkOutColorDark
+                    : AppColors.checkOutColor,
               ),
 
               // Issue
@@ -60,7 +70,7 @@ class SupportInfoCard extends StatelessWidget {
                 text: issue,
                 fontWeight: FontWeight.w600,
                 fontSize: 12.sp,
-                color: AppColors.titleColor,
+                // color: AppColors.titleColor,
               ),
             ],
           ),
@@ -73,14 +83,15 @@ class SupportInfoCard extends StatelessWidget {
               // Avatar
               CircleAvatar(
                 radius: 20.r,
-                backgroundColor: AppColors.primaryColor,
+                backgroundColor: theme.primaryColor,
                 child: Center(
                   child: KText(
                     textAlign: TextAlign.center,
                     text: avatarText,
                     fontWeight: FontWeight.w600,
                     fontSize: 14.sp,
-                    color: AppColors.secondaryColor,
+                    color:
+                        theme.secondaryHeaderColor, //AppColors.secondaryColor
                   ),
                 ),
               ),
@@ -95,7 +106,7 @@ class SupportInfoCard extends StatelessWidget {
                     textAlign: TextAlign.start,
                     fontWeight: FontWeight.w600,
                     fontSize: 12.sp,
-                    color: AppColors.titleColor,
+                    //color: AppColors.titleColor,
                   ),
 
                   // Date
@@ -104,7 +115,7 @@ class SupportInfoCard extends StatelessWidget {
                     textAlign: TextAlign.start,
                     fontWeight: FontWeight.w500,
                     fontSize: 10.sp,
-                    color: AppColors.titleColor,
+                    //color: AppColors.titleColor,
                   ),
                 ],
               ),
@@ -119,14 +130,17 @@ class SupportInfoCard extends StatelessWidget {
             text: TextSpan(
               text: "Ticket: ",
               style: GoogleFonts.sora(
-                color: AppColors.primaryColor,
+                color: theme.primaryColor,
                 fontWeight: FontWeight.w500,
               ),
               children: [
                 TextSpan(
                   text: issue,
                   style: GoogleFonts.sora(
-                    color: AppColors.titleColor,
+                    color: theme
+                        .textTheme
+                        .headlineLarge
+                        ?.color, //AppColors.titleColor,,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -143,7 +157,13 @@ class SupportInfoCard extends StatelessWidget {
               // Username
               Row(
                 children: [
-                  Icon(Icons.add, color: AppColors.checkInColor, size: 14.w),
+                  Icon(
+                    Icons.add,
+                    color: isDark
+                        ? AppColors.checkInColorDark
+                        : AppColors.checkInColor,
+                    size: 14.w,
+                  ),
 
                   // Assign
                   KText(
@@ -151,7 +171,9 @@ class SupportInfoCard extends StatelessWidget {
                     textAlign: TextAlign.start,
                     fontWeight: FontWeight.w600,
                     fontSize: 12.sp,
-                    color: AppColors.checkInColor,
+                    color: isDark
+                        ? AppColors.checkInColorDark
+                        : AppColors.checkInColor,
                   ),
                 ],
               ),
@@ -162,7 +184,7 @@ class SupportInfoCard extends StatelessWidget {
                 textAlign: TextAlign.start,
                 fontWeight: FontWeight.w600,
                 fontSize: 12.sp,
-                color: AppColors.greyColor,
+                color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
               ),
             ],
           ),

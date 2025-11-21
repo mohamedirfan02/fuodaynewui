@@ -149,6 +149,9 @@ class _PerformanceAuditFormState extends State<PerformanceAuditForm> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       physics: const BouncingScrollPhysics(),
@@ -302,8 +305,10 @@ class _PerformanceAuditFormState extends State<PerformanceAuditForm> {
             allowHalfRating: true,
             itemCount: 5,
             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-            itemBuilder: (context, _) =>
-                const Icon(Icons.star, color: Colors.amber),
+            itemBuilder: (context, _) => Icon(
+              Icons.star,
+              color: isDark ? Colors.amber.shade200 : Colors.amber,
+            ),
             onRatingUpdate: (rating) {
               context.ratingProviderRead.setRating(rating);
             },
@@ -619,7 +624,7 @@ class _PerformanceAuditFormState extends State<PerformanceAuditForm> {
 
           // Submit
           KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             fontSize: 10.sp,
             fontWeight: FontWeight.w600,
             height: AppResponsive.responsiveBtnHeight(context),

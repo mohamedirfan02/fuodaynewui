@@ -53,6 +53,9 @@ class _ManagerTotalLeaveRequestScreenState
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final provider = context.allLeaveRequestProviderWatch;
 
     final columns = ['S.No', 'Name', 'Type', 'From', 'To', 'Reason', 'Status'];
@@ -95,7 +98,7 @@ class _ManagerTotalLeaveRequestScreenState
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         child: KAuthFilledBtn(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: theme.primaryColor,
           height: AppResponsive.responsiveBtnHeight(context),
           width: double.infinity,
           text: "Download",
@@ -258,7 +261,9 @@ class _ManagerTotalLeaveRequestScreenState
                         children: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
+                              backgroundColor: isDark
+                                  ? AppColors.checkInColorDark
+                                  : AppColors.checkOutColor,
                               padding: EdgeInsets.symmetric(
                                 horizontal: 6.w,
                                 vertical: 3.h,
@@ -279,7 +284,8 @@ class _ManagerTotalLeaveRequestScreenState
                               "Reject",
                               style: TextStyle(
                                 fontSize: 10.sp,
-                                color: Colors.white,
+                                color: theme
+                                    .secondaryHeaderColor, //AppColors.secondaryColor
                               ),
                             ),
                           ),
@@ -307,7 +313,8 @@ class _ManagerTotalLeaveRequestScreenState
                               "Approve",
                               style: TextStyle(
                                 fontSize: 10.sp,
-                                color: Colors.white,
+                                color: theme
+                                    .secondaryHeaderColor, //AppColors.secondaryColor
                               ),
                             ),
                           ),
@@ -316,8 +323,12 @@ class _ManagerTotalLeaveRequestScreenState
                     } else {
                       //   Once updated → show color text only
                       final color = currentStatus == 'approved'
-                          ? Colors.green
-                          : Colors.red;
+                          ? isDark
+                                ? AppColors.checkInColorDark
+                                : AppColors.checkInColor
+                          : isDark
+                          ? AppColors.checkOutColorDark
+                          : AppColors.checkOutColor;
                       statusWidget = Text(
                         currentStatus.capitalize(),
                         style: TextStyle(

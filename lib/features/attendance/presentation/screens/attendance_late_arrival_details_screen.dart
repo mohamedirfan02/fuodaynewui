@@ -244,7 +244,8 @@ class _AttendanceLateArrivalDetailsScreenState
     // Apply filters and re-index
     final filteredData = getFilteredData(allData);
     final displayData = reindexData(filteredData);
-
+    //App Theme Data
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: KAppBar(
         title: "Late Arrival Details",
@@ -259,7 +260,7 @@ class _AttendanceLateArrivalDetailsScreenState
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: displayData.isEmpty ? "No Data to Download" : "Download",
@@ -357,7 +358,7 @@ class _AttendanceLateArrivalDetailsScreenState
                           vertical: 4.h,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
+                          color: theme.primaryColor,
                           borderRadius: BorderRadius.circular(4.r),
                         ),
                         child: Row(
@@ -426,7 +427,7 @@ class _AttendanceLateArrivalDetailsScreenState
                     vertical: 8.h,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.1),
+                    color: theme.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Column(
@@ -437,14 +438,14 @@ class _AttendanceLateArrivalDetailsScreenState
                           Icon(
                             Icons.filter_alt,
                             size: 16.sp,
-                            color: AppColors.primaryColor,
+                            color: theme.primaryColor,
                           ),
                           SizedBox(width: 8.w),
                           Text(
                             'Active Filters (${displayData.length} of ${allData.length} records):',
                             style: TextStyle(
                               fontSize: 12.sp,
-                              color: AppColors.primaryColor,
+                              color: theme.primaryColor,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -456,7 +457,7 @@ class _AttendanceLateArrivalDetailsScreenState
                           '• Search: "$searchQuery"',
                           style: TextStyle(
                             fontSize: 11.sp,
-                            color: AppColors.primaryColor.withOpacity(0.8),
+                            color: theme.primaryColor.withOpacity(0.8),
                           ),
                         ),
                       ],
@@ -466,7 +467,7 @@ class _AttendanceLateArrivalDetailsScreenState
                           '• Date Range: ${startDate != null ? "${startDate!.day}/${startDate!.month}/${startDate!.year}" : "Any"} to ${endDate != null ? "${endDate!.day}/${endDate!.month}/${endDate!.year}" : "Any"}',
                           style: TextStyle(
                             fontSize: 11.sp,
-                            color: AppColors.primaryColor.withOpacity(0.8),
+                            color: theme.primaryColor.withOpacity(0.8),
                           ),
                         ),
                       ],
@@ -499,7 +500,7 @@ class _AttendanceLateArrivalDetailsScreenState
                         child: Text(
                           'Clear filters to show all records',
                           style: TextStyle(
-                            color: AppColors.primaryColor,
+                            color: theme.primaryColor,
                             fontSize: 12.sp,
                           ),
                         ),
@@ -533,6 +534,8 @@ class _AttendanceLateArrivalDetailsScreenState
     TextEditingController controller,
     bool isStartDate,
   ) async {
+    //App Theme Data
+    final theme = Theme.of(context);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -542,9 +545,15 @@ class _AttendanceLateArrivalDetailsScreenState
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: AppColors.primaryColor,
-              onPrimary: AppColors.secondaryColor,
-              onSurface: AppColors.titleColor,
+              surface: theme.scaffoldBackgroundColor, // DatePicker background
+              surfaceBright: theme.scaffoldBackgroundColor,
+              surfaceContainerHighest: theme.scaffoldBackgroundColor,
+              primary: theme.primaryColor,
+              onPrimary: theme.secondaryHeaderColor, //AppColors.secondaryColor,
+              onSurface:
+                  theme.textTheme.headlineLarge?.color ??
+                  AppColors
+                      .titleColor, //AppColors.titleColor,theme.textTheme.headlineLarge?.color,//AppColors.titleColor,
             ),
           ),
           child: child!,

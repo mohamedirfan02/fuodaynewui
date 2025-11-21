@@ -49,106 +49,107 @@ class _TimeTrackerScreenState extends State<TimeTrackerScreen> {
     } else {
       return "Good Night";
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
 
     // Safe extraction of employee details
     final name = employeeDetails?['name'] ?? "No Name";
 
-    return Consumer<TimeTrackerProvider>(builder: (context, provider, _) {
-      final data = provider.entity;
+    return Consumer<TimeTrackerProvider>(
+      builder: (context, provider, _) {
+        final data = provider.entity;
 
-      if (data == null || provider.error != null) {
-        return Scaffold(
-          appBar: KAppBar(
-            title: "Time Tracker",
-            centerTitle: true,
-            leadingIcon: Icons.arrow_back,
-            onLeadingIconPress: () => GoRouter.of(context).pop(),
-          ),
-          body: const Center(child: Text("No data available")),
-        );
-      }
+        if (data == null || provider.error != null) {
+          return Scaffold(
+            appBar: KAppBar(
+              title: "Time Tracker",
+              centerTitle: true,
+              leadingIcon: Icons.arrow_back,
+              onLeadingIconPress: () => GoRouter.of(context).pop(),
+            ),
+            body: const Center(child: Text("No data available")),
+          );
+        }
 
-          //final data = provider.entity!;
+        //final data = provider.entity!;
 
-          return DefaultTabController(
-            length: 2,
-            child: Scaffold(
-              appBar: KAppBar(
-                title: "Time Tracker",
-                centerTitle: true,
-                leadingIcon: Icons.arrow_back,
-                onLeadingIconPress: () {
-                  GoRouter.of(context).pop();
-                },
-              ),
-              body: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        KText(
-                          text: getGreeting(),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14.sp,
-                        ),
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: KAppBar(
+              title: "Time Tracker",
+              centerTitle: true,
+              leadingIcon: Icons.arrow_back,
+              onLeadingIconPress: () {
+                GoRouter.of(context).pop();
+              },
+            ),
+            body: Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      KText(
+                        text: getGreeting(),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.sp,
+                      ),
 
-
-                        Row(
-                          spacing: 4.w,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Time
-                            KText(
-                              text: name,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12.sp,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    KVerticalSpacer(height: 20.h),
-
-                    // Tab Bar
-                    KTabBar(
-                      tabs: [
-                        Tab(text: "Overview"),
-                        Tab(text: "Project Management"),
-                      ],
-                    ),
-
-                    KVerticalSpacer(height: 20.h),
-
-                    Expanded(
-                      child: TabBarView(
+                      Row(
+                        spacing: 4.w,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // OverView
-                          TimeTrackerOverview(data: data.attendances),
-
-                          //  Project Management
-                          TimeTrackerProjectManagement(data: data.projects),
+                          // Time
+                          KText(
+                            text: name,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12.sp,
+                          ),
                         ],
                       ),
+                    ],
+                  ),
+
+                  KVerticalSpacer(height: 20.h),
+
+                  // Tab Bar
+                  KTabBar(
+                    tabs: [
+                      Tab(text: "Overview"),
+                      Tab(text: "Project Management"),
+                    ],
+                  ),
+
+                  KVerticalSpacer(height: 20.h),
+
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        // OverView
+                        TimeTrackerOverview(data: data.attendances),
+
+                        //  Project Management
+                        TimeTrackerProjectManagement(data: data.projects),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          );
-        }); }
+          ),
+        );
+      },
+    );
+  }
 }

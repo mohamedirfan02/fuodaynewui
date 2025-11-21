@@ -26,6 +26,9 @@ class AttendanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final size = MediaQuery.of(context).size;
     final isTablet = size.width > 600;
     final isLandscape = size.width > size.height;
@@ -42,12 +45,17 @@ class AttendanceCard extends StatelessWidget {
           width: cardWidth,
           padding: EdgeInsets.symmetric(horizontal: 19.w, vertical: 19.h),
           decoration: BoxDecoration(
-            border: Border.all(width: 0.1.w, color: AppColors.greyColor),
+            border: Border.all(
+              width: 0.1.w,
+              color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+            ),
             borderRadius: BorderRadius.circular(8.r),
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: AppColors.cardGradientColor,
+              colors: isDark
+                  ? AppColors.cardGradientColorDark
+                  : AppColors.cardGradientColor,
             ),
           ),
 
@@ -60,7 +68,10 @@ class AttendanceCard extends StatelessWidget {
                 text: attendanceCount,
                 fontWeight: FontWeight.w700,
                 fontSize: 16.sp,
-                color: AppColors.titleColor,
+                color: theme
+                    .textTheme
+                    .headlineLarge
+                    ?.color, //AppColors.titleColor,
               ),
 
               KVerticalSpacer(height: 8.h),
@@ -71,7 +82,7 @@ class AttendanceCard extends StatelessWidget {
                   text: attendanceDescription,
                   fontWeight: FontWeight.w500,
                   fontSize: 10.sp,
-                  color: AppColors.titleColor,
+                  color: theme.textTheme.headlineLarge?.color,
                 ),
               ),
 
@@ -106,8 +117,9 @@ class AttendanceCard extends StatelessWidget {
           right: 20, //isTablet ? (isLandscape ? 20 : 20) :
           child: CircleAvatar(
             radius: 14.r,
-            backgroundColor: AppColors.secondaryColor,
-            child: Icon(attendanceCardIcon, color: AppColors.primaryColor),
+            backgroundColor:
+                theme.secondaryHeaderColor, //AppColors.secondaryColor,
+            child: Icon(attendanceCardIcon, color: theme.primaryColor),
           ),
         ),
       ],

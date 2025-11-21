@@ -18,7 +18,6 @@ import 'package:fuoday/features/attendance/presentation/providers/total_attendan
 import 'package:fuoday/features/attendance/presentation/providers/total_early_arrivals_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_late_arrivals_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_punctual_arrivals_details_provider.dart';
-import 'package:fuoday/features/auth/domain/entities/employee_auth_entities.dart';
 import 'package:fuoday/features/auth/presentation/providers/employee_auth_login_provider.dart';
 import 'package:fuoday/features/auth/presentation/providers/employee_auth_logout_provider.dart';
 import 'package:fuoday/features/auth/presentation/providers/forgot_password_provider.dart';
@@ -63,7 +62,6 @@ import 'package:fuoday/features/teams/presentation/providers/team_reportees_prov
 import 'package:fuoday/features/time_tracker/domain/usecase/get_time_and_project_tracker_UseCase.dart';
 import 'package:fuoday/features/time_tracker/presentation/provider/time_tracker_provider.dart';
 import 'package:fuoday/features/time_tracker/presentation/screens/time_tracker_screen.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -346,8 +344,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => getIt<CandidateActionProvider>(),
         ),
-
-
       ],
       child: LayoutBuilder(
         builder: (context, constraints) {

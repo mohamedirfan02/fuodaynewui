@@ -10,8 +10,6 @@ import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/service/pdf_generator_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
@@ -54,6 +52,8 @@ class _HRPermissionsScreenState extends State<HRPermissionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     final permissions =
         context.watch<HROverviewProvider>().hrOverview?.permissions ?? [];
 
@@ -114,7 +114,7 @@ class _HRPermissionsScreenState extends State<HRPermissionsScreen> {
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",

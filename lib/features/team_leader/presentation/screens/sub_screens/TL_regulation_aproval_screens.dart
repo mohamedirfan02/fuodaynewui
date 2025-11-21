@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_app_bar.dart';
-import 'package:fuoday/commons/widgets/k_data_table.dart';
 import 'package:fuoday/commons/widgets/k_drop_down_text_form_field.dart';
 import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
@@ -10,7 +9,6 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
@@ -71,6 +69,8 @@ class _TLRegulationAprovalScreenState extends State<TLRegulationAprovalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     final providerWatch = context.allRegulationsProviderWatch;
 
     final filteredList = providerWatch.getFilteredData(
@@ -286,7 +286,7 @@ class _TLRegulationAprovalScreenState extends State<TLRegulationAprovalScreen> {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         child: KAuthFilledBtn(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: theme.primaryColor,
           height: AppResponsive.responsiveBtnHeight(context),
           width: double.infinity,
           text: "Download Report",

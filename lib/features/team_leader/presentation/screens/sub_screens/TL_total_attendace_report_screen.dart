@@ -4,14 +4,11 @@ import 'package:fuoday/commons/widgets/k_app_bar.dart';
 import 'package:fuoday/commons/widgets/k_data_table.dart';
 import 'package:fuoday/commons/widgets/k_download_options_bottom_sheet.dart';
 import 'package:fuoday/commons/widgets/k_pdf_generater_reusable_widget.dart';
-import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/service/pdf_generator_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
@@ -174,6 +171,8 @@ class _TLTotalAttendanceRepotScreenState
       'Checkout',
       'Status',
     ];
+    //App Theme Data
+    final theme = Theme.of(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: true, //    Handle keyboard
@@ -252,7 +251,7 @@ class _TLTotalAttendanceRepotScreenState
                           vertical: 8.h,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryColor.withOpacity(0.1),
+                          color: theme.primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         child: Row(
@@ -260,14 +259,14 @@ class _TLTotalAttendanceRepotScreenState
                             Icon(
                               Icons.filter_alt,
                               size: 16.sp,
-                              color: AppColors.primaryColor,
+                              color: theme.primaryColor,
                             ),
                             SizedBox(width: 8.w),
                             Text(
                               'Showing: ${selectedMonth?.toString().padLeft(2, '0')}/$selectedYear (${displayData.length} records)',
                               style: TextStyle(
                                 fontSize: 12.sp,
-                                color: AppColors.primaryColor,
+                                color: theme.primaryColor,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -283,13 +282,14 @@ class _TLTotalAttendanceRepotScreenState
                               child: Container(
                                 padding: EdgeInsets.all(4.w),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
+                                  color: theme.primaryColor,
                                   borderRadius: BorderRadius.circular(4.r),
                                 ),
                                 child: Icon(
                                   Icons.clear,
                                   size: 14.sp,
-                                  color: Colors.white,
+                                  color: theme
+                                      .secondaryHeaderColor, //AppColors.secondaryColor
                                 ),
                               ),
                             ),
@@ -309,7 +309,10 @@ class _TLTotalAttendanceRepotScreenState
                                         ? Icons.search_off
                                         : Icons.calendar_today_outlined,
                                     size: 48.sp,
-                                    color: Colors.grey,
+                                    color: theme
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.color, //AppColors.greyColor,
                                   ),
                                   SizedBox(height: 16.h),
                                   Text(
@@ -321,7 +324,10 @@ class _TLTotalAttendanceRepotScreenState
                                         : 'No attendance data available',
                                     style: TextStyle(
                                       fontSize: 14.sp,
-                                      color: Colors.grey,
+                                      color: theme
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color, //AppColors.greyColor,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
@@ -344,7 +350,7 @@ class _TLTotalAttendanceRepotScreenState
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: displayData.isEmpty ? "No Data to Download" : "Download",

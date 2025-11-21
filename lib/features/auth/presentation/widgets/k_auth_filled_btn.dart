@@ -10,7 +10,7 @@ class KAuthFilledBtn extends StatelessWidget {
   final double height;
   final double width;
   final Color backgroundColor;
-  final Color textColor;
+  final Color? textColor;
   final double fontSize;
   final FontWeight fontWeight;
   final BorderRadiusGeometry borderRadius;
@@ -25,7 +25,7 @@ class KAuthFilledBtn extends StatelessWidget {
     this.height = 48,
     this.width = double.infinity,
     this.backgroundColor = Colors.blue,
-    this.textColor = Colors.white,
+    this.textColor,
     this.fontSize = 14,
     this.fontWeight = FontWeight.w600,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
@@ -35,6 +35,9 @@ class KAuthFilledBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return SizedBox(
       height: height.h,
       width: width.w,
@@ -56,7 +59,9 @@ class KAuthFilledBtn extends StatelessWidget {
                 width: 18.h,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(textColor),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    textColor ?? Colors.white,
+                  ),
                 ),
               )
             : Row(
@@ -70,7 +75,10 @@ class KAuthFilledBtn extends StatelessWidget {
                   Text(
                     text,
                     style: GoogleFonts.sora(
-                      color: textColor,
+                      color:
+                          textColor ??
+                          theme
+                              .secondaryHeaderColor, //AppColors.secondaryColor, //AppColors.titleColor,,
                       fontSize: fontSize.sp,
                       fontWeight: fontWeight,
                     ),

@@ -43,6 +43,8 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
 
   @override
   Widget build(BuildContext context) {
+    final dateTimeProvider = context.dateTimeProviderWatch;
+
     // Providers
     final provider = context.performanceSummaryProviderWatch;
     // Columns
@@ -140,7 +142,7 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           KText(
-            text: "Good Afternoon, Mohammed Irfan",
+            text: "${dateTimeProvider.greeting}, $name",
             fontWeight: FontWeight.w600,
             fontSize: 14.sp,
           ),

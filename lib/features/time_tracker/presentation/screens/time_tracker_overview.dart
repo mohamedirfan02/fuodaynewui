@@ -16,19 +16,15 @@ class TimeTrackerOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final columns = [
-      'S.No',
-      'Date',
-      'Log on',
-      'Log off',
-      'Worked hours',
-    ];
+    final columns = ['S.No', 'Date', 'Log on', 'Log off', 'Worked hours'];
 
     final rowData = data.asMap().entries.map((entry) {
       final i = entry.key;
       final attendance = entry.value;
       final dateTime = DateTime.tryParse(attendance.date);
-      final dayName = dateTime != null ? DateFormat('EEEE').format(dateTime) : '-';
+      final dayName = dateTime != null
+          ? DateFormat('EEEE').format(dateTime)
+          : '-';
       return {
         'S.No': '${i + 1}',
         'Date': attendance.date,
@@ -77,7 +73,7 @@ class TimeTrackerOverview extends StatelessWidget {
             text: "Time Management",
             fontWeight: FontWeight.w600,
             fontSize: 13.sp,
-            color: AppColors.titleColor,
+            //color: AppColors.titleColor,
           ),
           KVerticalSpacer(height: 10.h),
           SizedBox(

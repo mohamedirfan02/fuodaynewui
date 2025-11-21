@@ -129,6 +129,8 @@ class _AttendanceAbsentDaysDetailsScreenState
       BuildContext context,
       TextEditingController controller,
     ) async {
+      //App Theme Data
+      final theme = Theme.of(context);
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -140,9 +142,15 @@ class _AttendanceAbsentDaysDetailsScreenState
           return Theme(
             data: Theme.of(context).copyWith(
               colorScheme: ColorScheme.light(
-                primary: AppColors.primaryColor,
-                onPrimary: AppColors.secondaryColor,
-                onSurface: AppColors.titleColor,
+                surface: theme.scaffoldBackgroundColor, // DatePicker background
+                surfaceBright: theme.scaffoldBackgroundColor,
+                surfaceContainerHighest: theme.scaffoldBackgroundColor,
+                primary: theme.primaryColor,
+                onPrimary:
+                    theme.secondaryHeaderColor, //AppColors.secondaryColor,
+                onSurface:
+                    theme.textTheme.headlineLarge?.color ??
+                    AppColors.titleColor,
               ),
             ),
             child: child!,
@@ -154,6 +162,10 @@ class _AttendanceAbsentDaysDetailsScreenState
         controller.text = "${picked.day}/${picked.month}/${picked.year}";
       }
     }
+
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       appBar: KAppBar(
@@ -171,7 +183,7 @@ class _AttendanceAbsentDaysDetailsScreenState
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",
@@ -325,7 +337,10 @@ class _AttendanceAbsentDaysDetailsScreenState
                         text: "No Absent Days",
                         fontWeight: FontWeight.w600,
                         fontSize: 14.sp,
-                        color: AppColors.titleColor,
+                        color: theme
+                            .textTheme
+                            .headlineLarge
+                            ?.color, //AppColors.titleColor,
                       ),
                       KText(
                         textAlign: TextAlign.center,
@@ -333,7 +348,10 @@ class _AttendanceAbsentDaysDetailsScreenState
                             "No Absent Days found for your account. Great attendance Record",
                         fontWeight: FontWeight.w500,
                         fontSize: 12.sp,
-                        color: AppColors.greyColor,
+                        color: theme
+                            .textTheme
+                            .bodyLarge
+                            ?.color, //AppColors.greyColor,
                       ),
                       AttendanceMessageContent(
                         messageContentTitle: "Performance: High",

@@ -41,7 +41,6 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
 
   @override
   Widget build(BuildContext context) {
-
     // Total Attendance Provider
     final totalAttendanceDetailsProvider =
         context.totalAttendanceDetailsProviderWatch;

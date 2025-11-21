@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_linear_gradient_bg.dart';
+import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_svg.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
@@ -30,6 +31,9 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final provider = Provider.of<VerifyOtpProvider>(context);
     final provider2 = Provider.of<ForgotPasswordProvider>(context);
 
@@ -39,23 +43,28 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
       await provider2.sendOtp(email: widget.email);
 
       if (provider.error != null && context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: Colors.red, content: Text(provider.error!)),
-        );
+        KSnackBar.failure(context, provider.error!);
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(backgroundColor: Colors.red, content: Text()),
+        // );
       } else if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.green,
-            content: Text("OTP sent successfully!"),
-          ),
-        );
+        KSnackBar.success(context, "OTP sent successfully!");
+
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(
+        //     backgroundColor: Colors.green,
+        //     content: Text("OTP sent successfully!"),
+        //   ),
+        // );
       }
     }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: KLinearGradientBg(
-        gradientColor: AppColors.employeeGradientColor,
+        gradientColor: isDark
+            ? AppColors.employeeGradientColorDark
+            : AppColors.employeeGradientColor, //Employee Card,
         child: SafeArea(
           child: LayoutBuilder(
             builder: (context, constraints) {
@@ -82,7 +91,7 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: AppColors.authBgColor,
+                            color: theme.scaffoldBackgroundColor,
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(30.r),
                             ),
@@ -99,7 +108,7 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
                               ),
                               KVerticalSpacer(height: 10.h),
                               KText(
-                                text: "Login Now",
+                                text: "Enter OTP",
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.subTitleColor,
                                 fontSize: 14.sp,
@@ -116,7 +125,7 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
                               KText(
                                 text: "Enter Verification Code",
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.titleColor,
+                                // color: AppColors.titleColor,
                                 fontSize: 16.sp,
                               ),
                               KVerticalSpacer(height: 20.h),
@@ -124,7 +133,7 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
                               KText(
                                 text: "We sent a code to ${widget.email}",
                                 fontWeight: FontWeight.w400,
-                                color: AppColors.titleColor,
+                                //color: AppColors.titleColor,
                                 fontSize: 12.sp,
                               ),
                               KVerticalSpacer(height: 20.h),
@@ -155,7 +164,7 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
                               KVerticalSpacer(height: 20.h),
 
                               KAuthFilledBtn(
-                                backgroundColor: AppColors.primaryColor,
+                                backgroundColor: theme.primaryColor,
                                 fontSize: 10.sp,
                                 isLoading: provider.isLoading,
                                 text: provider.isLoading
@@ -219,7 +228,9 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
                                 text: "Don’t receive OTP code?",
                                 fontWeight: FontWeight.w500,
                                 fontSize: 10.sp,
-                                color: AppColors.textBtnColor,
+                                color: isDark
+                                    ? AppColors.textBtnColorDark
+                                    : AppColors.textBtnColor,
                               ),
                               provider2.isLoading
                                   ? CircularProgressIndicator()
@@ -233,7 +244,9 @@ class _AuthOtpScreenState extends State<AuthOtpScreen> {
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12.sp,
                                       textAlign: TextAlign.center,
-                                      textColor: AppColors.textBtnColor,
+                                      textColor: isDark
+                                          ? AppColors.textBtnColorDark
+                                          : AppColors.textBtnColor,
                                       showUnderline: true,
                                     ),
                               KVerticalSpacer(height: 20.h),

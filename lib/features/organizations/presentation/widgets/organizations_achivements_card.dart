@@ -21,24 +21,29 @@ class OrganizationsAchievementsValueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.r),
-        side: BorderSide(color: AppColors.greyColor, width: 0.1.w),
+        side: BorderSide(
+          color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+          width: 0.1.w,
+        ),
       ),
       child: ListTile(
         contentPadding: EdgeInsets.all(10.w),
         leading: Icon(leadingIconData, color: leadingIconColor, size: 24.w),
         title: Text(achievementDescription),
         titleTextStyle: GoogleFonts.sora(
-          color: AppColors.titleColor,
+          color: theme.textTheme.headlineLarge?.color, //AppColors.titleColor,
           fontWeight: FontWeight.w500,
           fontSize: 12.sp,
         ),
         subtitle: isSubTitle && subTitle != null ? Text(subTitle!) : null,
         subtitleTextStyle: GoogleFonts.sora(
-          color: AppColors.greyColor,
+          color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
           fontWeight: FontWeight.w400,
           fontSize: 10.sp,
         ),

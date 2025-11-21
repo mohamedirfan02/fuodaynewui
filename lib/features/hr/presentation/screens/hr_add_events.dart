@@ -119,6 +119,8 @@ class _HrAddEventsState extends State<HrAddEvents> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     Future<void> selectDate(
       BuildContext context,
       TextEditingController controller,
@@ -134,9 +136,12 @@ class _HrAddEventsState extends State<HrAddEvents> {
           return Theme(
             data: Theme.of(context).copyWith(
               colorScheme: ColorScheme.light(
-                primary: AppColors.primaryColor,
-                onPrimary: AppColors.secondaryColor,
-                onSurface: AppColors.titleColor,
+                primary: theme.primaryColor,
+                onPrimary:
+                    theme.secondaryHeaderColor, //AppColors.secondaryColor
+                onSurface:
+                    theme.textTheme.headlineLarge?.color ??
+                    AppColors.titleColor, //AppColors.titleColor,
               ),
             ),
             child: child!,
@@ -150,7 +155,7 @@ class _HrAddEventsState extends State<HrAddEvents> {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.secondaryColor,
+      backgroundColor: theme.secondaryHeaderColor, //AppColors.secondaryColor,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Form(
@@ -266,7 +271,7 @@ class _HrAddEventsState extends State<HrAddEvents> {
                       submitEvent();
                     }
                   },
-                  backgroundColor: AppColors.primaryColor,
+                  backgroundColor: theme.primaryColor,
                   fontSize: 10.sp,
                   height: AppResponsive.responsiveBtnHeight(context),
                 ),

@@ -48,7 +48,7 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
     webUserId =
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
-    // // ✅ Fetch API data using provider
+    // //   Fetch API data using provider
     // Future.microtask(() {
     //   context.allRoleLateArrivalsReportProviderRead.fetchLateArrivals();
     // });
@@ -62,11 +62,14 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final lateArrivalProvider = context.allRoleLateArrivalsReportProviderWatch;
     final employees =
         lateArrivalProvider.lateArrivals?.teamSection.employees ?? [];
 
-    // ✅ Convert model data → table data
+    //   Convert model data → table data
     final List<Map<String, String>> data = employees.asMap().entries.map((
       entry,
     ) {
@@ -90,7 +93,7 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
         .toSet()
         .toList();
 
-    // ✅ Filtered data (Dropdown + Search)
+    //   Filtered data (Dropdown + Search)
     final List<Map<String, String>> filteredData = data.where((item) {
       final matchesName =
           selectedName == null || item['Employee'] == selectedName;
@@ -102,7 +105,7 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
       return matchesName && matchesSearch;
     }).toList();
 
-    // ✅ Columns order
+    //   Columns order
     final columns = [
       'S.No',
       'Employee',
@@ -127,7 +130,7 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",
@@ -141,7 +144,7 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
                 ),
                 builder: (context) {
                   return KDownloadOptionsBottomSheet(
-                    // ✅ NEW PDF DOWNLOAD LOGIC
+                    //   NEW PDF DOWNLOAD LOGIC
                     onPdfTap: () async {
                       if (filteredData.isEmpty) {
                         KSnackBar.failure(context, "No Data Found");
@@ -162,17 +165,15 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
                         adjustColumnWidth: false,
                       );
                       if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("✅ PDF generated successfully!"),
-                        ),
-                      );
+
+                      KSnackBar.success(context, "PDF generated successfully!");
+
                       GoRouter.of(context).pop();
 
                       await OpenFilex.open(generatedFile.path);
                     },
 
-                    // ✅ Excel Logic Unchanged
+                    //   Excel Logic Unchanged
                     onExcelTap: () async {
                       if (filteredData.isEmpty) {
                         KSnackBar.failure(context, "No Data Found");
@@ -210,7 +211,7 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
               ),
               KVerticalSpacer(height: 12.h),
 
-              // ✅ Dropdown + Clear Button Row
+              //   Dropdown + Clear Button Row
               Row(
                 children: [
                   Expanded(
@@ -241,7 +242,12 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
                   ),
                   if (selectedName != null)
                     IconButton(
-                      icon: const Icon(Icons.clear, color: Colors.redAccent),
+                      icon: Icon(
+                        Icons.clear,
+                        color: isDark
+                            ? AppColors.checkOutColorDark
+                            : AppColors.checkOutColor,
+                      ),
                       tooltip: "Clear Selection",
                       onPressed: () {
                         setState(() => selectedName = null);
@@ -259,7 +265,7 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
               ),
               KVerticalSpacer(height: 12.h),
 
-              // ✅ Search field
+              //   Search field
               KAuthTextFormField(
                 controller: searchController,
                 hintText: "Search by Name",
@@ -270,7 +276,7 @@ class _TLLateArrivalScreenState extends State<TLLateArrivalScreen> {
 
               KVerticalSpacer(height: 40.h),
 
-              // ✅ Data Table
+              //   Data Table
               if (filteredData.isEmpty)
                 const Center(child: Text("No Data Found"))
               else

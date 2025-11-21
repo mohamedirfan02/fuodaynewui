@@ -70,6 +70,8 @@ class _AttendanceEarlyArrivalsDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     final isTablet = AppResponsive.isTablet(context);
     final isLandscape = AppResponsive.isLandscape(context);
     // Providers
@@ -113,10 +115,22 @@ class _AttendanceEarlyArrivalsDetailsScreenState
           return Theme(
             data: Theme.of(context).copyWith(
               colorScheme: ColorScheme.light(
-                primary: AppColors.primaryColor,
-                onPrimary: AppColors.secondaryColor,
-                onSurface: AppColors.titleColor,
+                surface: theme.scaffoldBackgroundColor, // DatePicker background
+                surfaceBright: theme.scaffoldBackgroundColor,
+                surfaceContainerHighest: theme.scaffoldBackgroundColor,
+                //AppColors.titleColor,theme.textTheme.headlineLarge?.color,//AppColors.titleColor,,
+                primary: theme.primaryColor,
+                onPrimary:
+                    theme.scaffoldBackgroundColor, //AppColors.secondaryColor,,
+                onSurface:
+                    theme.textTheme.headlineLarge?.color ??
+                    AppColors.titleColor, //AppColors.titleColor,
               ),
+              // dialogTheme: DialogThemeData(
+              //   backgroundColor:
+              //       theme.scaffoldBackgroundColor, // dialog container
+              //   surfaceTintColor: Colors.transparent,
+              // ),
             ),
             child: child!,
           );
@@ -186,7 +200,7 @@ class _AttendanceEarlyArrivalsDetailsScreenState
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",

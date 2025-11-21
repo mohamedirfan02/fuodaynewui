@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fuoday/commons/widgets/k_data_table.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
@@ -15,8 +14,6 @@ class ManagementViewProjects extends StatefulWidget {
 }
 
 class _ManagementViewProjectsState extends State<ManagementViewProjects> {
-
-
   @override
   void initState() {
     super.initState();

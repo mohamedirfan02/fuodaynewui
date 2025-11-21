@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_circular_cache_image.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 
 class KAppBarWithDrawer extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onDrawerPressed;
@@ -51,7 +50,7 @@ class KAppBarWithDrawer extends StatelessWidget implements PreferredSizeWidget {
       ],
       backgroundColor: backgroundColor ?? theme.primaryColor,
       leading: IconButton(
-        onPressed: onDrawerPressed ?? () {},
+        onPressed: onDrawerPressed,
         icon: Icon(Icons.menu, color: iconColor ?? theme.secondaryHeaderColor),
       ),
       title: showUserInfo

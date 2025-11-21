@@ -122,7 +122,8 @@ class _AttendanceOverviewState extends State<AttendanceOverview> {
     final size = MediaQuery.of(context).size;
     final isTablet = size.width > 600;
     final isLandscape = size.width > size.height;
-
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
@@ -165,8 +166,10 @@ class _AttendanceOverviewState extends State<AttendanceOverview> {
                 attendanceCount: item['numberOfCount'].toString(),
                 attendanceCardIcon: item['icon'],
                 attendanceDescription: item['title'],
-                attendanceIconColor: AppColors.primaryColor,
-                attendancePercentageColor: AppColors.checkInColor,
+                attendanceIconColor: theme.primaryColor,
+                attendancePercentageColor: isDark
+                    ? AppColors.checkInColorDark
+                    : AppColors.checkInColor,
               );
             },
           ),

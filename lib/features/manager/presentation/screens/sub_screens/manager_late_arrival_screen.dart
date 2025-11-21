@@ -11,15 +11,11 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/service/pdf_generator_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
-import 'package:fuoday/features/attendance/presentation/providers/total_early_arrivals_details_provider.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:provider/provider.dart';
 
 class ManagerLateArrivalScreen extends StatefulWidget {
   const ManagerLateArrivalScreen({super.key});
@@ -52,7 +48,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
     webUserId =
         int.tryParse(employeeDetails?['web_user_id']?.toString() ?? '') ?? 0;
 
-    // // ✅ Fetch API data using provider
+    // //   Fetch API data using provider
     // Future.microtask(() {
     //   context.allRoleLateArrivalsReportProviderRead.fetchLateArrivals();
     // });
@@ -66,12 +62,14 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Watch provider for API data
+    //App Theme Data
+    final theme = Theme.of(context);
+    //   Watch provider for API data
     final lateArrivalProvider = context.allRoleLateArrivalsReportProviderWatch;
     final employees =
         lateArrivalProvider.lateArrivals?.managerSection.employees ?? [];
 
-    // ✅ Convert model data → table data
+    //   Convert model data → table data
     final List<Map<String, String>> data = employees.asMap().entries.map((
       entry,
     ) {
@@ -95,7 +93,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
         .toSet()
         .toList();
 
-    // ✅ Filtered data (Dropdown + Search)
+    //   Filtered data (Dropdown + Search)
     final List<Map<String, String>> filteredData = data.where((item) {
       final matchesName =
           selectedName == null || item['Employee'] == selectedName;
@@ -107,7 +105,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
       return matchesName && matchesSearch;
     }).toList();
 
-    // ✅ Columns order
+    //   Columns order
     final columns = [
       'S.No',
       'Employee',
@@ -132,7 +130,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Download",
@@ -168,7 +166,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("✅ PDF generated successfully!"),
+                          content: Text("  PDF generated successfully!"),
                         ),
                       );
                       GoRouter.of(context).pop();
@@ -189,7 +187,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("✅ PDF generated successfully!"),
+                          content: Text("  PDF generated successfully!"),
                         ),
                       );
                       await OpenFilex.open(excelFile.path);
@@ -217,7 +215,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
               ),
               KVerticalSpacer(height: 12.h),
 
-              // ✅ Dropdown + Clear Button Row
+              //   Dropdown + Clear Button Row
               Row(
                 children: [
                   Expanded(
@@ -268,7 +266,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
               ),
               KVerticalSpacer(height: 12.h),
 
-              // ✅ Search field with real-time filter
+              //   Search field with real-time filter
               KAuthTextFormField(
                 controller: searchController,
                 hintText: "Search by Name",
@@ -279,7 +277,7 @@ class _ManagerLateArrivalScreenState extends State<ManagerLateArrivalScreen> {
 
               KVerticalSpacer(height: 40.h),
 
-              // ✅ Data Table
+              //   Data Table
               if (filteredData.isEmpty)
                 const Center(child: Text("No Data Found"))
               else

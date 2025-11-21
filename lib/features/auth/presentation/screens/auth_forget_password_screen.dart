@@ -27,6 +27,9 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final provider = Provider.of<ForgotPasswordProvider>(
       context,
     ); //   access provider
@@ -41,7 +44,9 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
         if (provider.error != null) {
           ScaffoldMessenger.of(currentContext).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.red,
+              backgroundColor: isDark
+                  ? AppColors.checkOutColorDark
+                  : AppColors.checkOutColor,
               content: Text(provider.error!),
             ),
           );
@@ -52,8 +57,10 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
             ).pushNamed(AppRouteConstants.otp, extra: emailController.text);
           }
           ScaffoldMessenger.of(currentContext).showSnackBar(
-            const SnackBar(
-              backgroundColor: Colors.green,
+            SnackBar(
+              backgroundColor: isDark
+                  ? AppColors.checkInColorDark
+                  : AppColors.checkInColor,
               content: Text("OTP sent successfully!"),
             ),
           );
@@ -68,7 +75,9 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: KLinearGradientBg(
-        gradientColor: AppColors.employeeGradientColor,
+        gradientColor: isDark
+            ? AppColors.employeeGradientColorDark
+            : AppColors.employeeGradientColor, //Employee Card,
         child: SafeArea(
           child: Column(
             children: [
@@ -92,7 +101,7 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppColors.authBgColor,
+                    color: theme.scaffoldBackgroundColor,
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(30.r),
                     ),
@@ -136,7 +145,8 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      color: AppColors.secondaryColor,
+                                      color: theme
+                                          .secondaryHeaderColor, //AppColors.secondaryColor,
                                     ),
                                     child: Column(
                                       crossAxisAlignment:
@@ -181,8 +191,7 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
                                         /// Send Button
                                         KAuthFilledBtn(
                                           isLoading: provider.isLoading,
-                                          backgroundColor:
-                                              AppColors.primaryColor,
+                                          backgroundColor: theme.primaryColor,
                                           fontSize: 10.sp,
                                           text: "Send",
                                           onPressed: () {
@@ -200,8 +209,7 @@ class _AuthForgetPasswordScreenState extends State<AuthForgetPasswordScreen> {
 
                                         /// Back to Login Button
                                         KAuthFilledBtn(
-                                          backgroundColor: AppColors
-                                              .primaryColor
+                                          backgroundColor: theme.primaryColor
                                               .withOpacity(0.4),
                                           fontSize: 10.sp,
                                           text: "Back to Login",
