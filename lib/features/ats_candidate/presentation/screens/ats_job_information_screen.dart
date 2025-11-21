@@ -471,7 +471,8 @@ class KTitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        KText(text: title, fontWeight: FontWeight.w600, fontSize: 12.sp),
+        KText(text: title, fontWeight: FontWeight.w600, fontSize: 12.sp, color: AppColors.titleColor),
+        KHorizontalSpacer(width: 4.w),
         KText(
           text: " *",
           color: Colors.red,

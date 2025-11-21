@@ -232,6 +232,14 @@ class _CandidateScreenState extends State<CandidateScreen> {
               color: AppColors.atsHomepageBg,
               child: Padding(
                 padding: EdgeInsets.all(16.w),
+                child: RefreshIndicator(
+                  // ✅ Add RefreshIndicator here
+                  onRefresh: () async {
+                    _fetchCandidates();
+                    // Wait a bit for the fetch to complete
+                    await Future.delayed(Duration(milliseconds: 500));
+                  },
+                  color: AppColors.primaryColor,
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(
@@ -639,7 +647,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
                     ],
                   ),
                 ),
-              ),
+              ),),
             ),
           ),
         );
@@ -768,20 +776,66 @@ class _CandidateScreenState extends State<CandidateScreen> {
               _actionButton(
                 color: AppColors.softRed,
                 icon: AppAssetsConstants.deleteIcon,
-                onTap: () {
+                onTap: () async {
+                  // Show confirmation dialog
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Delete Candidate'),
+                      content: Text('Are you sure you want to delete ${candidate.candidateName}?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: Text('Delete', style: TextStyle(color: Colors.red)),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (confirm != true) return;
+
                   final provider = context.read<CandidateActionProvider>();
 
-                  provider.deleteCandidate( candidate.id).then((success) {
+                  // Show loading
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Deleting candidate..."),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  }
+
+                  final success = await provider.deleteCandidate(candidate.id);
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).clearSnackBars();
+
                     if (success) {
+                      // ✅ Refresh the page
+                      _fetchCandidates();
+
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Candidate deleted successfully")),
+                        SnackBar(
+                          content: Text("Deletion failed"),
+                          backgroundColor: Colors.red,
+                        ),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Deletion failed")),
+                        SnackBar(
+
+
+                          content: Text("Candidate deleted successfully"),
+                          backgroundColor: Colors.green,
+                        ),
                       );
                     }
-                  });
+                  }
                 },
               ),
 

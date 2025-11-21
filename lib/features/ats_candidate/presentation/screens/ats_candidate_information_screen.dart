@@ -263,7 +263,22 @@ class _CandidateInformationScreenState
                     //     ? "Please enter name"
                     //     : null,
                   ),
-
+                  KVerticalSpacer(height: 16.h),
+                  KAuthTextFormField(
+                    label: "Phone Number",
+                    controller: phoneController,
+                    hintText: "999-999-999",
+                    keyboardType: TextInputType.phone,
+                    isRequiredStar: true,
+                    // validator: (value) {
+                    //   if (value == null || value.trim().isEmpty) {
+                    //     return "Please enter phone number";
+                    //   } else if (value.length < 10) {
+                    //     return "Enter valid phone number";
+                    //   }
+                    //   return null;
+                    // },
+                  ),
                   KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
                     label: "Email Id",
@@ -306,19 +321,13 @@ class _CandidateInformationScreenState
 
                   KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
-                    label: "Phone Number",
-                    controller: phoneController,
-                    hintText: "999-999-999",
-                    keyboardType: TextInputType.phone,
+                    label: "Total Experience",
+                    controller: jobTitleController,
+                    hintText: "Year,months",
                     isRequiredStar: true,
-                    // validator: (value) {
-                    //   if (value == null || value.trim().isEmpty) {
-                    //     return "Please enter phone number";
-                    //   } else if (value.length < 10) {
-                    //     return "Enter valid phone number";
-                    //   }
-                    //   return null;
-                    // },
+                    // validator: (value) => value == null || value.trim().isEmpty
+                    //     ? "Please enter job title"
+                    //     : null,
                   ),
 
                   KVerticalSpacer(height: 16.h),
@@ -332,16 +341,7 @@ class _CandidateInformationScreenState
                     //     : null,
                   ),
 
-                  KVerticalSpacer(height: 16.h),
-                  KAuthTextFormField(
-                    label: "Current Job Title",
-                    controller: jobTitleController,
-                    hintText: "Person Job Title",
-                    isRequiredStar: true,
-                    // validator: (value) => value == null || value.trim().isEmpty
-                    //     ? "Please enter job title"
-                    //     : null,
-                  ),
+
 
                   KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
