@@ -31,14 +31,17 @@ class KAtsGlowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     return InkWell(
       borderRadius: borderRadius,
       onTap: isLoading
           ? null
           : () {
-        HapticFeedback.mediumImpact();
-        onPressed();
-      },
+              HapticFeedback.mediumImpact();
+              onPressed();
+            },
       child: Container(
         width: width,
         height: height,
@@ -46,10 +49,7 @@ class KAtsGlowButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: borderRadius,
-          border: Border.all(
-            color: backgroundColor,
-            width: 1,
-          ),
+          border: Border.all(color: backgroundColor, width: 1),
           boxShadow: const [
             BoxShadow(
               color: Color(0xFFEBF2FF),
@@ -68,31 +68,31 @@ class KAtsGlowButton extends StatelessWidget {
         child: Center(
           child: isLoading
               ? const SizedBox(
-            height: 18,
-            width: 18,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-          )
+                  height: 18,
+                  width: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
               : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (icon != null) ...[
-                icon!,
-                const SizedBox(width: 6), // spacing between icon & text
-              ],
-              Text(
-                text,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: fontSize,
-                  fontWeight: fontWeight,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (icon != null) ...[
+                      icon!,
+                      const SizedBox(width: 6), // spacing between icon & text
+                    ],
+                    Text(
+                      text,
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: fontSize,
+                        fontWeight: fontWeight,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );

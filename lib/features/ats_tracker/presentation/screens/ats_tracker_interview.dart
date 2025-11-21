@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
-import 'package:fuoday/commons/widgets/k_ats_data_table.dart';
 import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
@@ -179,9 +178,11 @@ class _InterviewScreenState extends State<InterviewScreen> {
   //==================================================================
   // Columns
   List<GridColumn> _buildColumns() {
-    const headerStyle = TextStyle(
+    //App Theme Data
+    final theme = Theme.of(context);
+    final headerStyle = TextStyle(
       fontWeight: FontWeight.normal,
-      color: AppColors.greyColor,
+      color: theme.textTheme.bodyLarge?.color,
     );
     Widget header(String text) => Container(
       padding: const EdgeInsets.all(8),
@@ -231,6 +232,9 @@ class _InterviewScreenState extends State<InterviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
@@ -293,7 +297,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: AppColors.atsHomepageBg,
+        color: theme.cardColor, //ATS Background Color
         child: Padding(
           padding: EdgeInsets.only(top: 10.0.h),
           child: SingleChildScrollView(
@@ -338,8 +342,10 @@ class _InterviewScreenState extends State<InterviewScreen> {
                       employeeCount: item['numberOfCount'].toString(),
                       employeeCardIcon: item['icon'],
                       employeeDescription: item['title'],
-                      employeeIconColor: AppColors.primaryColor,
-                      employeePercentageColor: AppColors.checkInColor,
+                      employeeIconColor: theme.primaryColor,
+                      employeePercentageColor: isDark
+                          ? AppColors.checkInColorDark
+                          : AppColors.checkInColor,
                       growthText: item['growth'],
                     );
                   },
@@ -350,10 +356,14 @@ class _InterviewScreenState extends State<InterviewScreen> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
+                      color:
+                          theme.textTheme.bodyLarge?.color?.withValues(
+                            alpha: 0.3,
+                          ) ??
+                          AppColors.greyColor.withValues(alpha: 0.3),
                     ),
                     borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
+                    color: theme.secondaryHeaderColor,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -374,7 +384,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                                   text: "Candidate List",
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.sp,
-                                  color: AppColors.titleColor,
+                                  // color: AppColors.titleColor,
                                 ),
                               ],
                             ),
@@ -390,7 +400,9 @@ class _InterviewScreenState extends State<InterviewScreen> {
                                 Expanded(
                                   child: KAtsGlowButton(
                                     text: "Filter",
-                                    textColor: AppColors.greyColor,
+                                    textColor:
+                                        theme.textTheme.bodyLarge?.color ??
+                                        AppColors.greyColor,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                     icon: SvgPicture.asset(
@@ -398,11 +410,17 @@ class _InterviewScreenState extends State<InterviewScreen> {
                                       height: 15,
                                       width: 15,
                                       fit: BoxFit.contain,
+                                      //SVG IMAGE COLOR
+                                      colorFilter: ColorFilter.mode(
+                                        theme.textTheme.headlineLarge?.color ??
+                                            Colors.black,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                     onPressed: () {
                                       print("Filter button tapped");
                                     },
-                                    backgroundColor: AppColors.secondaryColor,
+                                    backgroundColor: theme.secondaryHeaderColor,
                                   ),
                                 ),
 
@@ -421,7 +439,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                                     onPressed: () {
                                       print("Candidates button tapped");
                                     },
-                                    backgroundColor: AppColors.primaryColor,
+                                    backgroundColor: theme.primaryColor,
                                   ),
                                 ),
                               ],

@@ -82,7 +82,7 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
           keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
             hintText: widget.hintText ?? 'Password',
-            hintStyle: TextStyle(color: theme.textTheme.headlineLarge?.color),
+            // hintStyle: TextStyle(color: theme.textTheme.headlineLarge?.color),
             labelText: widget.floatingLabel ? widget.label : null,
             // floating label
             labelStyle: widget.floatingLabel
@@ -105,7 +105,9 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
               onPressed: _togglePasswordVisibility,
               icon: Icon(
                 _obscureText ? Icons.visibility_off : Icons.visibility,
-                color: theme.textTheme.headlineLarge?.color?.withOpacity(0.7),
+                color: theme.textTheme.headlineLarge?.color?.withValues(
+                  alpha: 0.7,
+                ),
               ),
             ),
             border: const OutlineInputBorder(),

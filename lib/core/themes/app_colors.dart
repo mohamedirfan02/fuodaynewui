@@ -121,7 +121,7 @@ class AppColors {
   static const Color greyColor = Color(0xFF636364);
   static const Color chipColor = Color(0xFFD1D7E8);
   static const Color approvedColor = Color(0xFF009F00);
-  static const Color pendingColor = Color(0xFFFFCF28);
+  static const Color pendingColor = Color(0xFFB79AFF);
 
   // attendance card light color
   static const Color attendanceCardTextLightColor = Color(0xFFC6CEE4);
@@ -199,6 +199,10 @@ class AppColors {
 
   // Attendance Card Light Text (in dark mode = muted gray)
   static const Color attendanceCardTextLightColorDark = Color(0xFF9DA7C5);
+  //==========ATS SCREENS==========
+  static const Color softBlueDark = Color(0xFF8FD0FF);
+  static const Color unactiveDark = Color(0xFFCC6A1E);
+  static const Color closedDark = Color(0xFF178A7A);
 }
 
 class AppTheme {
@@ -212,7 +216,9 @@ class AppTheme {
     primaryColor: AppColors.primaryColor,
     secondaryHeaderColor: AppColors.secondaryColor,
 
-    cardColor: Colors.white,
+    //=====ATS Background color========
+    cardColor: AppColors.atsHomepageBg,
+    //=================================
     dividerColor: AppColors.lightGreyColor,
 
     textTheme: TextTheme(

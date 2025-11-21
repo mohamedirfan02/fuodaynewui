@@ -53,6 +53,9 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final pageCount = (_rowsPerPage >= widget.totalRows)
         ? 1
         : (widget.totalRows / _rowsPerPage).ceil();
@@ -72,15 +75,17 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
           ),
           child: SfDataGridTheme(
             data: SfDataGridThemeData(
-              gridLineColor: AppColors.greyColor.withOpacity(0.15),
+              gridLineColor: theme.textTheme.bodyLarge?.color?.withOpacity(
+                0.15,
+              ),
+
+              // headerColor: isDark ? AppColors.greyColor : Colors.white,
               selectionColor:
                   // widget.selectionColor ??
-                  AppColors.primaryColor.withOpacity(
-                    0.15,
-                  ), // 🔹 Selection color
+                  theme.primaryColor.withOpacity(0.15), // 🔹 Selection color
               currentCellStyle: DataGridCurrentCellStyle(
                 // borderColor: widget.selectionColor ?? AppColors.primaryColor,
-                borderColor: AppColors.primaryColor,
+                borderColor: theme.primaryColor,
                 borderWidth: 2,
               ),
             ),
@@ -166,13 +171,15 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                         borderRadius: BorderRadius.zero,
                       ),
                       child: Container(
-                        width: 40,
-                        height: 40,
+                        width: 40.w,
+                        height: 40.h,
                         alignment: Alignment.center,
                         // your custom decoration controls only what's visible
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? AppColors.greyColor.withOpacity(.2)
+                              ? theme.textTheme.bodyLarge?.color?.withOpacity(
+                                  .2,
+                                )
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(
                             5,
@@ -184,7 +191,10 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                           style: TextStyle(
                             color: isSelected
                                 ? Colors.white
-                                : AppColors.titleColor,
+                                : theme
+                                      .textTheme
+                                      .headlineLarge
+                                      ?.color, //AppColors.titleColor,,
                             fontWeight: isSelected
                                 ? FontWeight.w600
                                 : FontWeight.normal,
@@ -208,7 +218,7 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                     'Showing ${_pagerController.selectedPageIndex * _rowsPerPage + 1} to ${(_pagerController.selectedPageIndex + 1) * _rowsPerPage} of ${widget.totalRows} entries',
                 fontSize: 12
                     .sp, // responsive font......MediaQuery.of(context).size.width * 0.03
-                color: AppColors.greyColor,
+                color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
                 fontWeight: FontWeight.w500,
               ),
               GestureDetector(
@@ -220,10 +230,13 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.8,
-                      color: AppColors.greyColor.withOpacity(0.1),
+                      color:
+                          theme.textTheme.bodyLarge?.color ??
+                          AppColors.greyColor.withOpacity(0.1),
                     ),
                     borderRadius: BorderRadius.circular(8),
-                    color: AppColors.secondaryColor,
+                    color:
+                        theme.secondaryHeaderColor, //AppColors.secondaryColor
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -233,14 +246,17 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                             ? 'Show All'
                             : 'Show $_rowsPerPage',
                         fontSize: 10.sp,
-                        color: AppColors.titleColor,
+                        // color: AppColors.titleColor,
                         fontWeight: FontWeight.w500,
                       ),
                       //const SizedBox(width: 4),
                       Icon(
                         Icons.keyboard_arrow_down,
                         size: 15.h,
-                        color: AppColors.titleColor,
+                        color: theme
+                            .textTheme
+                            .headlineLarge
+                            ?.color, //AppColors.titleColor,,
                       ),
                     ],
                   ),
@@ -264,6 +280,9 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
 
         return StatefulBuilder(
           builder: (context, setModalState) {
+            //App Theme Data
+            final theme = Theme.of(context);
+            // final isDark = theme.brightness == Brightness.dark;
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -304,10 +323,7 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                     return ListTile(
                       title: Text(displayText),
                       trailing: isSelected
-                          ? const Icon(
-                              Icons.check,
-                              color: AppColors.primaryColor,
-                            )
+                          ? Icon(Icons.check, color: theme.primaryColor)
                           : null,
                       onTap: () {
                         Navigator.pop(ctx);
@@ -384,10 +400,12 @@ class GenericDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
+    //App Theme Data
+
     final rowIndex = _paginatedRows.indexOf(row);
     final actualDataIndex = (_currentPageIndex * _rowsPerPage) + rowIndex;
     return DataGridRowAdapter(
-      color: Colors.white,
+      color: Colors.transparent,
       //selectedColor: selectionColor ?? AppColors.primaryColor.withOpacity(0.15),
       cells: row.getCells().map((cell) {
         if (cellBuilder != null) {

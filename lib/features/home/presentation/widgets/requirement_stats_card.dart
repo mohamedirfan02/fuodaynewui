@@ -17,6 +17,9 @@ class RequirementStatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final totalJobs = dataMap.values.fold<double>(0, (a, b) => a + b).toInt();
@@ -35,10 +38,13 @@ class RequirementStatsCard extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(
           width: 0.8 * scale,
-          color: AppColors.greyColor.withOpacity(0.3),
+          color:
+              theme.textTheme.bodyLarge?.color?.withOpacity(0.3) ??
+                    AppColors.greyColor
+                ..withOpacity(0.3),
         ),
         borderRadius: BorderRadius.circular(8 * scale),
-        color: AppColors.secondaryColor,
+        color: theme.secondaryHeaderColor, //AppColors.secondaryColor
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +57,7 @@ class RequirementStatsCard extends StatelessWidget {
                 text: "Total Requirement",
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
-                color: AppColors.titleColor,
+                //color: AppColors.titleColor,
               ),
               InkWell(
                 onTap: () {
@@ -63,12 +69,19 @@ class RequirementStatsCard extends StatelessWidget {
                       text: "See all",
                       fontWeight: FontWeight.w500,
                       fontSize: 16.sp,
-                      color: AppColors.subTitleColor,
+                      color: theme
+                          .inputDecorationTheme
+                          .focusedBorder
+                          ?.borderSide
+                          .color, //subTitleColor
                     ),
                     Icon(
                       Icons.arrow_forward_ios,
                       size: 16.sp,
-                      color: AppColors.titleColor,
+                      color: theme
+                          .textTheme
+                          .headlineLarge
+                          ?.color, //AppColors.titleColor,
                     ),
                   ],
                 ),
@@ -118,7 +131,9 @@ class RequirementStatsCard extends StatelessWidget {
                         : screenWidth * 0.22,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.secondaryColor,
+                      color: isDark
+                          ? theme.textTheme.bodyLarge?.color
+                          : AppColors.secondaryColor,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.1),
@@ -137,7 +152,7 @@ class RequirementStatsCard extends StatelessWidget {
                           fontSize: isTablet
                               ? (isLandscape ? 12 * scale : 14 * scale)
                               : 14 * scale,
-                          color: AppColors.titleColor,
+                          // color: AppColors.titleColor,
                         ),
                         SizedBox(height: 2 * scale),
                         KText(
@@ -146,7 +161,9 @@ class RequirementStatsCard extends StatelessWidget {
                           fontSize: isTablet
                               ? (isLandscape ? 8 * scale : 10 * scale)
                               : 10 * scale,
-                          color: AppColors.subTitleColor,
+                          color: isDark
+                              ? AppColors.secondaryColor
+                              : AppColors.subTitleColor,
                         ),
                       ],
                     ),
@@ -158,7 +175,7 @@ class RequirementStatsCard extends StatelessWidget {
 
           SizedBox(height: 16 * scale),
 
-          // ✅ Legend section
+          //  Legend section
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -185,14 +202,14 @@ class RequirementStatsCard extends StatelessWidget {
                           text: label,
                           fontWeight: FontWeight.w500,
                           fontSize: 16.sp,
-                          color: AppColors.titleColor,
+                          //color: AppColors.titleColor,
                         ),
                       ),
                       KText(
                         text: value.toString(),
                         fontWeight: FontWeight.w600,
                         fontSize: 16.sp,
-                        color: AppColors.titleColor,
+                        //color: AppColors.titleColor,
                       ),
                     ],
                   ),
