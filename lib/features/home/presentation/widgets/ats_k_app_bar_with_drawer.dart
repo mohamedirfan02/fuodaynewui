@@ -32,9 +32,11 @@ class AtsKAppBarWithDrawer extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
     return AppBar(
       centerTitle: !showUserInfo,
-      backgroundColor: AppColors.secondaryColor,
+      backgroundColor: theme.secondaryHeaderColor, //AppColors.secondaryColor,
       leading: IconButton(
         onPressed: onDrawerPressed ?? () {},
         icon: SvgPicture.asset(
@@ -42,6 +44,11 @@ class AtsKAppBarWithDrawer extends StatelessWidget
           height: 11.67,
           width: 15,
           fit: BoxFit.contain,
+          //SVG IMAGE COLOR
+          colorFilter: ColorFilter.mode(
+            theme.textTheme.headlineLarge?.color ?? Colors.black,
+            BlendMode.srcIn,
+          ),
         ),
       ),
       title: showUserInfo
@@ -53,13 +60,13 @@ class AtsKAppBarWithDrawer extends StatelessWidget
                   text: userName,
                   fontWeight: FontWeight.w600,
                   fontSize: 12.sp,
-                  color: AppColors.secondaryColor,
+                  //color: AppColors.secondaryColor,
                 ),
                 KText(
                   text: userDesignation,
                   fontWeight: FontWeight.w500,
                   fontSize: 10.sp,
-                  color: AppColors.secondaryColor,
+                  // color: AppColors.secondaryColor,
                 ),
               ],
             )
@@ -83,6 +90,11 @@ class AtsKAppBarWithDrawer extends StatelessWidget
               height: 20,
               width: 20,
               fit: BoxFit.contain,
+              //SVG IMAGE COLOR
+              colorFilter: ColorFilter.mode(
+                theme.textTheme.headlineLarge?.color ?? Colors.black,
+                BlendMode.srcIn,
+              ),
             ),
           ),
         ),

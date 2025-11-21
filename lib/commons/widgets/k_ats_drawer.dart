@@ -25,8 +25,11 @@ class KAtsDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     return Drawer(
-      backgroundColor: AppColors.secondaryColor,
+      backgroundColor: theme.secondaryHeaderColor, //AppColors.secondaryColor
       child: Column(
         children: [
           // Logo Header
@@ -40,10 +43,13 @@ class KAtsDrawer extends StatelessWidget {
                   .h, // 10.5 + 35 (logo height) + 7 (gap) - creating proper spacing
             ),
             decoration: BoxDecoration(
-              color: AppColors.secondaryColor,
+              color: theme.secondaryHeaderColor,
               border: Border(
                 bottom: BorderSide(
-                  color: AppColors.subTitleColor.withOpacity(0.1),
+                  color:
+                      theme.inputDecorationTheme.focusedBorder?.borderSide.color
+                          .withOpacity(0.1) ??
+                      AppColors.subTitleColor.withOpacity(0.1),
                   width: 1,
                 ),
               ),
@@ -54,6 +60,7 @@ class KAtsDrawer extends StatelessWidget {
                 AppAssetsConstants.atsFuoDayLogo,
                 height: 35.h,
                 width: 176.w,
+                //  color: theme.textTheme.headlineLarge?.color,//AppColors.titleColor,,
               ),
             ),
           ),
@@ -243,6 +250,9 @@ class KAtsDrawer extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        //App Theme Data
+        final theme = Theme.of(context);
+        // final isDark = theme.brightness == Brightness.dark;
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.r),
@@ -255,7 +265,11 @@ class KAtsDrawer extends StatelessWidget {
           content: KText(
             text: "Are you sure you want to logout?",
             fontSize: 14.sp,
-            color: AppColors.subTitleColor,
+            color: theme
+                .inputDecorationTheme
+                .focusedBorder
+                ?.borderSide
+                .color, //subTitleColor,
             fontWeight: FontWeight.w600,
           ),
           actions: [
@@ -265,7 +279,8 @@ class KAtsDrawer extends StatelessWidget {
               },
               child: KText(
                 text: "Cancel",
-                color: AppColors.subTitleColor,
+                color:
+                    theme.inputDecorationTheme.focusedBorder?.borderSide.color,
                 fontWeight: FontWeight.w600,
 
                 fontSize: 14.sp,
@@ -297,13 +312,13 @@ class KAtsDrawer extends StatelessWidget {
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.primaryColor,
+                          theme.primaryColor,
                         ),
                       ),
                     )
                   : KText(
                       text: "Logout",
-                      color: AppColors.primaryColor,
+                      color: theme.primaryColor,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                     ),

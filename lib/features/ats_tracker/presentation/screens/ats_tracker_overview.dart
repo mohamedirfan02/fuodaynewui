@@ -189,9 +189,11 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
   //==================================================================
   // Columns
   List<GridColumn> _buildColumns() {
-    const headerStyle = TextStyle(
+    //App Theme Data
+    final theme = Theme.of(context);
+    final headerStyle = TextStyle(
       fontWeight: FontWeight.normal,
-      color: AppColors.greyColor,
+      color: theme.textTheme.bodyLarge?.color,
     );
     Widget header(String text) => Container(
       padding: const EdgeInsets.all(8),
@@ -241,6 +243,9 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
@@ -303,7 +308,7 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: AppColors.atsHomepageBg,
+        color: theme.cardColor, //ATS Background Color
         child: Padding(
           padding: EdgeInsets.only(top: 10.h),
           child: SingleChildScrollView(
@@ -329,8 +334,10 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                       employeeCount: item['numberOfCount'].toString(),
                       employeeCardIcon: item['icon'],
                       employeeDescription: item['title'],
-                      employeeIconColor: AppColors.primaryColor,
-                      employeePercentageColor: AppColors.checkInColor,
+                      employeeIconColor: theme.primaryColor,
+                      employeePercentageColor: isDark
+                          ? AppColors.checkInColorDark
+                          : AppColors.checkInColor,
                       growthText: item['growth'],
                     );
                   },
@@ -341,10 +348,14 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
+                      color:
+                          theme.textTheme.bodyLarge?.color?.withValues(
+                            alpha: 0.3,
+                          ) ??
+                          AppColors.greyColor.withValues(alpha: 0.3),
                     ),
                     borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
+                    color: theme.secondaryHeaderColor,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -365,7 +376,7 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                                   text: "Candidate List",
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.sp,
-                                  color: AppColors.titleColor,
+                                  // color: AppColors.titleColor,
                                 ),
                               ],
                             ),
@@ -381,7 +392,9 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                                 Expanded(
                                   child: KAtsGlowButton(
                                     text: "Filter",
-                                    textColor: AppColors.greyColor,
+                                    textColor:
+                                        theme.textTheme.bodyLarge?.color ??
+                                        AppColors.greyColor,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                     icon: SvgPicture.asset(
@@ -389,11 +402,17 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                                       height: 15,
                                       width: 15,
                                       fit: BoxFit.contain,
+                                      //SVG IMAGE COLOR
+                                      colorFilter: ColorFilter.mode(
+                                        theme.textTheme.headlineLarge?.color ??
+                                            Colors.black,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                     onPressed: () {
                                       print("Filter button tapped");
                                     },
-                                    backgroundColor: AppColors.secondaryColor,
+                                    backgroundColor: theme.secondaryHeaderColor,
                                   ),
                                 ),
 
@@ -412,7 +431,7 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                                     onPressed: () {
                                       print("Candidates button tapped");
                                     },
-                                    backgroundColor: AppColors.primaryColor,
+                                    backgroundColor: theme.primaryColor,
                                   ),
                                 ),
                               ],

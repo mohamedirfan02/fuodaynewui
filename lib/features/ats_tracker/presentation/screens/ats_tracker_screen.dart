@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
-import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
@@ -11,7 +10,6 @@ import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/service/dio_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/secure_storage_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:go_router/go_router.dart';
 import 'ats_tracker_interview.dart';
@@ -148,7 +146,10 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
                       text: "Manage your Interview Schedule",
                       fontWeight: FontWeight.w500,
                       fontSize: 14.sp,
-                      color: AppColors.greyColor,
+                      color: theme
+                          .textTheme
+                          .bodyLarge
+                          ?.color, //AppColors.greyColor,,
                     ),
                   ),
 
@@ -165,10 +166,16 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
                           child: TabBar(
                             isScrollable: true,
                             tabAlignment: TabAlignment.start, // left align
-                            dividerColor: AppColors.atsHomepageBg,
-                            unselectedLabelColor: AppColors.greyColor,
-                            indicatorColor: AppColors.primaryColor,
-                            labelColor: AppColors.titleColor,
+                            dividerColor: theme.cardColor,
+                            unselectedLabelColor: theme
+                                .textTheme
+                                .bodyLarge
+                                ?.color, //AppColors.greyColor,
+                            indicatorColor: theme.primaryColor,
+                            labelColor: theme
+                                .textTheme
+                                .headlineLarge
+                                ?.color, //AppColors.titleColor,
                             tabs: [
                               Tab(
                                 child: Row(
@@ -179,6 +186,12 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
                                       height: 20,
                                       width: 20,
                                       fit: BoxFit.contain,
+                                      //SVG IMAGE COLOR
+                                      colorFilter: ColorFilter.mode(
+                                        theme.textTheme.headlineLarge?.color ??
+                                            Colors.black,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                     const SizedBox(width: 6),
                                     const Text("Overview"),
@@ -194,6 +207,12 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
                                       height: 20,
                                       width: 20,
                                       fit: BoxFit.contain,
+                                      //SVG IMAGE COLOR
+                                      colorFilter: ColorFilter.mode(
+                                        theme.textTheme.headlineLarge?.color ??
+                                            Colors.black,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                     const SizedBox(width: 6),
                                     const Text("Interview"),

@@ -208,6 +208,10 @@ class AppColors {
   static const Color successColorDark = Color(0xFF66BB6A);
   static const Color warningColorDark = Color(0xFFFFB74D);
   static const Color infoColorDark = Color(0xFF5B9FFF);
+  //==========ATS SCREENS==========
+  static const Color softBlueDark = Color(0xFF8FD0FF);
+  static const Color unactiveDark = Color(0xFFCC6A1E);
+  static const Color closedDark = Color(0xFF178A7A);
 }
 
 class AppTheme {
@@ -221,7 +225,9 @@ class AppTheme {
     primaryColor: AppColors.primaryColor,
     secondaryHeaderColor: AppColors.secondaryColor,
 
-    cardColor: Colors.white,
+    //=====ATS Background color========
+    cardColor: AppColors.atsHomepageBg,
+    //=================================
     dividerColor: AppColors.lightGreyColor,
 
     textTheme: TextTheme(

@@ -247,12 +247,19 @@ class _DashoardTabState extends State<DashoardTab> {
       initialDatePickerMode: DatePickerMode.day,
       helpText: 'Select Date',
       builder: (context, child) {
+        //App Theme Data
+        final theme = Theme.of(context);
+        // final isDark = theme.brightness == Brightness.dark;
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: AppColors.primaryColor,
-              onPrimary: AppColors.secondaryColor,
-              onSurface: AppColors.titleColor,
+              primary: theme.primaryColor,
+              onPrimary: theme.secondaryHeaderColor, //AppColors.secondaryColor
+              onSurface:
+                  theme.textTheme.headlineLarge?.color ??
+                  AppColors.titleColor, //AppColors.titleColor,
+              surface: theme.secondaryHeaderColor,
+              surfaceContainer: theme.secondaryHeaderColor,
             ),
           ),
           child: child!,
@@ -365,6 +372,9 @@ class _DashoardTabState extends State<DashoardTab> {
   //==================================================================
   // Columns
   List<GridColumn> _buildColumns() {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     const headerStyle = TextStyle(
       fontWeight: FontWeight.normal,
       color: AppColors.greyColor,
@@ -372,7 +382,12 @@ class _DashoardTabState extends State<DashoardTab> {
     Widget header(String text) => Container(
       padding: const EdgeInsets.all(8),
       alignment: Alignment.center,
-      child: Text(text, style: headerStyle),
+      child: KText(
+        text: text,
+        fontWeight: FontWeight.normal,
+        fontSize: 12.sp,
+        color: theme.textTheme.bodyLarge?.color,
+      ),
     );
 
     return [
@@ -397,6 +412,9 @@ class _DashoardTabState extends State<DashoardTab> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final rows = _buildRows();
     final columns = _buildColumns();
     final hiveService = getIt<HiveStorageService>();
@@ -468,7 +486,7 @@ class _DashoardTabState extends State<DashoardTab> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: AppColors.atsHomepageBg,
+        color: theme.cardColor, //ATS Background Color
         child: Padding(
           padding: EdgeInsets.all(16.w),
           child: SingleChildScrollView(
@@ -524,8 +542,10 @@ class _DashoardTabState extends State<DashoardTab> {
                       employeeCount: item['numberOfCount'].toString(),
                       employeeCardIcon: item['icon'],
                       employeeDescription: item['title'],
-                      employeeIconColor: AppColors.primaryColor,
-                      employeePercentageColor: AppColors.checkInColor,
+                      employeeIconColor: theme.primaryColor,
+                      employeePercentageColor: isDark
+                          ? AppColors.checkInColorDark
+                          : AppColors.checkInColor,
                       growthText: item['growth'],
                     );
                   },
@@ -536,9 +556,13 @@ class _DashoardTabState extends State<DashoardTab> {
                 RequirementStatsCard(
                   dataMap: {"Pending": 36, "Unactive": 6, "Closed": 13},
                   colorMap: {
-                    "Pending": AppColors.pending,
-                    "Unactive": AppColors.unactive,
-                    "Closed": AppColors.closed,
+                    "Pending": isDark
+                        ? AppColors.pendingColorDark
+                        : AppColors.pending,
+                    "Unactive": isDark
+                        ? AppColors.unactiveDark
+                        : AppColors.unactive,
+                    "Closed": isDark ? AppColors.closedDark : AppColors.closed,
                   },
                 ),
                 SizedBox(height: 16.h),
@@ -552,10 +576,15 @@ class _DashoardTabState extends State<DashoardTab> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
+                      color:
+                          theme.textTheme.bodyLarge?.color?.withOpacity(0.3) ??
+                          AppColors.greyColor.withOpacity(
+                            0.3,
+                          ), //BORDER COLOR,//AppColors.greyColor.withOpacity(0.3),
                     ),
                     borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
+                    color:
+                        theme.secondaryHeaderColor, //AppColors.secondaryColor
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -576,7 +605,7 @@ class _DashoardTabState extends State<DashoardTab> {
                                   text: "Applicant details",
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.sp,
-                                  color: AppColors.titleColor,
+                                  // color: AppColors.titleColor,
                                 ),
                               ],
                             ),
@@ -592,7 +621,10 @@ class _DashoardTabState extends State<DashoardTab> {
                                 Expanded(
                                   child: KAtsGlowButton(
                                     text: "Date",
-                                    textColor: AppColors.greyColor,
+                                    textColor:
+                                        theme.textTheme.bodyLarge?.color ??
+                                        AppColors
+                                            .greyColor, //AppColors.greyColor,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                     icon: SvgPicture.asset(
@@ -600,11 +632,18 @@ class _DashoardTabState extends State<DashoardTab> {
                                       height: 20,
                                       width: 20,
                                       fit: BoxFit.contain,
+                                      //SVG IMAGE COLOR
+                                      colorFilter: ColorFilter.mode(
+                                        theme.textTheme.headlineLarge?.color ??
+                                            Colors.black,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                     onPressed: () {
                                       selectDate(context, dateController);
                                     },
-                                    backgroundColor: AppColors.secondaryColor,
+                                    backgroundColor: theme
+                                        .secondaryHeaderColor, //AppColors.secondaryColor
                                   ),
                                 ),
 
@@ -612,7 +651,8 @@ class _DashoardTabState extends State<DashoardTab> {
                                 Expanded(
                                   child: KAtsGlowButton(
                                     text: "Export",
-                                    textColor: AppColors.secondaryColor,
+                                    textColor: theme
+                                        .secondaryHeaderColor, //AppColors.secondaryColor
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                     icon: SvgPicture.asset(
@@ -620,6 +660,11 @@ class _DashoardTabState extends State<DashoardTab> {
                                       height: 20,
                                       width: 20,
                                       fit: BoxFit.contain,
+                                      //SVG IMAGE COLOR
+                                      colorFilter: ColorFilter.mode(
+                                        theme.secondaryHeaderColor,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                     onPressed: () {
                                       print("Export button tapped");
@@ -640,8 +685,11 @@ class _DashoardTabState extends State<DashoardTab> {
                             // Filter Field
                             KFilterBtn(
                               text: "Filter",
-                              textColor: Colors.black,
-                              backgroundColor: Colors.white,
+                              textColor:
+                                  theme.textTheme.headlineLarge?.color ??
+                                  AppColors.titleColor, //AppColors.titleColor,
+                              backgroundColor: theme
+                                  .secondaryHeaderColor, //AppColors.secondaryColor
                               borderColor: const Color.fromRGBO(
                                 233,
                                 234,
@@ -657,7 +705,12 @@ class _DashoardTabState extends State<DashoardTab> {
                                 AppAssetsConstants.filterIcon,
                                 height: 16.h,
                                 width: 16.w,
-                                color: Colors.black,
+                                //SVG IMAGE COLOR
+                                colorFilter: ColorFilter.mode(
+                                  theme.textTheme.headlineLarge?.color ??
+                                      Colors.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
 
@@ -864,10 +917,13 @@ class _DashoardTabState extends State<DashoardTab> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
+                      color:
+                          theme.textTheme.bodyLarge?.color?.withOpacity(0.3) ??
+                          AppColors.greyColor, //BORDER COLOR
                     ),
                     borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
+                    color:
+                        theme.secondaryHeaderColor, //AppColors.secondaryColor
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -899,6 +955,9 @@ class _DashoardTabState extends State<DashoardTab> {
     List<GridColumn> columns,
     List<DataGridRow> rows,
   ) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     return ReusableDataGrid(
       allowSorting: false, // 🔹 Enable sorting
       title: 'Applicants',
@@ -953,14 +1012,17 @@ class _DashoardTabState extends State<DashoardTab> {
                           text: fullName,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.titleColor,
+                          //  color: AppColors.titleColor,
                           textAlign: TextAlign.center,
                         ),
                         KText(
                           text: email,
                           fontSize: 11.sp,
                           fontWeight: FontWeight.w400,
-                          color: AppColors.greyColor,
+                          color: theme
+                              .textTheme
+                              .bodyLarge
+                              ?.color, //AppColors.greyColor,
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -982,7 +1044,7 @@ class _DashoardTabState extends State<DashoardTab> {
               Icon(
                 Icons.download_outlined,
                 size: 16.sp,
-                color: AppColors.greyColor,
+                color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,,
               ),
             ],
           );
