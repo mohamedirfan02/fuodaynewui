@@ -66,7 +66,7 @@ class OnBoardingScreen extends StatelessWidget {
                         ? AppColors.onBoardingBgColorDark
                         : AppColors.onBoardingBgColor,
                     textColor: isDark
-                        ? AppColors.onBoardingTextColorDark
+                        ? AppColors.titleColorDark
                         : AppColors.onBoardingTextColor,
                     onTap: () async {
                       // Set onboarding status to true

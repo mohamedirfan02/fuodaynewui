@@ -89,7 +89,9 @@ class _HomeEmployeeScreenState extends State<HomeEmployeeScreen> {
           profileImageUrl: profilePhoto,
         ),
         body: KLinearGradientBg(
-          gradientColor: AppColors.employeeGradientColor,
+          gradientColor: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.employeeGradientColorDark
+              : AppColors.employeeGradientColor,
           child: Padding(
             padding: EdgeInsets.only(top: 20.h),
             child: Column(

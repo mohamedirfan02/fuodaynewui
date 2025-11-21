@@ -48,7 +48,7 @@ class TimeTrackerOverview extends StatelessWidget {
                 children: [
                   TimeTrackerOverviewCard(
                     iconData: Icons.lock_clock,
-                    timeTrackerOverviewCardTitle: "Weekly Working Hours",
+                    timeTrackerOverviewCardTitle: "Weekly Working",
                     timeTrackerOverviewCardWorkingHours: "48 Hours",
                   ),
                   KHorizontalSpacer(width: 10.w),

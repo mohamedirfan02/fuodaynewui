@@ -64,15 +64,22 @@ class AttendanceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // Attendance count
-              KText(
-                text: attendanceCount,
-                fontWeight: FontWeight.w700,
-                fontSize: 16.sp,
-                color: theme
-                    .textTheme
-                    .headlineLarge
-                    ?.color, //AppColors.titleColor,
+              TweenAnimationBuilder<double>(
+                tween: Tween<double>(
+                  begin: 0,
+                  end: double.tryParse(attendanceCount) ?? 0,
+                ),
+                duration: const Duration(milliseconds: 800),
+                builder: (context, value, child) {
+                  return KText(
+                    text: value.toStringAsFixed(0), // animated number
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16.sp,
+                    color: theme.textTheme.headlineLarge?.color,
+                  );
+                },
               ),
+
 
               KVerticalSpacer(height: 8.h),
 

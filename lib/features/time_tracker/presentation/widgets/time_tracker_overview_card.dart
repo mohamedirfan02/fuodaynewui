@@ -75,13 +75,23 @@ class TimeTrackerOverviewCard extends StatelessWidget {
           KVerticalSpacer(height: 4.h),
 
           // Hours
-          KText(
-            textAlign: TextAlign.center,
-            text: timeTrackerOverviewCardWorkingHours,
-            fontWeight: FontWeight.w600,
-            // color: AppColors.titleColor,
-            fontSize: 12.sp,
+          TweenAnimationBuilder<double>(
+            tween: Tween<double>(
+              begin: 0,
+              end: double.tryParse(
+                  timeTrackerOverviewCardWorkingHours.replaceAll(RegExp(r'[^0-9]'), '')
+              ) ?? 0,
+            ),
+            duration: const Duration(milliseconds: 800),
+            builder: (context, value, child) {
+              return KText(
+                text: "${value.toStringAsFixed(0)} Hours",
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w700,
+              );
+            },
           ),
+
         ],
       ),
     );

@@ -216,11 +216,10 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
 
           // Table
           SizedBox(
-            height: 600.h,
+            height: 200.h,
             child: KDataTable(columnTitles: columns, rowData: data),
           ),
 
-          KVerticalSpacer(height: 60.h),
         ],
       ),
     );
