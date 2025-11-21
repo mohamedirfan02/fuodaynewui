@@ -217,12 +217,14 @@ class _FollowUpCallTabState extends State<FollowUpCallTab> {
   //==================================================================
   // Columns
   List<GridColumn> _buildColumns() {
-    const headerStyle = TextStyle(
+    //App Theme Data
+    final theme = Theme.of(context);
+    final headerStyle = TextStyle(
       fontWeight: FontWeight.normal,
-      color: AppColors.greyColor,
+      color: theme.textTheme.bodyLarge?.color,
     );
     Widget header(String text) => Container(
-      padding: const EdgeInsets.all(8),
+      padding: EdgeInsets.all(8.w),
       alignment: Alignment.center,
       child: Text(text, style: headerStyle),
     );
@@ -271,13 +273,15 @@ class _FollowUpCallTabState extends State<FollowUpCallTab> {
         'icon': AppAssetsConstants.rejectCallIcon, // ✅ SVG path
       },
     ];
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: AppColors.atsHomepageBg,
+        color: theme.cardColor,
         child: Padding(
           padding: EdgeInsets.all(16.w),
           child: SingleChildScrollView(
@@ -303,8 +307,10 @@ class _FollowUpCallTabState extends State<FollowUpCallTab> {
                       employeeCount: item['numberOfCount'].toString(),
                       employeeCardIcon: item['icon'],
                       employeeDescription: item['title'],
-                      employeeIconColor: AppColors.primaryColor,
-                      employeePercentageColor: AppColors.checkInColor,
+                      employeeIconColor: theme.primaryColor,
+                      employeePercentageColor: isDark
+                          ? AppColors.checkInColorDark
+                          : AppColors.checkInColor,
                       growthText: item['growth'],
                     );
                   },
@@ -315,10 +321,14 @@ class _FollowUpCallTabState extends State<FollowUpCallTab> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
+                      color:
+                          theme.textTheme.bodyLarge?.color?.withValues(
+                            alpha: 0.3,
+                          ) ??
+                          AppColors.greyColor.withValues(alpha: 0.3),
                     ),
                     borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
+                    color: theme.secondaryHeaderColor,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -337,7 +347,7 @@ class _FollowUpCallTabState extends State<FollowUpCallTab> {
                               text: "Hiring Manager",
                               fontWeight: FontWeight.w600,
                               fontSize: 16.sp,
-                              color: AppColors.titleColor,
+                              // color: AppColors.titleColor,
                             ),
                           ],
                         ),
@@ -371,6 +381,9 @@ class _FollowUpCallTabState extends State<FollowUpCallTab> {
       allowSorting: true, // 🔹 Enable sorting
       selectionColor: Colors.red.withOpacity(0.2),
       cellBuilder: (cell, rowIndex, actualDataIndex) {
+        //App Theme Data
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
         if (cell.columnName == 'Status') {
           final status = _selectedStages[actualDataIndex];
 
@@ -379,15 +392,17 @@ class _FollowUpCallTabState extends State<FollowUpCallTab> {
           Color textColor;
           switch (status.toLowerCase()) {
             case 'selected':
-              bgColor = AppColors.checkInColor.withOpacity(.2);
-              textColor = AppColors.checkInColor;
+              bgColor = AppColors.checkInColor.withValues(alpha: .2);
+              textColor = isDark
+                  ? AppColors.checkInColorDark
+                  : AppColors.checkInColor;
               break;
             case 'rejected':
-              bgColor = AppColors.softRed.withOpacity(.2);
-              textColor = AppColors.softRed;
+              bgColor = AppColors.softRed.withValues(alpha: .2);
+              textColor = isDark ? AppColors.softRedDark : AppColors.softRed;
               break;
             case 'holding':
-              bgColor = Colors.yellow.withOpacity(.2);
+              bgColor = Colors.yellow.withValues(alpha: .2);
               textColor = Colors.yellow.shade900;
               break;
             default:
@@ -407,9 +422,10 @@ class _FollowUpCallTabState extends State<FollowUpCallTab> {
               value: status,
               underline: const SizedBox.shrink(),
               isExpanded: true,
-              dropdownColor:
-                  Colors.white, // 🔹 White background for dropdown menu
-              iconEnabledColor: Colors.black, // 🔹 Black arrow icon
+              dropdownColor: theme
+                  .secondaryHeaderColor, // 🔹 White background for dropdown menu
+              iconEnabledColor:
+                  theme.textTheme.headlineLarge?.color, // 🔹  arrow icon
               selectedItemBuilder: (context) {
                 // 🔹 This controls how the selected item appears in the container
                 return stageOptions.map((stage) {
@@ -430,8 +446,11 @@ class _FollowUpCallTabState extends State<FollowUpCallTab> {
                   value: stage,
                   child: Text(
                     stage,
-                    style: const TextStyle(
-                      color: Colors.black, // 🔹 Black text in dropdown items
+                    style: TextStyle(
+                      color: theme
+                          .textTheme
+                          .headlineLarge
+                          ?.color, // 🔹 Black text in dropdown items
                     ),
                   ),
                 );

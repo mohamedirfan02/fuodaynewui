@@ -3,12 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
 import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
-import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
-import 'package:fuoday/commons/widgets/k_filter_button.dart';
-import 'package:fuoday/commons/widgets/k_horizontal_spacer.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
-import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
+import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
@@ -18,15 +15,7 @@ import 'package:fuoday/features/home/presentation/screens/ats_screens/ats_total_
 import 'package:fuoday/features/home/presentation/screens/ats_screens/ats_dashboard_tab.dart';
 import 'package:fuoday/features/home/presentation/screens/ats_screens/ats_yesterday_call_tab.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
-import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
-import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
-import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
-import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card.dart';
-import 'package:go_router/go_router.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
-import '../../../../../core/constants/router/app_route_constants.dart';
-import '../../../../ats_hiring/presentation/screens/ats_onboarding_tab.dart';
 
 class HomeRecruiterScreen extends StatefulWidget {
   const HomeRecruiterScreen({super.key});
@@ -402,8 +391,11 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final rows = _buildRows();
-    final columns = _buildColumns();
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
+    // final rows = _buildRows();
+    // final columns = _buildColumns();
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
 
@@ -459,9 +451,9 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AtsKAppBarWithDrawer(
-          userName: "",
+          userName: "Test",
           cachedNetworkImageUrl: profilePhoto,
-          userDesignation: "",
+          userDesignation: "Test userDesignation",
           showUserInfo: true,
           onDrawerPressed: _openDrawer,
           onNotificationPressed: () {},
@@ -474,7 +466,8 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          color: AppColors.atsHomepageBg,
+          // color: AppColors.atsHomepageBg,
+          color: theme.cardColor,
           child: Padding(
             padding: EdgeInsets.only(top: 16.h),
             child: Column(
@@ -491,7 +484,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                           text: "Hello $name",
                           fontWeight: FontWeight.w600,
                           fontSize: 16.sp,
-                          color: AppColors.titleColor,
+                          //color: AppColors.titleColor,
                         ),
                         const SizedBox(
                           width: 8,
@@ -513,7 +506,10 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                       text: "Welcome back to Recruiter Dashboard",
                       fontWeight: FontWeight.w500,
                       fontSize: 14.sp,
-                      color: AppColors.greyColor,
+                      color: theme
+                          .textTheme
+                          .bodyLarge
+                          ?.color, //AppColors.greyColor,,
                     ),
                   ),
                 ),
@@ -532,10 +528,16 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                         child: TabBar(
                           isScrollable: true,
                           tabAlignment: TabAlignment.start, // left align
-                          dividerColor: AppColors.atsHomepageBg,
-                          unselectedLabelColor: AppColors.greyColor,
-                          indicatorColor: AppColors.primaryColor,
-                          labelColor: AppColors.titleColor,
+                          dividerColor: theme.cardColor,
+                          unselectedLabelColor: theme
+                              .textTheme
+                              .bodyLarge
+                              ?.color, //AppColors.greyColor,,
+                          indicatorColor: theme.primaryColor,
+                          labelColor: theme
+                              .textTheme
+                              .headlineLarge
+                              ?.color, //AppColors.titleColor,,
                           tabs: [
                             Tab(
                               child: Row(
@@ -546,6 +548,11 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                                     height: 20,
                                     width: 20,
                                     fit: BoxFit.contain,
+                                    colorFilter: ColorFilter.mode(
+                                      theme.textTheme.headlineLarge?.color ??
+                                          Colors.black,
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
                                   const SizedBox(width: 6),
                                   const Text("Dashboard"),
@@ -564,7 +571,10 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                                   ),*/
                                   Icon(
                                     Icons.phone_in_talk_outlined,
-                                    color: Colors.black,
+                                    color: theme
+                                        .textTheme
+                                        .headlineLarge
+                                        ?.color, //AppColors.titleColor,,
                                     //size: 20,
                                   ),
                                   const SizedBox(width: 6),
@@ -581,6 +591,11 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                                     height: 20,
                                     width: 20,
                                     fit: BoxFit.contain,
+                                    colorFilter: ColorFilter.mode(
+                                      theme.textTheme.headlineLarge?.color ??
+                                          Colors.black,
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
                                   const SizedBox(width: 6),
                                   const Text("Yesterday Call Progress"),
@@ -596,6 +611,11 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                                     height: 20,
                                     width: 20,
                                     fit: BoxFit.contain,
+                                    colorFilter: ColorFilter.mode(
+                                      theme.textTheme.headlineLarge?.color ??
+                                          Colors.black,
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
                                   const SizedBox(width: 6),
                                   const Text("Follow Up Call Today"),
@@ -611,6 +631,12 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                                     height: 20,
                                     width: 20,
                                     fit: BoxFit.contain,
+                                    //SVG IMAGE COLOR
+                                    colorFilter: ColorFilter.mode(
+                                      theme.textTheme.headlineLarge?.color ??
+                                          Colors.black,
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
                                   const SizedBox(width: 6),
                                   const Text("Non Responsive Calls"),

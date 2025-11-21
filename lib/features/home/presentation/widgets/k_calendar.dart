@@ -10,6 +10,9 @@ import 'package:fuoday/core/themes/app_colors.dart';
 class CalendarHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -17,7 +20,7 @@ class CalendarHeader extends StatelessWidget {
           text: "Calendar",
           fontWeight: FontWeight.w600,
           fontSize: 16.sp,
-          color: AppColors.titleColor,
+          //color: AppColors.titleColor,
         ),
         InkWell(
           onTap: () {
@@ -29,12 +32,17 @@ class CalendarHeader extends StatelessWidget {
                 text: "See all",
                 fontWeight: FontWeight.w500,
                 fontSize: 11.sp,
-                color: AppColors.subTitleColor,
+                color: theme
+                    .inputDecorationTheme
+                    .focusedBorder
+                    ?.borderSide
+                    .color, //subTitleColor
               ),
               Icon(
                 Icons.arrow_forward_ios,
                 size: 12.sp,
-                color: AppColors.subTitleColor,
+                color:
+                    theme.inputDecorationTheme.focusedBorder?.borderSide.color,
               ),
             ],
           ),
@@ -50,6 +58,9 @@ class CalendarHeader extends StatelessWidget {
 class TodaySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    // final isDark = theme.brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -57,7 +68,7 @@ class TodaySection extends StatelessWidget {
           text: "TODAY",
           fontWeight: FontWeight.w500,
           fontSize: 11.sp,
-          color: AppColors.greyColor,
+          color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
         ),
         SizedBox(height: 12.h),
         CalendarEventItem(
@@ -77,6 +88,9 @@ class TodaySection extends StatelessWidget {
 class UpcomingSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -84,7 +98,7 @@ class UpcomingSection extends StatelessWidget {
           text: "UPCOMING",
           fontWeight: FontWeight.w500,
           fontSize: 11.sp,
-          color: AppColors.greyColor,
+          color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
         ),
         SizedBox(height: 12.h),
         CalendarEventItem(
@@ -131,6 +145,9 @@ class CalendarEventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.only(left: 12.w),
       decoration: BoxDecoration(
@@ -148,14 +165,14 @@ class CalendarEventItem extends StatelessWidget {
                 text: role,
                 fontWeight: FontWeight.w400,
                 fontSize: 11.sp,
-                color: AppColors.titleColor,
+                //  color: AppColors.titleColor,
               ),
               SizedBox(height: 4.h),
               KText(
                 text: task,
                 fontWeight: FontWeight.w600,
                 fontSize: 14.sp,
-                color: AppColors.titleColor,
+                // color: AppColors.titleColor,
               ),
             ],
           ),
@@ -163,7 +180,7 @@ class CalendarEventItem extends StatelessWidget {
             text: date,
             fontWeight: FontWeight.w400,
             fontSize: 11.sp,
-            color: AppColors.greyColor,
+            color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
           ),
         ],
       ),
