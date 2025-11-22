@@ -17,7 +17,7 @@ class AppColors {
   //     Color(0xFF1565c0), // Navy blue
   //     Color(0xFF1976d2), // Royal blue
   //     Color(0xFF1e88e5), // Bright blue
-  //     Color(0xFF42a5f5), // Light blue
+  //     Color(0xFF42a5f5), // Li ght blue
   //   ];
   //
   // // Option 3: Custom blue gradient matching your UI
@@ -128,7 +128,7 @@ class AppColors {
 
   /// for dark mode color //////////////////////
 
-// 🌙 Dark Mode Colors - Blue Themed
+  // 🌙 Dark Mode Colors - Blue Themed
   static const List<Color> employeeGradientColorDark = [
     Color(0xFF0A2463), // Deep Navy Blue
     Color(0xFF1E3A8A), // Royal Blue
@@ -150,57 +150,57 @@ class AppColors {
 
   static const Color transparentColorDark = Colors.transparent;
 
-// Primary Color (blue-tinted instead of purple)
+  // Primary Color (blue-tinted instead of purple)
   static const Color primaryColorDark = Color(0xFF5B9FFF);
 
-// Secondary Color
+  // Secondary Color
   static const Color secondaryColorDark = Color(0xFF1A2332);
 
-// Title Color
+  // Title Color
   static const Color titleColorDark = Color(0xFFFFFFFF);
 
-// Subtitle Color (keeping the nice blue)
+  // Subtitle Color (keeping the nice blue)
   static const Color subTitleColorDark = Color(0xFF88A8FF);
 
-// Auth Background
+  // Auth Background
   static const Color authBgColorDark = Color(0xFF0A1628);
 
-// Onboarding
+  // Onboarding
   static const Color onBoardingBgColorDark = Color(0xFF0A2463);
   static const Color onBoardingTextColorDark = Color(0xFF5B9FFF);
 
-// Auth TextField Colors
+  // Auth TextField Colors
   static const Color authTextFieldSuffixIconColorDark = Color(0xFF6B7A99);
   static const Color authUnderlineBorderColorDark = Color(0xFF4A5B7C);
   static const Color softRedDark = Color(0xFFE57373);
 
-// Text Button
+  // Text Button
   static const Color textBtnColorDark = Color(0xFF5B9FFF);
 
-// Auth Button
+  // Auth Button
   static const Color authBtnColorDark = Color(0xFF1E5FCC);
   static const Color authBackToLoginColorDark = Color(0xFF2A4A7C);
 
-// Card Border
+  // Card Border
   static const Color cardBorderColorDark = Color(0xFF2C3E5A);
   static const Color organizationalColorDark = Color(0xFFFFB74D);
   static const Color announcementColorDark = Color(0xFF4CAF70);
 
-// Check-in/out
+  // Check-in/out
   static const Color checkInColorDark = Color(0xFF66BB6A);
   static const Color checkOutColorDark = Color(0xFFE57373);
   static const Color locationOnSiteColorDark = Color(0xFF5B9FFF);
 
-// Neutral Colors
+  // Neutral Colors
   static const Color greyColorDark = Color(0xFF9DA7C5);
   static const Color chipColorDark = Color(0xFF1E2D45);
   static const Color approvedColorDark = Color(0xFF66BB6A);
   static const Color pendingColorDark = Color(0xFFFFB74D);
 
-// Attendance Card Light Text
+  // Attendance Card Light Text
   static const Color attendanceCardTextLightColorDark = Color(0xFF9DA7C5);
 
-// Additional helpful colors for consistency
+  // Additional helpful colors for consistency
   static const Color dividerColorDark = Color(0xFF1F3A5F);
   static const Color iconColorDark = Color(0xFF88A8FF);
   static const Color disabledColorDark = Color(0xFF4A5B7C);
@@ -212,6 +212,7 @@ class AppColors {
   static const Color softBlueDark = Color(0xFF8FD0FF);
   static const Color unactiveDark = Color(0xFFCC6A1E);
   static const Color closedDark = Color(0xFF178A7A);
+  static const Color chatBgDark = Color(0xFF1C2333);
 }
 
 class AppTheme {

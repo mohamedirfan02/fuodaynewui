@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fuoday/commons/widgets/k_text.dart';
-import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/ats_job_portal/presentation/widgets/k_container_card.dart';
 
 class JobPortalDesignPositionsTab extends StatefulWidget {
@@ -15,9 +12,11 @@ class JobPortalDesignPositionsTab extends StatefulWidget {
 
 class _JobPortalDesignPositionsTabState
     extends State<JobPortalDesignPositionsTab> {
-
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    //final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       child: Column(

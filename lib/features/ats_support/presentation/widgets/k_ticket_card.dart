@@ -61,13 +61,16 @@ class TicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(24.w),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFFFFF),
+          color: theme.secondaryHeaderColor, //AppColors.secondaryColor
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(color: const Color(0xFFE5E7EB), width: 1.w),
           boxShadow: [
@@ -123,7 +126,10 @@ class TicketCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF111827),
+                      color: theme
+                          .textTheme
+                          .headlineLarge
+                          ?.color, //AppColors.titleColor,
                       height: 1.4,
                     ),
                   ),
@@ -132,7 +138,7 @@ class TicketCard extends StatelessWidget {
             ),
 
             SizedBox(height: 16.h),
-            Divider(color: AppColors.lightGreyColor, thickness: 1, height: 1),
+            Divider(color: theme.dividerColor, thickness: 1, height: 1),
 
             SizedBox(height: 16.h),
 
@@ -148,7 +154,10 @@ class TicketCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFF9CA3AF),
+                          color: theme
+                              .textTheme
+                              .bodyLarge
+                              ?.color, //AppColors.greyColor,
                         ),
                       ),
                       SizedBox(height: 4.h),
@@ -157,7 +166,10 @@ class TicketCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF111827),
+                          color: theme
+                              .textTheme
+                              .headlineLarge
+                              ?.color, //AppColors.titleColor,
                         ),
                       ),
                     ],
@@ -172,7 +184,7 @@ class TicketCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFF9CA3AF),
+                          color: theme.textTheme.bodyLarge?.color,
                         ),
                       ),
                       SizedBox(height: 4.h),
@@ -181,7 +193,10 @@ class TicketCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF111827),
+                          color: theme
+                              .textTheme
+                              .headlineLarge
+                              ?.color, //AppColors.titleColor,
                         ),
                       ),
                     ],
@@ -204,7 +219,7 @@ class TicketCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFF9CA3AF),
+                          color: theme.textTheme.bodyLarge?.color,
                         ),
                       ),
                       SizedBox(height: 4.h),
@@ -213,7 +228,10 @@ class TicketCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF111827),
+                          color: theme
+                              .textTheme
+                              .headlineLarge
+                              ?.color, //AppColors.titleColor,
                         ),
                       ),
                     ],
@@ -228,7 +246,7 @@ class TicketCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFF9CA3AF),
+                          color: theme.textTheme.bodyLarge?.color,
                         ),
                       ),
                       SizedBox(height: 4.h),
@@ -237,7 +255,10 @@ class TicketCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF111827),
+                          color: theme
+                              .textTheme
+                              .headlineLarge
+                              ?.color, //AppColors.titleColor,
                         ),
                       ),
                     ],

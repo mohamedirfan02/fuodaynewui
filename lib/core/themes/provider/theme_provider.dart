@@ -25,7 +25,7 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   // Load saved theme preference from Hive
-  void _loadThemeFromHive() {
+  /*  void _loadThemeFromHive() {
     try {
       final savedTheme = _themeBox.get(
         AppHiveStorageConstants.themeModeKey,
@@ -49,6 +49,41 @@ class ThemeProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       AppLoggerHelper.logError("❌ Failed to load theme: $e");
+    }
+  }*/
+  void _loadThemeFromHive() {
+    try {
+      final savedTheme = _themeBox.get(
+        AppHiveStorageConstants.themeModeKey,
+        defaultValue: 'light', // Default theme is LIGHT
+      );
+
+      switch (savedTheme) {
+        case 'light':
+          _themeMode = ThemeMode.light;
+          break;
+
+        case 'dark':
+          _themeMode = ThemeMode.dark;
+          break;
+
+        case 'system':
+          _themeMode = ThemeMode.system;
+          break;
+
+        default:
+          _themeMode = ThemeMode.light;
+          break;
+      }
+
+      AppLoggerHelper.logInfo("📦 Loaded theme mode: $savedTheme");
+      notifyListeners();
+    } catch (e) {
+      // 👇 If any error occurs, default to LIGHT theme
+      _themeMode = ThemeMode.light;
+
+      AppLoggerHelper.logError("❌ Failed to load theme: $e");
+      notifyListeners();
     }
   }
 
