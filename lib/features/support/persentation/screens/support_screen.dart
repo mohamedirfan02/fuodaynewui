@@ -11,6 +11,7 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/themes/widget/theme_button_widget.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
@@ -104,7 +105,7 @@ class _SupportScreenState extends State<SupportScreen> {
     ) async {
       //App Theme Data
       final theme = Theme.of(context);
-      final isDark = theme.brightness == Brightness.dark;
+      //final isDark = theme.brightness == Brightness.dark;
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -423,6 +424,12 @@ class _SupportScreenState extends State<SupportScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              //ThemeSwitcherButtons(),
+
+              // OR
+              ThemeSwitcherSegmented(),
+              KVerticalSpacer(height: 12.h),
+
               // Search Controller
               KAuthTextFormField(
                 hintText: "Search",

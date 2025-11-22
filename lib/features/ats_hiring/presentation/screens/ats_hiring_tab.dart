@@ -175,9 +175,10 @@ class _HiringTabState extends State<HiringTab> {
   //==================================================================
   // Columns
   List<GridColumn> _buildColumns() {
-    const headerStyle = TextStyle(
+    final theme = Theme.of(context);
+    final headerStyle = TextStyle(
       fontWeight: FontWeight.normal,
-      color: AppColors.greyColor,
+      color: theme.textTheme.bodyLarge?.color,
     );
     Widget header(String text) => Container(
       padding: const EdgeInsets.all(8),
@@ -227,6 +228,9 @@ class _HiringTabState extends State<HiringTab> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
@@ -316,7 +320,7 @@ class _HiringTabState extends State<HiringTab> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: AppColors.atsHomepageBg,
+        color: theme.cardColor, //ATS Background Color,
         child: Padding(
           padding: EdgeInsets.all(16.w),
           child: SingleChildScrollView(
@@ -342,8 +346,10 @@ class _HiringTabState extends State<HiringTab> {
                       employeeCount: item['numberOfCount'].toString(),
                       employeeCardIcon: item['icon'],
                       employeeDescription: item['title'],
-                      employeeIconColor: AppColors.primaryColor,
-                      employeePercentageColor: AppColors.checkInColor,
+                      employeeIconColor: theme.primaryColor,
+                      employeePercentageColor: isDark
+                          ? AppColors.checkInColorDark
+                          : AppColors.checkInColor,
                       growthText: item['growth'],
                     );
                   },
@@ -354,10 +360,14 @@ class _HiringTabState extends State<HiringTab> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
+                      color:
+                          theme.textTheme.bodyLarge?.color?.withValues(
+                            alpha: 0.3,
+                          ) ??
+                          AppColors.greyColor.withValues(alpha: 0.3),
                     ),
                     borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
+                    color: theme.secondaryHeaderColor,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -376,7 +386,7 @@ class _HiringTabState extends State<HiringTab> {
                               text: "Hiring List",
                               fontWeight: FontWeight.w600,
                               fontSize: 16.sp,
-                              color: AppColors.titleColor,
+                              //color: AppColors.titleColor,
                             ),
                           ],
                         ),

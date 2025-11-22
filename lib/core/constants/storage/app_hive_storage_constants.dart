@@ -51,4 +51,8 @@ class AppHiveStorageConstants {
 
   // Home Feeds Project Key
   static const String homeFeedsProject = "homeFeedsProjectKey";
+
+  // Theme Box Key
+  static const String themeBoxKey = "themeBoxKey";
+  static const String themeModeKey = "themeModeKey";
 }

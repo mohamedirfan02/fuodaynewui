@@ -13,6 +13,7 @@ import 'package:fuoday/core/providers/app_internet_checker_provider.dart';
 import 'package:fuoday/core/router/app_router.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
+import 'package:fuoday/core/themes/provider/theme_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_absent_days_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_attendance_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_early_arrivals_details_provider.dart';
@@ -93,6 +94,7 @@ void commonMain() async {
   await Hive.openBox(AppHiveStorageConstants.authBoxKey);
   await Hive.openBox(AppHiveStorageConstants.onBoardingBoxKey);
   await Hive.openBox(AppHiveStorageConstants.employeeDetailsBoxKey);
+  await Hive.openBox(AppHiveStorageConstants.themeBoxKey);
 
   // dependency injection
   setUpServiceLocator();
@@ -124,6 +126,9 @@ class MyApp extends StatelessWidget {
 
         // Drop Down Provider
         ChangeNotifierProvider(create: (context) => getIt<DropdownProvider>()),
+
+        // App Theme Provider
+        ChangeNotifierProvider(create: (context) => getIt<ThemeProvider>()),
 
         // Check Box Provider
         ChangeNotifierProvider(create: (context) => getIt<CheckboxProvider>()),
@@ -363,33 +368,36 @@ class MyApp extends StatelessWidget {
             minTextAdapt: true,
             splitScreenMode: true,
             builder: (context, child) {
-              return MaterialApp.router(
-                debugShowCheckedModeBanner: false,
-                title: AppEnvironment.environmentName == "DEV"
-                    ? "Fuoday Dev"
-                    : "Fuoday",
-                // theme: ThemeData(fontFamily: GoogleFonts.inter().fontFamily),
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
-                themeMode: ThemeMode.system,
-                // theme: ThemeData(
-                //   textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
-                // ),
-                routerConfig: appRouter,
-                builder: (context, child) {
-                  return Banner(
-                    message: AppEnvironment.environmentName,
-                    location: BannerLocation.topEnd,
-                    color: AppEnvironment.environmentName == "DEV"
-                        ? AppColors.checkOutColor
-                        : AppColors.checkInColor,
-                    textStyle: TextStyle(
-                      color: AppColors.secondaryColor,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 12.0,
-                      letterSpacing: 1.0,
-                    ),
-                    child: child!,
+              return Consumer<ThemeProvider>(
+                builder: (context, themeProvider, child) {
+                  return MaterialApp.router(
+                    debugShowCheckedModeBanner: false,
+                    title: AppEnvironment.environmentName == "DEV"
+                        ? "Fuoday Dev"
+                        : "Fuoday",
+                    // theme: ThemeData(fontFamily: GoogleFonts.inter().fontFamily),
+                    theme: AppTheme.lightTheme,
+                    darkTheme: AppTheme.darkTheme,
+                    themeMode: themeProvider.themeMode, // theme: ThemeData(
+                    //   textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
+                    // ),
+                    routerConfig: appRouter,
+                    builder: (context, child) {
+                      return Banner(
+                        message: AppEnvironment.environmentName,
+                        location: BannerLocation.topEnd,
+                        color: AppEnvironment.environmentName == "DEV"
+                            ? AppColors.checkOutColor
+                            : AppColors.checkInColor,
+                        textStyle: TextStyle(
+                          color: AppColors.secondaryColor,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12.0,
+                          letterSpacing: 1.0,
+                        ),
+                        child: child!,
+                      );
+                    },
                   );
                 },
               );

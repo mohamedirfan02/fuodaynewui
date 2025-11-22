@@ -11,6 +11,7 @@ import 'package:fuoday/core/service/excel_generator_service.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/service/pdf_generator_service.dart';
 import 'package:fuoday/core/service/secure_storage_service.dart';
+import 'package:fuoday/core/themes/provider/theme_provider.dart';
 import 'package:fuoday/core/utils/file_picker.dart';
 import 'package:fuoday/features/ats_candidate/data/datasource/remote/candidates_remote_data_source.dart';
 import 'package:fuoday/features/ats_candidate/data/datasource/remote/candidates_remote_datasource.dart';
@@ -312,6 +313,8 @@ void setUpServiceLocator() {
   getIt.registerLazySingleton<DioService>(() => DioService());
 
   getIt.registerLazySingleton<AppFilePicker>(() => AppFilePicker());
+  // App Theme provider
+  getIt.registerLazySingleton<ThemeProvider>(() => ThemeProvider());
 
   // App Utility Providers
   getIt.registerFactory<AppFilePickerProvider>(() => AppFilePickerProvider());
@@ -1550,53 +1553,51 @@ void setUpServiceLocator() {
 
   // Add these registrations to your existing injection setup
 
-// 🔹 Data Source
+  // 🔹 Data Source
   getIt.registerLazySingleton<CandidatesRemoteDataSource>(
-        () => CandidatesRemoteDataSourceImpl(dioService: getIt<DioService>()),
+    () => CandidatesRemoteDataSourceImpl(dioService: getIt<DioService>()),
   );
 
-// 🔹 Repository
+  // 🔹 Repository
   getIt.registerLazySingleton<CandidatesRepository>(
-        () => CandidatesRepositoryImpl(
+    () => CandidatesRepositoryImpl(
       remoteDataSource: getIt<CandidatesRemoteDataSource>(),
     ),
   );
 
-// 🔹 Use Case
+  // 🔹 Use Case
   getIt.registerLazySingleton<GetCandidatesUseCase>(
-        () => GetCandidatesUseCase(repository: getIt<CandidatesRepository>()),
+    () => GetCandidatesUseCase(repository: getIt<CandidatesRepository>()),
   );
 
-// 🔹 Provider
+  // 🔹 Provider
   getIt.registerFactory<CandidatesProvider>(
-        () => CandidatesProvider(
-      getCandidatesUseCase: getIt<GetCandidatesUseCase>(),
-    ),
+    () =>
+        CandidatesProvider(getCandidatesUseCase: getIt<GetCandidatesUseCase>()),
   );
-
 
   // 🔹 Data Source
   getIt.registerLazySingleton<CandidatesActionRemoteDataSource>(
-        () => CandidatesActionRemoteDataSourceImpl(dioService: getIt<DioService>()),
+    () => CandidatesActionRemoteDataSourceImpl(dioService: getIt<DioService>()),
   );
 
   // 🔹 Repository
   getIt.registerLazySingleton<CandidatesActionRepository>(
-        () => CandidatesActionRepositoryImpl(
+    () => CandidatesActionRepositoryImpl(
       remoteDataSource: getIt<CandidatesActionRemoteDataSource>(),
     ),
   );
 
   // 🔹 Use Case
   getIt.registerLazySingleton<ActionOnCandidateUseCase>(
-        () => ActionOnCandidateUseCase(
+    () => ActionOnCandidateUseCase(
       repository: getIt<CandidatesActionRepository>(),
     ),
   );
 
   // 🔹 Provider
   getIt.registerFactory<CandidateActionProvider>(
-        () => CandidateActionProvider(
+    () => CandidateActionProvider(
       actionOnCandidateUseCase: getIt<ActionOnCandidateUseCase>(),
     ),
   );

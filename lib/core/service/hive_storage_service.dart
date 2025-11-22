@@ -14,15 +14,17 @@ class HiveStorageService {
   late Box _authBox;
   late Box _onBoardingBox;
   late Box _employeeDetailsBox;
+  late Box _themeBox;
 
+  Box get themeBox => _themeBox;
 
   Future<void> clearAll() async {
     await secureStorage.deleteAll(); // Clears encrypted values
     await Hive.box(AppHiveStorageConstants.authBoxKey).clear();
     await Hive.box(AppHiveStorageConstants.employeeDetailsBoxKey).clear();
     await Hive.box(AppHiveStorageConstants.onBoardingBoxKey).clear();
+    await Hive.box(AppHiveStorageConstants.themeBoxKey).clear();
   }
-
 
   /// Initialize Hive boxes
   Future<void> init() async {
@@ -34,6 +36,7 @@ class HiveStorageService {
       _employeeDetailsBox = await Hive.openBox(
         AppHiveStorageConstants.employeeDetailsBoxKey,
       );
+      _themeBox = Hive.box(AppHiveStorageConstants.themeBoxKey);
 
       AppLoggerHelper.logInfo("✅ Hive boxes initialized successfully.");
     } catch (e) {
