@@ -76,12 +76,12 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                KVerticalSpacer(height: 40.h),
+               // KVerticalSpacer(height: 40.h),
 
                 Image.asset(
                   AppAssetsConstants.logo,
-                  height: 150.h,
-                  width: 150.w,
+                  height: 180.h,
+                  width: 180.w,
                   // fit: BoxFit.cover,
                 ),
 

@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
+import 'package:fuoday/commons/widgets/k_snack_bar.dart';
+import 'package:fuoday/commons/widgets/k_text.dart';
+import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
+import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
+import 'package:fuoday/core/helper/app_logger_helper.dart';
+import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
+import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
+import 'package:fuoday/features/ats_candidate/widgets/k_ats_file_upload_btn.dart';
+import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
+import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../../../../commons/widgets/k_snack_bar.dart';
-import '../../../../commons/widgets/k_text.dart';
-import '../../../../commons/widgets/k_vertical_spacer.dart';
-import '../../../../core/constants/router/app_route_constants.dart';
-import '../../../../core/helper/app_logger_helper.dart';
-import '../../../../core/models/file_preview_data.dart';
-import '../../../../core/themes/app_colors.dart';
-import '../../widgets/k_ats_file_upload_btn.dart';
-import '../../../ats_index/presentation/widgets/gmail_compose_index.dart';
-import '../../../auth/presentation/widgets/k_auth_filled_btn.dart';
-import '../../../auth/presentation/widgets/k_auth_text_form_field.dart';
 
 class CandidateInformationScreen extends StatefulWidget {
   const CandidateInformationScreen({super.key});

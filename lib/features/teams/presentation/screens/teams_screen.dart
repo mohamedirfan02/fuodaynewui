@@ -47,6 +47,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
             text: "Teams",
             fontWeight: FontWeight.bold,
             fontSize: 14.sp,
+            color: theme.secondaryHeaderColor,
           ),
           titleTextStyle: GoogleFonts.sora(
             fontSize: 13.sp,

@@ -36,8 +36,8 @@ class KTeamProjectTile extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: isDark
-              ? AppColors.cardGradientColor
-              : AppColors.cardGradientColorDark,
+              ? AppColors.cardGradientColorDark
+              : AppColors.cardGradientColor,
         ),
       ),
       child: Column(

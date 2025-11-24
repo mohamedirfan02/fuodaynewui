@@ -156,18 +156,17 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              KVerticalSpacer(height: 20.h),
               KText(
                 text: "Welcome, $name!",
                 fontWeight: FontWeight.w600,
-                fontSize: 14.sp,
+                fontSize: 18.sp,
                 color: theme.textTheme.headlineLarge?.color,
               ),
               KVerticalSpacer(height: 10.h),
               KText(
                 text: "Your work is going to fill a large part of your life...",
                 fontWeight: FontWeight.w500,
-                fontSize: 10.sp,
+                fontSize: 14.sp,
                 color: theme.textTheme.headlineLarge?.color,
               ),
               KVerticalSpacer(height: 20.h),

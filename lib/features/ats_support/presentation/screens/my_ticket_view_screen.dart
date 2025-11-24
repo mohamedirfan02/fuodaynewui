@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fuoday/commons/widgets/k_alert_dialog_box.dart';
 import 'package:fuoday/commons/widgets/k_drop_down_text_form_field.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
@@ -9,7 +8,6 @@ import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
-import 'package:fuoday/features/ats_index/presentation/widgets/gmail_compose_index.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/add_response_dialog.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/k_details.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
