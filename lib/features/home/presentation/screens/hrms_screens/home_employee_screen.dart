@@ -147,12 +147,13 @@ class _HomeEmployeeScreenState extends State<HomeEmployeeScreen> {
                             vertical: 20.h,
                           ),
                           child: KTabBar(
+                            labelPadding: EdgeInsets.symmetric(horizontal: 30.w), // More space
                             tabs: [
                               Tab(text: "Activity"),
                               Tab(text: "Feeds"),
                               Tab(text: "Add Task"),
                             ],
-                          ),
+                          )
                         ),
                         Expanded(
                           child: TabBarView(

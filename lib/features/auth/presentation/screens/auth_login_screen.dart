@@ -50,15 +50,15 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     // Internet Checker Provider
-    final internetCheckerProvider = context.appInternetCheckerProviderWatch;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!internetCheckerProvider.isNetworkConnected) {
-        KSnackBar.failure(context, "No Internet Connection");
-      } else {
-        KSnackBar.success(context, "Internet Connection Available");
-      }
-    });
+    // final internetCheckerProvider = context.appInternetCheckerProviderWatch;
+    //
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (!internetCheckerProvider.isNetworkConnected) {
+    //     KSnackBar.failure(context, "No Internet Connection");
+    //   } else {
+    //     KSnackBar.success(context, "Internet Connection Available");
+    //   }
+    // });
     final isTablet = AppResponsive.isTablet(context);
     final isLandscape = AppResponsive.isLandscape(context);
 
@@ -333,15 +333,15 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                             text: "Employee Login",
                                             backgroundColor: theme.primaryColor,
                                             onPressed: () async {
-                                              // Internet Checker Provider
-                                              if (!internetCheckerProvider
-                                                  .isNetworkConnected) {
-                                                KSnackBar.failure(
-                                                  context,
-                                                  "No Internet Connection",
-                                                );
-                                                return;
-                                              }
+                                              // // Internet Checker Provider
+                                              // if (!internetCheckerProvider
+                                              //     .isNetworkConnected) {
+                                              //   KSnackBar.failure(
+                                              //     context,
+                                              //     "No Internet Connection",
+                                              //   );
+                                              //   return;
+                                              // }
 
                                               // Form Key Validation
                                               if (!formKey.currentState!

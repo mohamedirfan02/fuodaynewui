@@ -15,6 +15,7 @@ class KTabBar extends StatelessWidget {
   final TabBarIndicatorSize? indicatorSize;
   final EdgeInsetsGeometry? indicatorPadding;
   final TabController? controller;
+  final EdgeInsetsGeometry? labelPadding; // Added parameter for spacing
 
   const KTabBar({
     super.key,
@@ -29,6 +30,8 @@ class KTabBar extends StatelessWidget {
     this.indicatorSize,
     this.indicatorPadding,
     this.controller,
+    this.labelPadding, // Added to constructor
+
   });
 
   @override
@@ -55,7 +58,7 @@ class KTabBar extends StatelessWidget {
       unselectedLabelStyle:
           unselectedLabelStyle ??
           GoogleFonts.sora(fontSize: 10.sp, fontWeight: FontWeight.normal),
-      labelPadding: EdgeInsets.symmetric(horizontal: 8.w),
+      labelPadding: labelPadding ?? EdgeInsets.symmetric(horizontal: 8.w), // Now customizable
       tabAlignment: TabAlignment.center,
       isScrollable: true,
     );

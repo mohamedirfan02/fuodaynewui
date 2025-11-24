@@ -63,7 +63,7 @@ class AttendanceWelcomingCard extends StatelessWidget {
                         AppAssetsConstants.sunImg,
                         height: 40.h,
                         width: 40.w,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.cover, color: AppColors.greyColor,
                       ),
 
                       Column(
@@ -79,7 +79,7 @@ class AttendanceWelcomingCard extends StatelessWidget {
                             color: isDark
                                 ? AppColors.attendanceCardTextLightColorDark
                                 : AppColors
-                                      .attendanceCardTextLightColor, //theme.textTheme.bodyLarge?.color,
+                                      .greyColor, //theme.textTheme.bodyLarge?.color,
                           ),
 
                           // Welcoming TExt
@@ -89,7 +89,7 @@ class AttendanceWelcomingCard extends StatelessWidget {
                             fontSize: 12.sp,
                             color: isDark
                                 ? AppColors.attendanceCardTextLightColorDark
-                                : AppColors.attendanceCardTextLightColor,
+                                : AppColors.greyColor,
                           ),
                         ],
                       ),
@@ -131,6 +131,7 @@ class AttendanceWelcomingCard extends StatelessWidget {
                     height: 80.h,
                     width: 80.w,
                     fit: BoxFit.cover,
+                    color: AppColors.greyColor,
                   ),
                 ],
               ),

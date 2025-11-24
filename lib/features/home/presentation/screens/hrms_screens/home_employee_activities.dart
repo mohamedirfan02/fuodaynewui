@@ -239,9 +239,9 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                                   checkInProvider.isCheckedIn)
                             ? "Check Out"
                             : "Check In",
-                        fontSize: 8.sp,
+                        fontSize: 10.sp,
                         height: 25.h,
-                        width: 100.w,
+                        width: 125.w,
                         backgroundColor: checkInProvider.isLoading
                             ? Colors.grey
                             : (checkinStatusProvider.isCurrentlyCheckedIn ||
@@ -528,8 +528,8 @@ class _HomeEmployeeActivitiesState extends State<HomeEmployeeActivities> {
                 //     "Click the edit icon ✎ to add and manage your achievements !",
                 description:
                     'Recognizing our team\'s extraordinary efforts, we express heartfelt gratitude for your dedication, hard work, and the positive impact you bring daily',
-                onBadgesSubmitted: _handleBadgesSubmitted,
-                onBadgesUpdated: _handleBadgesUpdated,
+                // onBadgesSubmitted: _handleBadgesSubmitted,
+                // onBadgesUpdated: _handleBadgesUpdated,
               ),
 
               // Show error if checkin status fetch failed

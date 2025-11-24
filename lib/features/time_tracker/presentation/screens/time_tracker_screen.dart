@@ -125,6 +125,7 @@ class _TimeTrackerScreenState extends State<TimeTrackerScreen> {
 
                   // Tab Bar
                   KTabBar(
+                    labelPadding: EdgeInsets.symmetric(horizontal: 30.w), // More space
                     tabs: [
                       Tab(text: "Overview"),
                       Tab(text: "Project Management"),

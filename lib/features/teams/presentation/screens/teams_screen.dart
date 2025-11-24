@@ -92,7 +92,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                         KText(
                           text: name,
                           fontWeight: FontWeight.w600,
-                          fontSize: 14.sp,
+                          fontSize: 20.sp,
                           color: AppColors.secondaryColor,
                         ),
 
@@ -100,7 +100,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                         KText(
                           text: "Employee Id: $empId",
                           fontWeight: FontWeight.w500,
-                          fontSize: 10.sp,
+                          fontSize: 12.sp,
                           color: AppColors.secondaryColor,
                         ),
 
@@ -108,7 +108,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                         KText(
                           text: email,
                           fontWeight: FontWeight.w500,
-                          fontSize: 10.sp,
+                          fontSize: 12.sp,
                           color: AppColors.secondaryColor,
                         ),
                       ],

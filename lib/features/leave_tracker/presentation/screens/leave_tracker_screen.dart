@@ -33,15 +33,15 @@ class LeaveTrackerScreen extends StatefulWidget {
 class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController fromDateMonthYearController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController toDateMonthYearController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController employeeNameController = TextEditingController();
   final TextEditingController empIdController = TextEditingController();
   final TextEditingController regulationReasonController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController regulationCommentController =
-      TextEditingController();
+  TextEditingController();
   @override
   void dispose() {
     fromDateMonthYearController.dispose();
@@ -128,42 +128,189 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
     _scaffoldKey.currentState?.openDrawer();
   }
 
+  void _showLeaveRegulationBottomSheet() {
+    final theme = Theme.of(context);
+    final hiveService = getIt<HiveStorageService>();
+    final employeeDetails = hiveService.employeeDetails;
+    final name = employeeDetails?['name'] ?? "No Name";
+    final empId = employeeDetails?['empId'] ?? "No Employee ID";
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16.r),
+        ),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 20.w,
+            right: 20.w,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20.h,
+            top: 10.h,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Drag handle
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    height: 2.h,
+                    width: 40.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.r),
+                      color: theme.textTheme.bodyLarge?.color,
+                    ),
+                  ),
+                ),
+
+                KVerticalSpacer(height: 12.h),
+
+                // Create Ticket
+                KText(
+                  text: "Leave Regulation",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.sp,
+                  color: theme.textTheme.headlineLarge?.color,
+                ),
+
+                KVerticalSpacer(height: 10.h),
+
+                // Employee name
+                KAuthTextFormField(
+                  hintText: name,
+                  controller: employeeNameController,
+                  keyboardType: TextInputType.text,
+                  suffixIcon: Icons.perm_identity_outlined,
+                  isReadOnly: true,
+                ),
+                KVerticalSpacer(height: 10.h),
+
+                KAuthTextFormField(
+                  maxLines: 1,
+                  hintText: empId,
+                  controller: empIdController,
+                  keyboardType: TextInputType.text,
+                  suffixIcon: Icons.card_travel_rounded,
+                  isReadOnly: true,
+                ),
+                KVerticalSpacer(height: 10.h),
+                KAuthTextFormField(
+                  hintText: "From Date",
+                  onTap: () async {
+                    _selectDate(context, fromDateMonthYearController);
+                  },
+                  controller: fromDateMonthYearController,
+                  keyboardType: TextInputType.datetime,
+                  suffixIcon: Icons.date_range,
+                ),
+                KVerticalSpacer(height: 10.h),
+
+                KAuthTextFormField(
+                  hintText: "To Date",
+                  onTap: () async {
+                    _selectDate(context, toDateMonthYearController);
+                  },
+                  controller: toDateMonthYearController,
+                  keyboardType: TextInputType.datetime,
+                  suffixIcon: Icons.date_range,
+                ),
+                KVerticalSpacer(height: 10.h),
+
+                KAuthTextFormField(
+                  maxLines: 3,
+                  hintText: "Regulation Reason",
+                  controller: regulationReasonController,
+                  keyboardType: TextInputType.text,
+                  suffixIcon: Icons.category_rounded,
+                ),
+                KVerticalSpacer(height: 10.h),
+
+                KAuthTextFormField(
+                  hintText: "Regulation Comment",
+                  controller: regulationCommentController,
+                  keyboardType: TextInputType.text,
+                  suffixIcon: Icons.description,
+                ),
+                KVerticalSpacer(height: 10.h),
+                // Cancel
+                KAuthFilledBtn(
+                  height: AppResponsive.responsiveBtnHeight(context),
+                  width: double.infinity,
+                  text: "Cancel",
+                  fontSize: 10.sp,
+                  textColor: theme.primaryColor,
+                  onPressed: () {
+                    GoRouter.of(context).pop();
+                  },
+                  backgroundColor: theme.primaryColor.withOpacity(0.4),
+                ),
+
+                SizedBox(height: 12.h),
+
+                // Submit
+                KAuthFilledBtn(
+                  height: AppResponsive.responsiveBtnHeight(context),
+                  fontSize: 10.sp,
+                  width: double.infinity,
+                  text: "Submit",
+                  textColor: theme.secondaryHeaderColor,
+                  onPressed: _submitForm,
+                  backgroundColor: AppColors.primaryColor,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _selectDate(
+      BuildContext context,
+      TextEditingController controller,
+      ) async {
+    final theme = Theme.of(context);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      initialDatePickerMode: DatePickerMode.day,
+      helpText: 'Select Date',
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: theme.primaryColor,
+              onPrimary: theme.secondaryHeaderColor,
+              onSurface:
+              theme.textTheme.headlineLarge?.color ?? AppColors.titleColor,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      controller.text = DateFormat('yyyy-MM-dd').format(picked);
+    }
+  }
+
+  // void _openDrawer() {
+  //   _scaffoldKey.currentState?.openDrawer();
+  // }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    // Select Date
-    Future<void> selectDate(
-      BuildContext context,
-      TextEditingController controller,
-    ) async {
-      final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2101),
-        initialDatePickerMode: DatePickerMode.day,
-        helpText: 'Select Date',
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: ColorScheme.light(
-                primary: theme.primaryColor,
-                onPrimary: theme.secondaryHeaderColor,
-                onSurface:
-                    theme.textTheme.headlineLarge?.color ??
-                    AppColors.titleColor,
-              ),
-            ),
-            child: child!,
-          );
-        },
-      );
-
-      if (picked != null) {
-        controller.text = DateFormat('yyyy-MM-dd').format(picked);
-      }
-    }
 
     // Get employee details from Hive with error handling
     final hiveService = getIt<HiveStorageService>();
@@ -193,166 +340,19 @@ class _LeaveTrackerScreenState extends State<LeaveTrackerScreen> {
           userEmail: email,
           profileImageUrl: profilePhoto,
         ),
-        bottomNavigationBar: Container(
-          height: 60.h,
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-          margin: EdgeInsets.symmetric(vertical: 10.h),
-          child: Center(
-            child: KAuthFilledBtn(
-              backgroundColor: theme.primaryColor,
-              height: AppResponsive.responsiveBtnHeight(context),
-              width: double.infinity,
-              text: "Edit",
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16.r),
-                    ),
-                  ),
-                  builder: (context) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        left: 20.w,
-                        right: 20.w,
-                        bottom:
-                            MediaQuery.of(context).viewInsets.bottom +
-                            20.h, // keyboard aware
-                        top: 10.h,
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Drag handle
-                            Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: 2.h,
-                                width: 40.w,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  color: theme.textTheme.bodyLarge?.color,
-                                ),
-                              ),
-                            ),
-
-                            KVerticalSpacer(height: 12.h),
-
-                            // Create Ticket
-                            KText(
-                              text: "Leave Regulation",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14.sp,
-                              color: theme.textTheme.headlineLarge?.color,
-                            ),
-
-                            KVerticalSpacer(height: 10.h),
-
-                            // Employee name
-                            KAuthTextFormField(
-                              hintText: name,
-                              controller: employeeNameController,
-                              keyboardType: TextInputType.text,
-                              suffixIcon: Icons.perm_identity_outlined,
-                              isReadOnly: true,
-                            ),
-                            KVerticalSpacer(height: 10.h),
-
-                            KAuthTextFormField(
-                              maxLines: 1,
-                              hintText: empId,
-                              controller: empIdController,
-                              keyboardType: TextInputType.text,
-                              suffixIcon: Icons.card_travel_rounded,
-                              isReadOnly: true,
-                            ),
-                            KVerticalSpacer(height: 10.h),
-                            KAuthTextFormField(
-                              hintText: "From Date",
-                              onTap: () async {
-                                selectDate(
-                                  context,
-                                  fromDateMonthYearController,
-                                );
-                              },
-                              controller: fromDateMonthYearController,
-                              keyboardType: TextInputType.datetime,
-                              suffixIcon: Icons.date_range,
-                            ),
-                            KVerticalSpacer(height: 10.h),
-
-                            KAuthTextFormField(
-                              hintText: "To Date",
-                              onTap: () async {
-                                selectDate(context, toDateMonthYearController);
-                              },
-                              controller: toDateMonthYearController,
-                              keyboardType: TextInputType.datetime,
-                              suffixIcon: Icons.date_range,
-                            ),
-                            KVerticalSpacer(height: 10.h),
-
-                            KAuthTextFormField(
-                              maxLines: 3,
-                              hintText: "Regulation Reason",
-                              controller: regulationReasonController,
-                              keyboardType: TextInputType.text,
-                              suffixIcon: Icons.category_rounded,
-                            ),
-                            KVerticalSpacer(height: 10.h),
-
-                            KAuthTextFormField(
-                              hintText: "Regulation Comment",
-                              controller: regulationCommentController,
-                              keyboardType: TextInputType.text,
-                              suffixIcon: Icons.description,
-                            ),
-                            KVerticalSpacer(height: 10.h),
-                            // Cancel
-                            KAuthFilledBtn(
-                              height: AppResponsive.responsiveBtnHeight(
-                                context,
-                              ),
-                              width: double.infinity,
-                              text: "Cancel",
-                              fontSize: 10.sp,
-                              textColor: theme.primaryColor,
-                              onPressed: () {
-                                GoRouter.of(context).pop();
-                              },
-                              backgroundColor: theme.primaryColor.withOpacity(
-                                0.4,
-                              ),
-                            ),
-
-                            SizedBox(height: 12.h),
-
-                            // Submit
-                            KAuthFilledBtn(
-                              height: AppResponsive.responsiveBtnHeight(
-                                context,
-                              ),
-                              fontSize: 10.sp,
-                              width: double.infinity,
-                              text: "Submit",
-                              textColor: theme.secondaryHeaderColor,
-                              onPressed:
-                                  _submitForm, // Updated to use the new submit method
-                              backgroundColor: AppColors.primaryColor,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: _showLeaveRegulationBottomSheet,
+          backgroundColor: theme.primaryColor,
+          icon: Icon(
+            Icons.edit,
+            color: theme.secondaryHeaderColor,
+          ),
+          label: Text(
+            "Leave Regulation",
+            style: TextStyle(
+              color: theme.secondaryHeaderColor,
               fontSize: 11.sp,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
