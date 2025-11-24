@@ -4,8 +4,7 @@ import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
-import 'package:fuoday/core/di/injection.dart';
-import 'package:fuoday/core/service/hive_storage_service.dart';
+
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
@@ -21,7 +20,7 @@ class OnboardingTab extends StatefulWidget {
 class _OnboardingTabState extends State<OnboardingTab> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+  // void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
 
   // Pagination state
   int currentPage = 1;
@@ -181,9 +180,11 @@ class _OnboardingTabState extends State<OnboardingTab> {
   //==================================================================
   // Columns
   List<GridColumn> _buildColumns() {
-    const headerStyle = TextStyle(
+    //App Theme Data
+    final theme = Theme.of(context);
+    final headerStyle = TextStyle(
       fontWeight: FontWeight.normal,
-      color: AppColors.greyColor,
+      color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
     );
     Widget header(String text) => Container(
       padding: const EdgeInsets.all(8),
@@ -233,43 +234,46 @@ class _OnboardingTabState extends State<OnboardingTab> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final rows = _buildRows();
     final columns = _buildColumns();
-    final hiveService = getIt<HiveStorageService>();
+    // final hiveService = getIt<HiveStorageService>();
     //Table Column Header Widget
-    SizedBox _headers(String text, double width) {
-      return SizedBox(
-        width: width,
-        child: Center(
-          child: KText(
-            text: text,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
-            color: AppColors.greyColor,
-          ),
-        ),
-      );
-    }
+    // SizedBox _headers(String text, double width) {
+    //   return SizedBox(
+    //     width: width,
+    //     child: Center(
+    //       child: KText(
+    //         text: text,
+    //         fontSize: 12.sp,
+    //         fontWeight: FontWeight.w500,
+    //         color: AppColors.greyColor,
+    //       ),
+    //     ),
+    //   );
+    // }
 
-    final headers = [
-      _headers("S.No", 50.w),
-      _headers("Name", 100.w),
-      _headers("Experience", 120.w),
-      _headers("Location", 120.w),
-      _headers("Role", 100.w),
-      _headers("ATS Score", 160.w),
+    // final headers = [
+    //   _headers("S.No", 50.w),
+    //   _headers("Name", 100.w),
+    //   _headers("Experience", 120.w),
+    //   _headers("Location", 120.w),
+    //   _headers("Role", 100.w),
+    //   _headers("ATS Score", 160.w),
 
-      //   if (showStatusColumn) // ✅ conditional
-      //      SizedBox(
-      //      width: 120.w,
-      //      child: KText(
-      //        text: "Status",
-      //        fontSize: 12.sp,
-      //        fontWeight: FontWeight.w500,
-      //        color: AppColors.greyColor,
-      //      ),
-      //    ),
-    ];
+    //   if (showStatusColumn) // ✅ conditional
+    //      SizedBox(
+    //      width: 120.w,
+    //      child: KText(
+    //        text: "Status",
+    //        fontSize: 12.sp,
+    //        fontWeight: FontWeight.w500,
+    //        color: AppColors.greyColor,
+    //      ),
+    //    ),
+    // ];
 
     // Grid Attendance Data - Updated with dynamic counts
     final List<Map<String, dynamic>> gridAttendanceData = [
@@ -300,7 +304,7 @@ class _OnboardingTabState extends State<OnboardingTab> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: AppColors.atsHomepageBg,
+        color: theme.cardColor, //ATS Background Color
         child: Padding(
           padding: EdgeInsets.all(16.w),
           child: SingleChildScrollView(
@@ -326,8 +330,10 @@ class _OnboardingTabState extends State<OnboardingTab> {
                       employeeCount: item['numberOfCount'].toString(),
                       employeeCardIcon: item['icon'],
                       employeeDescription: item['title'],
-                      employeeIconColor: AppColors.primaryColor,
-                      employeePercentageColor: AppColors.checkInColor,
+                      employeeIconColor: theme.primaryColor,
+                      employeePercentageColor: isDark
+                          ? AppColors.checkInColorDark
+                          : AppColors.checkInColor,
                       growthText: item['growth'],
                     );
                   },
@@ -338,10 +344,14 @@ class _OnboardingTabState extends State<OnboardingTab> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
-                      color: AppColors.greyColor.withOpacity(0.3),
+                      color:
+                          theme.textTheme.bodyLarge?.color?.withValues(
+                            alpha: 0.3,
+                          ) ??
+                          AppColors.greyColor.withValues(alpha: 0.3),
                     ),
                     borderRadius: BorderRadius.circular(7.69.r),
-                    color: AppColors.secondaryColor,
+                    color: theme.secondaryHeaderColor,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -360,7 +370,7 @@ class _OnboardingTabState extends State<OnboardingTab> {
                               text: "Candidate List",
                               fontWeight: FontWeight.w600,
                               fontSize: 16.sp,
-                              color: AppColors.titleColor,
+                              //  color: AppColors.titleColor,
                             ),
                           ],
                         ),
@@ -447,126 +457,126 @@ class _OnboardingTabState extends State<OnboardingTab> {
     );
   }
 
-  Widget _buildPageNumbersRow() {
-    int windowEnd = (pageWindowStart + pageWindowSize - 1);
-    if (windowEnd > totalPages) windowEnd = totalPages;
+  // Widget _buildPageNumbersRow() {
+  //   int windowEnd = (pageWindowStart + pageWindowSize - 1);
+  //   if (windowEnd > totalPages) windowEnd = totalPages;
+  //
+  //   List<Widget> pageButtons = [];
+  //
+  //   // Previous window arrow
+  //   pageButtons.add(
+  //     IconButton(
+  //       icon: Icon(Icons.chevron_left, size: 16.sp),
+  //       onPressed: pageWindowStart > 1
+  //           ? () {
+  //               setState(() {
+  //                 pageWindowStart -= pageWindowSize;
+  //                 currentPage = pageWindowStart;
+  //               });
+  //             }
+  //           : null,
+  //     ),
+  //   );
+  //
+  //   // Page numbers
+  //   for (int i = pageWindowStart; i <= windowEnd; i++) {
+  //     pageButtons.add(
+  //       Padding(
+  //         padding: EdgeInsets.only(right: 8.w),
+  //         child: _buildPageNumber(i),
+  //       ),
+  //     );
+  //   }
+  //
+  //   // Next window arrow
+  //   pageButtons.add(
+  //     IconButton(
+  //       icon: Icon(Icons.chevron_right, size: 16.sp),
+  //       onPressed: windowEnd < totalPages
+  //           ? () {
+  //               setState(() {
+  //                 pageWindowStart += pageWindowSize;
+  //                 currentPage = pageWindowStart;
+  //               });
+  //             }
+  //           : null,
+  //     ),
+  //   );
+  //
+  //   return Row(children: pageButtons);
+  // }
 
-    List<Widget> pageButtons = [];
+  // Widget _buildPageNumber(int pageNum) {
+  //   final isActive = pageNum == currentPage;
+  //
+  //   return GestureDetector(
+  //     onTap: () {
+  //       setState(() {
+  //         currentPage = pageNum;
+  //       });
+  //     },
+  //     child: Container(
+  //       width: 32.w,
+  //       height: 32.w,
+  //       decoration: BoxDecoration(
+  //         color: isActive ? Color(0xFFF8F8F8) : Colors.transparent,
+  //         borderRadius: BorderRadius.circular(4.r),
+  //       ),
+  //       child: Center(
+  //         child: KText(
+  //           text: pageNum.toString(),
+  //           fontSize: 12.sp,
+  //           color: isActive ? Colors.black : AppColors.titleColor,
+  //           fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-    // Previous window arrow
-    pageButtons.add(
-      IconButton(
-        icon: Icon(Icons.chevron_left, size: 16.sp),
-        onPressed: pageWindowStart > 1
-            ? () {
-                setState(() {
-                  pageWindowStart -= pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
-            : null,
-      ),
-    );
-
-    // Page numbers
-    for (int i = pageWindowStart; i <= windowEnd; i++) {
-      pageButtons.add(
-        Padding(
-          padding: EdgeInsets.only(right: 8.w),
-          child: _buildPageNumber(i),
-        ),
-      );
-    }
-
-    // Next window arrow
-    pageButtons.add(
-      IconButton(
-        icon: Icon(Icons.chevron_right, size: 16.sp),
-        onPressed: windowEnd < totalPages
-            ? () {
-                setState(() {
-                  pageWindowStart += pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
-            : null,
-      ),
-    );
-
-    return Row(children: pageButtons);
-  }
-
-  Widget _buildPageNumber(int pageNum) {
-    final isActive = pageNum == currentPage;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          currentPage = pageNum;
-        });
-      },
-      child: Container(
-        width: 32.w,
-        height: 32.w,
-        decoration: BoxDecoration(
-          color: isActive ? Color(0xFFF8F8F8) : Colors.transparent,
-          borderRadius: BorderRadius.circular(4.r),
-        ),
-        child: Center(
-          child: KText(
-            text: pageNum.toString(),
-            fontSize: 12.sp,
-            color: isActive ? Colors.black : AppColors.titleColor,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showItemsPerPageSelector() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              KText(
-                text: "Items per page",
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.titleColor,
-              ),
-              SizedBox(height: 16.h),
-              ...([5, 6, 10, 15, 20].map(
-                (count) => ListTile(
-                  title: KText(
-                    text: "Show $count items",
-                    fontSize: 14.sp,
-                    color: AppColors.titleColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  trailing: itemsPerPage == count
-                      ? Icon(Icons.check, color: AppColors.primaryColor)
-                      : null,
-                  onTap: () {
-                    setState(() {
-                      itemsPerPage = count;
-                      currentPage = 1; // Reset to first page
-                      pageWindowStart = 1; // Reset pagination window
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-              )),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  //   void _showItemsPerPageSelector() {
+  //     showModalBottomSheet(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return Container(
+  //           padding: EdgeInsets.all(16.w),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               KText(
+  //                 text: "Items per page",
+  //                 fontSize: 16.sp,
+  //                 fontWeight: FontWeight.w600,
+  //                 color: AppColors.titleColor,
+  //               ),
+  //               SizedBox(height: 16.h),
+  //               ...([5, 6, 10, 15, 20].map(
+  //                 (count) => ListTile(
+  //                   title: KText(
+  //                     text: "Show $count items",
+  //                     fontSize: 14.sp,
+  //                     color: AppColors.titleColor,
+  //                     fontWeight: FontWeight.w500,
+  //                   ),
+  //                   trailing: itemsPerPage == count
+  //                       ? Icon(Icons.check, color: AppColors.primaryColor)
+  //                       : null,
+  //                   onTap: () {
+  //                     setState(() {
+  //                       itemsPerPage = count;
+  //                       currentPage = 1; // Reset to first page
+  //                       pageWindowStart = 1; // Reset pagination window
+  //                     });
+  //                     Navigator.pop(context);
+  //                   },
+  //                 ),
+  //               )),
+  //             ],
+  //           ),
+  //         );
+  //       },
+  //     );
+  //   }
 }
 
 /// Data Table Widget

@@ -69,6 +69,9 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
     final name = employeeDetails?['name'] ?? "No Name";
@@ -107,7 +110,7 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          color: AppColors.atsHomepageBg,
+          color: theme.cardColor, //ATS Background Color
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -128,7 +131,7 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
                               text: "Job Portal",
                               fontWeight: FontWeight.w600,
                               fontSize: 16.sp,
-                              color: AppColors.titleColor,
+                              //color: AppColors.titleColor,
                             ),
                           ],
                         ),
@@ -138,7 +141,10 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
                         text: "Manage your Interview Schedule",
                         fontWeight: FontWeight.w500,
                         fontSize: 14.sp,
-                        color: AppColors.greyColor,
+                        color: theme
+                            .textTheme
+                            .bodyLarge
+                            ?.color, //AppColors.greyColor,
                       ),
                       SizedBox(height: 20.h),
                       GridView.builder(
@@ -158,8 +164,10 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
                             employeeCount: item['numberOfCount'].toString(),
                             employeeCardIcon: item['icon'],
                             employeeDescription: item['title'],
-                            employeeIconColor: AppColors.primaryColor,
-                            employeePercentageColor: AppColors.checkInColor,
+                            employeeIconColor: theme.primaryColor,
+                            employeePercentageColor: isDark
+                                ? AppColors.checkInColorDark
+                                : AppColors.checkInColor,
                             growthText: item['growth'],
                           );
                         },
@@ -180,11 +188,17 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
                                 height: 15,
                                 width: 15,
                                 fit: BoxFit.contain,
+                                //SVG IMAGE COLOR
+                                colorFilter: ColorFilter.mode(
+                                  theme.textTheme.headlineLarge?.color ??
+                                      Colors.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                               onPressed: () {
                                 print("Create Post button tapped");
                               },
-                              backgroundColor: AppColors.primaryColor,
+                              backgroundColor: theme.primaryColor,
                             ),
                           ),
                         ],
@@ -196,16 +210,20 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
 
                 // Tab Bar
                 Container(
-                  color: AppColors.atsHomepageBg,
+                  color: theme.cardColor, //ATS Background Color
                   padding: EdgeInsets.only(left: 16.w),
                   child: TabBar(
                     controller: _tabController,
                     isScrollable: true,
                     tabAlignment: TabAlignment.start,
-                    dividerColor: AppColors.atsHomepageBg,
-                    unselectedLabelColor: AppColors.greyColor,
-                    indicatorColor: AppColors.primaryColor,
-                    labelColor: AppColors.titleColor,
+                    dividerColor: theme.cardColor, //ATS Background Color
+                    unselectedLabelColor:
+                        theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
+                    indicatorColor: theme.primaryColor,
+                    labelColor: theme
+                        .textTheme
+                        .headlineLarge
+                        ?.color, //AppColors.titleColor,
                     tabs: const [
                       Tab(text: "Design Position"),
                       Tab(text: "Development Position"),

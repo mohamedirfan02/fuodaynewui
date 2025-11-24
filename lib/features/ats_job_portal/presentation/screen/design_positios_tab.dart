@@ -12,9 +12,11 @@ class JobPortalDesignPositionsTab extends StatefulWidget {
 
 class _JobPortalDesignPositionsTabState
     extends State<JobPortalDesignPositionsTab> {
-
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    //final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       child: Column(

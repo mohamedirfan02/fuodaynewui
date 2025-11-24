@@ -675,7 +675,7 @@ class _DashoardTabState extends State<DashoardTab> {
                                       //   context,
                                       // ).pushNamed(AppRouteConstants.atsTrackerScreen);
                                     },
-                                    backgroundColor: AppColors.primaryColor,
+                                    backgroundColor: theme.primaryColor,
                                   ),
                                 ),
                               ],

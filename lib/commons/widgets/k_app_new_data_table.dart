@@ -55,7 +55,7 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
   Widget build(BuildContext context) {
     //App Theme Data
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    //final isDark = theme.brightness == Brightness.dark;
     final pageCount = (_rowsPerPage >= widget.totalRows)
         ? 1
         : (widget.totalRows / _rowsPerPage).ceil();
@@ -75,14 +75,16 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
           ),
           child: SfDataGridTheme(
             data: SfDataGridThemeData(
-              gridLineColor: theme.textTheme.bodyLarge?.color?.withOpacity(
-                0.15,
+              gridLineColor: theme.textTheme.bodyLarge?.color?.withValues(
+                alpha: 0.15,
               ),
 
               // headerColor: isDark ? AppColors.greyColor : Colors.white,
               selectionColor:
                   // widget.selectionColor ??
-                  theme.primaryColor.withOpacity(0.15), // 🔹 Selection color
+                  theme.primaryColor.withValues(
+                    alpha: 0.15,
+                  ), // 🔹 Selection color
               currentCellStyle: DataGridCurrentCellStyle(
                 // borderColor: widget.selectionColor ?? AppColors.primaryColor,
                 borderColor: theme.primaryColor,
@@ -165,8 +167,12 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                   return ClipRRect(
                     borderRadius: BorderRadius.zero,
                     child: Material(
+                      //shadowColor: Colors.red,
+
                       // Make the internal material fully transparent and non-rounded
-                      color: Colors.transparent,
+                      color: theme.primaryColor.withValues(
+                        alpha: 0.5,
+                      ), //Colors.transparent, //
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero,
                       ),
@@ -177,10 +183,11 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                         // your custom decoration controls only what's visible
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? theme.textTheme.bodyLarge?.color?.withOpacity(
-                                  .2,
+                              ? theme.textTheme.bodyLarge?.color?.withValues(
+                                  alpha: .2,
                                 )
-                              : Colors.transparent,
+                              : theme
+                                    .secondaryHeaderColor, //AppColors.secondaryColor,
                           borderRadius: BorderRadius.circular(
                             5,
                           ), // ensure rectangle
@@ -232,7 +239,7 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                       width: 0.8,
                       color:
                           theme.textTheme.bodyLarge?.color ??
-                          AppColors.greyColor.withOpacity(0.1),
+                          AppColors.greyColor.withValues(alpha: 0.1),
                     ),
                     borderRadius: BorderRadius.circular(8),
                     color:

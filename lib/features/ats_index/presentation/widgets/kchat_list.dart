@@ -11,14 +11,17 @@ class KChatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    // final isDark = theme.brightness == Brightness.dark;
     final size = MediaQuery.of(context).size;
-    final width = size.width;
+    // final width = size.width;
     final height = size.height;
 
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: AppColors.secondaryColor,
+      color: theme.secondaryHeaderColor, //AppColors.secondaryColor,
       child: ListView.separated(
         physics: const BouncingScrollPhysics(),
         itemCount: conversations.length,
@@ -40,6 +43,9 @@ class KChatList extends StatelessWidget {
     BuildContext context,
     Map<String, dynamic> conversation,
   ) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
@@ -55,7 +61,7 @@ class KChatList extends StatelessWidget {
       onTap: onItemTap != null ? () => onItemTap!(conversation) : null,
       child: Container(
         width: double.infinity,
-        color: Colors.white,
+        color: theme.secondaryHeaderColor, //AppColors.secondaryColor
         padding: EdgeInsets.symmetric(
           horizontal: width * 0.04,
           vertical: height * 0.015,
@@ -66,7 +72,9 @@ class KChatList extends StatelessWidget {
             // Avatar
             CircleAvatar(
               radius: width * 0.06,
-              backgroundColor: Colors.grey.shade300,
+              backgroundColor:
+                  theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.2) ??
+                  theme.textTheme.bodyLarge?.color,
               backgroundImage: avatarUrl != null && avatarUrl.isNotEmpty
                   ? NetworkImage(avatarUrl)
                   : null,
@@ -74,7 +82,9 @@ class KChatList extends StatelessWidget {
                   ? Icon(
                       Icons.person,
                       size: width * 0.06,
-                      color: Colors.grey.shade600,
+                      color: theme.textTheme.bodyLarge?.color?.withValues(
+                        alpha: 0.9,
+                      ),
                     )
                   : null,
             ),
@@ -95,7 +105,7 @@ class KChatList extends StatelessWidget {
                           text: name,
                           fontWeight: FontWeight.w500,
                           fontSize: width * 0.03, //
-                          color: Colors.black87,
+                          //color: Colors.black87,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -105,7 +115,10 @@ class KChatList extends StatelessWidget {
                         text: time,
                         fontWeight: FontWeight.w400,
                         fontSize: width * 0.03,
-                        color: Colors.grey.shade600,
+                        color: theme
+                            .textTheme
+                            .headlineLarge
+                            ?.color, //AppColors.titleColor,
                       ),
                     ],
                   ),
@@ -116,7 +129,8 @@ class KChatList extends StatelessWidget {
                     text: email,
                     fontWeight: FontWeight.w400,
                     fontSize: width * 0.03,
-                    color: Colors.grey.shade600,
+                    color:
+                        theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -127,7 +141,7 @@ class KChatList extends StatelessWidget {
                     text: subject,
                     fontWeight: FontWeight.w400,
                     fontSize: width * 0.03,
-                    color: AppColors.greyColor,
+                    color: theme.textTheme.bodyLarge?.color,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -139,7 +153,7 @@ class KChatList extends StatelessWidget {
                       text: message,
                       fontWeight: FontWeight.w500,
                       fontSize: width * 0.03,
-                      color: AppColors.titleColor,
+                      //color: AppColors.titleColor,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

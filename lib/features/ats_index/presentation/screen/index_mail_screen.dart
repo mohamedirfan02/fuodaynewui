@@ -3,9 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
 import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
-import 'package:fuoday/commons/widgets/k_filter_button.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
-import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
@@ -15,7 +13,6 @@ import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/ats_index/presentation/widgets/gmail_compose_index.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
-import 'package:go_router/go_router.dart';
 
 class AtsIndexMailScreen extends StatefulWidget {
   const AtsIndexMailScreen({super.key});
@@ -37,15 +34,18 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
     required String subject,
     required String message,
   }) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //  final isDark = theme.brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         border: Border.all(
           width: 1.w,
-          color: AppColors.greyColor.withOpacity(0.2),
+          color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
         ),
         borderRadius: BorderRadius.circular(8.r),
-        color: AppColors.secondaryColor,
+        color: theme.secondaryHeaderColor, //AppColors.secondaryColor
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +58,9 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: isReceived
-                      ? Colors.green.withOpacity(0.1)
+                      ? theme.textTheme.bodyLarge?.color?.withValues(
+                          alpha: 0.2,
+                        ) //AppColors.greyColor,
                       : Colors.blue.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(4.r),
                 ),
@@ -150,6 +152,9 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final hiveService = getIt<HiveStorageService>();
@@ -176,14 +181,14 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: AppColors.atsHomepageBg,
+        color: theme.cardColor, //ATS Background Color
         child: Padding(
           padding: EdgeInsets.all(16.w),
           child: Column(
             children: [
               Container(
                 padding: EdgeInsets.all(18.47.w),
-                decoration: BoxDecoration(color: AppColors.secondaryColor),
+                decoration: BoxDecoration(color: theme.secondaryHeaderColor),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -202,7 +207,10 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                               ? Icon(
                                   Icons.person,
                                   size: width * 0.06,
-                                  color: Colors.grey.shade600,
+                                  color: theme.textTheme.bodyLarge?.color
+                                      ?.withValues(
+                                        alpha: 0.6,
+                                      ), //AppColors.greyColor,
                                 )
                               : null,
                         ),
@@ -226,7 +234,9 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                         Expanded(
                           child: KAtsGlowButton(
                             text: "Profile",
-                            textColor: AppColors.greyColor,
+                            textColor:
+                                theme.textTheme.bodyLarge?.color ??
+                                AppColors.greyColor, //AppColors.greyColor,
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                             icon: SvgPicture.asset(
@@ -234,9 +244,16 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                               height: 20,
                               width: 20,
                               fit: BoxFit.contain,
+                              //SVG IMAGE COLOR
+                              colorFilter: ColorFilter.mode(
+                                theme.textTheme.headlineLarge?.color ??
+                                    Colors.black,
+                                BlendMode.srcIn,
+                              ),
                             ),
                             onPressed: () {},
-                            backgroundColor: AppColors.secondaryColor,
+                            backgroundColor: theme
+                                .secondaryHeaderColor, //AppColors.secondaryColor,
                           ),
                         ),
                       ],
@@ -251,10 +268,16 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(
                     width: 1.w,
-                    color: AppColors.greyColor.withOpacity(0.2),
+                    color:
+                        theme.textTheme.bodyLarge?.color?.withValues(
+                          alpha: 0.2,
+                        ) ??
+                        AppColors.greyColor.withValues(
+                          alpha: 0.2,
+                        ), //AppColors.greyColor,
                   ),
                   borderRadius: BorderRadius.circular(8.r),
-                  color: AppColors.secondaryColor,
+                  color: theme.secondaryHeaderColor, //AppColors.secondaryColor
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,12 +289,15 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                           text: "To",
                           fontWeight: FontWeight.w500,
                           fontSize: 14.sp,
-                          color: AppColors.titleColor,
+                          // color: AppColors.titleColor,
                         ),
                         SizedBox(width: 24.w),
                         CircleAvatar(
                           radius: 16.r,
-                          backgroundColor: Colors.grey.shade300,
+                          backgroundColor: theme.textTheme.bodyLarge?.color
+                              ?.withValues(
+                                alpha: 0.3,
+                              ), //AppColors.greyColor,,//Colors.grey.shade300,
                           backgroundImage: profilePhoto.isNotEmpty
                               ? NetworkImage(profilePhoto)
                               : null,
@@ -279,7 +305,10 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                               ? Icon(
                                   Icons.person,
                                   size: 16.r,
-                                  color: Colors.grey.shade600,
+                                  color: theme.textTheme.bodyLarge?.color
+                                      ?.withValues(
+                                        alpha: 0.6,
+                                      ), //AppColors.greyColor, ,//Colors.grey.shade600,
                                 )
                               : null,
                         ),
@@ -288,20 +317,25 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                           text: "Pristia Candra",
                           fontWeight: FontWeight.w500,
                           fontSize: 14.sp,
-                          color: AppColors.titleColor,
+                          //  color: AppColors.titleColor,
                         ),
                         Spacer(),
                         KText(
                           text: "Nov12,2:55",
                           fontWeight: FontWeight.w400,
                           fontSize: 12.sp,
-                          color: AppColors.greyColor,
+                          color: theme
+                              .textTheme
+                              .bodyLarge
+                              ?.color, //AppColors.greyColor,
                         ),
                       ],
                     ),
                     SizedBox(height: 16.h),
                     Divider(
-                      color: AppColors.greyColor.withOpacity(0.2),
+                      color: theme.textTheme.bodyLarge?.color?.withValues(
+                        alpha: 0.2,
+                      ),
                       thickness: 1,
                     ),
                     SizedBox(height: 16.h),
@@ -313,7 +347,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                           text: "Subject :",
                           fontWeight: FontWeight.w500,
                           fontSize: 14.sp,
-                          color: AppColors.titleColor,
+                          //color: AppColors.titleColor,
                         ),
                         SizedBox(width: 8.w),
                         Expanded(
@@ -322,14 +356,16 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                                 "Thank you for your application at Pixel Office",
                             fontWeight: FontWeight.w400,
                             fontSize: 14.sp,
-                            color: AppColors.titleColor,
+                            //color: AppColors.titleColor,
                           ),
                         ),
                       ],
                     ),
                     SizedBox(height: 16.h),
                     Divider(
-                      color: AppColors.greyColor.withOpacity(0.2),
+                      color: theme.textTheme.bodyLarge?.color?.withValues(
+                        alpha: 0.2,
+                      ),
                       thickness: 1,
                     ),
                     SizedBox(height: 16.h),
@@ -338,7 +374,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                       text: "Hi Cecilia,",
                       fontWeight: FontWeight.w600,
                       fontSize: 14.sp,
-                      color: AppColors.titleColor,
+                      //color: AppColors.titleColor,
                     ),
                     SizedBox(height: 12.h),
                     KText(
@@ -346,7 +382,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                           "The main duties of a Senior Product Designer include conducting user research and testing, creating wireframes and prototypes, developing design systems, collaborating with cross-functional teams (such as developers, product managers, and other designers),",
                       fontWeight: FontWeight.w400,
                       fontSize: 14.sp,
-                      color: AppColors.titleColor,
+                      // color: AppColors.titleColor,
                       //    height: 1.5,
                     ),
                   ],
@@ -363,7 +399,7 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             text: "Send Message",
@@ -373,7 +409,8 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                 context: context,
                 isScrollControlled: true,
                 useSafeArea: true,
-                backgroundColor: AppColors.secondaryColor,
+                backgroundColor:
+                    theme.secondaryHeaderColor, //AppColors.secondaryColor
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(16.r),
