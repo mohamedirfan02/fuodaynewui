@@ -183,6 +183,7 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
                               text: "Create Post",
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
+                              textColor: theme.secondaryHeaderColor,
                               icon: SvgPicture.asset(
                                 AppAssetsConstants.addIcon,
                                 height: 15,
@@ -190,8 +191,7 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
                                 fit: BoxFit.contain,
                                 //SVG IMAGE COLOR
                                 colorFilter: ColorFilter.mode(
-                                  theme.textTheme.headlineLarge?.color ??
-                                      Colors.black,
+                                  theme.secondaryHeaderColor,
                                   BlendMode.srcIn,
                                 ),
                               ),

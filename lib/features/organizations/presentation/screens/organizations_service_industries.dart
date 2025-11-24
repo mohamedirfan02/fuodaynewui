@@ -45,7 +45,9 @@ class _OrganizationsServiceIndustriesState
     final provider = context.watch<ServicesAndIndustriesProvider>();
 
     if (provider.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(
+        child: CircularProgressIndicator(color: theme.primaryColor),
+      );
     }
 
     if (provider.hasError) {
@@ -85,7 +87,7 @@ class _OrganizationsServiceIndustriesState
               child: OrganizationsAchievementsValueCard(
                 leadingIconData: Icons.check_circle,
                 achievementDescription: service.name,
-                leadingIconColor: AppColors.primaryColor,
+                leadingIconColor: theme.primaryColor,
                 isSubTitle: true,
                 subTitle: service.description,
               ),

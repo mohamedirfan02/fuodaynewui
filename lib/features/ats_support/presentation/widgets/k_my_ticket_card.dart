@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_horizontal_spacer.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
+import 'package:fuoday/core/themes/app_colors.dart';
 
 enum TicketStatus { open, inProgress, completed }
 
@@ -20,26 +21,45 @@ class MyTicketCard extends StatelessWidget {
   });
 
   // Dark color for text based on status
-  Color get _statusColor {
+  Color _statusColor(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     switch (status) {
       case TicketStatus.open:
-        return const Color(0xFFEF4444); // Dark Red
+        return isDark
+            ? const Color(0xFFFCA5A5) // Light Red text for dark mode
+            : const Color(0xFFEF4444);
       case TicketStatus.inProgress:
-        return const Color(0xFFF59E0B); // Dark Yellow
+        return isDark
+            ? const Color(0xFFFCD34D) // Soft Yellow
+            : const Color(0xFFF59E0B);
       case TicketStatus.completed:
-        return const Color(0xFF10B981); // Dark Green
+        return isDark
+            ? const Color(0xFF6EE7B7) // Mint Green
+            : const Color(0xFF10B981);
     }
   }
 
   // Light color for background based on status
-  Color get _statusBackgroundColor {
+  Color _statusBackgroundColor(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     switch (status) {
       case TicketStatus.open:
-        return const Color(0xFFFEE2E2); // Light Red
+        return isDark
+            ? const Color(0xFF451A1A) // Dark Red BG
+            : const Color(0xFFFEE2E2);
       case TicketStatus.inProgress:
-        return const Color(0xFFFEF3C7); // Light Yellow
+        return isDark
+            ? const Color(0xFF422006) // Dark Yellow BG
+            : const Color(0xFFFEF3C7);
+
       case TicketStatus.completed:
-        return const Color(0xFFD1FAE5); // Light Green
+        return isDark
+            ? const Color(0xFF064E3B) // Dark Green BG
+            : const Color(0xFFD1FAE5);
     }
   }
 
@@ -57,6 +77,9 @@ class MyTicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return InkWell(
       onTap: onTap, // ✅ Trigger callback when tapped
       borderRadius: BorderRadius.circular(16.r), // Smooth ripple effect
@@ -64,12 +87,17 @@ class MyTicketCard extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(18.w),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFFFFF),
+          color: theme.secondaryHeaderColor, //AppColors.secondaryColor
           borderRadius: BorderRadius.circular(15.r),
-          border: Border.all(color: const Color(0xFFE5E7EB), width: 1.w),
+          border: Border.all(
+            color: isDark
+                ? theme.textTheme.bodyLarge?.color ?? AppColors.greyColor
+                : theme.secondaryHeaderColor,
+            width: 1.w,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -95,7 +123,8 @@ class MyTicketCard extends StatelessWidget {
                     text: date,
                     fontWeight: FontWeight.w400,
                     fontSize: 12.sp,
-                    color: Colors.grey[600],
+                    color:
+                        theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -111,14 +140,14 @@ class MyTicketCard extends StatelessWidget {
               width: 100.w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.r),
-                color: _statusBackgroundColor,
+                color: _statusBackgroundColor(context),
               ),
               child: Center(
                 child: KText(
                   text: _statusText,
                   fontWeight: FontWeight.w600,
                   fontSize: 13.sp,
-                  color: _statusColor,
+                  color: _statusColor(context),
                 ),
               ),
             ),
@@ -128,7 +157,7 @@ class MyTicketCard extends StatelessWidget {
             Icon(
               Icons.arrow_forward_ios_outlined,
               size: 18.sp,
-              color: Colors.grey[700],
+              color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
             ),
           ],
         ),

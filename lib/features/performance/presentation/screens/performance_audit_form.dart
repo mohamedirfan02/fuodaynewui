@@ -165,7 +165,7 @@ class _PerformanceAuditFormState extends State<PerformanceAuditForm> {
             text: "Individual Overview & Performance Identity",
             fontWeight: FontWeight.w600,
             fontSize: 14.sp,
-            color: AppColors.primaryColor,
+            color: theme.primaryColor,
           ),
 
           KVerticalSpacer(height: 6.h),
@@ -292,7 +292,7 @@ class _PerformanceAuditFormState extends State<PerformanceAuditForm> {
             text: "Self Evaluation & Professional Insights",
             fontWeight: FontWeight.w600,
             fontSize: 14.sp,
-            color: AppColors.primaryColor,
+            color: theme.primaryColor,
           ),
 
           KVerticalSpacer(height: 6.h),
@@ -330,7 +330,7 @@ class _PerformanceAuditFormState extends State<PerformanceAuditForm> {
             text: "Communication & Collaboration",
             fontWeight: FontWeight.w600,
             fontSize: 14.sp,
-            color: AppColors.primaryColor,
+            color: theme.primaryColor,
           ),
 
           KVerticalSpacer(height: 6.h),

@@ -42,7 +42,9 @@ class _OrganizationsOurTeamsState extends State<OrganizationsOurTeams> {
     final departmentProvider = context.watch<DepartmentListProvider>();
 
     if (departmentProvider.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(
+        child: CircularProgressIndicator(color: theme.primaryColor),
+      );
     }
 
     if (departmentProvider.error != null) {

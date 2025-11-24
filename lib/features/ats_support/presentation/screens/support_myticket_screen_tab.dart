@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/constants/app_route_constants.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/k_my_ticket_card.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -98,8 +97,11 @@ class _SupportMyTicketTabState extends State<SupportMyTicketTab> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.atsHomepageBg,
+      backgroundColor: theme.cardColor, //ATS Background Color
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         child: Column(
@@ -135,7 +137,7 @@ class _SupportMyTicketTabState extends State<SupportMyTicketTab> {
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
           child: KAuthFilledBtn(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: theme.primaryColor,
             height: AppResponsive.responsiveBtnHeight(context),
             width: double.infinity,
             icon: SvgPicture.asset(
@@ -143,6 +145,11 @@ class _SupportMyTicketTabState extends State<SupportMyTicketTab> {
               height: 16,
               width: 16,
               fit: BoxFit.contain,
+              //SVG IMAGE COLOR
+              colorFilter: ColorFilter.mode(
+                theme.secondaryHeaderColor,
+                BlendMode.srcIn,
+              ),
             ),
             text: "New Ticket",
             fontSize: 12.sp,

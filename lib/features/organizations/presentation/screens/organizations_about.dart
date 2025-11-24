@@ -4,7 +4,6 @@ import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/organizations/presentation/widgets/organizations_achivements_card.dart';
 import 'package:fuoday/features/organizations/presentation/widgets/organizations_image_carousel.dart';
 import 'package:fuoday/features/organizations/presentation/providers/organization_about_provider.dart';
@@ -39,11 +38,13 @@ class _OrganizationsAboutState extends State<OrganizationsAbout> {
   Widget build(BuildContext context) {
     //App Theme Data
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    // final isDark = theme.brightness == Brightness.dark;
     return Consumer<OrganizationAboutProvider>(
       builder: (context, provider, _) {
         if (provider.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(color: theme.primaryColor),
+          );
         }
 
         if (provider.error != null) {

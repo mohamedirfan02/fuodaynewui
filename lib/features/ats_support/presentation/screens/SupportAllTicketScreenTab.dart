@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/ats_support/presentation/screens/ticket_view_screen.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/k_ticket_card.dart';
 
@@ -20,7 +19,7 @@ class _SupportAllTicketTabState extends State<SupportAllTicketTab> {
   Widget build(BuildContext context) {
     //App Theme Data
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    //final isDark = theme.brightness == Brightness.dark;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 16.w), //
       child: Column(
