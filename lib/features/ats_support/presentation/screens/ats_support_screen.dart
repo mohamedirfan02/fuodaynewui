@@ -6,7 +6,6 @@ import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:go_router/go_router.dart';
 
@@ -28,6 +27,9 @@ class _AtsSupportScreenState extends State<AtsSupportScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    // final isDark = theme.brightness == Brightness.dark;
     // Get employee details from Hive with error handling
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
@@ -78,7 +80,7 @@ class _AtsSupportScreenState extends State<AtsSupportScreen> {
           body: Container(
             width: double.infinity,
             height: double.infinity,
-            color: AppColors.atsHomepageBg,
+            color: theme.cardColor, //ATS Background Color
             child: Padding(
               padding: EdgeInsets.only(top: 16.h),
               child: Column(
@@ -98,10 +100,17 @@ class _AtsSupportScreenState extends State<AtsSupportScreen> {
                             isScrollable: true,
                             tabAlignment: TabAlignment.start,
                             // left align
-                            dividerColor: AppColors.atsHomepageBg,
-                            unselectedLabelColor: AppColors.greyColor,
-                            indicatorColor: AppColors.primaryColor,
-                            labelColor: AppColors.titleColor,
+                            dividerColor:
+                                theme.cardColor, //ATS Background Color
+                            unselectedLabelColor: theme
+                                .textTheme
+                                .bodyLarge
+                                ?.color, //AppColors.greyColor,,
+                            indicatorColor: theme.primaryColor,
+                            labelColor: theme
+                                .textTheme
+                                .headlineLarge
+                                ?.color, //AppColors.titleColor,
                             tabs: [
                               Tab(
                                 child: Row(

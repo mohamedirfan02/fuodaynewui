@@ -156,8 +156,7 @@ dependencies:
 
   #New Data Table
   syncfusion_flutter_datagrid: ^30.2.7
-
-
+  syncfusion_flutter_core: ^30.2.7
 
 
 

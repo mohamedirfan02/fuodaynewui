@@ -18,6 +18,9 @@ class SupportAllTicketTab extends StatefulWidget {
 class _SupportAllTicketTabState extends State<SupportAllTicketTab> {
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 16.w), //
       child: Column(
@@ -32,7 +35,7 @@ class _SupportAllTicketTabState extends State<SupportAllTicketTab> {
                   text: "Total: 1234 Tickets",
                   fontWeight: FontWeight.w600,
                   fontSize: 16.sp,
-                  color: AppColors.titleColor,
+                  // color: AppColors.titleColor,
                 ),
                 //const SizedBox(width: 60), // spacing between text and emoji
                 SvgPicture.asset(
@@ -40,6 +43,11 @@ class _SupportAllTicketTabState extends State<SupportAllTicketTab> {
                   height: 20,
                   width: 20,
                   fit: BoxFit.contain,
+                  //SVG IMAGE COLOR
+                  colorFilter: ColorFilter.mode(
+                    theme.textTheme.headlineLarge?.color ?? Colors.black,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ],
             ),

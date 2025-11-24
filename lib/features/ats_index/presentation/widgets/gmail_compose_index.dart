@@ -68,20 +68,31 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        //App Theme Data
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.r),
           ),
           title: Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.green, size: 30.sp),
+              Icon(
+                Icons.check_circle,
+                color: isDark
+                    ? AppColors.checkInColorDark
+                    : AppColors.checkInColor,
+                size: 30.sp,
+              ),
               SizedBox(width: 10.w),
               Text(
                 "Success!",
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green,
+                  color: isDark
+                      ? AppColors.checkInColorDark
+                      : AppColors.checkInColor,
                 ),
               ),
             ],
@@ -99,7 +110,7 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
               child: Text(
                 "OK",
                 style: TextStyle(
-                  color: AppColors.primaryColor,
+                  color: theme.primaryColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -111,6 +122,9 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
   }
 
   void showErrorDialog(String errorMessage) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -121,14 +135,22 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
           ),
           title: Row(
             children: [
-              Icon(Icons.error, color: Colors.red, size: 30.sp),
+              Icon(
+                Icons.error,
+                color: isDark
+                    ? AppColors.checkOutColorDark
+                    : AppColors.checkOutColor,
+                size: 30.sp,
+              ),
               SizedBox(width: 10.w),
               Text(
                 "Failed!",
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.red,
+                  color: isDark
+                      ? AppColors.checkOutColorDark
+                      : AppColors.checkOutColor,
                 ),
               ),
             ],
@@ -157,11 +179,16 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
   }
 
   Future<void> sendMail() async {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     if (_toController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text("Please enter at least one recipient."),
-          backgroundColor: Colors.red,
+          backgroundColor: isDark
+              ? AppColors.checkOutColorDark
+              : AppColors.checkOutColor,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.r),
@@ -218,6 +245,9 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Padding(
       padding: EdgeInsets.all(16.w),
       child: SingleChildScrollView(
@@ -233,7 +263,10 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
                   style: TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.titleColor,
+                    color: theme
+                        .textTheme
+                        .headlineLarge
+                        ?.color, //AppColors.titleColor,
                   ),
                 ),
               ],
@@ -288,13 +321,13 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
 
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor,
+                backgroundColor: theme.primaryColor,
               ),
               onPressed: pickFiles,
-              icon: const Icon(Icons.attach_file, color: Colors.white),
-              label: const Text(
+              icon: Icon(Icons.attach_file, color: theme.secondaryHeaderColor),
+              label: Text(
                 "Add Attachments",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: theme.secondaryHeaderColor),
               ),
             ),
 
@@ -311,7 +344,12 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
                     style: TextStyle(fontSize: 12.sp),
                   ),
                   trailing: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.red),
+                    icon: Icon(
+                      Icons.close,
+                      color: isDark
+                          ? AppColors.checkOutColorDark
+                          : AppColors.checkOutColor,
+                    ),
                     onPressed: () {
                       setState(() {
                         attachments.remove(file);
@@ -332,7 +370,10 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
                       "Sending email...",
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: AppColors.greyColor,
+                        color: theme
+                            .textTheme
+                            .bodyLarge
+                            ?.color, //AppColors.greyColor,
                       ),
                     ),
                   ],
@@ -347,12 +388,12 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
               width: double.infinity,
               text: "Cancel",
               fontSize: 10.sp,
-              textColor: AppColors.primaryColor,
+              textColor: theme.primaryColor,
               onPressed: () {
                 clearAllFields(); // Clear all fields
                 GoRouter.of(context).pop();
               },
-              backgroundColor: AppColors.primaryColor.withOpacity(0.4),
+              backgroundColor: theme.primaryColor.withValues(alpha: 0.4),
             ),
 
             SizedBox(height: 12.h),
@@ -363,15 +404,15 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
               fontSize: 10.sp,
               width: double.infinity,
               text: isSending ? "Sending..." : "Submit",
-              textColor: AppColors.secondaryColor,
+              textColor: theme.secondaryHeaderColor, //AppColors.secondaryColor
               onPressed: () {
                 if (!isSending) {
                   sendMail();
                 }
               },
               backgroundColor: isSending
-                  ? AppColors.greyColor
-                  : AppColors.primaryColor,
+                  ? theme.textTheme.bodyLarge?.color ?? AppColors.greyColor
+                  : theme.primaryColor,
             ),
           ],
         ),

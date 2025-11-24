@@ -25,6 +25,7 @@ class KDropdownTextFormField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return DropdownButtonFormField2<T>(
       value: value,
@@ -46,13 +47,23 @@ class KDropdownTextFormField<T> extends StatelessWidget {
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primaryColor, width: 2.w),
+          borderSide: BorderSide(color: theme.primaryColor, width: 2.w),
         ),
         errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.checkOutColor, width: 1.w),
+          borderSide: BorderSide(
+            color: isDark
+                ? AppColors.checkOutColorDark
+                : AppColors.checkOutColor,
+            width: 1.w,
+          ),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.checkOutColor, width: 2.w),
+          borderSide: BorderSide(
+            color: isDark
+                ? AppColors.checkOutColorDark
+                : AppColors.checkOutColor,
+            width: 2.w,
+          ),
         ),
         errorStyle: GoogleFonts.sora(fontSize: 10.sp, color: Colors.red),
         contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),

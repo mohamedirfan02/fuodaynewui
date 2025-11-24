@@ -22,10 +22,13 @@ class TicketViewScreen extends StatefulWidget {
 class _TicketViewScreenState extends State<TicketViewScreen> {
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final isTablet = AppResponsive.isTablet(context);
     final isLandscape = AppResponsive.isLandscape(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: theme.cardColor, //ATS Background Color
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +38,10 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Colors.black,
+                color: theme
+                    .textTheme
+                    .headlineLarge
+                    ?.color, //AppColors.titleColor,
               ),
             ),
             Text(
@@ -43,7 +49,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                color: Colors.grey,
+                color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
               ),
             ),
           ],
@@ -65,12 +71,14 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
             padding: const EdgeInsets.only(right: 16.0),
             child: CircleAvatar(
               radius: 16,
-              backgroundColor: Colors.grey[300],
+              backgroundColor: theme.textTheme.bodyLarge?.color?.withValues(
+                alpha: 0.3,
+              ), //AppColors.greyColor,,
               child: Icon(Icons.person, size: 20),
             ),
           ),
         ],
-        backgroundColor: Colors.white,
+        backgroundColor: theme.secondaryHeaderColor, //AppColors.secondaryColor,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -94,7 +102,10 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                 text: "Status",
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
-                color: AppColors.atsTittleText,
+                color: theme
+                    .textTheme
+                    .headlineLarge
+                    ?.color, //AppColors.titleColor,
               ),
             ),
             KVerticalSpacer(height: 10.h),
@@ -111,7 +122,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
               width: 343.w,
               height: isTablet ? (isLandscape ? 255.h : 248.h) : 248.h,
               decoration: BoxDecoration(
-                color: AppColors.secondaryColor,
+                color: theme.secondaryHeaderColor, //AppColors.secondaryColor
                 borderRadius: BorderRadius.circular(16.r),
                 border: Border.all(color: const Color(0xFFE5E7EB), width: 1.w),
               ),
@@ -124,7 +135,10 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                       text: "Govlog",
                       fontWeight: FontWeight.w700,
                       fontSize: 12.sp,
-                      color: AppColors.atsTittleText,
+                      color: theme
+                          .textTheme
+                          .headlineLarge
+                          ?.color, //AppColors.titleColor,
                     ),
                     KVerticalSpacer(height: 24.h),
                     KText(
@@ -132,7 +146,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                           "Why can’t I update the app? It keeps reloading the same page. Please help.",
                       fontWeight: FontWeight.w400,
                       fontSize: 12.sp,
-                      color: AppColors.atsTittleText,
+                      color: theme.textTheme.headlineLarge?.color,
                     ),
                     KVerticalSpacer(height: 50.h),
                     SvgPicture.asset(
@@ -148,7 +162,10 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
                         text: "20:00",
                         fontWeight: FontWeight.w400,
                         fontSize: 12.sp,
-                        color: AppColors.greyColor,
+                        color: theme
+                            .textTheme
+                            .bodyLarge
+                            ?.color, //AppColors.greyColor,
                       ),
                     ),
                   ],
@@ -161,7 +178,7 @@ class _TicketViewScreenState extends State<TicketViewScreen> {
               width: 343.w,
               height: isTablet ? (isLandscape ? 280.h : 248.h) : 248.h,
               decoration: BoxDecoration(
-                color: AppColors.chatBg,
+                color: isDark ? AppColors.chatBgDark : AppColors.chatBg,
                 borderRadius: BorderRadius.circular(16.r),
                 border: Border.all(color: const Color(0xFFE5E7EB), width: 1.w),
               ),

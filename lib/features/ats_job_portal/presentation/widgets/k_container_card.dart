@@ -9,7 +9,7 @@ class JobCard extends StatelessWidget {
   final String candidatesInfo;
   final String timeInfo;
   final Color statusColor;
-  final Color statusBackgroundColor;
+  final Color? statusBackgroundColor;
 
   const JobCard({
     super.key,
@@ -19,19 +19,24 @@ class JobCard extends StatelessWidget {
     required this.candidatesInfo,
     required this.timeInfo,
     this.statusColor = const Color(0xFF10B981),
-    this.statusBackgroundColor = const Color(0xFFECFDF3),
+    this.statusBackgroundColor, //= const Color(0xFFECFDF3),
   });
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       width: 327.w,
       height: 150.h,
       padding: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
-        color: AppColors.secondaryColor,
+        color: theme.secondaryHeaderColor, //AppColors.secondaryColor
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color(0xFFD0D5DD), width: 1.w),
+        border: Border.all(
+          color: theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+        ), //BORDER COLOR, width: 1.w),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,13 +50,16 @@ class JobCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.titleColor,
+                  // color: AppColors.titleColor,
                 ),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: statusBackgroundColor,
+                  // color: statusBackgroundColor,
+                  color: isDark
+                      ? theme.secondaryHeaderColor
+                      : Color(0xFFECFDF3), //AppColors.secondaryColor,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Text(
@@ -73,7 +81,7 @@ class JobCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
-              color: AppColors.greyColor,
+              color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
             ),
           ),
           SizedBox(height: 8.h),
@@ -84,7 +92,7 @@ class JobCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
-              color: AppColors.greyColor,
+              color: theme.textTheme.bodyLarge?.color,
             ),
           ),
           SizedBox(height: 8.h),
@@ -95,7 +103,7 @@ class JobCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
-              color: AppColors.greyColor,
+              color: theme.textTheme.bodyLarge?.color,
             ),
           ),
         ],

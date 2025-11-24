@@ -105,6 +105,9 @@ class _AtsIndexScreenState extends State<AtsIndexScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
     final name = employeeDetails?['name'] ?? "No Name";
@@ -143,7 +146,7 @@ class _AtsIndexScreenState extends State<AtsIndexScreen> {
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          color: AppColors.atsHomepageBg,
+          color: theme.cardColor, //ATS Background Color
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Column(
@@ -154,7 +157,7 @@ class _AtsIndexScreenState extends State<AtsIndexScreen> {
                   text: "Index",
                   fontWeight: FontWeight.w600,
                   fontSize: 16.sp,
-                  color: AppColors.titleColor,
+                  //color: AppColors.titleColor,
                 ),
                 SizedBox(height: 16.h),
                 // Use the reusable widget!
