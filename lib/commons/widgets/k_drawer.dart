@@ -239,6 +239,8 @@ class KDrawer extends StatelessWidget {
   }
 
   void _showLogoutDialog(BuildContext context) {
+    final theme = Theme.of(context);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -250,7 +252,10 @@ class KDrawer extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context); // Close dialog
               },
-              child: Text("Cancel"),
+              child: Text(
+                "Cancel",
+                style: TextStyle(color: theme.primaryColor),
+              ),
             ),
 
             TextButton(
@@ -274,8 +279,8 @@ class KDrawer extends StatelessWidget {
                 }
               },
               child: context.employeeAuthLogOutProviderWatch.isLoading
-                  ? const CircularProgressIndicator()
-                  : const Text("Logout"),
+                  ? CircularProgressIndicator(color: theme.primaryColor)
+                  : Text("Logout", style: TextStyle(color: theme.primaryColor)),
             ),
           ],
         );

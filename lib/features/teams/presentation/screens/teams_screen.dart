@@ -52,10 +52,10 @@ class _TeamsScreenState extends State<TeamsScreen> {
           titleTextStyle: GoogleFonts.sora(
             fontSize: 13.sp,
             fontWeight: FontWeight.w500,
-            color: theme
-                .textTheme
-                .headlineLarge
-                ?.color, //AppColors.titleColor,, //AppColors.secondaryColor,
+            // color: theme
+            //     .textTheme
+            //     .headlineLarge
+            //     ?.color, //AppColors.titleColor,
           ),
           leading: IconButton(
             onPressed: () {
