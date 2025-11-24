@@ -10,6 +10,9 @@ class AddResponseDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     final TextEditingController responseController = TextEditingController();
 
     return Dialog(
@@ -29,11 +32,14 @@ class AddResponseDialog extends StatelessWidget {
 
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF374151), // grey tone
+                  // color: Color(0xFF374151), // grey tone
                 ),
                 InkWell(
                   onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.close, color: Colors.grey),
+                  child: Icon(
+                    Icons.close,
+                    color: theme.textTheme.bodyLarge?.color,
+                  ),
                 ),
               ],
             ),
@@ -45,7 +51,7 @@ class AddResponseDialog extends StatelessWidget {
 
               fontSize: 15,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF374151),
+              // color: Color(0xFF374151),
             ),
             const SizedBox(height: 8),
 
@@ -56,22 +62,29 @@ class AddResponseDialog extends StatelessWidget {
               decoration: InputDecoration(
                 hintText:
                     'Hi, I can’t seem to update the app. It says “Error checking updates” when I tried to update the app via Google Play. Pls help.',
-                hintStyle: const TextStyle(
-                  color: Color(0xFF6B7280),
+                hintStyle: TextStyle(
+                  color:
+                      theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
                   fontSize: 14,
                   height: 1.5,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+                  borderSide: BorderSide(
+                    color:
+                        theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+                  ), //AppColors.greyColor,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+                  borderSide: BorderSide(
+                    color:
+                        theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+                  ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFF7C3AED)),
+                  borderSide: BorderSide(color: theme.primaryColor),
                 ),
               ),
             ),
@@ -82,17 +95,23 @@ class AddResponseDialog extends StatelessWidget {
               width: double.infinity,
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Color(0xFFD1D5DB)),
+                  side: BorderSide(
+                    color:
+                        theme.textTheme.bodyLarge?.color ?? AppColors.greyColor,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 onPressed: () {},
-                child: const Text(
+                child: Text(
                   "Add Image",
                   style: TextStyle(
-                    color: Color(0xFF374151),
+                    color: theme
+                        .textTheme
+                        .headlineLarge
+                        ?.color, //AppColors.titleColor,
                     fontWeight: FontWeight.w500,
                     fontSize: 14,
                   ),
@@ -103,7 +122,7 @@ class AddResponseDialog extends StatelessWidget {
 
             // Add Response Button
             KAuthFilledBtn(
-              backgroundColor: AppColors.primaryColor,
+              backgroundColor: theme.primaryColor,
               text: "Add Response",
               onPressed: () {
                 Navigator.pop(context);

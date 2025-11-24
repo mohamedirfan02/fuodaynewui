@@ -26,25 +26,46 @@ class TicketCard extends StatelessWidget {
     this.icon,
   });
 
-  Color get _statusColor {
+  // Dark color for text based on status
+  Color _statusColor(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     switch (status) {
       case TicketStatus.open:
-        return const Color(0xFFEF4444); // Red
+        return isDark
+            ? const Color(0xFFFCA5A5) // Light Red text for dark mode
+            : const Color(0xFFEF4444);
       case TicketStatus.inProgress:
-        return const Color(0xFFF59E0B); // Orange/Yellow
+        return isDark
+            ? const Color(0xFFFCD34D) // Soft Yellow
+            : const Color(0xFFF59E0B);
       case TicketStatus.completed:
-        return const Color(0xFF10B981); // Green
+        return isDark
+            ? const Color(0xFF6EE7B7) // Mint Green
+            : const Color(0xFF10B981);
     }
   }
 
-  Color get _statusBackgroundColor {
+  // Light color for background based on status
+  Color _statusBackgroundColor(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     switch (status) {
       case TicketStatus.open:
-        return const Color(0xFFFEE2E2); // Light Red
+        return isDark
+            ? const Color(0xFF451A1A) // Dark Red BG
+            : const Color(0xFFFEE2E2);
       case TicketStatus.inProgress:
-        return const Color(0xFFFEF3C7); // Light Orange
+        return isDark
+            ? const Color(0xFF422006) // Dark Yellow BG
+            : const Color(0xFFFEF3C7);
+
       case TicketStatus.completed:
-        return const Color(0xFFD1FAE5); // Light Green
+        return isDark
+            ? const Color(0xFF064E3B) // Dark Green BG
+            : const Color(0xFFD1FAE5);
     }
   }
 
@@ -94,7 +115,7 @@ class TicketCard extends StatelessWidget {
                     vertical: 6.h,
                   ),
                   decoration: BoxDecoration(
-                    color: _statusBackgroundColor,
+                    color: _statusBackgroundColor(context),
                     borderRadius: BorderRadius.circular(30.r),
                   ),
                   child: Text(
@@ -102,7 +123,7 @@ class TicketCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
-                      color: _statusColor,
+                      color: _statusColor(context),
                       letterSpacing: 0.5,
                     ),
                   ),

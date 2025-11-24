@@ -246,7 +246,8 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
     final name = employeeDetails?['name'] ?? "No Name";
     final email = employeeDetails?['email'] ?? "No Email";
-    final String currentRoute = AppRouteConstants.atsTrackerScreen; // Replace with actual current route
+    final String currentRoute =
+        AppRouteConstants.atsTrackerScreen; // Replace with actual current route
 
     final headers = [
       _headers("S.No", 50.w),
@@ -416,11 +417,17 @@ class _AtsTrackerOverviewTabState extends State<AtsTrackerOverviewTab> {
                                     text: "Interview",
                                     fontWeight: FontWeight.w600,
                                     fontSize: 13,
+                                    textColor: theme.secondaryHeaderColor,
                                     icon: SvgPicture.asset(
                                       AppAssetsConstants.addIcon,
                                       height: 15,
                                       width: 15,
                                       fit: BoxFit.contain,
+                                      //SVG IMAGE COLOR
+                                      colorFilter: ColorFilter.mode(
+                                        theme.secondaryHeaderColor,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                     onPressed: () {
                                       print("Candidates button tapped");

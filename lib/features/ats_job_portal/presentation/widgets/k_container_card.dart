@@ -58,7 +58,7 @@ class JobCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   // color: statusBackgroundColor,
                   color: isDark
-                      ? theme.secondaryHeaderColor
+                      ? Color(0xFF064E3B)
                       : Color(0xFFECFDF3), //AppColors.secondaryColor,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
