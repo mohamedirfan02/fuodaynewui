@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fuoday/commons/widgets/k_data_table.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
@@ -19,16 +18,22 @@ class _PayslipOverviewState extends State<PayslipOverview> {
   void initState() {
     super.initState();
     // Fetch payroll overview when widget is created
-    Future.microtask(() =>
-        context.read<PayrollOverviewProvider>().fetchPayrollOverview());
+    Future.microtask(
+      () => context.read<PayrollOverviewProvider>().fetchPayrollOverview(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     final payrollProvider = context.watch<PayrollOverviewProvider>();
 
     if (payrollProvider.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(
+        child: CircularProgressIndicator(color: theme.primaryColor),
+      );
     }
 
     if (payrollProvider.errorMessage != null) {
@@ -44,7 +49,6 @@ class _PayslipOverviewState extends State<PayslipOverview> {
     if (payroll == null) {
       return const Center(child: Text("No payroll data available"));
     }
-
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -149,8 +153,16 @@ class _PayslipOverviewState extends State<PayslipOverview> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    KText(text: "Month", fontWeight: FontWeight.w600, fontSize: 12.sp),
-                    KText(text: payroll.payslip.month ?? "Not Available", fontWeight: FontWeight.w600, fontSize: 12.sp),
+                    KText(
+                      text: "Month",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.sp,
+                    ),
+                    KText(
+                      text: payroll.payslip.month ?? "Not Available",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.sp,
+                    ),
                   ],
                 ),
                 SizedBox(height: 8.h),
@@ -162,8 +174,16 @@ class _PayslipOverviewState extends State<PayslipOverview> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        KText(text: entry.key, fontWeight: FontWeight.w600, fontSize: 12.sp),
-                        KText(text: entry.value.toString(), fontWeight: FontWeight.w600, fontSize: 12.sp),
+                        KText(
+                          text: entry.key,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12.sp,
+                        ),
+                        KText(
+                          text: entry.value.toString(),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12.sp,
+                        ),
                       ],
                     ),
                   );
@@ -171,14 +191,22 @@ class _PayslipOverviewState extends State<PayslipOverview> {
 
                 // Show placeholder if no earnings
                 if (payroll.salaryComponents["Earnings"]!.isEmpty)
-                  KText(text: "No earnings", fontWeight: FontWeight.w600, fontSize: 12.sp),
+                  KText(
+                    text: "No earnings",
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12.sp,
+                  ),
               ],
             ),
           ),
 
           SizedBox(height: 20.h),
           // Deductions Section styled like Total Payable
-          KText(text: "Deductions", fontWeight: FontWeight.w600, fontSize: 14.sp),
+          KText(
+            text: "Deductions",
+            fontWeight: FontWeight.w600,
+            fontSize: 14.sp,
+          ),
 
           SizedBox(height: 10.h),
           Container(
@@ -193,8 +221,16 @@ class _PayslipOverviewState extends State<PayslipOverview> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    KText(text: "Month", fontWeight: FontWeight.w600, fontSize: 12.sp),
-                    KText(text: payroll.payslip.month ?? "Not Available", fontWeight: FontWeight.w600, fontSize: 12.sp),
+                    KText(
+                      text: "Month",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.sp,
+                    ),
+                    KText(
+                      text: payroll.payslip.month ?? "Not Available",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.sp,
+                    ),
                   ],
                 ),
                 SizedBox(height: 8.h),
@@ -206,8 +242,16 @@ class _PayslipOverviewState extends State<PayslipOverview> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        KText(text: entry.key, fontWeight: FontWeight.w600, fontSize: 12.sp),
-                        KText(text: entry.value.toString(), fontWeight: FontWeight.w600, fontSize: 12.sp),
+                        KText(
+                          text: entry.key,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12.sp,
+                        ),
+                        KText(
+                          text: entry.value.toString(),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12.sp,
+                        ),
                       ],
                     ),
                   );
@@ -215,14 +259,22 @@ class _PayslipOverviewState extends State<PayslipOverview> {
 
                 // If no deductions, show a placeholder row
                 if (payroll.salaryComponents["Deductions"]!.isEmpty)
-                  KText(text: "No deductions", fontWeight: FontWeight.w600, fontSize: 12.sp),
+                  KText(
+                    text: "No deductions",
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12.sp,
+                  ),
               ],
             ),
           ),
 
           SizedBox(height: 20.h),
           // Total Payable Section
-          KText(text: "Total Payable", fontWeight: FontWeight.w600, fontSize: 14.sp),
+          KText(
+            text: "Total Payable",
+            fontWeight: FontWeight.w600,
+            fontSize: 14.sp,
+          ),
           SizedBox(height: 10.h),
           Container(
             padding: EdgeInsets.all(12.w),
@@ -235,24 +287,48 @@ class _PayslipOverviewState extends State<PayslipOverview> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    KText(text: "Month", fontWeight: FontWeight.w600, fontSize: 12.sp),
-                    KText(text: payroll.payslip.month ?? "Not Available", fontWeight: FontWeight.w600, fontSize: 12.sp),
+                    KText(
+                      text: "Month",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.sp,
+                    ),
+                    KText(
+                      text: payroll.payslip.month ?? "Not Available",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.sp,
+                    ),
                   ],
                 ),
                 SizedBox(height: 8.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    KText(text: "Total Salary", fontWeight: FontWeight.w600, fontSize: 12.sp,),
-                    KText(text: payroll.payslip.totalSalary.toString(), fontWeight: FontWeight.w600, fontSize: 12.sp),
+                    KText(
+                      text: "Total Salary",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.sp,
+                    ),
+                    KText(
+                      text: payroll.payslip.totalSalary.toString(),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.sp,
+                    ),
                   ],
                 ),
                 SizedBox(height: 8.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    KText(text: "In Words", fontWeight: FontWeight.w600, fontSize: 12.sp),
-                    KText(text: payroll.payslip.totalSalaryWord, fontWeight: FontWeight.w600, fontSize: 12.sp),
+                    KText(
+                      text: "In Words",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.sp,
+                    ),
+                    KText(
+                      text: payroll.payslip.totalSalaryWord,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12.sp,
+                    ),
                   ],
                 ),
               ],

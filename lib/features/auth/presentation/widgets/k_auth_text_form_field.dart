@@ -66,7 +66,7 @@ class KAuthTextFormField extends StatelessWidget {
               if (isRequiredStar)
                 KText(
                   text: " *",
-                  color: Colors.red,
+                  color: isDark ? AppColors.checkOutColorDark : Colors.red,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                 ),
@@ -86,6 +86,7 @@ class KAuthTextFormField extends StatelessWidget {
             fontWeight: FontWeight.w500,
             color: theme.textTheme.headlineLarge?.color,
           ),
+          cursorColor: theme.primaryColor,
           controller: controller,
           obscureText: obscureText,
           keyboardType: keyboardType,

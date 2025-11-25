@@ -71,7 +71,7 @@ class HROverviewWidget extends StatelessWidget {
     //   Filter only today’s records where employee is “present” (not on leave)
     final todayAttendanceList =
         EmployeetotalAttendce?.hrSection.data
-            ?.where(
+            .where(
               (att) =>
                   att.date == todayStr &&
                   att.status != "On Leave" &&
@@ -103,7 +103,7 @@ class HROverviewWidget extends StatelessWidget {
         'icon': Icons.check_circle,
       },
       {
-        'count': "${permissions?.length ?? 0}",
+        'count': "${permissions.length ?? 0}",
         'description': 'Permissions',
         'filter': 'this week',
         'icon': Icons.rate_review,

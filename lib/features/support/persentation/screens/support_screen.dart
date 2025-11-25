@@ -139,7 +139,7 @@ class _SupportScreenState extends State<SupportScreen> {
 
     //App Theme Data
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    //final isDark = theme.brightness == Brightness.dark;
 
     return DefaultTabController(
       length: 3,

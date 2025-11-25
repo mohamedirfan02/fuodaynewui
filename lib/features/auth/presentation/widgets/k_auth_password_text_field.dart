@@ -71,6 +71,7 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
           onTap: widget.onTap,
           readOnly: widget.isReadOnly,
           validator: widget.validator,
+          cursorColor: theme.primaryColor,
           style: GoogleFonts.sora(
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,

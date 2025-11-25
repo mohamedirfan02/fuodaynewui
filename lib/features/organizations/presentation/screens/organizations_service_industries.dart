@@ -6,7 +6,6 @@ import 'package:fuoday/features/organizations/presentation/providers/services_an
 import 'package:provider/provider.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/organizations/presentation/widgets/organizations_achivements_card.dart';
 
 class OrganizationsServiceIndustries extends StatefulWidget {
@@ -41,7 +40,7 @@ class _OrganizationsServiceIndustriesState
   Widget build(BuildContext context) {
     //App Theme Data
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    //final isDark = theme.brightness == Brightness.dark;
     final provider = context.watch<ServicesAndIndustriesProvider>();
 
     if (provider.isLoading) {

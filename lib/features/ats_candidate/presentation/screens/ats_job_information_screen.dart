@@ -18,7 +18,6 @@ import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:intl/intl.dart';
 
-
 class JobInformationScreen extends StatefulWidget {
   const JobInformationScreen({super.key});
 
@@ -73,6 +72,9 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
     TextEditingController controller,
     ValueChanged<DateTime> onPicked,
   ) async {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //  final isDark = theme.brightness == Brightness.dark;
     final picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -82,9 +84,12 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: AppColors.primaryColor,
-              onPrimary: AppColors.secondaryColor,
-              onSurface: AppColors.titleColor,
+              surface: theme.secondaryHeaderColor,
+              primary: theme.primaryColor,
+              onPrimary: theme.secondaryHeaderColor, //AppColors.secondaryColor
+              onSurface:
+                  theme.textTheme.headlineLarge?.color ??
+                  AppColors.titleColor, //AppColors.titleColor,
             ),
           ),
           child: child!,
@@ -108,6 +113,9 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
     final name = employeeDetails?['name'] ?? "No Name";
@@ -117,7 +125,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: AppColors.atsHomepageBg,
+      backgroundColor: theme.cardColor, //ATS Background Color
       appBar: AtsKAppBarWithDrawer(
         userName: "",
         cachedNetworkImageUrl: profilePhoto,
@@ -143,7 +151,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 text: "Job Information",
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
-                color: AppColors.titleColor,
+                //  color: AppColors.titleColor,
               ),
               SizedBox(height: 10.h),
 
@@ -394,7 +402,9 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadiusGeometry.circular(8),
                   border: Border.all(
-                    color: AppColors.greyColor.withOpacity(.2),
+                    color:
+                        theme.textTheme.bodyLarge?.color ??
+                        AppColors.greyColor, //BORDER COLOR,
                   ),
                 ),
                 height: 33.h,
@@ -405,7 +415,10 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                     children: [
                       Icon(
                         Icons.arrow_back_ios_new,
-                        color: Colors.black,
+                        color: theme
+                            .textTheme
+                            .headlineLarge
+                            ?.color, //AppColors.titleColor,
                         size: 18,
                       ),
                       KHorizontalSpacer(width: 7.w),
@@ -413,7 +426,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
                         text: "Back",
                         fontWeight: FontWeight.w600,
                         fontSize: 14.sp,
-                        color: Colors.black,
+                        //color: Colors.black,
                       ),
                     ],
                   ),
@@ -428,7 +441,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
               //   color: Colors.white,
               // ),
               borderRadius: BorderRadiusGeometry.circular(8),
-              backgroundColor: AppColors.primaryColor,
+              backgroundColor: theme.primaryColor,
               height: AppResponsive.responsiveBtnHeight(context),
               width: 130.w,
               text: "Save",
@@ -467,13 +480,21 @@ class KTitleText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Row(
       children: [
-        KText(text: title, fontWeight: FontWeight.w600, fontSize: 12.sp, color: AppColors.titleColor),
+        KText(
+          text: title,
+          fontWeight: FontWeight.w600,
+          fontSize: 12.sp,
+          //  color: AppColors.titleColor,
+        ),
         KHorizontalSpacer(width: 4.w),
         KText(
           text: " *",
-          color: Colors.red,
+          color: isDark ? AppColors.softRedDark : Colors.red,
           fontSize: 14.sp,
           fontWeight: FontWeight.w500,
         ),

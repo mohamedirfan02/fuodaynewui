@@ -54,11 +54,11 @@ class TimeTrackerOverviewCard extends StatelessWidget {
               color: theme.secondaryHeaderColor, //AppColors.secondaryColor
               border: Border.all(
                 color:
-                    theme.textTheme.bodyLarge?.color?.withOpacity(0.1) ??
+                    theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.1) ??
                     AppColors.greyColor,
               ),
             ),
-            child: Center(child: Icon(iconData, color: AppColors.primaryColor)),
+            child: Center(child: Icon(iconData, color: theme.primaryColor)),
           ),
 
           KVerticalSpacer(height: 12.h),
@@ -78,9 +78,14 @@ class TimeTrackerOverviewCard extends StatelessWidget {
           TweenAnimationBuilder<double>(
             tween: Tween<double>(
               begin: 0,
-              end: double.tryParse(
-                  timeTrackerOverviewCardWorkingHours.replaceAll(RegExp(r'[^0-9]'), '')
-              ) ?? 0,
+              end:
+                  double.tryParse(
+                    timeTrackerOverviewCardWorkingHours.replaceAll(
+                      RegExp(r'[^0-9]'),
+                      '',
+                    ),
+                  ) ??
+                  0,
             ),
             duration: const Duration(milliseconds: 800),
             builder: (context, value, child) {
@@ -91,7 +96,6 @@ class TimeTrackerOverviewCard extends StatelessWidget {
               );
             },
           ),
-
         ],
       ),
     );

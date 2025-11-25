@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OrganizationsTeamDesignationMemberCountHeading extends StatelessWidget {
