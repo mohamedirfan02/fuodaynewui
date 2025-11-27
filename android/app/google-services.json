@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "396884874881",
+    "project_id": "fuoday-prod",
+    "storage_bucket": "fuoday-prod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396884874881:android:ae6ba19699ba4959175f80",
+        "android_client_info": {
+          "package_name": "com.thikse.fuoday"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrb1W989xuA8zFVS6lwrLLYqF8_yDDfhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

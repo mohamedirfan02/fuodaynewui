@@ -1,0 +1,30 @@
+import 'package:fuoday/core/constants/storage/app_hive_storage_constants.dart';
+import 'package:fuoday/core/service/hive_storage_service.dart';
+import 'package:fuoday/features/attendance/data/models/total_attendance_details_model.dart';
+
+class TotalAttendanceDetailsLocalDataSource {
+  final HiveStorageService hiveStorageService;
+
+  TotalAttendanceDetailsLocalDataSource({required this.hiveStorageService});
+
+  Future<void> cacheTotalAttendanceDetails(
+    TotalAttendanceDetailsModel details,
+  ) async {
+    await hiveStorageService.put(
+      AppHiveStorageConstants.apiCacheBox,
+      AppHiveStorageConstants.totalAttendanceDetails,
+      details.toJson(),
+    );
+  }
+
+  Future<TotalAttendanceDetailsModel?>
+  getTotalAttendanceDetailsLocalHive() async {
+    final data = await hiveStorageService.get<Map<String, dynamic>>(
+      AppHiveStorageConstants.apiCacheBox,
+      AppHiveStorageConstants.totalAttendanceDetails,
+    );
+
+    if (data == null) return null;
+    return TotalAttendanceDetailsModel.fromJson(data);
+  }
+}
