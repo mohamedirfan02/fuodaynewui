@@ -32,6 +32,9 @@ class KAtsUploadPickerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Stack(
       children: [
         Column(
@@ -50,7 +53,9 @@ class KAtsUploadPickerTile extends StatelessWidget {
                 options: RoundedRectDottedBorderOptions(
                   dashPattern: [5, 5],
                   strokeWidth: 1,
-                  color: AppColors.textBtnColor,
+                  color: isDark
+                      ? AppColors.textBtnColorDark
+                      : AppColors.textBtnColor,
                   radius: Radius.circular(8.r),
                 ),
                 child: Container(
@@ -58,7 +63,9 @@ class KAtsUploadPickerTile extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.r),
-                    color: backgroundcolor ?? AppColors.secondaryColor,
+                    color:
+                        backgroundcolor ??
+                        theme.secondaryHeaderColor, //AppColors.secondaryColor
                   ),
                   child: Center(
                     child: Column(
@@ -67,12 +74,14 @@ class KAtsUploadPickerTile extends StatelessWidget {
                       children: [
                         Icon(
                           uploadPickerIcon,
-                          color: AppColors.greyColor.withOpacity(0.8),
+                          color: theme.textTheme.bodyLarge?.color?.withValues(
+                            alpha: 0.8,
+                          ),
                           size: 22.h,
                         ),
                         KText(
                           textAlign: TextAlign.center,
-                          color: AppColors.titleColor,
+                          // color: AppColors.titleColor,
                           text: description,
                           fontWeight: FontWeight.w500,
                           fontSize: 12.sp,
@@ -103,13 +112,19 @@ class KAtsUploadPickerTile extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.remove_red_eye,
-                        color: AppColors.greyColor,
+                        color: theme
+                            .textTheme
+                            .bodyLarge
+                            ?.color, //AppColors.greyColor,
                         size: 12.w,
                       ),
                       KText(
                         text: "View",
                         fontWeight: FontWeight.w500,
-                        color: AppColors.greyColor,
+                        color: theme
+                            .textTheme
+                            .bodyLarge
+                            ?.color, //AppColors.greyColor,
                         fontSize: 10.sp,
                       ),
                     ],
@@ -124,13 +139,19 @@ class KAtsUploadPickerTile extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.cancel,
-                        color: AppColors.greyColor,
+                        color: theme
+                            .textTheme
+                            .bodyLarge
+                            ?.color, //AppColors.greyColor,
                         size: 12.w,
                       ),
                       KText(
                         text: "Cancel",
                         fontWeight: FontWeight.w500,
-                        color: AppColors.greyColor,
+                        color: theme
+                            .textTheme
+                            .bodyLarge
+                            ?.color, //AppColors.greyColor,
                         fontSize: 10.sp,
                       ),
                     ],

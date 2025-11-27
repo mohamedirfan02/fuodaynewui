@@ -6,7 +6,6 @@ import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/time_tracker/presentation/provider/time_tracker_provider.dart';
 import 'package:fuoday/features/time_tracker/presentation/screens/time_tracker_overview.dart';
 import 'package:fuoday/features/time_tracker/presentation/screens/time_tracker_project_management.dart';
@@ -125,7 +124,9 @@ class _TimeTrackerScreenState extends State<TimeTrackerScreen> {
 
                   // Tab Bar
                   KTabBar(
-                    labelPadding: EdgeInsets.symmetric(horizontal: 30.w), // More space
+                    labelPadding: EdgeInsets.symmetric(
+                      horizontal: 30.w,
+                    ), // More space
                     tabs: [
                       Tab(text: "Overview"),
                       Tab(text: "Project Management"),

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
-import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
 import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
 import 'package:fuoday/commons/widgets/k_filter_button.dart';
-import 'package:fuoday/commons/widgets/k_horizontal_spacer.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
@@ -13,12 +11,9 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
-import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
-import 'package:fuoday/features/home/presentation/widgets/k_ats_applicatitem.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
 import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card.dart';
-import 'package:go_router/go_router.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../core/constants/router/app_route_constants.dart';
@@ -957,7 +952,7 @@ class _DashoardTabState extends State<DashoardTab> {
   ) {
     //App Theme Data
     final theme = Theme.of(context);
-    //final isDark = theme.brightness == Brightness.dark;
+    final isDark = theme.brightness == Brightness.dark;
     return ReusableDataGrid(
       allowSorting: false, // 🔹 Enable sorting
       title: 'Applicants',
@@ -1075,13 +1070,13 @@ class _DashoardTabState extends State<DashoardTab> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _actionButton(
-                color: AppColors.primaryColor,
+                color: theme.primaryColor,
                 icon: AppAssetsConstants.editIcon,
                 onTap: () {},
               ),
               SizedBox(width: 8.w),
               _actionButton(
-                color: AppColors.softRed,
+                color: isDark ? AppColors.softRedDark : AppColors.softRed,
                 icon: AppAssetsConstants.deleteIcon,
                 onTap: () {},
               ),
@@ -1094,127 +1089,6 @@ class _DashoardTabState extends State<DashoardTab> {
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           child: Text(value.toString(), style: TextStyle(fontSize: 12.sp)),
-        );
-      },
-    );
-  }
-
-  Widget _buildPageNumbersRow() {
-    int windowEnd = (pageWindowStart + pageWindowSize - 1);
-    if (windowEnd > totalPages) windowEnd = totalPages;
-
-    List<Widget> pageButtons = [];
-
-    // Previous window arrow
-    pageButtons.add(
-      IconButton(
-        icon: Icon(Icons.chevron_left, size: 16.sp),
-        onPressed: pageWindowStart > 1
-            ? () {
-                setState(() {
-                  pageWindowStart -= pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
-            : null,
-      ),
-    );
-
-    // Page numbers
-    for (int i = pageWindowStart; i <= windowEnd; i++) {
-      pageButtons.add(
-        Padding(
-          padding: EdgeInsets.only(right: 8.w),
-          child: _buildPageNumber(i),
-        ),
-      );
-    }
-
-    // Next window arrow
-    pageButtons.add(
-      IconButton(
-        icon: Icon(Icons.chevron_right, size: 16.sp),
-        onPressed: windowEnd < totalPages
-            ? () {
-                setState(() {
-                  pageWindowStart += pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
-            : null,
-      ),
-    );
-
-    return Row(children: pageButtons);
-  }
-
-  Widget _buildPageNumber(int pageNum) {
-    final isActive = pageNum == currentPage;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          currentPage = pageNum;
-        });
-      },
-      child: Container(
-        width: 32.w,
-        height: 32.w,
-        decoration: BoxDecoration(
-          color: isActive ? Color(0xFFF8F8F8) : Colors.transparent,
-          borderRadius: BorderRadius.circular(4.r),
-        ),
-        child: Center(
-          child: KText(
-            text: pageNum.toString(),
-            fontSize: 12.sp,
-            color: isActive ? Colors.black : AppColors.titleColor,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showItemsPerPageSelector() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              KText(
-                text: "Candidate per page",
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.titleColor,
-              ),
-              SizedBox(height: 16.h),
-              ...([5, 6, 10, 15, 20].map(
-                (count) => ListTile(
-                  title: KText(
-                    text: "Show $count Candidate",
-                    fontSize: 14.sp,
-                    color: AppColors.titleColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  trailing: itemsPerPage == count
-                      ? Icon(Icons.check, color: AppColors.primaryColor)
-                      : null,
-                  onTap: () {
-                    setState(() {
-                      itemsPerPage = count;
-                      currentPage = 1; // Reset to first page
-                      pageWindowStart = 1; // Reset pagination window
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-              )),
-            ],
-          ),
         );
       },
     );

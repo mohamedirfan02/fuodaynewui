@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 
 class EmployeeBottomNav extends StatelessWidget {
   const EmployeeBottomNav({super.key});

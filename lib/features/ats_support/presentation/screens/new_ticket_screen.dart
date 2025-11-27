@@ -46,6 +46,9 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
     final name = employeeDetails?['name'] ?? "No Name";
@@ -55,7 +58,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: AppColors.atsHomepageBg,
+      backgroundColor: theme.cardColor, //ATS Background Color
       appBar: AtsKAppBarWithDrawer(
         userName: "",
         cachedNetworkImageUrl: profilePhoto,
@@ -81,7 +84,7 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
                 text: "New Ticket",
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
-                color: AppColors.titleColor,
+                //color: AppColors.titleColor,
               ),
               SizedBox(height: 14.h),
 
@@ -162,9 +165,14 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
                   width: 50.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: AppColors.secondaryColor,
+                    color:
+                        theme.secondaryHeaderColor, //AppColors.secondaryColor
                     border: Border.all(
-                      color: AppColors.greyColor.withOpacity(.3),
+                      color:
+                          theme.textTheme.bodyLarge?.color?.withValues(
+                            alpha: 0.3,
+                          ) ??
+                          AppColors.greyColor, //BORDER COLOR
                       width: 1,
                     ),
                     image: _pickedImageFile != null
@@ -175,8 +183,11 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
                         : null,
                   ),
                   child: _pickedImageFile == null
-                      ? const Center(
-                          child: Icon(Icons.add_outlined, color: Colors.grey),
+                      ? Center(
+                          child: Icon(
+                            Icons.add_outlined,
+                            color: theme.textTheme.bodyLarge?.color,
+                          ), //AppColors.greyColor,
                         )
                       : Stack(
                           children: [
@@ -213,13 +224,13 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
         padding: EdgeInsets.all(20.w),
         child: KAuthFilledBtn(
           borderRadius: BorderRadius.circular(8),
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: theme.primaryColor,
           height: AppResponsive.responsiveBtnHeight(context),
           text: "Next",
           fontSize: 12.sp,
-          suffixIcon: const Icon(
+          suffixIcon: Icon(
             Icons.arrow_forward_ios_outlined,
-            color: Colors.white,
+            color: theme.secondaryHeaderColor, //AppColors.secondaryColor
           ),
           onPressed: () {
             final formValid = formKey.currentState!.validate();
@@ -241,12 +252,15 @@ class KTitleText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Row(
       children: [
         KText(text: title, fontWeight: FontWeight.w600, fontSize: 12.sp),
-        const KText(
+        KText(
           text: " *",
-          color: Colors.red,
+          color: isDark ? AppColors.checkOutColorDark : Colors.red,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),

@@ -380,12 +380,13 @@ class _SingleAssignedPersonDropdownState
   @override
   Widget build(BuildContext context) {
     //App Theme Data
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     return Consumer<EmployeeDepartmentProvider>(
       builder: (context, provider, _) {
         final isLoading = provider.isLoading;
         final employees = provider.employeeDepartment?.sameDepartment ?? [];
         final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -410,7 +411,11 @@ class _SingleAssignedPersonDropdownState
               height: 50,
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0.h),
               decoration: BoxDecoration(
-                border: Border.all(color: AppColors.authUnderlineBorderColor),
+                border: Border.all(
+                  color: isDark
+                      ? AppColors.authUnderlineBorderColorDark
+                      : AppColors.authUnderlineBorderColor,
+                ),
                 borderRadius: BorderRadius.circular(5),
               ),
               child: DropdownButtonHideUnderline(
@@ -442,7 +447,10 @@ class _SingleAssignedPersonDropdownState
                         emp.empName,
                         style: GoogleFonts.sora(
                           fontSize: 12.sp,
-                          color: AppColors.titleColor,
+                          color: theme
+                              .textTheme
+                              .headlineLarge
+                              ?.color, //AppColors.titleColor,
                         ),
                       ),
                     );

@@ -56,7 +56,6 @@ class _CandidateInformationScreenState
   final TextEditingController placeController =
       TextEditingController(); //   Added
 
-  // ⚠️ Removed duplicate use of assignedByController
   final TextEditingController assignDateController = TextEditingController();
 
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
@@ -79,6 +78,9 @@ class _CandidateInformationScreenState
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
 
@@ -87,13 +89,16 @@ class _CandidateInformationScreenState
     final email = employeeDetails?['email'] ?? "No Email";
     final String currentRoute = AppRouteConstants.atsCandidateInformationScreen;
 
-    // 🧩 Moved selectDate inside build for inline use
+    //  Moved selectDate inside build for inline use
     Future<void> selectDate(
       BuildContext context,
       TextEditingController controller, {
       required bool isDeadline,
       required bool isAssignDate,
     }) async {
+      //App Theme Data
+      final theme = Theme.of(context);
+      final isDark = theme.brightness == Brightness.dark;
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -105,9 +110,13 @@ class _CandidateInformationScreenState
           return Theme(
             data: Theme.of(context).copyWith(
               colorScheme: ColorScheme.light(
-                primary: AppColors.primaryColor,
-                onPrimary: AppColors.secondaryColor,
-                onSurface: AppColors.titleColor,
+                primary: theme.primaryColor,
+                onPrimary:
+                    theme.secondaryHeaderColor, //AppColors.secondaryColor,
+                onSurface:
+                    theme.textTheme.headlineLarge?.color ??
+                    AppColors.titleColor, //AppColors.titleColor,
+                surface: theme.secondaryHeaderColor,
               ),
             ),
             child: child!,
@@ -130,7 +139,7 @@ class _CandidateInformationScreenState
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: AppColors.atsHomepageBg,
+        backgroundColor: theme.cardColor, //ATS Background Color
         key: _scaffoldKey,
         appBar: AtsKAppBarWithDrawer(
           userName: "",
@@ -151,9 +160,8 @@ class _CandidateInformationScreenState
           child: Form(
             key: formKey,
             autovalidateMode: AutovalidateMode.onUnfocus, //   Added
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.h, vertical: 16.h),
-              decoration: BoxDecoration(color: AppColors.atsHomepageBg),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 16.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -163,14 +171,14 @@ class _CandidateInformationScreenState
                       text: "Candidate Information",
                       fontWeight: FontWeight.w600,
                       fontSize: 16.sp,
-                      color: AppColors.titleColor,
+                      // color: AppColors.titleColor,
                     ),
                   ),
                   //SizedBox(height: 16.h),
 
                   //   File Upload Section
                   KAtsUploadPickerTile(
-                    backgroundcolor: AppColors.atsHomepageBg,
+                    backgroundcolor: theme.cardColor, //ATS Background Color
                     showOnlyView: context.filePickerProviderWatch.isPicked(
                       "resume",
                     ),
@@ -340,8 +348,6 @@ class _CandidateInformationScreenState
                     //     : null,
                   ),
 
-
-
                   KVerticalSpacer(height: 16.h),
                   KAuthTextFormField(
                     label: "Current Employer",
@@ -390,12 +396,12 @@ class _CandidateInformationScreenState
           margin: EdgeInsets.symmetric(vertical: 10.h),
           child: Center(
             child: KAuthFilledBtn(
-              suffixIcon: const Icon(
+              suffixIcon: Icon(
                 Icons.arrow_forward_ios_outlined,
-                color: Colors.white,
+                color: theme.secondaryHeaderColor, //AppColors.secondaryColor
               ),
               borderRadius: BorderRadiusGeometry.circular(8),
-              backgroundColor: AppColors.primaryColor,
+              backgroundColor: theme.primaryColor,
               height: AppResponsive.responsiveBtnHeight(context),
               width: double.infinity,
               text: "Next",

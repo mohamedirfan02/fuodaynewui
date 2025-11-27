@@ -32,7 +32,7 @@ class KAtsGlowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //App Theme Data
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     //final isDark = theme.brightness == Brightness.dark;
     return InkWell(
       borderRadius: borderRadius,

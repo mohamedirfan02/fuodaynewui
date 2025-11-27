@@ -37,7 +37,7 @@ class KAuthFilledBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     //App Theme Data
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    // final isDark = theme.brightness == Brightness.dark;
     return SizedBox(
       height: height.h,
       width: width.w,

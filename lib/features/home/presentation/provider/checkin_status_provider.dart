@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/features/home/domain/entities/checkin_status_entity.dart';
 import 'package:fuoday/features/home/domain/usecases/get_checkin_status_usecase.dart';
 
 class CheckinStatusProvider with ChangeNotifier {
   final GetCheckinStatusUseCase _getCheckinStatusUseCase;
 
-  CheckinStatusProvider({required GetCheckinStatusUseCase getCheckinStatusUseCase})
-      : _getCheckinStatusUseCase = getCheckinStatusUseCase;
+  CheckinStatusProvider({
+    required GetCheckinStatusUseCase getCheckinStatusUseCase,
+  }) : _getCheckinStatusUseCase = getCheckinStatusUseCase;
 
   CheckinStatusEntity? _checkinStatus;
   bool _isLoading = false;
@@ -20,7 +20,8 @@ class CheckinStatusProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  bool get isCurrentlyCheckedIn => _checkinStatus?.checkin != null && _checkinStatus?.checkout == null;
+  bool get isCurrentlyCheckedIn =>
+      _checkinStatus?.checkin != null && _checkinStatus?.checkout == null;
 
   String get formattedCheckinTime => _checkinStatus?.checkin ?? "00:00:00";
   String get formattedCheckoutTime => _checkinStatus?.checkout ?? "00:00:00";
@@ -36,7 +37,7 @@ class CheckinStatusProvider with ChangeNotifier {
     final hours = d.inHours;
     final minutes = d.inMinutes.remainder(60);
     final seconds = d.inSeconds.remainder(60);
-    return '${hours.toString().padLeft(2,'0')}:${minutes.toString().padLeft(2,'0')}:${seconds.toString().padLeft(2,'0')}';
+    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
   Future<void> fetchCheckinStatus(int webUserId) async {

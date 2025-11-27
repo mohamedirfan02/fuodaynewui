@@ -169,13 +169,13 @@ class _ManagerTotalAttendanceRepotScreenState
       final e = entry.value;
       return {
         'S.No': '$i',
-        'Date': e.date?.toString() ?? '-',
-        'Name': e.name?.toString() ?? '-',
-        'Emp ID': e.empId?.toString() ?? '-',
+        'Date': e.date.toString() ?? '-',
+        'Name': e.name.toString() ?? '-',
+        'Emp ID': e.empId.toString() ?? '-',
         'Checkin': e.checkin?.toString() ?? '-',
         'Checkout': e.checkout?.toString() ?? '-',
         'Worked Hours': e.workedHours?.toString() ?? '-',
-        'Status': e.status?.toString() ?? '-',
+        'Status': e.status.toString() ?? '-',
       };
     }).toList();
 

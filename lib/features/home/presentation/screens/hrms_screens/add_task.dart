@@ -96,7 +96,7 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    //final isDark = theme.brightness == Brightness.dark;
     // Select Date
     Future<void> selectDate(
       BuildContext context,
@@ -104,6 +104,9 @@ class _AddTaskState extends State<AddTask> {
       required bool isDeadline,
       required bool isAssignDate,
     }) async {
+      //App Theme Data
+      final theme = Theme.of(context);
+      final isDark = theme.brightness == Brightness.dark;
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -115,9 +118,14 @@ class _AddTaskState extends State<AddTask> {
           return Theme(
             data: Theme.of(context).copyWith(
               colorScheme: ColorScheme.light(
-                primary: AppColors.primaryColor,
-                onPrimary: AppColors.secondaryColor,
-                onSurface: AppColors.titleColor,
+                surfaceContainer: theme.secondaryHeaderColor,
+                surface: theme.secondaryHeaderColor,
+                primary: theme.primaryColor,
+                onPrimary:
+                    theme.secondaryHeaderColor, //AppColors.secondaryColor
+                onSurface:
+                    theme.textTheme.headlineLarge?.color ??
+                    AppColors.titleColor, //AppColors.titleColor,
               ),
             ),
             child: child!,
@@ -504,7 +512,7 @@ class _AddTaskState extends State<AddTask> {
                     }
                   },
 
-                  backgroundColor: AppColors.primaryColor,
+                  backgroundColor: theme.primaryColor,
                   fontSize: 10.sp,
                   height: AppResponsive.responsiveBtnHeight(context),
                 ),
