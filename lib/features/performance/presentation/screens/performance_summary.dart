@@ -133,6 +133,18 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
     AppLoggerHelper.logInfo(performanceSummaryCard.toString());
     final isTablet = AppResponsive.isTablet(context);
     final isLandscape = AppResponsive.isLandscape(context);
+    // final providerLoading = context.performanceSummaryProviderWatch;
+
+    if (provider.isLoading) {
+      //App Theme Data
+      final theme = Theme.of(context);
+      //final isDark = theme.brightness == Brightness.dark;
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(color: theme.primaryColor),
+        ),
+      );
+    }
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -219,7 +231,6 @@ class _PerformanceSummaryState extends State<PerformanceSummary> {
             height: 200.h,
             child: KDataTable(columnTitles: columns, rowData: data),
           ),
-
         ],
       ),
     );

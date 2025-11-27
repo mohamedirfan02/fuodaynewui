@@ -35,7 +35,7 @@ class KDropdownTextFormField<T> extends StatelessWidget {
         hintStyle: GoogleFonts.sora(
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
-          color: theme.textTheme.headlineLarge?.color?.withOpacity(.7),
+          color: theme.textTheme.headlineLarge?.color?.withValues(alpha: .7),
         ),
 
         border: const OutlineInputBorder(),
