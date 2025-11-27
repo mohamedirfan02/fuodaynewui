@@ -149,9 +149,21 @@ class _PerformanceAuditFormState extends State<PerformanceAuditForm> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.employeeAuditProviderWatch;
+
     //App Theme Data
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    if (provider.isLoading) {
+      //App Theme Data
+      final theme = Theme.of(context);
+      //final isDark = theme.brightness == Brightness.dark;
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(color: theme.primaryColor),
+        ),
+      );
+    }
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       physics: const BouncingScrollPhysics(),

@@ -22,20 +22,21 @@ class KDataTable extends StatelessWidget {
       horizontalMargin: 12,
       minWidth: 1000, // Reduced from 1600 to fit better
       headingRowColor: WidgetStateProperty.all(
-        isDark ? const Color(0xFF2A2D32) : Colors.blueGrey.shade50,
+        isDark ? theme.secondaryHeaderColor : Colors.blueGrey.shade50,
       ),
       columns: columnTitles
           .map(
             (title) => DataColumn2(
-          label: Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          size: ColumnSize.S, // Auto-size columns to content
-        ),
-      )
+              label: Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              size: ColumnSize.S, // Auto-size columns to content
+            ),
+          )
           .toList(),
-      rows: rowData.map((row) { // Fixed the typo here
+      rows: rowData.map((row) {
+        // Fixed the typo here
         return DataRow(
           cells: columnTitles.map((col) {
             final cellValue = row[col];

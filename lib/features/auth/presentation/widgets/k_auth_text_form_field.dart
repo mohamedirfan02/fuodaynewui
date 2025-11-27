@@ -99,7 +99,9 @@ class KAuthTextFormField extends StatelessWidget {
                     fontWeight: labelFontWeight ?? FontWeight.w500,
                     color:
                         labelColor ??
-                        theme.textTheme.headlineLarge?.color?.withOpacity(0.7),
+                        theme.textTheme.headlineLarge?.color?.withValues(
+                          alpha: 0.7,
+                        ),
                   )
                 : null,
             floatingLabelStyle: floatingLabel
@@ -109,7 +111,14 @@ class KAuthTextFormField extends StatelessWidget {
                     color: labelColor ?? theme.primaryColor,
                   )
                 : null,
-            suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
+            suffixIcon: suffixIcon != null
+                ? Icon(
+                    suffixIcon,
+                    color: theme.textTheme.bodyLarge?.color?.withValues(
+                      alpha: 0.7,
+                    ),
+                  )
+                : null,
             border: const OutlineInputBorder(),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(

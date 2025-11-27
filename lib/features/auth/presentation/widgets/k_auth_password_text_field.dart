@@ -107,7 +107,7 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
               icon: Icon(
                 _obscureText ? Icons.visibility_off : Icons.visibility,
                 color: theme.textTheme.headlineLarge?.color?.withValues(
-                  alpha: 0.7,
+                  alpha: 0.5,
                 ),
               ),
             ),
