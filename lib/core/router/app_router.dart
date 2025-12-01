@@ -143,43 +143,43 @@ Widget _slideFromRight(
 }
 
 /// Smooth Slide from left with better curve
-Widget _slideFromLeft(
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  Widget child,
-) {
-  final curvedAnimation = CurvedAnimation(
-    parent: animation,
-    curve: Curves.fastEaseInToSlowEaseOut,
-  );
-
-  // Also animate the exiting page sliding out to the right
-  final exitingAnimation = CurvedAnimation(
-    parent: secondaryAnimation,
-    curve: Curves.fastOutSlowIn,
-  );
-
-  return Stack(
-    children: [
-      // Exiting page slides right
-      SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset.zero,
-          end: const Offset(0.3, 0), // Slight right slide for exiting page
-        ).animate(exitingAnimation),
-        child: Container(color: CupertinoColors.systemBackground),
-      ),
-      // Entering page slides from left
-      SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(-1.0, 0),
-          end: Offset.zero,
-        ).animate(curvedAnimation),
-        child: child,
-      ),
-    ],
-  );
-}
+// Widget _slideFromLeft(
+//   Animation<double> animation,
+//   Animation<double> secondaryAnimation,
+//   Widget child,
+// ) {
+//   final curvedAnimation = CurvedAnimation(
+//     parent: animation,
+//     curve: Curves.fastEaseInToSlowEaseOut,
+//   );
+//
+//   // Also animate the exiting page sliding out to the right
+//   final exitingAnimation = CurvedAnimation(
+//     parent: secondaryAnimation,
+//     curve: Curves.fastOutSlowIn,
+//   );
+//
+//   return Stack(
+//     children: [
+//       // Exiting page slides right
+//       SlideTransition(
+//         position: Tween<Offset>(
+//           begin: Offset.zero,
+//           end: const Offset(0.3, 0), // Slight right slide for exiting page
+//         ).animate(exitingAnimation),
+//         child: Container(color: CupertinoColors.systemBackground),
+//       ),
+//       // Entering page slides from left
+//       SlideTransition(
+//         position: Tween<Offset>(
+//           begin: const Offset(-1.0, 0),
+//           end: Offset.zero,
+//         ).animate(curvedAnimation),
+//         child: child,
+//       ),
+//     ],
+//   );
+// }
 
 /// Smooth Fade in with scale effect
 Widget _fadeIn(
@@ -204,21 +204,21 @@ Widget _fadeIn(
 }
 
 /// Scale in with fade
-Widget _scaleIn(
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  Widget child,
-) {
-  final curvedAnimation = CurvedAnimation(
-    parent: animation,
-    curve: Curves.elasticOut, // More natural scale animation
-  );
-
-  return ScaleTransition(
-    scale: Tween<double>(begin: 0.8, end: 1).animate(curvedAnimation),
-    child: FadeTransition(opacity: curvedAnimation, child: child),
-  );
-}
+// Widget _scaleIn(
+//   Animation<double> animation,
+//   Animation<double> secondaryAnimation,
+//   Widget child,
+// ) {
+//   final curvedAnimation = CurvedAnimation(
+//     parent: animation,
+//     curve: Curves.elasticOut, // More natural scale animation
+//   );
+//
+//   return ScaleTransition(
+//     scale: Tween<double>(begin: 0.8, end: 1).animate(curvedAnimation),
+//     child: FadeTransition(opacity: curvedAnimation, child: child),
+//   );
+// }
 
 /// Smooth Slide up from bottom
 Widget _slideUp(
