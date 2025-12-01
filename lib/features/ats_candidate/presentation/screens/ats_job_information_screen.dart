@@ -115,7 +115,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
   Widget build(BuildContext context) {
     //App Theme Data
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    //final isDark = theme.brightness == Brightness.dark;
     final hiveService = getIt<HiveStorageService>();
     final employeeDetails = hiveService.employeeDetails;
     final name = employeeDetails?['name'] ?? "No Name";

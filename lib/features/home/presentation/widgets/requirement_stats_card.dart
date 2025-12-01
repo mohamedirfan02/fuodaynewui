@@ -222,3 +222,158 @@ class RequirementStatsCard extends StatelessWidget {
     );
   }
 }
+//HRMS Task Chat
+
+class KPieChart extends StatelessWidget {
+  final Map<String, double> dataMap;
+  final Map<String, Color> colorMap;
+  final bool showTotal;
+  final String totalLabel;
+
+  const KPieChart({
+    super.key,
+    required this.dataMap,
+    required this.colorMap,
+    this.showTotal = true,
+    this.totalLabel = "Total Task",
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //final isDark = theme.brightness == Brightness.dark;
+    final total = dataMap.values.fold<double>(0, (a, b) => a + b);
+
+    return Center(
+      child: SizedBox(
+        width: 140.w,
+        height: 140.w,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            PieChart(
+              dataMap: dataMap,
+              colorList: colorMap.values.toList(),
+              chartType: ChartType.ring,
+              ringStrokeWidth: 18.w,
+              chartValuesOptions: const ChartValuesOptions(
+                showChartValues: false,
+              ),
+              legendOptions: const LegendOptions(showLegends: false),
+            ),
+            if (showTotal)
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  KText(
+                    text: totalLabel,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.sp,
+                    color: AppColors.secondaryColor,
+                  ),
+                  buildTotalRichText(
+                    total: total,
+                    numberColor:
+                        AppColors.secondaryColor, //AppColors.secondaryColor
+                    labelColor:
+                        AppColors.inReviewedColor, //AppColors.greyColor,
+                    icon: Icons.arrow_upward_rounded,
+                    gap: 8,
+                    iconColor: AppColors.inReviewedColor,
+                  ),
+
+                  // KText(
+                  //   text: total.toInt().toString(),
+                  //   fontWeight: FontWeight.w700,
+                  //   fontSize: 16.sp,
+                  //   color: AppColors.secondaryColor,
+                  // ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildTotalRichText({
+    required num total,
+    Color? numberColor,
+    Color? labelColor,
+    double? numberSize,
+    double? labelSize,
+    IconData icon = Icons.arrow_right_alt,
+    Color? iconColor,
+    double iconSize = 20,
+    double gap = 3,
+  }) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: total.toInt().toString(),
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: numberSize ?? 14.sp,
+              color: numberColor ?? AppColors.secondaryColor,
+            ),
+          ),
+          WidgetSpan(child: SizedBox(width: gap)),
+          TextSpan(
+            text: "8%",
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: labelSize ?? 14.sp,
+              color: labelColor ?? AppColors.greyColor,
+            ),
+          ),
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Icon(
+              icon,
+              size: 16,
+              color: iconColor ?? AppColors.secondaryColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class KPieChartLegend extends StatelessWidget {
+  final Map<String, Color> colorMap;
+
+  const KPieChartLegend({super.key, required this.colorMap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 40.w,
+      runSpacing: 16.h,
+      children: colorMap.entries.map((entry) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 10.w,
+              height: 10.h,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: entry.value, // ← same as pie chart
+              ),
+            ),
+            SizedBox(width: 10.w),
+            KText(
+              text: entry.key,
+              fontWeight: FontWeight.w500,
+              fontSize: 12.sp,
+              color: AppColors.secondaryColor,
+            ),
+          ],
+        );
+      }).toList(),
+    );
+  }
+}

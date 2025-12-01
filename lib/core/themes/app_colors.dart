@@ -59,6 +59,11 @@ class AppColors {
   static const Color closed = Color(0xFF2DD4BF); // rgba(45, 212, 191, 1)
   static const Color pending = Color(0xFF8C62FF); // rgba(140, 98, 255, 1)
   static const Color unactive = Color(0xFFFE964A); // rgba(254, 150, 74, 1)
+  //HRMS Chat Colors
+  static const Color todoColor = Color(0xFF643DFF); //#643DFF
+  static const Color inProgressColor = Color(0xFFFF692E); //#FF692E
+  static const Color inReviewedColor = Color(0xFF32ABB9); //#32ABB9
+  static const Color completedColor = Color(0xFFFFC84C); //#FFC84C
 
   static const Color transparentColor = Colors.transparent;
 
@@ -82,6 +87,9 @@ class AppColors {
 
   // auth Bg Color
   static const Color authBgColor = Color(0xFFE8EEFE);
+
+  static const Color homeBtnBgColor = Color(0xFFE6E8EA);
+  static const Color newCheckInColor = Color(0xFF593DD0);
 
   // onboarding btn
   static const Color onBoardingBgColor = Color(0xFFFFFFFF);

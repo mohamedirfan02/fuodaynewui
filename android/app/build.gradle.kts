@@ -40,6 +40,12 @@ android {
 
     flavorDimensions += "environment"
     productFlavors {
+
+        create("dev") {
+            dimension = "environment"
+            resValue("string", "app_name", "Fuoday Dev")
+        }
+
         create("prod") {
             dimension = "environment"
             resValue("string", "app_name", "Fuoday")

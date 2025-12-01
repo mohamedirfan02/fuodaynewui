@@ -44,7 +44,7 @@ class ExcelGeneratorService {
       AppLoggerHelper.logInfo('✅ Excel generated and saved to: $filePath');
 
       return file;
-    } catch (e, stackTrace) {
+    } catch (e) {
       AppLoggerHelper.logError('❌ Excel generation failed: $e');
       rethrow;
     }

@@ -794,7 +794,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
 
         /// CV Column
         if (cell.columnName == 'CV') {
-          final cvUrl = candidate.resume ?? "";
+          final cvUrl = candidate.resume;
 
           final fileName = cvUrl.split("/").last;
 
@@ -832,7 +832,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
 
         /// Status Column
         if (cell.columnName == 'Status') {
-          final status = candidate.disposition ?? "";
+          final status = candidate.disposition;
           return Padding(
             padding: EdgeInsetsGeometry.all(10),
             child: Container(

@@ -301,6 +301,9 @@ final getIt = GetIt.instance;
 
 void setUpServiceLocator() {
   // Commons
+  if (getIt.isRegistered<CheckboxProvider>()) return;
+
+  /// Skip if already registered to avoid duplicate registration during hot reload
   getIt.registerFactory<CheckboxProvider>(() => CheckboxProvider());
   getIt.registerFactory<DropdownProvider>(() => DropdownProvider());
 
