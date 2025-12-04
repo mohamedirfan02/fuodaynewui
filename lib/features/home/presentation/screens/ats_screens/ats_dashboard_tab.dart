@@ -45,6 +45,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '01 May 2025',
       'avatarColor': AppColors.primaryColor,
+      'jobId': '1001',
     },
     {
       'name': 'Hanna Baptista',
@@ -53,6 +54,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '01 May 2025',
       'avatarColor': AppColors.greyColor,
+      'jobId': '1002',
     },
     {
       'name': 'John Doe',
@@ -61,6 +63,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '02 May 2025',
       'avatarColor': AppColors.approvedColor,
+      'jobId': '1003',
     },
     {
       'name': 'James George',
@@ -69,6 +72,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '02 May 2025',
       'avatarColor': AppColors.unactive,
+      'jobId': '1004',
     },
     {
       'name': 'Miracle Geidt',
@@ -77,6 +81,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '02 May 2025',
       'avatarColor': AppColors.titleColor,
+      'jobId': '1005',
     },
     {
       'name': 'Skylar Herwitz',
@@ -85,6 +90,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '02 May 2025',
       'avatarColor': AppColors.authBackToLoginColor,
+      'jobId': '1006',
     },
     {
       'name': 'Alex Johnson',
@@ -93,6 +99,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '03 May 2025',
       'avatarColor': AppColors.titleColor,
+      'jobId': '1007',
     },
     {
       'name': 'Sarah Wilson',
@@ -101,6 +108,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '03 May 2025',
       'avatarColor': AppColors.secondaryColor,
+      'jobId': '1008',
     },
     {
       'name': 'Mike Davis',
@@ -109,6 +117,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '04 May 2025',
       'avatarColor': AppColors.greyColor,
+      'jobId': '1009',
     },
     {
       'name': 'Emma Thompson',
@@ -117,6 +126,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '04 May 2025',
       'avatarColor': AppColors.authTextFieldSuffixIconColor,
+      'jobId': '1001',
     },
     {
       'name': 'David Brown',
@@ -125,6 +135,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '05 May 2025',
       'avatarColor': AppColors.unactive,
+      'jobId': '1001',
     },
     {
       'name': 'Lisa Garcia',
@@ -133,6 +144,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '05 May 2025',
       'avatarColor': AppColors.pending,
+      'jobId': '1001',
     },
     {
       'name': 'Tom Anderson',
@@ -141,6 +153,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '06 May 2025',
       'avatarColor': AppColors.checkInColor,
+      'jobId': '1001',
     },
     {
       'name': 'Rachel Miller',
@@ -149,6 +162,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '06 May 2025',
       'avatarColor': AppColors.authUnderlineBorderColor,
+      'jobId': '1001',
     },
     {
       'name': 'Kevin Taylor',
@@ -157,6 +171,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '07 May 2025',
       'avatarColor': AppColors.approvedColor,
+      'jobId': '1001',
     },
     {
       'name': 'Jessica Lee',
@@ -165,6 +180,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '07 May 2025',
       'avatarColor': AppColors.primaryColor,
+      'jobId': '1001',
     },
     {
       'name': 'Ryan Clark',
@@ -173,6 +189,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '08 May 2025',
       'avatarColor': AppColors.titleColor,
+      'jobId': '1001',
     },
     {
       'name': 'Amanda White',
@@ -181,6 +198,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '08 May 2025',
       'avatarColor': AppColors.greyColor,
+      'jobId': '1001',
     },
     {
       'name': 'Chris Martinez',
@@ -189,14 +207,7 @@ class _DashoardTabState extends State<DashoardTab> {
       'cv': 'cv.pdf',
       'createdDate': '09 May 2025',
       'avatarColor': AppColors.pending,
-    },
-    {
-      'name': 'Nicole Rodriguez',
-      'email': 'nicole@unpixel.com',
-      'phone': '08092139441',
-      'cv': 'cv.pdf',
-      'createdDate': '09 May 2025',
-      'avatarColor': AppColors.unactive,
+      'jobId': '1001',
     },
   ];
 
@@ -313,19 +324,19 @@ class _DashoardTabState extends State<DashoardTab> {
     VoidCallback? onTap,
   }) {
     return Container(
-      width: 30.w,
-      height: 30.h,
+      width: 25.w,
+      height: 25.h,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(6.r),
       ),
       child: IconButton(
         onPressed: onTap,
         icon: SvgPicture.asset(
           icon,
-          height: 14.h,
+          height: 10.h,
           fit: BoxFit.contain,
-          color: Colors.white,
+          colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
         ),
         padding: EdgeInsets.zero,
       ),
@@ -352,6 +363,7 @@ class _DashoardTabState extends State<DashoardTab> {
         // S.No column
         DataGridCell<int>(columnName: 'SNo', value: index + 1),
         DataGridCell<String>(columnName: 'Email', value: data['email']),
+        DataGridCell<String>(columnName: 'JobID', value: data['jobId']),
         DataGridCell<String>(columnName: 'Phone', value: data['phone']),
         DataGridCell<String>(columnName: 'CV', value: data['cv']),
         DataGridCell<String>(
@@ -388,9 +400,10 @@ class _DashoardTabState extends State<DashoardTab> {
     return [
       GridColumn(columnName: 'SNo', width: 70, label: header('S.No')),
       GridColumn(columnName: 'Email', width: 200, label: header('Name')),
+      GridColumn(columnName: 'JobID', width: 70, label: header('Job ID')),
       GridColumn(columnName: 'Phone', label: header('Phone Number')),
       GridColumn(columnName: 'CV', label: header('CV')),
-      GridColumn(columnName: 'CreatedDate', label: header('Date')),
+      GridColumn(columnName: 'CreatedDate', label: header('CreatedDate')),
       GridColumn(columnName: 'Stage', width: 140, label: header('Stage')),
       GridColumn(columnName: 'Action', width: 100, label: header('Action')),
     ];
@@ -429,36 +442,42 @@ class _DashoardTabState extends State<DashoardTab> {
         'title': 'Total Opening Position',
         'numberOfCount': "3,540",
         'growth': "+5.1%",
+        'backgroundImage': AppAssetsConstants.atsHomeCardImg1,
       },
       {
         'title': 'Total Closed Position',
         'numberOfCount': "1,540",
         'growth': "+5.1%",
         'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+        'backgroundImage': AppAssetsConstants.atsHomeCardImg2,
       },
       {
         'title': 'Total Employee',
         'numberOfCount': "500",
         'growth': "+5.1%",
         'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+        'backgroundImage': AppAssetsConstants.atsHomeCardImg3,
       },
       {
         'title': 'Shortlisted',
         'numberOfCount': "1,504",
         'growth': "+5.1%",
         'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+        'backgroundImage': AppAssetsConstants.atsHomeCardImg4,
       },
       {
         'title': 'On Hold',
         'numberOfCount': "562",
         'growth': "+5.1%",
         'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+        'backgroundImage': AppAssetsConstants.atsHomeCardImg5,
       },
       {
         'title': 'Onboarding',
         'numberOfCount': "850",
         'growth': "+5.1%",
         'icon': AppAssetsConstants.atsUserIcon, // ✅ SVG path
+        'backgroundImage': AppAssetsConstants.atsHomeCardImg6,
       },
     ];
 
@@ -542,6 +561,9 @@ class _DashoardTabState extends State<DashoardTab> {
                           ? AppColors.checkInColorDark
                           : AppColors.checkInColor,
                       growthText: item['growth'],
+                      backgroundImage: item['backgroundImage'],
+                      empTextColors: AppColors.secondaryColor,
+                      avatarBgColors: theme.secondaryHeaderColor,
                     );
                   },
                 ),
@@ -549,15 +571,21 @@ class _DashoardTabState extends State<DashoardTab> {
                 SizedBox(height: 16.h),
 
                 RequirementStatsCard(
-                  dataMap: {"Pending": 36, "Unactive": 6, "Closed": 13},
+                  dataMap: {
+                    "Pending": 36,
+                    "Completed": 6,
+                    "Application Conversion Rate": 98,
+                  },
                   colorMap: {
                     "Pending": isDark
                         ? AppColors.pendingColorDark
                         : AppColors.pending,
-                    "Unactive": isDark
+                    "Completed": isDark
                         ? AppColors.unactiveDark
                         : AppColors.unactive,
-                    "Closed": isDark ? AppColors.closedDark : AppColors.closed,
+                    "Application Conversion Rate": isDark
+                        ? AppColors.closedDark
+                        : AppColors.closed,
                   },
                 ),
                 SizedBox(height: 16.h),
@@ -572,9 +600,11 @@ class _DashoardTabState extends State<DashoardTab> {
                     border: Border.all(
                       width: 0.77.w,
                       color:
-                          theme.textTheme.bodyLarge?.color?.withOpacity(0.3) ??
-                          AppColors.greyColor.withOpacity(
-                            0.3,
+                          theme.textTheme.bodyLarge?.color?.withValues(
+                            alpha: 0.3,
+                          ) ??
+                          AppColors.greyColor.withValues(
+                            alpha: 0.3,
                           ), //BORDER COLOR,//AppColors.greyColor.withOpacity(0.3),
                     ),
                     borderRadius: BorderRadius.circular(7.69.r),
@@ -714,196 +744,13 @@ class _DashoardTabState extends State<DashoardTab> {
                         ),
                       ),
 
-                      ///---Old Data Table---
-                      // // Applicant Table with Pagination
-                      // SingleChildScrollView(
-                      //   scrollDirection: Axis.horizontal,
-                      //   child: Column(
-                      //     children: [
-                      //       ApplicantItem.buildHeader(),
-                      //       SizedBox(height: 16.h),
-                      //       Column(
-                      //         children: List.generate(
-                      //           paginatedApplicants.length,
-                      //           (index) {
-                      //             final applicant = paginatedApplicants[index];
-                      //             final sno =
-                      //                 ((currentPage - 1) * itemsPerPage) +
-                      //                 index +
-                      //                 1; // Correct numbering across pages
-                      //
-                      //             return ApplicantItem(
-                      //               sno: sno,
-                      //               name: applicant['name'],
-                      //               email: applicant['email'],
-                      //               phoneNumber: applicant['phone'],
-                      //               cv: applicant['cv'],
-                      //               createdDate: applicant['createdDate'],
-                      //               avatarColor: applicant['avatarColor'],
-                      //               showInitials: true,
-                      //               initials: applicant['name']
-                      //                   .substring(0, 2)
-                      //                   .toUpperCase(),
-                      //               onStageChanged: (newStage) {
-                      //                 print(
-                      //                   "${applicant['name']} stage changed to $newStage",
-                      //                 );
-                      //               },
-                      //             );
-                      //           },
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      //
-                      // KVerticalSpacer(height: 24.h),
-                      //
-                      // // Pagination
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [_buildPageNumbersRow()],
-                      // ),
-                      //
-                      // SizedBox(height: 16.w),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     // Dynamic entries text
-                      //     KText(
-                      //       text: entriesDisplayText,
-                      //       fontSize:
-                      //           MediaQuery.of(context).size.width *
-                      //           0.03, // responsive font
-                      //       color: AppColors.greyColor,
-                      //       fontWeight: FontWeight.w500,
-                      //     ),
-                      //
-                      //     // SizedBox(
-                      //     //   width: MediaQuery.of(context).size.width * 0.08,
-                      //     // ), // spacing between text and button
-                      //     // Dropdown container
-                      //     GestureDetector(
-                      //       onTap: _showItemsPerPageSelector,
-                      //       child: Container(
-                      //         padding: EdgeInsets.all(
-                      //           MediaQuery.of(context).size.width * 0.02,
-                      //         ),
-                      //         decoration: BoxDecoration(
-                      //           border: Border.all(
-                      //             width: 0.8,
-                      //             color: AppColors.greyColor.withOpacity(0.1),
-                      //           ),
-                      //           borderRadius: BorderRadius.circular(8),
-                      //           color: AppColors.secondaryColor,
-                      //         ),
-                      //         child: Row(
-                      //           children: [
-                      //             KText(
-                      //               text: "Show $itemsPerPage",
-                      //               fontSize:
-                      //                   MediaQuery.of(context).size.width *
-                      //                   0.025,
-                      //               color: AppColors.titleColor,
-                      //               fontWeight: FontWeight.w500,
-                      //             ),
-                      //             Icon(
-                      //               Icons.keyboard_arrow_down,
-                      //               size:
-                      //                   MediaQuery.of(context).size.width *
-                      //                   0.04,
-                      //               color: AppColors.titleColor,
-                      //             ),
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                       ///<!---------- Data Table
                       newData_table(columns, rows),
                     ],
                   ),
                 ),
                 SizedBox(height: 16.w),
-                //=========================New Table Column
-                //newData_table(columns, rows),
-                // ReusableDataGrid(
-                //   title: 'Products Table',
-                //   columns: columns,
-                //   rows: rows,
-                //   totalRows: rows.length,
-                //   initialRowsPerPage: 5,
-                //   cellBuilder: (cell, rowIndex) {
-                //     // Last column → show 3 icon buttons
-                //     if (cell.columnName == 'Price') {
-                //       return Container(
-                //         alignment: Alignment.center,
-                //         padding: const EdgeInsets.all(4),
-                //         child: FittedBox(
-                //           fit: BoxFit.scaleDown,
-                //           child: Row(
-                //             mainAxisSize: MainAxisSize.min,
-                //             children: [
-                //               // IconButton(
-                //               //   icon: const Icon(
-                //               //     Icons.edit,
-                //               //     size: 18,
-                //               //     color: Colors.blue,
-                //               //   ),
-                //               //   onPressed: () =>
-                //               //       print('Edit clicked for row $rowIndex'),
-                //               // ),
-                //               // IconButton(
-                //               //   icon: const Icon(
-                //               //     Icons.delete,
-                //               //     size: 18,
-                //               //     color: Colors.red,
-                //               //   ),
-                //               //   onPressed: () =>
-                //               //       print('Delete clicked for row $rowIndex'),
-                //               // ),
-                //               // IconButton(
-                //               //   icon: const Icon(
-                //               //     Icons.visibility,
-                //               //     size: 18,
-                //               //     color: Colors.green,
-                //               //   ),
-                //               //   onPressed: () =>
-                //               //       print('View clicked for row $rowIndex'),
-                //               // ),
-                //               Container(
-                //                 width: 50,
-                //                 height: 50,
-                //                 color: Colors.red,
-                //                 child: Center(child: CircleAvatar()),
-                //               ),
-                //               Container(
-                //                 width: 50,
-                //                 height: 50,
-                //                 color: Colors.yellow,
-                //                 child: Center(child: CircleAvatar()),
-                //               ),
-                //               Container(
-                //                 width: 50,
-                //                 height: 50,
-                //                 color: Colors.red,
-                //                 child: Center(child: CircleAvatar()),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //       );
-                //     }
-                //
-                //     // Default cell styling for other columns
-                //     return Container(
-                //       alignment: Alignment.center,
-                //       padding: const EdgeInsets.all(8),
-                //       child: Text(cell.value.toString()),
-                //     );
-                //   },
-                // ),
+
                 Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: 18.47.w,
@@ -953,6 +800,8 @@ class _DashoardTabState extends State<DashoardTab> {
     //App Theme Data
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final atsPrimaryColor = Theme.of(context).colorScheme.primary;
+
     return ReusableDataGrid(
       allowSorting: false, // 🔹 Enable sorting
       title: 'Applicants',
@@ -963,6 +812,12 @@ class _DashoardTabState extends State<DashoardTab> {
       cellBuilder: (cell, rowIndex, actualDataIndex) {
         final value = cell.value;
         if (cell.columnName == 'SNo') {
+          return Container(
+            alignment: Alignment.center, // Centers horizontally and vertically
+            child: Text(cell.value.toString(), textAlign: TextAlign.center),
+          );
+        }
+        if (cell.columnName == 'JobID') {
           return Container(
             alignment: Alignment.center, // Centers horizontally and vertically
             child: Text(cell.value.toString(), textAlign: TextAlign.center),
@@ -986,13 +841,15 @@ class _DashoardTabState extends State<DashoardTab> {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: color,
+                  backgroundColor: AppColors.checkInColor.withValues(
+                    alpha: 0.1,
+                  ),
                   radius: 12.r,
                   child: KText(
                     text: getInitials(fullName),
-                    fontSize: 12.sp,
+                    fontSize: 10.sp,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: AppColors.checkInColor,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -1037,7 +894,7 @@ class _DashoardTabState extends State<DashoardTab> {
               Text(cv),
               SizedBox(width: 4.w),
               Icon(
-                Icons.download_outlined,
+                Icons.sim_card_download_outlined,
                 size: 16.sp,
                 color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,,
               ),
@@ -1070,7 +927,7 @@ class _DashoardTabState extends State<DashoardTab> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _actionButton(
-                color: theme.primaryColor,
+                color: atsPrimaryColor,
                 icon: AppAssetsConstants.editIcon,
                 onTap: () {},
               ),

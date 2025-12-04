@@ -6,6 +6,7 @@ import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
+import 'package:fuoday/features/auth/presentation/screens/java_login_test.dart';
 import 'package:fuoday/core/constants/router/app_route_constants.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
@@ -76,8 +77,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-               // KVerticalSpacer(height: 40.h),
-
+                // KVerticalSpacer(height: 40.h),
                 Image.asset(
                   AppAssetsConstants.logo,
                   height: 180.h,
@@ -118,15 +118,24 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
 
                                   KVerticalSpacer(height: 10.h),
 
-                                  KText(
-                                    text: "Login Now",
-                                    fontWeight: FontWeight.w500,
-                                    color: theme
-                                        .inputDecorationTheme
-                                        .focusedBorder
-                                        ?.borderSide
-                                        .color, //AppColors.subTitleColor,
-                                    fontSize: 14.sp,
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => LoginScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: KText(
+                                      text: "Login Now",
+                                      fontWeight: FontWeight.w500,
+                                      color: theme
+                                          .inputDecorationTheme
+                                          .focusedBorder
+                                          ?.borderSide
+                                          .color, //AppColors.subTitleColor,
+                                      fontSize: 14.sp,
+                                    ),
                                   ),
 
                                   KVerticalSpacer(height: 20.h),

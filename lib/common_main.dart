@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/providers/checkbox_provider.dart';
 import 'package:fuoday/commons/providers/dropdown_provider.dart';
@@ -7,6 +8,7 @@ import 'package:fuoday/core/constants/api/app_api_endpoint_constants.dart';
 import 'package:fuoday/core/constants/storage/app_hive_storage_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/helper/app_logger_helper.dart';
+import 'package:fuoday/core/models/notification_model.dart';
 import 'package:fuoday/core/providers/app_file_downloader_provider.dart';
 import 'package:fuoday/core/providers/app_file_picker_provider.dart';
 import 'package:fuoday/core/providers/app_internet_checker_provider.dart';
@@ -14,6 +16,7 @@ import 'package:fuoday/core/router/app_router.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/themes/provider/theme_provider.dart';
+import 'package:fuoday/features/ats_candidate/presentation/provider/draft_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_absent_days_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_attendance_details_provider.dart';
 import 'package:fuoday/features/attendance/presentation/providers/total_early_arrivals_details_provider.dart';
@@ -78,6 +81,8 @@ import 'features/management/presentation/provider/emp_audit_form_provider.dart';
 import 'features/payslip/presentation/Provider/payroll_overview_provider.dart';
 import 'features/performance/presentation/providers/audit_reporting_team_provider.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 void commonMain() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -89,12 +94,21 @@ void commonMain() async {
   // Hive init
   await Hive.initFlutter();
 
+  // ===== IMPORTANT: Register Adapter BEFORE opening boxes =====
+  if (!Hive.isAdapterRegistered(5)) {
+    Hive.registerAdapter(NotificationModelAdapter());
+  }
+
   // Hive Open Boxes
   await Hive.openBox(AppHiveStorageConstants.apiCacheBox);
   await Hive.openBox(AppHiveStorageConstants.authBoxKey);
   await Hive.openBox(AppHiveStorageConstants.onBoardingBoxKey);
   await Hive.openBox(AppHiveStorageConstants.employeeDetailsBoxKey);
   await Hive.openBox(AppHiveStorageConstants.themeBoxKey);
+  // Open notifications box with type
+  await Hive.openBox<NotificationModel>(
+    AppHiveStorageConstants.notificationsBoxKey,
+  );
 
   // dependency injection
   setUpServiceLocator();
@@ -349,6 +363,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => getIt<CandidateActionProvider>(),
         ),
+        ChangeNotifierProvider(create: (context) => getIt<DraftProvider>()),
       ],
       child: LayoutBuilder(
         builder: (context, constraints) {

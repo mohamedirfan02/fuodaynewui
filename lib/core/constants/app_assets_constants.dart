@@ -20,6 +20,14 @@ class AppAssetsConstants {
   static const String atsUserIcon = "assets/images/svg/ats-user.svg";
 
   static const String miceIcon = "assets/images/svg/miceicon.svg";
+  //ATS Home Cards
+  static const String atsHomeCardImg1 = "assets/images/png/atshomecard-I.png";
+  static const String atsHomeCardImg2 = "assets/images/png/atshomecard-II.png";
+  static const String atsHomeCardImg3 = "assets/images/png/atshomecard-III.png";
+  static const String atsHomeCardImg4 = "assets/images/png/atshomecard-IV.png";
+  static const String atsHomeCardImg5 = "assets/images/png/atshomecard-V.png";
+  static const String atsHomeCardImg6 = "assets/images/png/atshomecard-VI.png";
+
   //HRMS Home Cards
   static const String homeCard1 = "assets/images/png/Card1.png";
   static const String homeCard2 = "assets/images/png/Card2.png";
@@ -69,6 +77,9 @@ class AppAssetsConstants {
 
   static const String pecIcon = "assets/icons/pec.svg";
 
+  static const String checkIcon = "assets/icons/checkicon.svg";
+  static const String cancelIcon = "assets/icons/cancelicon.svg";
+
   static const String atsFuoDayLogo = "assets/images/png/ats-fuoday-logo.png";
 
   static const String atsFuoDayLogoSvg =
@@ -91,4 +102,6 @@ class AppAssetsConstants {
   static const String timeTrackerIcon = "assets/icons/timeTracker.svg";
 
   static const String locationIcon = "assets/icons/location.svg";
+
+  static const String upArrowIcon = "assets/icons/uparrow.svg";
 }

@@ -6,6 +6,7 @@ class AppApiEndpointConstants {
 
   // Login Endpoint
   static String get login => '$baseUrl/web-users/login';
+  static String get loginJava => '$baseUrl/web-users/login';
 
   // Logout Endpoint
   static String get logout => '$baseUrl/web-users/logout';

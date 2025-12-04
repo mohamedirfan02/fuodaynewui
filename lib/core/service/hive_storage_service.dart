@@ -37,6 +37,7 @@ class HiveStorageService {
         AppHiveStorageConstants.employeeDetailsBoxKey,
       );
       _themeBox = Hive.box(AppHiveStorageConstants.themeBoxKey);
+      _draftBox = await Hive.openBox(AppHiveStorageConstants.draftBoxKey);
 
       AppLoggerHelper.logInfo("✅ Hive boxes initialized successfully.");
     } catch (e) {
@@ -288,5 +289,23 @@ class HiveStorageService {
       AppLoggerHelper.logError("❌ Failed to get all from [$boxName]: $e");
       return {};
     }
+  }
+
+  static const String _draftBoxKey = "draft_list";
+
+  late Box _draftBox;
+
+  Future<void> saveDraftList(List<Map<String, dynamic>> list) async {
+    await _draftBox.put(_draftBoxKey, list);
+  }
+
+  Future<List<Map<String, dynamic>>?> getDraftList() async {
+    final data = _draftBox.get(_draftBoxKey);
+    if (data == null) return null;
+    return List<Map<String, dynamic>>.from(data);
+  }
+
+  Future<void> clearDraftList() async {
+    await _draftBox.delete(_draftBoxKey);
   }
 }
