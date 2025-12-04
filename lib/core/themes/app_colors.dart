@@ -43,7 +43,11 @@ class AppColors {
     Color(0xFFEFF1F7),
     Colors.white,
   ];
-
+  //ATS Button color
+  static const List<Color> atsButtonGradientColor = [
+    Color(0xFFB683F7),
+    Color(0xFF7C2F7F),
+  ];
   static const List<Color> recruiterGradientColor = [
     Color(0xFF2B57F1), // rgba(43, 87, 241, 1.0)
     Color(0xFF4756A5), // rgba(71, 86, 165, 1.0)
@@ -225,76 +229,92 @@ class AppColors {
 
 class AppTheme {
   // ======================= LIGHT THEME ========================= //
-  static ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    fontFamily: GoogleFonts.inter().fontFamily,
+  static ThemeData lightTheme =
+      ThemeData(
+        brightness: Brightness.light,
+        fontFamily: GoogleFonts.inter().fontFamily,
 
-    scaffoldBackgroundColor: AppColors.atsHomepageBg, // your bg color
+        scaffoldBackgroundColor: AppColors.atsHomepageBg, // your bg color
 
-    primaryColor: AppColors.primaryColor,
-    secondaryHeaderColor: AppColors.secondaryColor,
+        primaryColor: AppColors.primaryColor,
+        secondaryHeaderColor: AppColors.secondaryColor,
 
-    //=====ATS Background color========
-    cardColor: AppColors.atsHomepageBg,
-    //=================================
-    dividerColor: AppColors.lightGreyColor,
+        //=====ATS Background color========
+        cardColor: AppColors.atsHomepageBg,
+        //=================================
+        dividerColor: AppColors.lightGreyColor,
 
-    textTheme: TextTheme(
-      headlineLarge: TextStyle(color: AppColors.titleColor),
-      bodyLarge: TextStyle(color: AppColors.greyColor),
-    ),
+        textTheme: TextTheme(
+          headlineLarge: TextStyle(color: AppColors.titleColor),
+          bodyLarge: TextStyle(color: AppColors.greyColor),
+        ),
 
-    inputDecorationTheme: InputDecorationTheme(
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.authUnderlineBorderColor),
-      ),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.subTitleColor),
-      ),
-      suffixIconColor: AppColors.authTextFieldSuffixIconColor,
-    ),
+        inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: AppColors.authUnderlineBorderColor),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: AppColors.subTitleColor),
+          ),
+          suffixIconColor: AppColors.authTextFieldSuffixIconColor,
+        ),
 
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.authBtnColor,
-        foregroundColor: AppColors.secondaryColor,
-      ),
-    ),
-  );
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.authBtnColor,
+            foregroundColor: AppColors.secondaryColor,
+          ),
+        ),
+      ).copyWith(
+        //  ATSPrimaryColor
+        colorScheme: const ColorScheme.light().copyWith(
+          primary: AppColors.softBlue,
+        ),
+      );
 
   // ======================= DARK THEME ========================= //
-  static ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    fontFamily: GoogleFonts.inter().fontFamily,
+  static ThemeData darkTheme =
+      ThemeData(
+        brightness: Brightness.dark,
+        fontFamily: GoogleFonts.inter().fontFamily,
 
-    scaffoldBackgroundColor: AppColors.authBgColorDark,
+        scaffoldBackgroundColor: AppColors.authBgColorDark,
 
-    primaryColor: AppColors.primaryColorDark,
-    secondaryHeaderColor: AppColors.secondaryColorDark,
+        primaryColor: AppColors.primaryColorDark,
+        secondaryHeaderColor: AppColors.secondaryColorDark,
 
-    cardColor: AppColors.secondaryColorDark,
-    dividerColor: AppColors.greyColorDark,
+        cardColor: AppColors.secondaryColorDark,
+        dividerColor: AppColors.greyColorDark,
 
-    textTheme: TextTheme(
-      headlineLarge: TextStyle(color: AppColors.titleColorDark),
-      bodyLarge: TextStyle(color: AppColors.attendanceCardTextLightColorDark),
-    ),
+        textTheme: TextTheme(
+          headlineLarge: TextStyle(color: AppColors.titleColorDark),
+          bodyLarge: TextStyle(
+            color: AppColors.attendanceCardTextLightColorDark,
+          ),
+        ),
 
-    inputDecorationTheme: InputDecorationTheme(
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.authUnderlineBorderColorDark),
-      ),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.subTitleColorDark),
-      ),
-      suffixIconColor: AppColors.authTextFieldSuffixIconColorDark,
-    ),
+        inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: AppColors.authUnderlineBorderColorDark,
+            ),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: AppColors.subTitleColorDark),
+          ),
+          suffixIconColor: AppColors.authTextFieldSuffixIconColorDark,
+        ),
 
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.authBtnColorDark,
-        foregroundColor: AppColors.secondaryColorDark,
-      ),
-    ),
-  );
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.authBtnColorDark,
+            foregroundColor: AppColors.secondaryColorDark,
+          ),
+        ),
+      ).copyWith(
+        // ATSPrimaryColor DARK
+        colorScheme: const ColorScheme.dark().copyWith(
+          primary: AppColors.softBlueDark,
+        ),
+      );
 }

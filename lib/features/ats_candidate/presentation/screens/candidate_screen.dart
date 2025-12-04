@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
 import 'package:fuoday/commons/widgets/k_ats_drawer.dart';
 import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
+import 'package:fuoday/commons/widgets/k_drop_down_text_form_field.dart';
 import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
@@ -17,19 +17,17 @@ import 'package:fuoday/core/helper/app_logger_helper.dart';
 import 'package:fuoday/core/models/file_preview_data.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
-import 'package:fuoday/features/ats_candidate/domain/entities/candidate_entity.dart';
-import 'package:fuoday/features/ats_candidate/presentation/provider/candidate_action_provider.dart';
 import 'package:fuoday/features/ats_candidate/presentation/provider/candidates_provider.dart';
+import 'package:fuoday/features/ats_candidate/presentation/provider/draft_provider.dart';
+import 'package:fuoday/features/ats_candidate/widgets/k_ats_candidates_datatable.dart';
 import 'package:fuoday/features/ats_candidate/widgets/k_ats_file_upload_btn.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_k_app_bar_with_drawer.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
-import 'package:fuoday/features/payslip/presentation/widgets/pay_slip_download_options.dart';
 import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class CandidateScreen extends StatefulWidget {
   const CandidateScreen({super.key});
@@ -44,22 +42,23 @@ class _CandidateScreenState extends State<CandidateScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+  final searchController = TextEditingController();
+
   final String currentRoute =
       AppRouteConstants.atsCandidate; // Replace with actual current route
-
-  // Pagination state
-  int currentPage = 1;
-  int itemsPerPage = 6; // Change this to show how many items per page
-  int pageWindowStart = 1; // first page in current window
-  int pageWindowSize = 5; // show 5 numbers at a time
 
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _fetchCandidates();
+    searchController.addListener(() {
+      setState(() {
+        searchQuery = searchController.text.toLowerCase();
+      });
     });
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _fetchCandidates();
+    // });
   }
 
   Future<void> downloadPdfFromUrl(String url) async {
@@ -94,7 +93,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
     context.read<CandidatesProvider>().fetchCandidates(webUserId);
   }
 
-  // Build DataGridRows from applicantsData
+  /*  // Build DataGridRows from applicantsData
   List<DataGridRow> _buildRows(List<CandidateEntity> candidates) {
     return candidates.asMap().entries.map((entry) {
       int index = entry.key;
@@ -122,48 +121,10 @@ class _CandidateScreenState extends State<CandidateScreen> {
         ],
       );
     }).toList();
-  }
+  }*/
 
-  //==================================================================
-  // Columns
-  List<GridColumn> _buildColumns() {
-    //App Theme Data
-    final theme = Theme.of(context);
-    // final isDark = theme.brightness == Brightness.dark;
-    final headerStyle = TextStyle(
-      fontWeight: FontWeight.normal,
-      color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
-    );
-    Widget header(String text) => Container(
-      padding: const EdgeInsets.all(8),
-      alignment: Alignment.center,
-      child: Text(text, style: headerStyle),
-    );
-
-    return [
-      GridColumn(columnName: 'SNo', width: 70, label: header('S.No')),
-      GridColumn(columnName: 'Name', width: 150, label: header('Name')),
-      GridColumn(
-        columnName: 'mobileNumber',
-        width: 150,
-        label: header('Mobile Number'),
-      ),
-      GridColumn(columnName: 'CV', width: 150, label: header('Attachment')),
-      GridColumn(columnName: 'Experience', label: header('Experience')),
-      GridColumn(columnName: 'Email', width: 200, label: header('Email')),
-      GridColumn(
-        columnName: 'Status',
-        width: 140,
-        label: header('Disposition'),
-      ),
-      GridColumn(
-        columnName: 'Recruiter',
-        width: 200,
-        label: header('Recruiter'),
-      ),
-      GridColumn(columnName: 'Action', width: 200, label: header('Action')),
-    ];
-  }
+  String selectedFilter = "All Status";
+  String searchQuery = "";
 
   @override
   void dispose() {
@@ -181,15 +142,11 @@ class _CandidateScreenState extends State<CandidateScreen> {
     final name = employeeDetails?['name'] ?? "No Name";
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
     final email = employeeDetails?['email'] ?? "No Email";
+    final draftProvider = context.watch<DraftProvider>();
+    final draftList = draftProvider.draftList.length;
 
     return Consumer<CandidatesProvider>(
       builder: (context, candidatesProvider, child) {
-        final columns = _buildColumns();
-        final List<DataGridRow> rows =
-            candidatesProvider.status == CandidatesStatus.success
-            ? _buildRows(candidatesProvider.candidates)
-            : <DataGridRow>[];
-
         // Update grid data with counts
         final List<Map<String, dynamic>> gridAttendanceData = [
           {
@@ -268,27 +225,61 @@ class _CandidateScreenState extends State<CandidateScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: KText(
-                            text: "Candidates",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                            //  color: AppColors.titleColor,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                KText(
+                                  text: "Candidates",
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16.sp,
+                                  //  color: AppColors.titleColor,
+                                ),
+
+                                KText(
+                                  text: "Manage your Candidates",
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.sp,
+                                  color: theme
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color, //AppColors.greyColor,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                            KAtsGlowButton(
+                              text: "Candidates",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              textColor: theme.secondaryHeaderColor,
+                              gradientColors: AppColors.atsButtonGradientColor,
+                              icon: SvgPicture.asset(
+                                AppAssetsConstants.addIcon,
+                                height: 15,
+                                width: 15,
+                                fit: BoxFit.contain,
+                                //SVG IMAGE COLOR
+                                colorFilter: ColorFilter.mode(
+                                  theme.secondaryHeaderColor,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              onPressed: () {
+                                print("Candidates button tapped");
+                                GoRouter.of(context).pushNamed(
+                                  AppRouteConstants
+                                      .atsCandidateInformationScreen,
+                                );
+                              },
+                              backgroundColor: theme.primaryColor,
+                            ),
+                          ],
                         ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: KText(
-                            text: "Manage your Candidates",
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp,
-                            color: theme
-                                .textTheme
-                                .bodyLarge
-                                ?.color, //AppColors.greyColor,
-                          ),
-                        ),
+
                         SizedBox(height: 20.h),
 
                         // Grid Cards with counts
@@ -589,27 +580,94 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        KText(
-                                          text: "Candidate List",
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16.sp,
-                                          // color: AppColors.titleColor,
-                                        ),
-                                        if (candidatesProvider.status ==
-                                            CandidatesStatus.loading)
-                                          SizedBox(
-                                            width: 20.w,
-                                            height: 20.h,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                    theme.primaryColor,
-                                                  ),
-                                            ),
+                                        Expanded(
+                                          //flex: 2,
+                                          child: KText(
+                                            text: selectedFilter,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16.sp,
+                                            // color: AppColors.titleColor,
                                           ),
+                                        ),
+                                        Expanded(
+                                          //flex: 1,
+                                          child: KAtsGlowButton(
+                                            //  width: ,
+                                            text: "Interview",
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13,
+                                            textColor:
+                                                theme.secondaryHeaderColor,
+                                            gradientColors: AppColors
+                                                .atsButtonGradientColor,
+                                            icon: SvgPicture.asset(
+                                              AppAssetsConstants.addIcon,
+                                              height: 15,
+                                              width: 15,
+                                              fit: BoxFit.contain,
+                                              //SVG IMAGE COLOR
+                                              colorFilter: ColorFilter.mode(
+                                                theme.secondaryHeaderColor,
+                                                BlendMode.srcIn,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              print("Candidates button tapped");
+                                              GoRouter.of(context).pushNamed(
+                                                AppRouteConstants
+                                                    .atsScheduleInterviewScreen,
+                                              );
+                                            },
+                                            backgroundColor: theme.primaryColor,
+                                          ),
+                                        ),
                                       ],
                                     ),
+                                    KVerticalSpacer(height: 16.h),
+                                    KDropdownTextFormField<String>(
+                                      hintText: "All Status",
+                                      value: context.dropDownProviderWatch
+                                          .getValue('priority'),
+                                      items: [
+                                        'All Status',
+                                        'Shortlisted Candidates',
+                                        'Holed  Candidates',
+                                        'Rejected Candidates',
+                                      ],
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedFilter = value!;
+                                        });
+                                      },
+                                    ),
+                                    KVerticalSpacer(height: 16.h),
+                                    KAtsGlowSearchField(
+                                      controller: searchController,
+                                      hintText: "Search what you need",
+                                      prefixIcon: Icon(
+                                        Icons.search,
+                                        color:
+                                            theme.textTheme.bodyLarge?.color ??
+                                            AppColors.greyColor,
+                                      ),
+
+                                      backgroundColor:
+                                          theme.secondaryHeaderColor,
+                                      textColor:
+                                          theme
+                                              .textTheme
+                                              .headlineLarge
+                                              ?.color ??
+                                          AppColors
+                                              .titleColor, //AppColors.titleColor,,
+                                      onChanged: (value) {
+                                        print("Typing: $value");
+                                      },
+                                      onSubmitted: (value) {
+                                        print("Search submitted: $value");
+                                      },
+                                    ),
+
                                     KVerticalSpacer(height: 16.h),
                                     Row(
                                       spacing: 20.w,
@@ -630,20 +688,15 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                                     .greyColor, //AppColors.greyColor,
                                             fontWeight: FontWeight.w600,
                                             fontSize: 14,
-                                            icon: SvgPicture.asset(
-                                              AppAssetsConstants.filterIcon,
-                                              height: 15,
-                                              width: 15,
-                                              fit: BoxFit.contain,
-                                              //SVG IMAGE COLOR
-                                              colorFilter: ColorFilter.mode(
-                                                theme
-                                                        .textTheme
-                                                        .headlineLarge
-                                                        ?.color ??
-                                                    Colors.black,
-                                                BlendMode.srcIn,
-                                              ),
+                                            icon: Icon(
+                                              Icons.filter_alt_outlined,
+                                              color:
+                                                  theme
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.color ??
+                                                  AppColors
+                                                      .greyColor, //AppColors.titleColor,,
                                             ),
                                             onPressed: () {
                                               print("Filter button tapped");
@@ -652,32 +705,61 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                                 .secondaryHeaderColor, //AppColors.secondaryColor AppColors.secondaryColor,
                                           ),
                                         ),
+                                        // All Status DropDown
                                         Expanded(
-                                          child: KAtsGlowButton(
-                                            text: "Candidates",
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 13,
-                                            textColor:
-                                                theme.secondaryHeaderColor,
-                                            icon: SvgPicture.asset(
-                                              AppAssetsConstants.addIcon,
-                                              height: 15,
-                                              width: 15,
-                                              fit: BoxFit.contain,
-                                              //SVG IMAGE COLOR
-                                              colorFilter: ColorFilter.mode(
-                                                theme.secondaryHeaderColor,
-                                                BlendMode.srcIn,
+                                          child: Stack(
+                                            clipBehavior: Clip.none,
+                                            children: [
+                                              KAtsGlowButton(
+                                                text: "Draft",
+                                                textColor:
+                                                    theme
+                                                        .textTheme
+                                                        .bodyLarge
+                                                        ?.color ??
+                                                    AppColors.greyColor,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14,
+                                                onPressed: () {
+                                                  GoRouter.of(
+                                                    context,
+                                                  ).pushNamed(
+                                                    AppRouteConstants
+                                                        .atsDraftScreen,
+                                                  );
+                                                  print("Draft button tapped");
+                                                },
+                                                backgroundColor:
+                                                    theme.secondaryHeaderColor,
                                               ),
-                                            ),
-                                            onPressed: () {
-                                              print("Candidates button tapped");
-                                              GoRouter.of(context).pushNamed(
-                                                AppRouteConstants
-                                                    .atsCandidateInformationScreen,
-                                              );
-                                            },
-                                            backgroundColor: theme.primaryColor,
+                                              // Badge
+                                              Positioned(
+                                                top: -14, // adjust as needed
+                                                right: 10, // adjust as needed
+                                                child: Container(
+                                                  padding: EdgeInsets.all(4),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(
+                                                      color: theme
+                                                          .cardColor, // optional: border to blend with background
+                                                      width: 1.5,
+                                                    ),
+                                                  ),
+                                                  child: Text(
+                                                    draftList
+                                                        .toString(), // your badge count
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
@@ -688,52 +770,16 @@ class _CandidateScreenState extends State<CandidateScreen> {
                               ),
 
                               // Handle different states
-                              if (candidatesProvider.status ==
-                                  CandidatesStatus.loading)
-                                Padding(
-                                  padding: EdgeInsets.all(50.h),
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        theme.primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              else if (candidatesProvider.status ==
-                                  CandidatesStatus.error)
-                                Padding(
-                                  padding: EdgeInsets.all(50.h),
-                                  child: Column(
-                                    children: [
-                                      Icon(
-                                        Icons.error_outline,
-                                        size: 48.sp,
-                                        color: AppColors.softRed,
-                                      ),
-                                      SizedBox(height: 16.h),
-                                      KText(
-                                        text: candidatesProvider.errorMessage,
-                                        fontSize: 14.sp,
-                                        color: AppColors.greyColor,
-                                        textAlign: TextAlign.center,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      SizedBox(height: 16.h),
-                                      ElevatedButton(
-                                        onPressed: _fetchCandidates,
-                                        child: Text('Retry'),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              else if (candidatesProvider.status ==
-                                  CandidatesStatus.success)
-                                newData_table(
-                                  columns,
-                                  rows,
-                                  candidatesProvider.candidates,
-                                ),
+
+                              // Table renderer
+                              if (selectedFilter == "All Status")
+                                AllStatusListedTable(searchQuery: searchQuery),
+                              if (selectedFilter == "Shortlisted Candidates")
+                                ShortlistedTable(),
+                              if (selectedFilter == "Holed  Candidates")
+                                HoledTable(),
+                              if (selectedFilter == "Rejected Candidates")
+                                RejectedTable(),
                             ],
                           ),
                         ),
@@ -749,7 +795,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
     );
   }
 
-  Color _getStatusColor(String? status) {
+  /* Color _getStatusColor(String? status) {
     if (status == null) return AppColors.greyColor;
 
     switch (status.toLowerCase()) {
@@ -769,209 +815,5 @@ class _CandidateScreenState extends State<CandidateScreen> {
         }
         return AppColors.checkInColor;
     }
-  }
-
-  /// Data Table Widget
-  ReusableDataGrid newData_table(
-    List<GridColumn> columns,
-    List<DataGridRow> rows,
-    List<CandidateEntity> candidates,
-  ) {
-    return ReusableDataGrid(
-      title: 'Applicants',
-      allowSorting: false,
-      columns: columns,
-      rows: rows,
-      totalRows: rows.length,
-      initialRowsPerPage: 5,
-      cellBuilder: (cell, rowIndex, actualDataIndex) {
-        //App Theme Data
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-        // Always use REAL API DATA
-        final candidate = candidates[actualDataIndex];
-        final value = cell.value;
-
-        /// CV Column
-        if (cell.columnName == 'CV') {
-          final cvUrl = candidate.resume;
-
-          final fileName = cvUrl.split("/").last;
-
-          return InkWell(
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                ),
-                builder: (_) => PdfDownloadBottomSheet(
-                  onPdfTap: () async {
-                    Navigator.pop(context);
-                    await downloadPdfFromUrl(cvUrl);
-                  },
-                ),
-              );
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Text(
-                    fileName,
-                    style: TextStyle(fontSize: 12),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                const Icon(Icons.download_outlined, size: 16),
-              ],
-            ),
-          );
-        }
-
-        /// Status Column
-        if (cell.columnName == 'Status') {
-          final status = candidate.disposition;
-          return Padding(
-            padding: EdgeInsetsGeometry.all(10),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: _getStatusColor(status).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Center(
-                child: Text(
-                  status,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: _getStatusColor(status),
-                  ),
-                ),
-              ),
-            ),
-          );
-        }
-
-        /// Action Column
-        if (cell.columnName == 'Action') {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _actionButton(
-                color: isDark
-                    ? AppColors.approvedColorDark
-                    : AppColors.approvedColor,
-                icon: AppAssetsConstants.eyeIcon,
-                onTap: () {},
-              ),
-              SizedBox(width: 8.w),
-              _actionButton(
-                color: theme.primaryColor,
-                icon: AppAssetsConstants.editIcon,
-                onTap: () {},
-              ),
-              SizedBox(width: 8.w),
-              _actionButton(
-                color: isDark ? AppColors.softRedDark : AppColors.softRed,
-                icon: AppAssetsConstants.deleteIcon,
-                onTap: () async {
-                  // Show confirmation dialog
-                  final confirm = await showDialog<bool>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Delete Candidate'),
-                      content: Text(
-                        'Are you sure you want to delete ${candidate.candidateName}?',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          child: Text(
-                            'Delete',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-
-                  if (confirm != true) return;
-
-                  final provider = context.read<CandidateActionProvider>();
-
-                  // Show loading
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Deleting candidate..."),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  }
-
-                  final success = await provider.deleteCandidate(candidate.id);
-
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).clearSnackBars();
-
-                    if (success) {
-                      // ✅ Refresh the page
-                      _fetchCandidates();
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Deletion failed"),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Candidate deleted successfully"),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    }
-                  }
-                },
-              ),
-            ],
-          );
-        }
-
-        /// Default Cell
-        return Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          child: Text(value.toString(), style: TextStyle(fontSize: 12)),
-        );
-      },
-    );
-  }
-
-  Widget _actionButton({
-    required Color color,
-    required String icon,
-    VoidCallback? onTap,
-  }) {
-    return Container(
-      width: 30,
-      height: 30,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: IconButton(
-        onPressed: onTap,
-        icon: SvgPicture.asset(icon, color: Colors.white),
-        padding: EdgeInsets.zero,
-      ),
-    );
-  }
+  }*/
 }

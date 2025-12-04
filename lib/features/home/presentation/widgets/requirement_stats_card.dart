@@ -54,38 +54,38 @@ class RequirementStatsCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               KText(
-                text: "Total Requirement",
+                text: "Target Status",
                 fontWeight: FontWeight.w600,
                 fontSize: 16.sp,
                 //color: AppColors.titleColor,
               ),
-              InkWell(
-                onTap: () {
-                  // TODO: navigate to full screen
-                },
-                child: Row(
-                  children: [
-                    KText(
-                      text: "See all",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.sp,
-                      color: theme
-                          .inputDecorationTheme
-                          .focusedBorder
-                          ?.borderSide
-                          .color, //subTitleColor
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16.sp,
-                      color: theme
-                          .textTheme
-                          .headlineLarge
-                          ?.color, //AppColors.titleColor,
-                    ),
-                  ],
-                ),
-              ),
+              // InkWell(
+              //   onTap: () {
+              //     // TODO: navigate to full screen
+              //   },
+              //   child: Row(
+              //     children: [
+              //       KText(
+              //         text: "See all",
+              //         fontWeight: FontWeight.w500,
+              //         fontSize: 16.sp,
+              //         color: theme
+              //             .inputDecorationTheme
+              //             .focusedBorder
+              //             ?.borderSide
+              //             .color, //subTitleColor
+              //       ),
+              //       Icon(
+              //         Icons.arrow_forward_ios,
+              //         size: 16.sp,
+              //         color: theme
+              //             .textTheme
+              //             .headlineLarge
+              //             ?.color, //AppColors.titleColor,
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
 
@@ -156,7 +156,7 @@ class RequirementStatsCard extends StatelessWidget {
                         ),
                         SizedBox(height: 2 * scale),
                         KText(
-                          text: "Total Jobs",
+                          text: "Total Target",
                           fontWeight: FontWeight.w500,
                           fontSize: isTablet
                               ? (isLandscape ? 8 * scale : 10 * scale)
@@ -201,14 +201,14 @@ class RequirementStatsCard extends StatelessWidget {
                         child: KText(
                           text: label,
                           fontWeight: FontWeight.w500,
-                          fontSize: 16.sp,
+                          fontSize: 12.sp,
                           //color: AppColors.titleColor,
                         ),
                       ),
                       KText(
                         text: value.toString(),
                         fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
+                        fontSize: 14.sp,
                         //color: AppColors.titleColor,
                       ),
                     ],

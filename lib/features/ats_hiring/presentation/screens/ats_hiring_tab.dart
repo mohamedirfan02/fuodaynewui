@@ -24,7 +24,7 @@ class HiringTab extends StatefulWidget {
 class _HiringTabState extends State<HiringTab> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+  // void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
 
   // Pagination state
   int currentPage = 1;

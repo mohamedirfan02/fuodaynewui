@@ -393,6 +393,8 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
   Widget build(BuildContext context) {
     //App Theme Data
     final theme = Theme.of(context);
+    final atsPrimaryColor = Theme.of(context).colorScheme.primary;
+
     //final isDark = theme.brightness == Brightness.dark;
     // final rows = _buildRows();
     // final columns = _buildColumns();
@@ -533,7 +535,7 @@ class _HomeRecruiterScreenState extends State<HomeRecruiterScreen> {
                               .textTheme
                               .bodyLarge
                               ?.color, //AppColors.greyColor,,
-                          indicatorColor: theme.primaryColor,
+                          indicatorColor: atsPrimaryColor,
                           labelColor: theme
                               .textTheme
                               .headlineLarge

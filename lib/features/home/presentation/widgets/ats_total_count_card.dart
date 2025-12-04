@@ -18,6 +18,7 @@ class AtsTotalCountCard extends StatelessWidget {
 
   //   Dynamic icon: can be SVG asset (String) or IconData
   final dynamic employeeCardIcon;
+  final dynamic employeeCardArrowIcon;
 
   const AtsTotalCountCard({
     super.key,
@@ -30,6 +31,7 @@ class AtsTotalCountCard extends StatelessWidget {
     this.backgroundImage,
     this.empTextColors,
     this.avatarBgColors,
+    this.employeeCardArrowIcon,
   });
 
   @override
@@ -114,10 +116,16 @@ class AtsTotalCountCard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.arrow_upward,
-                        color: employeePercentageColor,
-                        size: 12.sp,
+                      SvgPicture.asset(
+                        AppAssetsConstants.upArrowIcon,
+                        width: 5.w,
+                        height: 5.w,
+                        //SVG IMAGE COLOR
+                        colorFilter: ColorFilter.mode(
+                          employeePercentageColor,
+                          BlendMode.srcIn,
+                        ),
+                        fit: BoxFit.contain,
                       ),
                       SizedBox(width: 2.w),
                       Text(
