@@ -11,6 +11,7 @@ import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
+import 'package:fuoday/features/ats_calender/presentation/screen/ats_calender_screen.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
 import 'package:fuoday/features/home/presentation/widgets/k_calendar.dart';
 import 'package:fuoday/features/home/presentation/widgets/requirement_stats_card.dart';
@@ -211,35 +212,6 @@ class _DashoardTabState extends State<DashoardTab> {
     },
   ];
 
-  // Getter methods for pagination
-  int get totalPages => (applicantsData.length / itemsPerPage).ceil();
-
-  List<Map<String, dynamic>> get paginatedApplicants {
-    int totalPagesCount = (applicantsData.length / itemsPerPage).ceil();
-
-    // Ensure currentPage is within range
-    if (currentPage > totalPagesCount) currentPage = totalPagesCount;
-    if (currentPage < 1) currentPage = 1;
-
-    int startIndex = (currentPage - 1) * itemsPerPage;
-    int endIndex = startIndex + itemsPerPage;
-    if (startIndex >= applicantsData.length) return []; // safe guard
-    if (endIndex > applicantsData.length) endIndex = applicantsData.length;
-
-    return applicantsData.sublist(startIndex, endIndex);
-  }
-
-  // Calculate display text for showing entries
-  String get entriesDisplayText {
-    if (applicantsData.isEmpty) return "Showing 0 to 0 of 0 entries";
-
-    int startIndex = (currentPage - 1) * itemsPerPage + 1;
-    int endIndex = currentPage * itemsPerPage;
-    if (endIndex > applicantsData.length) endIndex = applicantsData.length;
-
-    return "Showing $startIndex to $endIndex of ${applicantsData.length} entries";
-  }
-
   // Select Date
   Future<void> selectDate(
     BuildContext context,
@@ -278,45 +250,6 @@ class _DashoardTabState extends State<DashoardTab> {
     }
   }
 
-  //New Data Tbale Headers
-  // List<DataGridRow> _buildRows() => List.generate(
-  //   200,
-  //   (i) => DataGridRow(
-  //     cells: [
-  //       DataGridCell<int>(columnName: 'ID', value: i + 1),
-  //       DataGridCell<String>(columnName: 'Name', value: 'Item ${i + 1}'),
-  //       DataGridCell<double>(columnName: 'Price', value: (i + 1) * 10.5),
-  //       DataGridCell<String>(
-  //         columnName: 'Nameq',
-  //         value: 'Item cccccccc${i + 1}',
-  //       ),
-  //       DataGridCell<String>(
-  //         columnName: 'Namec',
-  //         value: 'Item vvvvvvvvv${i + 1}',
-  //       ),
-  //     ],
-  //   ),
-  // );
-
-  // // ✅ Columns
-  // List<GridColumn> _buildColumns() {
-  //   const headerStyle = TextStyle(fontWeight: FontWeight.bold);
-  //
-  //   Widget header(String text) => Container(
-  //     padding: const EdgeInsets.all(8),
-  //     alignment: Alignment.center,
-  //     child: Text(text, style: headerStyle),
-  //   );
-  //
-  //   return [
-  //     GridColumn(columnName: 'ID', label: header('ID')),
-  //     GridColumn(columnName: 'Name', label: header('Name')),
-  //     GridColumn(columnName: 'Price', width: 180, label: header('Actions')),
-  //     GridColumn(columnName: 'Namew', width: 200, label: header('Test1')),
-  //     GridColumn(columnName: 'Namec', width: 180, label: header('Actions')),
-  //   ];
-  // }
-  // Track selected stage per row
   late List<String> _selectedStages;
   Widget _actionButton({
     required Color color,
@@ -665,7 +598,13 @@ class _DashoardTabState extends State<DashoardTab> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      selectDate(context, dateController);
+                                      //selectDate(context, dateController);
+                                      // Navigator.of(context).push(
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) =>
+                                      //         CalendarScreen2(),
+                                      //   ),
+                                      // );
                                     },
                                     backgroundColor: theme
                                         .secondaryHeaderColor, //AppColors.secondaryColor

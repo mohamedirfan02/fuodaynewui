@@ -10,8 +10,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class AllStatusListedTable extends StatefulWidget {
   final String searchQuery;
-  const AllStatusListedTable({Key? key, required this.searchQuery})
-    : super(key: key);
+  const AllStatusListedTable({super.key, required this.searchQuery});
 
   @override
   State<AllStatusListedTable> createState() => _AllStatusListedTableState();

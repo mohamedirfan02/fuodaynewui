@@ -99,6 +99,7 @@ class _ScheduleInterviewScreenState extends State<ScheduleInterviewScreen> {
                     label: "Date",
                     hintText: "Select Date",
                     isReadOnly: true,
+                    suffixIcon: Icons.calendar_month,
                     onTap: () async {
                       DateTime? date = await showDatePicker(
                         context: context,
@@ -124,6 +125,7 @@ class _ScheduleInterviewScreenState extends State<ScheduleInterviewScreen> {
                     label: "Time",
                     hintText: "Select Time",
                     isReadOnly: true,
+                    suffixIcon: Icons.access_time_outlined,
                     onTap: () async {
                       TimeOfDay? time = await showTimePicker(
                         context: context,

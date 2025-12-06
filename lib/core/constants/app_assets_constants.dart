@@ -55,7 +55,15 @@ class AppAssetsConstants {
 
   static const String drawerIcon = "assets/icons/drawer.svg";
   static const String noteIcon = "assets/icons/note.svg";
+  static const String singleNoteIcon = "assets/icons/singleNoteIcon.svg";
+  static const String cupIconIcon = "assets/icons/cupIcon.svg";
+  static const String webIcon = "assets/icons/webIcon.svg";
+  static const String addCardIcon = "assets/icons/addCardIcon.svg";
+  static const String personCardIcon = "assets/icons/personCardIcon.svg";
   static const String pointIcon = "assets/icons/point.svg";
+  static const String beatsIcon = "assets/icons/beatsIcon.svg";
+  static const String conversionIcon = "assets/icons/conversionIcon.svg";
+  static const String timerIcon = "assets/icons/timerIcon.svg";
 
   static const String notificationIcon = "assets/icons/notification.svg";
 

@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
 import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
-// import 'package:fuoday/core/constants/app_route_constants.dart';
-import 'package:fuoday/core/di/injection.dart';
-import 'package:fuoday/core/service/hive_storage_service.dart';
+import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
+import 'package:fuoday/features/ats_candidate/widgets/k_ats_candidates_datatable.dart';
 import 'package:fuoday/features/home/presentation/widgets/ats_total_count_card.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
-import '../../../../core/constants/router/app_route_constants.dart';
 
 class InterviewScreen extends StatefulWidget {
   const InterviewScreen({super.key});
@@ -26,208 +22,237 @@ class InterviewScreen extends StatefulWidget {
 class _InterviewScreenState extends State<InterviewScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
-
-  // Pagination state
-  int currentPage = 1;
-  int itemsPerPage = 6; // Change this to show how many items per page
-  int pageWindowStart = 1; // first page in current window
-  int pageWindowSize = 5; // show 5 numbers at a time
-
   // Sample data for candidates
-  final List<Map<String, dynamic>> sampleData = [
+  // ================= SAMPLE DATA ==================
+  List<Map<String, dynamic>> applicantsData = [
     {
-      "sno": 1,
-      "name": "Aarav Sharma",
-      "colum3": "2 yrs", // Experience
-      "colum4": "Mumbai, Maharashtra", // Location
-      "colum5": "Flutter Developer", // Role
-      "colum6": "85%", // ATS Score
+      'name': 'Pristia Candra',
+      'jobId': '1001',
+      'recruitmentId': 'R-501',
+      'contact': '89034 56787',
+      'Role': 'Bangalore',
+      'role': 'Intern',
+      'Interview Stage': '(L1 80%)',
+      'Performance Scored': '90%',
+      'atsScore': '89%',
+      'feedback': 'I do not know how to spell a lot of things.',
+      'action': 'View Profile',
     },
     {
-      "sno": 2,
-      "name": "Priya Verma",
-      "colum3": "3 yrs",
-      "colum4": "Delhi, NCR",
-      "colum5": "Backend Developer",
-      "colum6": "78%",
+      'name': 'Rohit Sharma',
+      'jobId': '1002',
+      'recruitmentId': 'R-502',
+      'contact': '79845 23412',
+      'Role': 'Hyderabad',
+      'role': 'Flutter Developer',
+      'Interview Stage': '(L2 70%)',
+      'Performance Scored': '88%',
+      'atsScore': '92%',
+      'feedback': 'Strong fundamentals and fast learner.',
+      'action': 'View Profile',
     },
     {
-      "sno": 3,
-      "name": "Rohan Gupta",
-      "colum3": "1.5 yrs",
-      "colum4": "Pune, Maharashtra",
-      "colum5": "UI/UX Designer",
-      "colum6": "65%",
+      'name': 'Jessica Martin',
+      'jobId': '1003',
+      'recruitmentId': 'R-503',
+      'contact': '90341 12458',
+      'Role': 'Chennai',
+      'role': 'UI/UX Designer',
+      'Interview Stage': '(HR Done)',
+      'Performance Scored': '79%',
+      'atsScore': '81%',
+      'feedback': 'Creative approach to design problems.',
+      'action': 'View Profile',
     },
     {
-      "sno": 4,
-      "name": "Neha Singh",
-      "colum3": "4 yrs",
-      "colum4": "Bangalore, Karnataka",
-      "colum5": "Full Stack Developer",
-      "colum6": "92%",
+      'name': 'Abdul Rahman',
+      'jobId': '1004',
+      'recruitmentId': 'R-504',
+      'contact': '74586 90321',
+      'Role': 'Delhi',
+      'role': 'QA Tester',
+      'Interview Stage': '(L1 60%)',
+      'Performance Scored': '74%',
+      'atsScore': '76%',
+      'feedback': 'Good but needs more automation knowledge.',
+      'action': 'View Profile',
     },
     {
-      "sno": 5,
-      "name": "Arjun Mehta",
-      "colum3": "Fresher",
-      "colum4": "Ahmedabad, Gujarat",
-      "colum5": "QA Engineer",
-      "colum6": "60%",
+      'name': 'Sofia Loren',
+      'jobId': '1005',
+      'recruitmentId': 'R-505',
+      'contact': '81246 54789',
+      'Role': 'Pune',
+      'role': 'Product Manager',
+      'Interview Stage': '(L2 82%)',
+      'Performance Scored': '91%',
+      'atsScore': '94%',
+      'feedback': 'Excellent leadership and communication.',
+      'action': 'View Profile',
     },
     {
-      "sno": 6,
-      "name": "Simran Kaur",
-      "colum3": "5 yrs",
-      "colum4": "Chennai, Tamil Nadu",
-      "colum5": "Project Manager",
-      "colum6": "88%",
+      'name': 'Karthik Kumar',
+      'jobId': '1006',
+      'recruitmentId': 'R-506',
+      'contact': '93421 90754',
+      'Role': 'Mumbai',
+      'role': 'Backend Developer',
+      'Interview Stage': '(L1 72%)',
+      'Performance Scored': '83%',
+      'atsScore': '87%',
+      'feedback': 'Strong in Node.js & databases.',
+      'action': 'View Profile',
     },
     {
-      "sno": 7,
-      "name": "Vikram Rao",
-      "colum3": "2.5 yrs",
-      "colum4": "Hyderabad, Telangana",
-      "colum5": "Data Analyst",
-      "colum6": "73%",
+      'name': 'Maria Isabel',
+      'jobId': '1007',
+      'recruitmentId': 'R-507',
+      'contact': '67543 21098',
+      'Role': 'Kolkata',
+      'role': 'Digital Marketer',
+      'Interview Stage': '(HR 100%)',
+      'Performance Scored': '85%',
+      'atsScore': '81%',
+      'feedback': 'Excellent campaign strategy knowledge.',
+      'action': 'View Profile',
     },
     {
-      "sno": 8,
-      "name": "Ananya Nair",
-      "colum3": "1 yr",
-      "colum4": "Kochi, Kerala",
-      "colum5": "AI Engineer",
-      "colum6": "95%",
+      'name': 'Daniel Scott',
+      'jobId': '1008',
+      'recruitmentId': 'R-508',
+      'contact': '90812 45123',
+      'Role': 'Remote',
+      'role': 'Data Analyst',
+      'Interview Stage': '(L2 78%)',
+      'Performance Scored': '89%',
+      'atsScore': '90%',
+      'feedback': 'Very strong analytical thinking.',
+      'action': 'View Profile',
     },
     {
-      "sno": 9,
-      "name": "Karan Patel",
-      "colum3": "6 yrs",
-      "colum4": "Surat, Gujarat",
-      "colum5": "DevOps Engineer",
-      "colum6": "91%",
+      'name': 'Neha Verma',
+      'jobId': '1009',
+      'recruitmentId': 'R-509',
+      'contact': '70234 44521',
+      'Role': 'Noida',
+      'role': 'HR Executive',
+      'Interview Stage': '(HR Done)',
+      'Performance Scored': '82%',
+      'atsScore': '80%',
+      'feedback': 'Good HR knowledge and employee handling.',
+      'action': 'View Profile',
     },
     {
-      "sno": 10,
-      "name": "Meera Iyer",
-      "colum3": "3.5 yrs",
-      "colum4": "Coimbatore, Tamil Nadu",
-      "colum5": "Business Analyst",
-      "colum6": "67%",
-    },
-    {
-      "sno": 11,
-      "name": "Rahul Kumar",
-      "colum3": "4.5 yrs",
-      "colum4": "Kolkata, West Bengal",
-      "colum5": "Mobile Developer",
-      "colum6": "84%",
-    },
-    {
-      "sno": 12,
-      "name": "Sneha Reddy",
-      "colum3": "2 yrs",
-      "colum4": "Visakhapatnam, Andhra Pradesh",
-      "colum5": "Frontend Developer",
-      "colum6": "79%",
-    },
-    {
-      "sno": 13,
-      "name": "Amit Agarwal",
-      "colum3": "7 yrs",
-      "colum4": "Jaipur, Rajasthan",
-      "colum5": "Tech Lead",
-      "colum6": "89%",
-    },
-    {
-      "sno": 14,
-      "name": "Pooja Jain",
-      "colum3": "1.5 yrs",
-      "colum4": "Indore, Madhya Pradesh",
-      "colum5": "Content Writer",
-      "colum6": "55%",
-    },
-    {
-      "sno": 15,
-      "name": "Rajesh Mishra",
-      "colum3": "8 yrs",
-      "colum4": "Lucknow, Uttar Pradesh",
-      "colum5": "System Admin",
-      "colum6": "71%",
+      'name': 'Michael Jordan',
+      'jobId': '1010',
+      'recruitmentId': 'R-510',
+      'contact': '89012 55678',
+      'Role': 'Coimbatore',
+      'role': 'DevOps Engineer',
+      'Interview Stage': '(L2 85%)',
+      'Performance Scored': '92%',
+      'atsScore': '95%',
+      'feedback': 'Expert in CI/CD and AWS.',
+      'action': 'View Profile',
     },
   ];
+  late List<String> _selectedStages;
+  final List<String> stageOptions = [
+    '(L1 60%)',
+    '(L1 72%)',
+    '(L1 80%)',
+    '(L2 70%)',
+    '(L2 82%)',
+    '(L2 78%)',
+    '(L2 85%)',
+    '(HR Done)',
+    '(HR 100%)',
+  ];
+  @override
+  void initState() {
+    super.initState();
+    // Store stages with unique keys (using name+jobId as key)
+    _selectedStages = applicantsData
+        .map((e) => e['Interview Stage'] as String)
+        .toList();
+  }
 
-  // Build DataGridRows from applicantsData
-  List<DataGridRow> _buildRows() => sampleData.asMap().entries.map((entry) {
-    int index = entry.key; // row index
+  // =============== BUILD ROWS ===================
+  List<DataGridRow> _buildRows() => applicantsData.asMap().entries.map((entry) {
+    int index = entry.key;
     var data = entry.value;
+
     return DataGridRow(
       cells: [
-        // S.No column
         DataGridCell<int>(columnName: 'SNo', value: index + 1),
         DataGridCell<String>(columnName: 'Name', value: data['name']),
-        DataGridCell<String>(columnName: 'Experience', value: data['colum3']),
-        DataGridCell<String>(columnName: 'Location', value: data['colum4']),
-        DataGridCell<String>(columnName: 'Role', value: data['colum5']),
-        DataGridCell<String>(columnName: 'Score', value: data['colum6']),
+        DataGridCell<String>(columnName: 'JobID', value: data['jobId']),
+        DataGridCell<String>(
+          columnName: 'RecruitmentID',
+          value: data['recruitmentId'],
+        ),
+        DataGridCell<String>(columnName: 'Contact', value: data['contact']),
+        DataGridCell<String>(columnName: 'Location', value: data['Role']),
+        DataGridCell<String>(columnName: 'Role', value: data['role']),
+        DataGridCell<String>(
+          columnName: 'InterviewStage',
+          value: data['Interview Stage'],
+        ),
+        DataGridCell<String>(
+          columnName: 'PerformanceScore',
+          value: data['Performance Scored'],
+        ),
+        DataGridCell<String>(columnName: 'ATSScore', value: data['atsScore']),
+        DataGridCell<String>(columnName: 'Feedback', value: data['feedback']),
+        DataGridCell<String>(columnName: 'Action', value: data['action']),
       ],
     );
   }).toList();
 
-  //==================================================================
-  // Columns
+  // =============== BUILD COLUMNS ===================
   List<GridColumn> _buildColumns() {
-    //App Theme Data
     final theme = Theme.of(context);
     final headerStyle = TextStyle(
       fontWeight: FontWeight.normal,
       color: theme.textTheme.bodyLarge?.color,
     );
-    Widget header(String text) => Container(
+
+    Widget header(String title) => Container(
       padding: const EdgeInsets.all(8),
       alignment: Alignment.center,
-      child: Text(text, style: headerStyle),
+      child: Text(title, style: headerStyle),
     );
 
     return [
-      GridColumn(columnName: 'SNo', width: 70, label: header('S.No')),
-      GridColumn(columnName: 'Name', width: 150, label: header('Name')),
-
-      GridColumn(columnName: 'Experience', label: header('Experience')),
-      GridColumn(columnName: 'Location', label: header('Location')),
-      GridColumn(columnName: 'Role', width: 200, label: header('Role')),
-      GridColumn(columnName: 'Score', width: 120, label: header('ATS Score')),
+      GridColumn(columnName: 'SNo', width: 60, label: header('S.No')),
+      GridColumn(columnName: 'Name', width: 140, label: header('Name')),
+      GridColumn(columnName: 'JobID', width: 100, label: header('Job ID')),
+      GridColumn(
+        columnName: 'RecruitmentID',
+        width: 130,
+        label: header('Recruitment ID'),
+      ),
+      GridColumn(columnName: 'Contact', width: 130, label: header('Contact')),
+      GridColumn(columnName: 'Location', width: 130, label: header('Location')),
+      GridColumn(columnName: 'Role', width: 160, label: header('Role')),
+      GridColumn(
+        columnName: 'InterviewStage',
+        width: 150,
+        label: header('Interview Stage'),
+      ),
+      GridColumn(
+        columnName: 'PerformanceScore',
+        width: 150,
+        label: header('Performance Score'),
+      ),
+      GridColumn(
+        columnName: 'ATSScore',
+        width: 110,
+        label: header('ATS Score'),
+      ),
+      GridColumn(columnName: 'Feedback', width: 160, label: header('Feedback')),
+      GridColumn(columnName: 'Action', width: 140, label: header('Action')),
     ];
-  }
-
-  // Getter methods for pagination
-  int get totalPages => (sampleData.length / itemsPerPage).ceil();
-
-  List<Map<String, dynamic>> get paginatedData {
-    int totalPagesCount = (sampleData.length / itemsPerPage).ceil();
-
-    // Ensure currentPage is within range
-    if (currentPage > totalPagesCount) currentPage = totalPagesCount;
-    if (currentPage < 1) currentPage = 1;
-
-    int startIndex = (currentPage - 1) * itemsPerPage;
-    int endIndex = startIndex + itemsPerPage;
-    if (startIndex >= sampleData.length) return []; // safe guard
-    if (endIndex > sampleData.length) endIndex = sampleData.length;
-
-    return sampleData.sublist(startIndex, endIndex);
-  }
-
-  // Calculate display text for showing entries
-  String get entriesDisplayText {
-    if (sampleData.isEmpty) return "Showing 0 to 0 of 0 entries";
-
-    int startIndex = (currentPage - 1) * itemsPerPage + 1;
-    int endIndex = currentPage * itemsPerPage;
-    if (endIndex > sampleData.length) endIndex = sampleData.length;
-
-    return "Showing $startIndex to $endIndex of ${sampleData.length} entries";
   }
 
   @override
@@ -235,59 +260,39 @@ class _InterviewScreenState extends State<InterviewScreen> {
     //App Theme Data
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final hiveService = getIt<HiveStorageService>();
-    final employeeDetails = hiveService.employeeDetails;
-    final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
-    final name = employeeDetails?['name'] ?? "No Name";
-    final email = employeeDetails?['email'] ?? "No Email";
+    // final hiveService = getIt<HiveStorageService>();
+    // final employeeDetails = hiveService.employeeDetails;
+    // final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
+    // final name = employeeDetails?['name'] ?? "No Name";
+    // final email = employeeDetails?['email'] ?? "No Email";
     final String currentRoute =
-        AppRouteConstants.interviewScreen; // Replace with actual current route
-
-    final headers = [
-      _headers("S.No", 50.w),
-      _headers("Name", 100.w),
-      _headers("Experience", 120.w),
-      _headers("Location", 120.w),
-      _headers("Role", 100.w),
-      _headers("ATS Score", 160.w),
-
-      //   if (showStatusColumn) // ✅ conditional
-      //      SizedBox(
-      //      width: 120.w,
-      //      child: KText(
-      //        text: "Status",
-      //        fontSize: 12.sp,
-      //        fontWeight: FontWeight.w500,
-      //        color: AppColors.greyColor,
-      //      ),
-      //    ),
-    ];
+        AppRouteConstants.atsTrackerScreen; // Replace with actual current route
 
     // Grid Attendance Data - Updated with dynamic counts
     final List<Map<String, dynamic>> gridAttendanceData = [
       {
-        'icon': AppAssetsConstants.downloadIcon, // ✅ SVG path
-        'title': 'Resume Downloaded',
+        'icon': AppAssetsConstants.personCardIcon, // ✅ SVG path
+        'title': 'Interview  Today',
         'numberOfCount': "13,540",
         'growth': "+5.1%",
       },
       {
-        'title': 'Above 80% Score',
+        'title': 'L1 Round',
         'numberOfCount': "708",
         'growth': "+5.1%",
-        'icon': AppAssetsConstants.pecIcon, // ✅ SVG path
+        'icon': AppAssetsConstants.webIcon, // ✅ SVG path
       },
       {
-        'title': '50% - 80% Score',
+        'title': 'L2 Round',
         'numberOfCount': "958",
         'growth': "+5.1%",
-        'icon': AppAssetsConstants.pecIcon, // ✅ SVG path
+        'icon': AppAssetsConstants.cupIconIcon, // ✅ SVG path
       },
       {
-        'title': '40% Score',
+        'title': 'Yet to be start',
         'numberOfCount': "1,504",
         'growth': "+5.1%",
-        'icon': AppAssetsConstants.pecIcon, // ✅ SVG path
+        'icon': AppAssetsConstants.addCardIcon, // ✅ SVG path
       },
     ];
     final rows = _buildRows();
@@ -299,31 +304,12 @@ class _InterviewScreenState extends State<InterviewScreen> {
         height: double.infinity,
         color: theme.cardColor, //ATS Background Color
         child: Padding(
-          padding: EdgeInsets.only(top: 10.0.h),
+          padding: EdgeInsets.only(top: 10.h),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Align(
-                //   alignment: Alignment.centerLeft,
-                //   child: KText(
-                //     text: "Interview",
-                //     fontWeight: FontWeight.w600,
-                //     fontSize: 16.sp,
-                //     color: AppColors.titleColor,
-                //   ),
-                // ),
-                // Align(
-                //   alignment: Alignment.centerLeft,
-                //   child: KText(
-                //     text: "Manage your Interview Schedule",
-                //     fontWeight: FontWeight.w500,
-                //     fontSize: 14.sp,
-                //     color: AppColors.greyColor,
-                //   ),
-                // ),
-                // SizedBox(height: 20.h),
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -352,7 +338,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                 ),
                 SizedBox(height: 14.h),
                 Container(
-                  // padding: EdgeInsets.all(18.47.w),
+                  //padding: EdgeInsets.all(18.47.w),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 0.77.w,
@@ -381,143 +367,54 @@ class _InterviewScreenState extends State<InterviewScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 KText(
-                                  text: "Candidate List",
+                                  text: "Interview List",
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.sp,
                                   // color: AppColors.titleColor,
                                 ),
-                              ],
-                            ),
-                            KVerticalSpacer(height: 16.h),
-
-                            // Date and Export Row
-                            Row(
-                              spacing: 20.w,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // Filter Button
-                                Expanded(
-                                  child: KAtsGlowButton(
-                                    text: "Filter",
-                                    textColor:
+                                KAtsGlowButton(
+                                  width: 110,
+                                  text: "Filter",
+                                  textColor:
+                                      theme.textTheme.bodyLarge?.color ??
+                                      AppColors.greyColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  icon: Icon(
+                                    Icons.filter_alt_outlined,
+                                    size: 20,
+                                    color:
                                         theme.textTheme.bodyLarge?.color ??
                                         AppColors.greyColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    icon: SvgPicture.asset(
-                                      AppAssetsConstants.filterIcon,
-                                      height: 15,
-                                      width: 15,
-                                      fit: BoxFit.contain,
-                                      //SVG IMAGE COLOR
-                                      colorFilter: ColorFilter.mode(
-                                        theme.textTheme.headlineLarge?.color ??
-                                            Colors.black,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      print("Filter button tapped");
-                                    },
-                                    backgroundColor: theme.secondaryHeaderColor,
                                   ),
-                                ),
-
-                                // Export file
-                                Expanded(
-                                  child: KAtsGlowButton(
-                                    text: "Interview",
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13,
-                                    icon: SvgPicture.asset(
-                                      AppAssetsConstants.addIcon,
-                                      height: 15,
-                                      width: 15,
-                                      fit: BoxFit.contain,
-                                    ),
-                                    onPressed: () {
-                                      print("Candidates button tapped");
-                                    },
-                                    backgroundColor: theme.primaryColor,
-                                  ),
+                                  onPressed: () {
+                                    print("Filter button tapped");
+                                  },
+                                  backgroundColor: theme.secondaryHeaderColor,
                                 ),
                               ],
                             ),
+
                             KVerticalSpacer(height: 16.h),
                           ],
                         ),
                       ),
-                      /* <!-----------Old Data Table----------->
-                      // Data Table with paginated data
-                      SizedBox(
-                        height: 330.h,
-                        child: KAtsDataTable(
-                          columnHeaders: headers,
-                          rowData: paginatedData,
-                          minWidth: 1000.w,
-                          showActionsColumn: false,
-                          showStatusColumn: false,
-                        ),
-                      ),
-
-                      // Pagination
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [_buildPageNumbersRow()],
-                      ),
-
-                      SizedBox(height: 16.w),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          KText(
-                            text: entriesDisplayText, // Dynamic entries text
-                            fontSize: MediaQuery.of(context).size.width * 0.03,
-                            color: AppColors.greyColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-
-                          GestureDetector(
-                            onTap: () {
-                              // Show dropdown or bottom sheet to change items per page
-                              _showItemsPerPageSelector();
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(10.w),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 0.77.w,
-                                  color: AppColors.greyColor.withOpacity(0.1),
-                                ),
-                                borderRadius: BorderRadius.circular(8.r),
-                                color: AppColors.secondaryColor,
-                              ),
-                              child: Row(
-                                children: [
-                                  KText(
-                                    text: "Show $itemsPerPage",
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                        0.025,
-                                    color: AppColors.titleColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size:
-                                        MediaQuery.of(context).size.width *
-                                        0.04,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),*/
 
                       /// New Data Table
-                      newData_table(columns, rows),
+                      newData_table(
+                        columns,
+                        rows,
+                        applicantsData,
+                        _selectedStages,
+                        stageOptions,
+                        context,
+                        (index, newStage) {
+                          setState(() {
+                            _selectedStages[index] = newStage;
+                            applicantsData[index]['Interview Stage'] = newStage;
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -528,147 +425,18 @@ class _InterviewScreenState extends State<InterviewScreen> {
       ),
     );
   }
-
-  SizedBox _headers(String text, double width) {
-    return SizedBox(
-      width: width,
-      child: Center(
-        child: KText(
-          text: text,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColors.greyColor,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPageNumbersRow() {
-    int windowEnd = (pageWindowStart + pageWindowSize - 1);
-    if (windowEnd > totalPages) windowEnd = totalPages;
-
-    List<Widget> pageButtons = [];
-
-    // Previous window arrow
-    pageButtons.add(
-      IconButton(
-        icon: Icon(Icons.chevron_left, size: 16.sp),
-        onPressed: pageWindowStart > 1
-            ? () {
-                setState(() {
-                  pageWindowStart -= pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
-            : null,
-      ),
-    );
-
-    // Page numbers
-    for (int i = pageWindowStart; i <= windowEnd; i++) {
-      pageButtons.add(
-        Padding(
-          padding: EdgeInsets.only(right: 8.w),
-          child: _buildPageNumber(i),
-        ),
-      );
-    }
-
-    // Next window arrow
-    pageButtons.add(
-      IconButton(
-        icon: Icon(Icons.chevron_right, size: 16.sp),
-        onPressed: windowEnd < totalPages
-            ? () {
-                setState(() {
-                  pageWindowStart += pageWindowSize;
-                  currentPage = pageWindowStart;
-                });
-              }
-            : null,
-      ),
-    );
-
-    return Row(children: pageButtons);
-  }
-
-  Widget _buildPageNumber(int pageNum) {
-    final isActive = pageNum == currentPage;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          currentPage = pageNum;
-        });
-      },
-      child: Container(
-        width: 32.w,
-        height: 32.w,
-        decoration: BoxDecoration(
-          color: isActive ? Color(0xFFF8F8F8) : Colors.transparent,
-          borderRadius: BorderRadius.circular(4.r),
-        ),
-        child: Center(
-          child: KText(
-            text: pageNum.toString(),
-            fontSize: 12.sp,
-            color: isActive ? Colors.black : AppColors.titleColor,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showItemsPerPageSelector() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              KText(
-                text: "Items per page",
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.titleColor,
-              ),
-              SizedBox(height: 16.h),
-              ...([5, 6, 10, 15, 20].map(
-                (count) => ListTile(
-                  title: KText(
-                    text: "Show $count items",
-                    fontSize: 14.sp,
-                    color: AppColors.titleColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  trailing: itemsPerPage == count
-                      ? Icon(Icons.check, color: AppColors.primaryColor)
-                      : null,
-                  onTap: () {
-                    setState(() {
-                      itemsPerPage = count;
-                      currentPage = 1; // Reset to first page
-                      pageWindowStart = 1; // Reset pagination window
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-              )),
-            ],
-          ),
-        );
-      },
-    );
-  }
 }
 
 /// Data Table Widget
 ReusableDataGrid newData_table(
   List<GridColumn> columns,
   List<DataGridRow> rows,
+  List<Map<String, dynamic>> applicantsData,
+  List<String> selectedStages,
+  List<String> stageOptions,
+
+  BuildContext context,
+  void Function(int index, String newStage) onStageChanged,
 ) {
   return ReusableDataGrid(
     title: 'Applicants',
@@ -677,5 +445,141 @@ ReusableDataGrid newData_table(
     allowSorting: false,
     totalRows: rows.length,
     initialRowsPerPage: 5,
+    cellBuilder: (cell, rowIndex, actualDataIndex) {
+      //App Theme Data
+      final theme = Theme.of(context);
+      final isDark = theme.brightness == Brightness.dark;
+      final atsPrimaryColor = Theme.of(context).colorScheme.primary;
+
+      //App Theme Data
+      // final isDark = theme.brightness == Brightness.dark;
+      // final atsPrimaryColor = Theme.of(context).colorScheme.primary;
+
+      // Always use REAL API DATA
+      if (actualDataIndex >= applicantsData.length) {
+        return const SizedBox(); // prevents RangeError
+      }
+      final value = cell.value;
+
+      ///Stages
+      if (cell.columnName == 'InterviewStage') {
+        final status = selectedStages[actualDataIndex];
+
+        // 🔹 Color mapping for container & text
+
+        return Container(
+          // height: 20.h,
+          margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            // color: bgColor, // 🔹 Container background color
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: DropdownButton<String>(
+            value: status,
+            underline: const SizedBox.shrink(),
+            isExpanded: true,
+            dropdownColor: theme
+                .secondaryHeaderColor, // 🔹 White background for dropdown menu
+            iconEnabledColor: theme.textTheme.headlineLarge?.color?.withValues(
+              alpha: 0.5,
+            ), //AppColors.titleColor,, // 🔹  arrow icon
+            selectedItemBuilder: (context) {
+              // 🔹 This controls how the selected item appears in the container
+              return stageOptions.map((stage) {
+                return Center(
+                  child: Text(
+                    stage,
+                    style: TextStyle(
+                      //color: textColor, // 🔹 Colored text for selected item
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                );
+              }).toList();
+            },
+            items: stageOptions.map((stage) {
+              return DropdownMenuItem(
+                value: stage,
+                child: Text(
+                  stage,
+                  style: TextStyle(
+                    color: theme
+                        .textTheme
+                        .headlineLarge
+                        ?.color, // 🔹 Black text in dropdown items
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: (val) {
+              if (val != null) {
+                onStageChanged(actualDataIndex, val); // call the callback
+              }
+            },
+          ),
+        );
+      }
+
+      ///ATS Score
+      if (cell.columnName == 'ATSScore') {
+        final status = cell.value.toString(); // ⬅️ take current row value
+        return Padding(
+          padding: const EdgeInsets.all(10),
+          child: Container(
+            // width: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.checkInColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Center(
+              child: Text(
+                status,
+                style: TextStyle(
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.checkInColor,
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+
+      /// Action Column
+      if (cell.columnName == 'Action') {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ActionButtonWidget(
+              color: AppColors.checkInColor.withValues(alpha: 0.8),
+              icon: AppAssetsConstants.eyeIcon,
+              onTap: () {},
+            ),
+            SizedBox(width: 8.w),
+            ActionButtonWidget(
+              color: atsPrimaryColor,
+              icon: AppAssetsConstants.editIcon,
+              onTap: () async {
+                // Show confirmation dialog
+              },
+            ),
+          ],
+        );
+      }
+
+      /// Default Cell
+      return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Text(value.toString(), style: TextStyle(fontSize: 12)),
+      );
+    },
   );
 }
+
+/*
+        /// Status Column
+        */

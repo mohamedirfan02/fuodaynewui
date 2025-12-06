@@ -160,7 +160,7 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                     return null;
                   }
 
-                  // ✅ Both pageIndex and selectedPageIndex are 0-based, so direct comparison
+                  // Both pageIndex and selectedPageIndex are 0-based, so direct comparison
                   final isSelected =
                       _pagerController.selectedPageIndex == pageIndex;
 
