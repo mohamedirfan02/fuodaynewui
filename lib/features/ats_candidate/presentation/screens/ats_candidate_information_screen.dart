@@ -6,12 +6,16 @@ import 'package:fuoday/commons/widgets/k_horizontal_spacer.dart';
 import 'package:fuoday/commons/widgets/k_snack_bar.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
+import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/extensions/provider_extension.dart';
+import 'package:fuoday/core/helper/app_logger_helper.dart';
+import 'package:fuoday/core/models/file_preview_data.dart';
 
 import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/ats_candidate/presentation/provider/draft_provider.dart';
+import 'package:fuoday/features/ats_candidate/widgets/k_ats_file_upload_btn.dart';
 
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_text_form_field.dart';
 import 'package:go_router/go_router.dart';
@@ -85,7 +89,7 @@ class _CandidateInformationScreenState
     super.dispose();
   }
 
-  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+  //void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
 
   Future<void> pickDate(TextEditingController ctrl) async {
     final picked = await showDatePicker(
@@ -153,6 +157,82 @@ class _CandidateInformationScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //  KVerticalSpacer(height: 12.h),
+              //   File Upload Section
+              KAtsUploadPickerTile(
+                backgroundcolor: theme.cardColor, //ATS Background Color
+                showOnlyView: context.filePickerProviderWatch.isPicked(
+                  "resume",
+                ),
+                onViewTap: () {
+                  final pickedFile = context.filePickerProviderRead.getFile(
+                    "resume",
+                  );
+                  if (pickedFile == null) return;
+                  final filePath = pickedFile.path;
+                  final fileName = pickedFile.name.toLowerCase();
+
+                  if (fileName.endsWith('.pdf')) {
+                    GoRouter.of(context).pushNamed(
+                      AppRouteConstants.pdfPreview,
+                      extra: FilePreviewData(
+                        filePath: filePath!,
+                        fileName: fileName,
+                      ),
+                    );
+                  } else if (fileName.endsWith('.png') ||
+                      fileName.endsWith('.jpg') ||
+                      fileName.endsWith('.jpeg') ||
+                      fileName.endsWith('.webp')) {
+                    GoRouter.of(context).pushNamed(
+                      AppRouteConstants.imagePreview,
+                      extra: FilePreviewData(
+                        filePath: filePath!,
+                        fileName: fileName,
+                      ),
+                    );
+                  } else if (fileName.endsWith('.doc') ||
+                      fileName.endsWith('.docx')) {
+                    KSnackBar.success(
+                      context,
+                      "Word file selected: ${pickedFile.name}",
+                    );
+                  } else {
+                    KSnackBar.failure(context, "Unsupported file type");
+                  }
+                },
+                showCancel: context.filePickerProviderWatch.isPicked("resume"),
+                onCancelTap: () {
+                  context.filePickerProviderRead.removeFile("resume");
+                  KSnackBar.success(context, "File removed successfully");
+                },
+                uploadOnTap: () async {
+                  final key = "resume";
+                  final filePicker = context.filePickerProviderRead;
+                  await filePicker.pickFile(key);
+                  final pickedFile = filePicker.getFile(key);
+
+                  if (filePicker.isPicked(key)) {
+                    AppLoggerHelper.logInfo('Picked file: ${pickedFile!.name}');
+                    KSnackBar.success(
+                      context,
+                      'Picked file: ${pickedFile.name}',
+                    );
+                  } else {
+                    AppLoggerHelper.logError('No file selected.');
+                    KSnackBar.failure(context, 'No file selected.');
+                  }
+                },
+                uploadPickerTitle: "",
+                uploadPickerIcon:
+                    context.filePickerProviderWatch.isPicked("resume")
+                    ? Icons.check_circle
+                    : Icons.cloud_upload_outlined,
+                description:
+                    context.filePickerProviderWatch.getFile("resume") != null
+                    ? "Selected File: ${context.filePickerProviderWatch.getFile("resume")!.name}"
+                    : "Browse file to upload\nSupports .pdf, .doc, .docx",
+              ),
+              KVerticalSpacer(height: 12.h),
 
               // 1. Candidate Name
               KAuthTextFormField(

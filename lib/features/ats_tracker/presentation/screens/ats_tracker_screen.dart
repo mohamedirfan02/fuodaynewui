@@ -74,19 +74,19 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
     );
 
     /// Slide from left (back navigation)
-    Widget _slideFromLeft(
-      Animation<double> animation,
-      Animation<double> _,
-      Widget child,
-    ) {
-      return SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(-1, 0), // Start from left
-          end: Offset.zero,
-        ).animate(animation),
-        child: child,
-      );
-    }
+    // Widget _slideFromLeft(
+    //   Animation<double> animation,
+    //   Animation<double> _,
+    //   Widget child,
+    // ) {
+    //   return SlideTransition(
+    //     position: Tween<Offset>(
+    //       begin: const Offset(-1, 0), // Start from left
+    //       end: Offset.zero,
+    //     ).animate(animation),
+    //     child: child,
+    //   );
+    // }
 
     return PopScope(
       canPop: false, // Prevent default pop
@@ -194,7 +194,7 @@ class _AtsTrackerScreenState extends State<AtsTrackerScreen> {
                                       ),
                                     ),
                                     const SizedBox(width: 6),
-                                    const Text("Overview"),
+                                    const Text("ATS Tracker"),
                                   ],
                                 ),
                               ),
