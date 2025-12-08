@@ -363,6 +363,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => getIt<CandidateActionProvider>(),
         ),
+        //Draft provider In Candidate Screen
         ChangeNotifierProvider(create: (context) => getIt<DraftProvider>()),
       ],
       child: LayoutBuilder(
