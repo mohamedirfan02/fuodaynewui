@@ -30,281 +30,421 @@ class AuthLoginScreen extends StatefulWidget {
 class _AuthLoginScreenState extends State<AuthLoginScreen> {
   // Form Key
   final formKey = GlobalKey<FormState>();
+  bool _rememberMe = false;
 
   // Controllers
   final TextEditingController employeeIdController = TextEditingController();
   final TextEditingController recruiterController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  // Focus Nodes
+  final FocusNode emailFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+
   @override
   void dispose() {
     employeeIdController.dispose();
     recruiterController.dispose();
     passwordController.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
     super.dispose();
+  }
+
+  /// ✅ Common login handler method
+  Future<void> _handleLogin() async {
+    // Form Key Validation
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
+    final provider = context.employeeAuthLoginProviderRead;
+    final isEmployee = context.slidingSegmentProviderRead.isEmployee;
+
+    final role = isEmployee ? "employee" : "recruiter";
+    final emailId = isEmployee
+        ? employeeIdController.text.trim()
+        : recruiterController.text.trim();
+    final password = passwordController.text.trim();
+
+    await provider.login(
+      role: role,
+      emailId: emailId,
+      password: password,
+    );
+
+    if (provider.authEntity != null) {
+      await HiveStorageService().setIsAuthLogged(true);
+
+      try {
+        await SecureStorageService().saveToken(
+          token: provider.authEntity!.token,
+        );
+
+        await HiveStorageService().setUserRole(role);
+
+        final rawWebUserId =
+            provider.authEntity?.data.employeeDetails?.webUserId;
+
+        AppLoggerHelper.logInfo(
+          '🧩 Raw webUserId: ${provider.authEntity?.data.employeeDetails?.webUserId}',
+        );
+        AppLoggerHelper.logInfo(
+          '🧩 Raw profilePhoto: ${provider.authEntity?.data.employeeDetails?.profilePhoto}',
+        );
+
+        await HiveStorageService.setEmployeeDetailsStatic(
+          userName: provider.authEntity?.data.name ?? "No User Name",
+          role: role,
+          empId: provider.authEntity?.data.empId ?? "No EmpId",
+          email: emailId,
+          designation: provider.authEntity?.data.employeeDetails?.designation ??
+              "No Emp Designation",
+          profilePhoto:
+          provider.authEntity?.data.employeeDetails?.profilePhoto ??
+              "No Image Url",
+          webUserId: rawWebUserId?.toString() ?? '0',
+          logo: provider.authEntity?.data.adminUser.logo ?? "No Image Url",
+          checkin: provider.authEntity?.data.employeeDetails?.checkin ??
+              (isEmployee ? 'no checkin' : 'checkin'),
+          id: provider.authEntity?.data.adminUser.id?.toString() ?? "No ID",
+          access: provider.authEntity?.data.employeeDetails?.access ?? "",
+        );
+
+        AppLoggerHelper.logInfo(
+          '✅ Token saved to SecureStorage: ${provider.authEntity!.token}',
+        );
+      } catch (e) {
+        AppLoggerHelper.logError('⛔ Failed to save token: $e');
+      }
+
+      // Navigate based on role
+      GoRouter.of(context).pushReplacementNamed(
+        isEmployee
+            ? AppRouteConstants.employeeBottomNav
+            : AppRouteConstants.homeRecruiter,
+      );
+
+      KSnackBar.success(context, "Login Successful");
+    } else {
+      AppLoggerHelper.logError('Login Failed: ${provider.error}');
+      KSnackBar.failure(context, "Login Failed Try Again");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    //App Theme Data
+    // App Theme Data
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    // Internet Checker Provider
-    // final internetCheckerProvider = context.appInternetCheckerProviderWatch;
-    //
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (!internetCheckerProvider.isNetworkConnected) {
-    //     KSnackBar.failure(context, "No Internet Connection");
-    //   } else {
-    //     KSnackBar.success(context, "Internet Connection Available");
-    //   }
-    // });
+
     final isTablet = AppResponsive.isTablet(context);
     final isLandscape = AppResponsive.isLandscape(context);
 
-    //isTablet? (isLandscape ? 30.h : 25.h) : 22.h,
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: KLinearGradientBg(
-        gradientColor: isDark
-            ? AppColors.employeeGradientColorDark
-            : AppColors.employeeGradientColor, //Employee Card
-        child: SafeArea(
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-               // KVerticalSpacer(height: 40.h),
+      body: Stack(
+        children: [
+          /// 🔥 Background Image
+          Positioned.fill(
+            child: Image.asset(
+              AppAssetsConstants.loginBgGradient,
+              fit: BoxFit.cover,
+            ),
+          ),
 
-                Image.asset(
-                  AppAssetsConstants.logo,
-                  height: 180.h,
-                  width: 180.w,
-                  // fit: BoxFit.cover,
-                ),
-
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: theme.scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20.r),
-                      ),
+          /// ⭐ Foreground UI
+          SafeArea(
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// 🔥 HEADER SECTION
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 20.w,
+                      right: 20.w,
+                      top: 30.h,
+                      bottom: 20.h,
                     ),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return SingleChildScrollView(
-                          padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom,
-                          ),
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              minHeight: constraints.maxHeight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// Logo
+                        Image.asset(
+                          AppAssetsConstants.newFuoDayLogo,
+                          height: 20.73.h,
+                          width: 86.97.w,
+                        ),
+
+                        SizedBox(height: 25.h),
+
+                        /// Title
+                        KText(
+                          text: "Welcome to Fuoday",
+                          fontWeight: FontWeight.w700,
+                          fontSize: 23.sp,
+                          color: Colors.white,
+                        ),
+
+                        SizedBox(height: 5.h),
+
+                        /// Subtitle
+                        KText(
+                          text:
+                          "Access your workspace and continue your journey.",
+                          fontWeight: FontWeight.w400,
+                          fontSize: 10.sp,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  /// 🔥 BOTTOM FORM CONTAINER
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: theme.scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20.r),
+                        ),
+                      ),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return SingleChildScrollView(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
-                            child: IntrinsicHeight(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 30),
-                                    child: KText(
-                                      text: "Start Your Experience",
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16.sp,
-                                    ),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minHeight: constraints.maxHeight,
+                              ),
+                              child: IntrinsicHeight(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w,
                                   ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 20.h),
 
-                                  KVerticalSpacer(height: 10.h),
-
-                                  KText(
-                                    text: "Login Now",
-                                    fontWeight: FontWeight.w500,
-                                    color: theme
-                                        .inputDecorationTheme
-                                        .focusedBorder
-                                        ?.borderSide
-                                        .color, //AppColors.subTitleColor,
-                                    fontSize: 14.sp,
-                                  ),
-
-                                  KVerticalSpacer(height: 20.h),
-
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 20.w,
-                                    ),
-                                    width: double.infinity,
-                                    height: 100.h,
-                                    child: CupertinoSlidingSegmentedControl<int>(
-                                      children: {
-                                        0: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 8.h,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
+                                      /// 🔥 Employee / Recruiter Switch
+                                      Container(
+                                        width: double.infinity,
+                                        height: 60.h,
+                                        child: CupertinoSlidingSegmentedControl<
+                                            int>(
+                                          children: {
+                                            0: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: 6.h,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
                                                 MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.person,
-                                                color:
-                                                    context
+                                                children: [
+                                                  Icon(
+                                                    Icons.person,
+                                                    color: context
                                                         .slidingSegmentProviderWatch
                                                         .isRecruiter
-                                                    ? theme.primaryColor
-                                                    : theme
-                                                          .secondaryHeaderColor, //AppColors.secondaryColor,
-                                              ),
-                                              SizedBox(width: 10.w),
-                                              KText(
-                                                text: "Employee",
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 12.sp,
-                                                color:
-                                                    context
+                                                        ? theme.primaryColor
+                                                        : theme
+                                                        .secondaryHeaderColor,
+                                                  ),
+                                                  SizedBox(width: 10.w),
+                                                  KText(
+                                                    text: "Employee",
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12.sp,
+                                                    color: context
                                                         .slidingSegmentProviderWatch
                                                         .isRecruiter
-                                                    ? theme.primaryColor
-                                                    : theme
-                                                          .secondaryHeaderColor,
+                                                        ? theme.primaryColor
+                                                        : theme
+                                                        .secondaryHeaderColor,
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                        1: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 6.h,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
+                                            ),
+                                            1: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: 6.h,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
                                                 MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.person,
-                                                color:
-                                                    context
+                                                children: [
+                                                  Icon(
+                                                    Icons.person,
+                                                    color: context
                                                         .slidingSegmentProviderWatch
                                                         .isEmployee
-                                                    ? theme.primaryColor
-                                                    : theme
-                                                          .secondaryHeaderColor,
-                                              ),
-                                              SizedBox(width: 10.w),
-                                              KText(
-                                                text: "Recruiter",
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 12.sp,
-                                                color:
-                                                    context
+                                                        ? theme.primaryColor
+                                                        : theme
+                                                        .secondaryHeaderColor,
+                                                  ),
+                                                  SizedBox(width: 10.w),
+                                                  KText(
+                                                    text: "Recruiter",
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12.sp,
+                                                    color: context
                                                         .slidingSegmentProviderWatch
                                                         .isEmployee
-                                                    ? theme.primaryColor
-                                                    : theme
-                                                          .secondaryHeaderColor,
+                                                        ? theme.primaryColor
+                                                        : theme
+                                                        .secondaryHeaderColor,
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      },
-                                      backgroundColor:
+                                            ),
+                                          },
+                                          backgroundColor:
                                           theme.secondaryHeaderColor,
-                                      thumbColor: theme.primaryColor,
-                                      groupValue: context
-                                          .slidingSegmentProviderRead
-                                          .selectedIndex,
-                                      onValueChanged: (value) {
-                                        if (value != null) {
-                                          context.slidingSegmentProviderRead
-                                              .setSelectedIndex(value);
-                                        }
-                                      },
-                                    ),
-                                  ),
-
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                      horizontal: 20.w,
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 20.w,
-                                      vertical: 20.h,
-                                    ),
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: theme
-                                          .secondaryHeaderColor, //AppColors.secondaryColor
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        KText(
-                                          textAlign: TextAlign.start,
-                                          text: "Hi,\nWelcome back",
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16.sp,
+                                          thumbColor: theme.primaryColor,
+                                          groupValue: context
+                                              .slidingSegmentProviderRead
+                                              .selectedIndex,
+                                          onValueChanged: (value) {
+                                            if (value != null) {
+                                              context
+                                                  .slidingSegmentProviderRead
+                                                  .setSelectedIndex(value);
+                                            }
+                                          },
                                         ),
+                                      ),
 
-                                        KVerticalSpacer(height: 20.h),
+                                      SizedBox(height: 20.h),
 
-                                        if (context
-                                            .slidingSegmentProviderWatch
-                                            .isEmployee)
-                                          KAuthTextFormField(
-                                            validator: (value) =>
-                                                AppValidators.validateName(
-                                                  value,
-                                                  emptyMessage:
-                                                      "Enter your email",
-                                                ),
-                                            controller: employeeIdController,
-                                            suffixIcon: Icons.mail_outline,
-                                            keyboardType: TextInputType.text,
-                                            hintText: "EMPLOYEE ID",
-                                          ),
+                                      /// 🔥 Email Label
+                                      KText(
+                                        text: "Email",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12.sp,
+                                        color: Colors.grey,
+                                      ),
 
-                                        // Recruiter TextField
-                                        if (context
-                                            .slidingSegmentProviderWatch
-                                            .isRecruiter)
-                                          KAuthTextFormField(
-                                            validator: (value) =>
-                                                AppValidators.validateName(
-                                                  value,
-                                                  emptyMessage:
-                                                      "Enter your email",
-                                                ),
-                                            controller: recruiterController,
-                                            suffixIcon: Icons.mail_outline,
-                                            keyboardType: TextInputType.text,
-                                            hintText: "RECRUITER ID",
-                                          ),
+                                      SizedBox(height: 8.h),
 
-                                        KVerticalSpacer(height: 20.h),
-
-                                        // Password Text Field
-                                        KAuthPasswordTextField(
+                                      /// 🔥 Employee Email Field
+                                      if (context
+                                          .slidingSegmentProviderWatch
+                                          .isEmployee)
+                                        KAuthTextFormField(
                                           validator: (value) =>
-                                              AppValidators.validateText(
+                                              AppValidators.validateName(
                                                 value,
-                                                emptyMessage:
-                                                    "Enter your password",
+                                                emptyMessage: "Enter your email",
                                               ),
-                                          controller: passwordController,
-                                          hintText: "PASSWORD",
+                                          controller: employeeIdController,
+                                          suffixIcon: Icons.mail_outline,
+                                          keyboardType: TextInputType.text,
+                                          hintText: "EMAIL ID",
+                                          onFieldSubmitted: (value) {
+                                            // Move focus to password field
+                                            FocusScope.of(context)
+                                                .requestFocus(
+                                                passwordFocusNode);
+                                          },
                                         ),
 
-                                        KVerticalSpacer(height: 12.h),
+                                      /// 🔥 Recruiter Email Field
+                                      if (context
+                                          .slidingSegmentProviderWatch
+                                          .isRecruiter)
+                                        KAuthTextFormField(
+                                          validator: (value) =>
+                                              AppValidators.validateName(
+                                                value,
+                                                emptyMessage: "Enter your email",
+                                              ),
+                                          controller: recruiterController,
+                                          suffixIcon: Icons.mail_outline,
+                                          keyboardType: TextInputType.text,
+                                          hintText: "EMAIL ID",
+                                          onFieldSubmitted: (value) {
+                                            // Move focus to password field
+                                            FocusScope.of(context)
+                                                .requestFocus(
+                                                passwordFocusNode);
+                                          },
+                                        ),
 
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: KAuthTextBtn(
-                                            showUnderline: true,
+                                      SizedBox(height: 20.h),
+
+                                      /// 🔥 Password Label
+                                      KText(
+                                        text: "Password",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12.sp,
+                                        color: Colors.grey,
+                                      ),
+
+                                      SizedBox(height: 8.h),
+
+                                      /// 🔥 Password Field
+                                      KAuthPasswordTextField(
+                                        validator: (value) =>
+                                            AppValidators.validateText(
+                                              value,
+                                              emptyMessage: "Enter your password",
+                                            ),
+                                        controller: passwordController,
+                                        hintText: "PASSWORD",
+                                        focusNode: passwordFocusNode,
+                                        onFieldSubmitted: (value) {
+                                          // Trigger login when Enter is pressed
+                                          _handleLogin();
+                                        },
+                                      ),
+
+                                      SizedBox(height: 12.h),
+
+                                      /// 🔥 Remember me & Forget Password Row
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 24.w,
+                                                height: 24.h,
+                                                child: Checkbox(
+                                                  value: _rememberMe,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      _rememberMe =
+                                                          value ?? false;
+                                                    });
+                                                  },
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                      4.r,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: 8.w),
+                                              KText(
+                                                text: "Remember me",
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12.sp,
+                                                color: Colors.grey,
+                                              ),
+                                            ],
+                                          ),
+                                          KAuthTextBtn(
+                                            showUnderline: false,
                                             onTap: () {
-                                              // Forget Password
                                               GoRouter.of(context).pushNamed(
                                                 AppRouteConstants
                                                     .forgetPassword,
@@ -318,361 +458,122 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                                                 ? AppColors.textBtnColorDark
                                                 : AppColors.textBtnColor,
                                           ),
-                                        ),
+                                        ],
+                                      ),
 
-                                        KVerticalSpacer(height: 14.h),
+                                      SizedBox(height: 20.h),
 
-                                        if (context
-                                            .slidingSegmentProviderWatch
-                                            .isEmployee)
-                                          KAuthFilledBtn(
-                                            isLoading: context
-                                                .employeeAuthLoginProviderWatch
-                                                .isLoading,
-                                            fontSize: 10.sp,
-                                            text: "Employee Login",
-                                            backgroundColor: theme.primaryColor,
-                                            onPressed: () async {
-                                              // // Internet Checker Provider
-                                              // if (!internetCheckerProvider
-                                              //     .isNetworkConnected) {
-                                              //   KSnackBar.failure(
-                                              //     context,
-                                              //     "No Internet Connection",
-                                              //   );
-                                              //   return;
-                                              // }
+                                      /// 🔥 Login Button (Employee/Recruiter)
+                                      KAuthFilledBtn(
+                                        isLoading: context
+                                            .employeeAuthLoginProviderWatch
+                                            .isLoading,
+                                        fontSize: 14.sp,
+                                        text: "Log In",
+                                        backgroundColor: theme.primaryColor,
+                                        onPressed: _handleLogin,
+                                        height: isTablet
+                                            ? (isLandscape ? 30.h : 25.h)
+                                            : 30.h,
+                                        width: double.infinity,
+                                      ),
 
-                                              // Form Key Validation
-                                              if (!formKey.currentState!
-                                                  .validate()) {
-                                                return;
-                                              }
+                                      Spacer(),
 
-                                              final provider = context
-                                                  .employeeAuthLoginProviderRead;
-
-                                              final role = "employee";
-                                              final emailId =
-                                                  employeeIdController.text
-                                                      .trim();
-                                              final password =
-                                                  passwordController.text
-                                                      .trim();
-
-                                              await provider.login(
-                                                role: role,
-                                                emailId: emailId,
-                                                password: password,
-                                              );
-
-                                              if (provider.authEntity != null) {
-                                                await HiveStorageService()
-                                                    .setIsAuthLogged(true);
-
-                                                try {
-                                                  await SecureStorageService()
-                                                      .saveToken(
-                                                        token: provider
-                                                            .authEntity!
-                                                            .token,
-                                                      );
-
-                                                  final role =
-                                                      "employee"; // 🔥 Store the role permanently
-                                                  await HiveStorageService()
-                                                      .setUserRole(role);
-                                                  final rawWebUserId = provider
-                                                      .authEntity
-                                                      ?.data
-                                                      .employeeDetails
-                                                      ?.webUserId;
-
-                                                  AppLoggerHelper.logInfo(
-                                                    '🧩 Raw webUserId: ${provider.authEntity?.data.employeeDetails.webUserId}',
-                                                  );
-                                                  AppLoggerHelper.logInfo(
-                                                    '🧩 Raw profilePhoto: ${provider.authEntity?.data.employeeDetails.profilePhoto}',
-                                                  );
-
-                                                  await HiveStorageService.setEmployeeDetailsStatic(
-                                                    userName:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .name ??
-                                                        "No User Name",
-                                                    role: role,
-                                                    empId:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .empId ??
-                                                        "No EmpId",
-                                                    email: emailId,
-                                                    designation:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .employeeDetails
-                                                            ?.designation ??
-                                                        "No Emp Designation",
-                                                    profilePhoto:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .employeeDetails
-                                                            ?.profilePhoto ??
-                                                        "No Image Url",
-                                                    webUserId:
-                                                        rawWebUserId
-                                                            ?.toString() ??
-                                                        '0',
-                                                    logo:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .adminUser
-                                                            .logo ??
-                                                        "No Image Url",
-                                                    checkin:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .employeeDetails
-                                                            .checkin ??
-                                                        'no checkin',
-                                                    id:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .adminUser
-                                                            .id
-                                                            ?.toString() ?? // Convert int to String if needed
-                                                        "No ID",
-
-                                                    access:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .employeeDetails
-                                                            .access ??
-                                                        "",
-                                                  );
-
-                                                  AppLoggerHelper.logInfo(
-                                                    '✅ Token saved to SecureStorage: ${provider.authEntity!.token}',
-                                                  );
-                                                } catch (e) {
-                                                  AppLoggerHelper.logError(
-                                                    '⛔ Failed to save token: $e',
-                                                  );
-                                                }
-
-                                                GoRouter.of(
-                                                  context,
-                                                ).pushReplacementNamed(
-                                                  AppRouteConstants
-                                                      .employeeBottomNav,
-                                                );
-
-                                                //  Success Snack Bar
-                                                KSnackBar.success(
-                                                  context,
-                                                  "Login Successfull",
-                                                );
-                                              } else {
-                                                AppLoggerHelper.logError(
-                                                  'Login Failed: ${provider.error}',
-                                                );
-                                                ScaffoldMessenger.of(
-                                                  context,
-                                                ).showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                      'Login Failed: ${provider.error}',
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                            height: isTablet
-                                                ? (isLandscape ? 30.h : 25.h)
-                                                : 22.h,
-                                            width: double.infinity,
-                                          )
-                                        else
-                                          KAuthFilledBtn(
-                                            isLoading: context
-                                                .employeeAuthLoginProviderWatch
-                                                .isLoading,
-                                            fontSize: 10.sp,
-                                            text: "Recruiter Login",
-                                            backgroundColor: theme.primaryColor,
-                                            onPressed: () async {
-                                              if (!formKey.currentState!
-                                                  .validate()) {
-                                                return;
-                                              }
-
-                                              final provider = context
-                                                  .employeeAuthLoginProviderRead;
-
-                                              final role = "recruiter";
-                                              final emailId =
-                                                  recruiterController.text
-                                                      .trim();
-                                              final password =
-                                                  passwordController.text
-                                                      .trim();
-
-                                              await provider.login(
-                                                role: role,
-                                                emailId: emailId,
-                                                password: password,
-                                              );
-
-                                              if (provider.authEntity != null) {
-                                                await HiveStorageService()
-                                                    .setIsAuthLogged(true);
-
-                                                try {
-                                                  await SecureStorageService()
-                                                      .saveToken(
-                                                        token: provider
-                                                            .authEntity!
-                                                            .token,
-                                                      );
-                                                  final role = "recruiter";
-                                                  await HiveStorageService()
-                                                      .setUserRole(role);
-
-                                                  final rawWebUserId = provider
-                                                      .authEntity
-                                                      ?.data
-                                                      .employeeDetails
-                                                      ?.webUserId;
-
-                                                  AppLoggerHelper.logInfo(
-                                                    '🧪 webUserId (raw): $rawWebUserId',
-                                                  );
-
-                                                  await HiveStorageService.setEmployeeDetailsStatic(
-                                                    userName:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .name ??
-                                                        "No User Name",
-                                                    role: role,
-                                                    empId:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .empId ??
-                                                        "No EmpId",
-                                                    checkin:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .checkin ??
-                                                        "checkin",
-                                                    email: emailId,
-                                                    designation:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .employeeDetails
-                                                            ?.designation ??
-                                                        "No Emp Designation",
-                                                    profilePhoto:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .employeeDetails
-                                                            ?.profilePhoto ??
-                                                        "No Image Url",
-                                                    webUserId:
-                                                        rawWebUserId
-                                                            ?.toString() ??
-                                                        '0',
-                                                    logo:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .adminUser
-                                                            .logo ??
-                                                        "No Image Url",
-                                                    id:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .adminUser
-                                                            .id
-                                                            ?.toString() ?? // Convert int to String if needed
-                                                        "No ID",
-                                                    access:
-                                                        provider
-                                                            .authEntity
-                                                            ?.data
-                                                            .employeeDetails
-                                                            .access ??
-                                                        "",
-                                                  );
-
-                                                  AppLoggerHelper.logInfo(
-                                                    '✅ Token saved to SecureStorage: ${provider.authEntity!.token}',
-                                                  );
-                                                } catch (e) {
-                                                  AppLoggerHelper.logError(
-                                                    '⛔ Failed to save token: $e',
-                                                  );
-                                                }
-
-                                                GoRouter.of(
-                                                  context,
-                                                ).pushReplacementNamed(
-                                                  AppRouteConstants
-                                                      .homeRecruiter,
-                                                );
-                                              } else {
-                                                AppLoggerHelper.logError(
-                                                  'Login Failed: ${provider.error}',
-                                                );
-                                                ScaffoldMessenger.of(
-                                                  context,
-                                                ).showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                      'Login Failed: ${provider.error}',
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                            height: isTablet
-                                                ? (isLandscape ? 30.h : 25.h)
-                                                : 22.h,
-                                            width: double.infinity,
+                                      /// 🔥 Terms and Privacy Text
+                                      Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: 20.h,
                                           ),
-
-                                        KVerticalSpacer(height: 20),
-                                      ],
-                                    ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                children: [
+                                                  KText(
+                                                    text:
+                                                    "By logging you agree to our",
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 10.sp,
+                                                    color: Colors.grey,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      GoRouter.of(
+                                                        context,
+                                                      ).pushNamed(
+                                                        AppRouteConstants
+                                                            .termsOfService,
+                                                      );
+                                                    },
+                                                    child: KText(
+                                                      text: " Terms of Service",
+                                                      fontWeight:
+                                                      FontWeight.w400,
+                                                      fontSize: 10.sp,
+                                                      color: theme.primaryColor,
+                                                      textAlign:
+                                                      TextAlign.center,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                children: [
+                                                  KText(
+                                                    text: "and",
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 10.sp,
+                                                    color: Colors.grey,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      GoRouter.of(
+                                                        context,
+                                                      ).pushNamed(
+                                                        AppRouteConstants
+                                                            .privacyPolicy,
+                                                      );
+                                                    },
+                                                    child: KText(
+                                                      text: " Privacy Policy.",
+                                                      fontWeight:
+                                                      FontWeight.w400,
+                                                      fontSize: 10.sp,
+                                                      color: theme.primaryColor,
+                                                      textAlign:
+                                                      TextAlign.center,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

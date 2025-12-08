@@ -78,6 +78,10 @@ import 'features/management/presentation/provider/emp_audit_form_provider.dart';
 import 'features/payslip/presentation/Provider/payroll_overview_provider.dart';
 import 'features/performance/presentation/providers/audit_reporting_team_provider.dart';
 
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+
 void commonMain() async {
   WidgetsFlutterBinding.ensureInitialized();
 

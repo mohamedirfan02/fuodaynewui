@@ -6,6 +6,9 @@ class AppAssetsConstants {
   static const String splashLogo = "assets/images/svg/splash-logo.svg";
   static const String employeeBgGradient =
       "assets/images/png/employee-bg-gradient.png";
+
+  static const String loginBgGradient =
+      "assets/images/png/loginpng.png";
   static const String otpImg = "assets/images/svg/otp.svg";
   static const String personPlaceHolderImg =
       "assets/images/jpg/person-placeholder-img.jpeg";
@@ -73,4 +76,6 @@ class AppAssetsConstants {
   static const String incommingcallIcon = "assets/icons/incommingcall.svg";
 
   static const String rejectCallIcon = "assets/icons/rejectcall.svg";
+
+  static const String loginBg = "assets/images/svg/login-bg.svg";
 }

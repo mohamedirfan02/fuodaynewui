@@ -50,8 +50,12 @@ class AppAssetsConstants {
 
   static const String atsFuoDayLogo = "assets/images/png/ats-fuoday-logo.png";
 
+  static const String newFuoDayLogo = "assets/images/png/new-fuoday-logo.png";
+
   static const String atsFuoDayLogoSvg = "assets/images/svg/ats-fuoday-logo.svg";
 
+  static const String loginBg = "assets/images/svg/login-bg.svg";
 
+  static const String loginBgGradient = "assets/images/png/loginpng.png";
 
 }
