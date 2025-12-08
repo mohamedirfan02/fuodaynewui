@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
+import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 
 /// Reusable Chat List Widget (MediaQuery-based Responsive Version)
@@ -56,6 +59,20 @@ class KChatList extends StatelessWidget {
     final String? message = conversation['message'];
     final String time = conversation['time'] ?? '';
     final String? avatarUrl = conversation['avatarUrl'];
+    // final String? isForward = conversation['isforward'];
+    final bool forwardFlag =
+        conversation['isforward']?.toString().toLowerCase() == 'true';
+
+    String _getInitials(String name) {
+      if (name.trim().isEmpty) return "";
+      List<String> parts = name.trim().split(" ");
+      if (parts.length == 1) {
+        return parts[0].substring(0, 1).toUpperCase();
+      } else {
+        return (parts[0].substring(0, 1) + parts[1].substring(0, 1))
+            .toUpperCase();
+      }
+    }
 
     return InkWell(
       onTap: onItemTap != null ? () => onItemTap!(conversation) : null,
@@ -71,20 +88,17 @@ class KChatList extends StatelessWidget {
           children: [
             // Avatar
             CircleAvatar(
-              radius: width * 0.06,
-              backgroundColor:
-                  theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.2) ??
-                  theme.textTheme.bodyLarge?.color,
+              radius: width * 0.05,
+              backgroundColor: AppColors.checkInColor.withValues(alpha: 0.1),
               backgroundImage: avatarUrl != null && avatarUrl.isNotEmpty
                   ? NetworkImage(avatarUrl)
                   : null,
               child: avatarUrl == null || avatarUrl.isEmpty
-                  ? Icon(
-                      Icons.person,
-                      size: width * 0.06,
-                      color: theme.textTheme.bodyLarge?.color?.withValues(
-                        alpha: 0.9,
-                      ),
+                  ? KText(
+                      text: _getInitials(name),
+                      fontWeight: FontWeight.w600,
+                      fontSize: width * 0.035,
+                      color: AppColors.checkInColor,
                     )
                   : null,
             ),
@@ -100,62 +114,88 @@ class KChatList extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      KText(
+                        text: name,
+                        fontWeight: FontWeight.w500,
+                        fontSize: width * 0.03, //
+                        //color: Colors.black87,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       Expanded(
                         child: KText(
-                          text: name,
-                          fontWeight: FontWeight.w500,
-                          fontSize: width * 0.03, //
-                          //color: Colors.black87,
+                          text: "•${email}",
+                          fontWeight: FontWeight.w400,
+                          fontSize: width * 0.03,
+                          color: theme
+                              .textTheme
+                              .bodyLarge
+                              ?.color, //AppColors.greyColor,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      SizedBox(width: width * 0.02),
-                      KText(
-                        text: time,
-                        fontWeight: FontWeight.w400,
-                        fontSize: width * 0.03,
-                        color: theme
-                            .textTheme
-                            .headlineLarge
-                            ?.color, //AppColors.titleColor,
                       ),
                     ],
                   ),
                   SizedBox(height: height * 0.002),
 
-                  // Email
-                  KText(
-                    text: email,
-                    fontWeight: FontWeight.w400,
-                    fontSize: width * 0.03,
-                    color:
-                        theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: height * 0.004),
+                  // SizedBox(height: height * 0.004),
 
                   // Subject
-                  KText(
-                    text: subject,
-                    fontWeight: FontWeight.w400,
-                    fontSize: width * 0.03,
-                    color: theme.textTheme.bodyLarge?.color,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      KText(
+                        text: "Sub:",
+                        fontWeight: FontWeight.w500,
+                        fontSize: width * 0.03,
+                      ),
+                      Expanded(
+                        child: KText(
+                          text: subject,
+                          fontWeight: FontWeight.w400,
+                          fontSize: width * 0.03,
+                          //color: theme.textTheme.bodyLarge?.color,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
 
                   // Optional message preview
                   if (message != null && message.isNotEmpty) ...[
                     SizedBox(height: height * 0.002),
-                    KText(
-                      text: message,
-                      fontWeight: FontWeight.w500,
-                      fontSize: width * 0.03,
-                      //color: AppColors.titleColor,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        if (forwardFlag) ...[
+                          SvgPicture.asset(
+                            AppAssetsConstants.forwardIcon,
+                            fit: BoxFit.cover,
+                            colorFilter: ColorFilter.mode(
+                              theme.textTheme.headlineLarge?.color ??
+                                  Colors.black,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          SizedBox(width: width * 0.015),
+                        ],
+                        Expanded(
+                          child: KText(
+                            text: message,
+                            fontWeight: FontWeight.w500,
+                            fontSize: width * 0.03,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        SizedBox(width: width * 0.02),
+                        KText(
+                          text: time,
+                          fontWeight: FontWeight.w400,
+                          fontSize: width * 0.03,
+                          color: theme.textTheme.bodyLarge?.color,
+                        ),
+                      ],
                     ),
                   ],
                 ],

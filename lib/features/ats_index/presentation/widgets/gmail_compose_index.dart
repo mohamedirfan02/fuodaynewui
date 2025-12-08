@@ -249,7 +249,7 @@ class _ComposeEmailScreenState extends State<ComposeEmailScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     return Padding(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(8.w),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

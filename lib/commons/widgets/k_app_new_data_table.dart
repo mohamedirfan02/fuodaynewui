@@ -160,7 +160,7 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                     return null;
                   }
 
-                  // ✅ Both pageIndex and selectedPageIndex are 0-based, so direct comparison
+                  // Both pageIndex and selectedPageIndex are 0-based, so direct comparison
                   final isSelected =
                       _pagerController.selectedPageIndex == pageIndex;
 
@@ -170,9 +170,9 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                       //shadowColor: Colors.red,
 
                       // Make the internal material fully transparent and non-rounded
-                      color: theme.primaryColor.withValues(
-                        alpha: 0.5,
-                      ), //Colors.transparent, //
+                      // color: theme.primaryColor.withValues(
+                      //   alpha: 0.9,
+                      // ), //Colors.transparent, //
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero,
                       ),
@@ -184,7 +184,7 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                         decoration: BoxDecoration(
                           color: isSelected
                               ? theme.textTheme.bodyLarge?.color?.withValues(
-                                  alpha: .2,
+                                  alpha: 0.1,
                                 )
                               : theme
                                     .secondaryHeaderColor, //AppColors.secondaryColor,
@@ -196,12 +196,10 @@ class _ReusableDataGridState extends State<ReusableDataGrid> {
                         child: Text(
                           (pageIndex + 1).toString(),
                           style: TextStyle(
-                            color: isSelected
-                                ? Colors.white
-                                : theme
-                                      .textTheme
-                                      .headlineLarge
-                                      ?.color, //AppColors.titleColor,,
+                            color: theme
+                                .textTheme
+                                .headlineLarge
+                                ?.color, //AppColors.titleColor,,
                             fontWeight: isSelected
                                 ? FontWeight.w600
                                 : FontWeight.normal,

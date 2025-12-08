@@ -7,7 +7,10 @@ import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/features/approval/presentation/screens/approval_screen.dart';
 import 'package:fuoday/features/ats_admin_tab/presentation/screens/ats_admin_tabs_screen.dart';
 import 'package:fuoday/features/ats_calender/presentation/screen/ats_calender_screen.dart';
+import 'package:fuoday/features/ats_candidate/presentation/screens/ats_candidates_application_view_screen.dart';
+import 'package:fuoday/features/ats_candidate/presentation/screens/ats_schedule_interview_screen.dart';
 import 'package:fuoday/features/ats_candidate/presentation/screens/candidate_screen.dart';
+import 'package:fuoday/features/ats_candidate/presentation/screens/ats_draft_screen.dart';
 import 'package:fuoday/features/ats_help_center_screen/presentation/screens/ats_help_center_screen.dart';
 import 'package:fuoday/features/ats_hiring/presentation/screens/hiring_screen.dart';
 import 'package:fuoday/features/ats_index/presentation/screen/ats_index_screen.dart';
@@ -146,43 +149,43 @@ Widget _slideFromRight(
 }
 
 /// Smooth Slide from left with better curve
-Widget _slideFromLeft(
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  Widget child,
-) {
-  final curvedAnimation = CurvedAnimation(
-    parent: animation,
-    curve: Curves.fastEaseInToSlowEaseOut,
-  );
-
-  // Also animate the exiting page sliding out to the right
-  final exitingAnimation = CurvedAnimation(
-    parent: secondaryAnimation,
-    curve: Curves.fastOutSlowIn,
-  );
-
-  return Stack(
-    children: [
-      // Exiting page slides right
-      SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset.zero,
-          end: const Offset(0.3, 0), // Slight right slide for exiting page
-        ).animate(exitingAnimation),
-        child: Container(color: CupertinoColors.systemBackground),
-      ),
-      // Entering page slides from left
-      SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(-1.0, 0),
-          end: Offset.zero,
-        ).animate(curvedAnimation),
-        child: child,
-      ),
-    ],
-  );
-}
+// Widget _slideFromLeft(
+//   Animation<double> animation,
+//   Animation<double> secondaryAnimation,
+//   Widget child,
+// ) {
+//   final curvedAnimation = CurvedAnimation(
+//     parent: animation,
+//     curve: Curves.fastEaseInToSlowEaseOut,
+//   );
+//
+//   // Also animate the exiting page sliding out to the right
+//   final exitingAnimation = CurvedAnimation(
+//     parent: secondaryAnimation,
+//     curve: Curves.fastOutSlowIn,
+//   );
+//
+//   return Stack(
+//     children: [
+//       // Exiting page slides right
+//       SlideTransition(
+//         position: Tween<Offset>(
+//           begin: Offset.zero,
+//           end: const Offset(0.3, 0), // Slight right slide for exiting page
+//         ).animate(exitingAnimation),
+//         child: Container(color: CupertinoColors.systemBackground),
+//       ),
+//       // Entering page slides from left
+//       SlideTransition(
+//         position: Tween<Offset>(
+//           begin: const Offset(-1.0, 0),
+//           end: Offset.zero,
+//         ).animate(curvedAnimation),
+//         child: child,
+//       ),
+//     ],
+//   );
+// }
 
 /// Smooth Fade in with scale effect
 Widget _fadeIn(
@@ -207,21 +210,21 @@ Widget _fadeIn(
 }
 
 /// Scale in with fade
-Widget _scaleIn(
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  Widget child,
-) {
-  final curvedAnimation = CurvedAnimation(
-    parent: animation,
-    curve: Curves.elasticOut, // More natural scale animation
-  );
-
-  return ScaleTransition(
-    scale: Tween<double>(begin: 0.8, end: 1).animate(curvedAnimation),
-    child: FadeTransition(opacity: curvedAnimation, child: child),
-  );
-}
+// Widget _scaleIn(
+//   Animation<double> animation,
+//   Animation<double> secondaryAnimation,
+//   Widget child,
+// ) {
+//   final curvedAnimation = CurvedAnimation(
+//     parent: animation,
+//     curve: Curves.elasticOut, // More natural scale animation
+//   );
+//
+//   return ScaleTransition(
+//     scale: Tween<double>(begin: 0.8, end: 1).animate(curvedAnimation),
+//     child: FadeTransition(opacity: curvedAnimation, child: child),
+//   );
+// }
 
 /// Smooth Slide up from bottom
 Widget _slideUp(
@@ -502,11 +505,11 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
     GoRoute(
-      path: "/atsJobInformationScreen",
-      name: AppRouteConstants.atsJobInformationScreen,
+      path: "/atsCandidateApplicationViewScreen",
+      name: AppRouteConstants.atsCandidateApplicationViewScreen,
       pageBuilder: (context, state) => _buildPageWithTransition(
         state: state,
-        child: JobInformationScreen(),
+        child: CandidateApplicationViewScreen(),
         transition: _slideFromRight,
       ),
     ),
@@ -767,6 +770,24 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) => _buildPageWithTransition(
         state: state,
         child: HRTotalAttendanceRepotScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/atsDraftScreen",
+      name: AppRouteConstants.atsDraftScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: DraftScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/atsScheduleInterviewScreen",
+      name: AppRouteConstants.atsScheduleInterviewScreen,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: ScheduleInterviewScreen(),
         transition: _slideFromRight,
       ),
     ),

@@ -23,6 +23,7 @@ import 'package:fuoday/features/ats_candidate/domain/usecase/action_on_candidate
 import 'package:fuoday/features/ats_candidate/domain/usecase/get_candidates_usecase.dart';
 import 'package:fuoday/features/ats_candidate/presentation/provider/candidate_action_provider.dart';
 import 'package:fuoday/features/ats_candidate/presentation/provider/candidates_provider.dart';
+import 'package:fuoday/features/ats_candidate/presentation/provider/draft_provider.dart';
 import 'package:fuoday/features/attendance/data/datasources/local/total_absent_details_local_data_source.dart';
 import 'package:fuoday/features/attendance/data/datasources/local/total_attendance_details_local_data_source.dart';
 import 'package:fuoday/features/attendance/data/datasources/local/total_early_arrivals_details_local_data_source.dart';
@@ -301,6 +302,9 @@ final getIt = GetIt.instance;
 
 void setUpServiceLocator() {
   // Commons
+  if (getIt.isRegistered<CheckboxProvider>()) return;
+
+  /// Skip if already registered to avoid duplicate registration during hot reload
   getIt.registerFactory<CheckboxProvider>(() => CheckboxProvider());
   getIt.registerFactory<DropdownProvider>(() => DropdownProvider());
 
@@ -325,6 +329,9 @@ void setUpServiceLocator() {
   // Internet checker provider
   getIt.registerLazySingleton<AppInternetCheckerProvider>(
     () => AppInternetCheckerProvider(),
+  );
+  getIt.registerFactory<DraftProvider>(
+    () => DraftProvider(getIt<HiveStorageService>()),
   );
 
   // UI State Providers

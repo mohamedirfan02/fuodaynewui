@@ -40,6 +40,12 @@ android {
 
     flavorDimensions += "environment"
     productFlavors {
+
+        create("dev") {
+            dimension = "environment"
+            resValue("string", "app_name", "Fuoday Dev")
+        }
+
         create("prod") {
             dimension = "environment"
             resValue("string", "app_name", "Fuoday")
@@ -74,7 +80,7 @@ android {
 
 dependencies {
     // Required for Java 21 desugaring
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
 
 flutter {

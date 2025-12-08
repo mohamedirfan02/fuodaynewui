@@ -6,7 +6,7 @@ import 'package:fuoday/core/constants/assets/app_assets_constants.dart';
 
 import 'core/di/injection.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load .env file

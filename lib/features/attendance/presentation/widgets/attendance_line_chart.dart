@@ -1,14 +1,18 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:fuoday/commons/widgets/k_text.dart';
+import 'package:fuoday/core/themes/app_colors.dart';
 
 class AttendanceLineChart extends StatelessWidget {
   final List<double> attendanceValues;
   final List<String> months;
+  final bool showHourSuffix;
 
   const AttendanceLineChart({
     super.key,
     required this.attendanceValues,
     required this.months,
+    this.showHourSuffix = false, // default off
   });
 
   @override
@@ -25,7 +29,9 @@ class AttendanceLineChart extends StatelessWidget {
                 sideTitles: SideTitles(
                   reservedSize: 40,
                   showTitles: true,
-                  getTitlesWidget: (value, _) => Text('${value.toInt()}'),
+                  getTitlesWidget: (value, _) => Text(
+                    showHourSuffix ? '${value.toInt()}h' : '${value.toInt()}',
+                  ),
                 ),
               ),
               bottomTitles: AxisTitles(
@@ -69,7 +75,7 @@ class AttendanceLineChart extends StatelessWidget {
                 dotData: FlDotData(show: true),
                 belowBarData: BarAreaData(
                   show: true,
-                  color: Colors.indigo.withOpacity(0.3),
+                  color: Colors.indigo.withValues(alpha: 0.3),
                 ),
               ),
             ],

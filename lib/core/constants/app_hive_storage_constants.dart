@@ -16,4 +16,6 @@ class AppHiveStorageConstants {
 
   // ✅ Add a new key for the actual data inside the box:
   static const String employeeDetailsKey = "employeeDetails";
+
+  static const String notificationsBoxKey = 'notifications_box'; // Add this
 }

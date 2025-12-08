@@ -23,6 +23,7 @@ class KAuthTextFormField extends StatelessWidget {
   final bool isRequiredStar;
   final ValueChanged<String>? onFieldSubmitted; // ✅ Added
   final FocusNode? focusNode; // ✅ Added
+  final IconData? prefixIcon;
 
   const KAuthTextFormField({
     super.key,
@@ -42,6 +43,7 @@ class KAuthTextFormField extends StatelessWidget {
     this.labelFontWeight,
     this.onChanged,
     this.isRequiredStar = false,
+    this.prefixIcon,
     this.onFieldSubmitted, // ✅ Added
     this.focusNode, // ✅ Added
   });
@@ -87,6 +89,7 @@ class KAuthTextFormField extends StatelessWidget {
           focusNode: focusNode, // ✅ Added
           textInputAction: TextInputAction.next, // ✅ Added
           onFieldSubmitted: onFieldSubmitted, // ✅ Added
+          onChanged: onChanged,
           style: GoogleFonts.sora(
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
@@ -116,6 +119,15 @@ class KAuthTextFormField extends StatelessWidget {
               fontWeight: labelFontWeight ?? FontWeight.w600,
               color: labelColor ?? theme.primaryColor,
             )
+
+   : null,
+            prefixIcon: prefixIcon != null
+                ? Icon(
+                    prefixIcon,
+                    color: theme.textTheme.bodyLarge?.color?.withValues(
+                      alpha: 0.7,
+                    ),
+                  )
                 : null,
             suffixIcon: suffixIcon != null
                 ? Icon(
@@ -164,7 +176,7 @@ class KAuthTextFormField extends StatelessWidget {
             ),
           ),
         ),
-      ],
+          ],
     );
   }
 }

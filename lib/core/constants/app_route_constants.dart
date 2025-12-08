@@ -174,4 +174,8 @@ class AppRouteConstants {
   static const String atsJobInformationScreen = "atsJobInformationScreen";
   static const String atsMyTicketViewScreen = "atsMyTicketViewScreen";
   static const String atsNewTicketScreen = "atsNewTicketScreen";
+  static const String atsDraftScreen = "atsDraftScreen";
+  static const String atsScheduleInterviewScreen = "atsScheduleInterviewScreen";
+  static const String atsCandidateApplicationViewScreen =
+      "atsCandidateApplicationViewScreen";
 }

@@ -3,17 +3,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/commons/widgets/k_vertical_spacer.dart';
+import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 
 class AtsTotalCountCard extends StatelessWidget {
   final Color employeePercentageColor;
   final Color employeeIconColor;
+  final Color? empTextColors;
+  final Color? avatarBgColors;
   final String employeeCount;
   final String employeeDescription;
   final String? growthText;
+  final String? backgroundImage;
 
   //   Dynamic icon: can be SVG asset (String) or IconData
   final dynamic employeeCardIcon;
+  final dynamic employeeCardArrowIcon;
 
   const AtsTotalCountCard({
     super.key,
@@ -23,6 +28,10 @@ class AtsTotalCountCard extends StatelessWidget {
     required this.employeePercentageColor,
     this.growthText,
     this.employeeCardIcon,
+    this.backgroundImage,
+    this.empTextColors,
+    this.avatarBgColors,
+    this.employeeCardArrowIcon,
   });
 
   @override
@@ -35,14 +44,32 @@ class AtsTotalCountCard extends StatelessWidget {
       height: 103.h,
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
+        // image: DecorationImage(
+        //   image: AssetImage(AppAssetsConstants.homeCard1),
+        //   fit: BoxFit.cover,
+        //   opacity: isDark ? 0.7 : 1.0,
+        //   // Image.asset(
+        //   //   AppAssetsConstants.logo,
+        //   //   height: 180.h,
+        //   //   width: 180.w,
+        //   //   // fit: BoxFit.cover,
+        //   //  )
+        // ),
+        image: backgroundImage != null
+            ? DecorationImage(
+                image: AssetImage(backgroundImage!),
+                fit: BoxFit.cover,
+                // opacity: isDark ? 0.7 : 1.0,
+              )
+            : null,
         border: Border.all(
           width: 0.5.w,
           color:
-              theme.textTheme.bodyLarge?.color?.withOpacity(0.3) ??
+              theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.3) ??
               AppColors.greyColor,
         ),
         borderRadius: BorderRadius.circular(12.r),
-        color: theme.secondaryHeaderColor.withOpacity(1),
+        color: theme.secondaryHeaderColor.withValues(alpha: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,9 +78,11 @@ class AtsTotalCountCard extends StatelessWidget {
           //   Dynamic Icon
           CircleAvatar(
             radius: 14.r,
-            backgroundColor: isDark
-                ? AppColors.cardBorderColorDark
-                : AppColors.cardBorderColor,
+            backgroundColor:
+                avatarBgColors ??
+                (isDark
+                    ? AppColors.cardBorderColorDark
+                    : AppColors.cardBorderColor),
             child: _buildIcon(context),
           ),
 
@@ -67,7 +96,12 @@ class AtsTotalCountCard extends StatelessWidget {
                 text: employeeCount,
                 fontWeight: FontWeight.w700,
                 fontSize: 16.sp,
-                // color: AppColors.titleColor,
+                color:
+                    empTextColors ??
+                    theme
+                        .textTheme
+                        .headlineLarge
+                        ?.color, //AppColors.titleColor,
               ),
               SizedBox(width: 6.w),
 
@@ -75,15 +109,23 @@ class AtsTotalCountCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                   decoration: BoxDecoration(
-                    color: employeePercentageColor.withOpacity(0.1),
+                    color:
+                        empTextColors ??
+                        employeePercentageColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.arrow_upward,
-                        color: employeePercentageColor,
-                        size: 12.sp,
+                      SvgPicture.asset(
+                        AppAssetsConstants.upArrowIcon,
+                        width: 5.w,
+                        height: 5.w,
+                        //SVG IMAGE COLOR
+                        colorFilter: ColorFilter.mode(
+                          employeePercentageColor,
+                          BlendMode.srcIn,
+                        ),
+                        fit: BoxFit.contain,
                       ),
                       SizedBox(width: 2.w),
                       Text(
@@ -107,7 +149,7 @@ class AtsTotalCountCard extends StatelessWidget {
             text: employeeDescription,
             fontWeight: FontWeight.w400,
             fontSize: 10.sp,
-            color: theme.textTheme.headlineLarge?.color,
+            color: empTextColors ?? theme.textTheme.headlineLarge?.color,
           ),
         ],
       ),
