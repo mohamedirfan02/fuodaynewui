@@ -162,6 +162,19 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
     final name = employeeDetails?['name'] ?? "No Name";
     final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
     final email = employeeDetails?['email'] ?? "No Email";
+
+    //For Empty Avatar Initial purpose
+    String _getInitials(String name) {
+      if (name.trim().isEmpty) return "";
+      List<String> parts = name.trim().split(" ");
+      if (parts.length == 1) {
+        return parts[0].substring(0, 1).toUpperCase();
+      } else {
+        return (parts[0].substring(0, 1) + parts[1].substring(0, 1))
+            .toUpperCase();
+      }
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AtsKAppBarWithDrawer(
@@ -182,57 +195,64 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
         width: double.infinity,
         height: double.infinity,
         color: theme.cardColor, //ATS Background Color
-        child: Padding(
-          padding: EdgeInsets.all(16.w),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(18.47.w),
-                decoration: BoxDecoration(color: theme.secondaryHeaderColor),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      spacing: 20.w,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: width * 0.06,
-                          backgroundColor: Colors.grey.shade300,
-                          backgroundImage: profilePhoto.isNotEmpty
-                              ? NetworkImage(profilePhoto)
-                              : null,
-                          child: profilePhoto.isEmpty
-                              ? Icon(
-                                  Icons.person,
-                                  size: width * 0.06,
-                                  color: theme.textTheme.bodyLarge?.color
-                                      ?.withValues(
-                                        alpha: 0.6,
-                                      ), //AppColors.greyColor,
-                                )
-                              : null,
-                        ),
-                        // Start Date
-                        Column(
-                          children: [
-                            KText(
-                              text: "Pristia Candra",
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16.w),
+                  decoration: BoxDecoration(color: theme.secondaryHeaderColor),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        // spacing: 16.w,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: width * 0.06,
+                            backgroundColor: AppColors.checkInColor.withValues(
+                              alpha: 0.1,
                             ),
-                            KText(
-                              text: "UI/UX Designer",
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                            ),
-                          ],
-                        ),
-
-                        // Export file
-                        Expanded(
-                          child: KAtsGlowButton(
+                            backgroundImage: profilePhoto.isNotEmpty
+                                ? NetworkImage(profilePhoto)
+                                : null,
+                            child: profilePhoto.isEmpty
+                                ? KText(
+                                    text: "PC",
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: width * 0.035,
+                                    color: AppColors.checkInColor,
+                                  )
+                                : null,
+                          ),
+                          // Start Date
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              KText(
+                                text: "Pristia Candra",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
+                              KText(
+                                text: "lincoln@unpixel.com",
+                                fontWeight: FontWeight.w400,
+                                fontSize: 10,
+                                color: theme.textTheme.bodyLarge?.color,
+                              ),
+                              KText(
+                                text: "UI/UX Designer",
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          // Export file
+                          KAtsGlowButton(
                             text: "Profile",
                             textColor:
                                 theme.textTheme.bodyLarge?.color ??
@@ -255,140 +275,20 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                             backgroundColor: theme
                                 .secondaryHeaderColor, //AppColors.secondaryColor,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.h),
-              // Email Card
-              Container(
-                padding: EdgeInsets.all(16.w),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1.w,
-                    color:
-                        theme.textTheme.bodyLarge?.color?.withValues(
-                          alpha: 0.2,
-                        ) ??
-                        AppColors.greyColor.withValues(
-                          alpha: 0.2,
-                        ), //AppColors.greyColor,
+                        ],
+                      ),
+                    ],
                   ),
-                  borderRadius: BorderRadius.circular(8.r),
-                  color: theme.secondaryHeaderColor, //AppColors.secondaryColor
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // To section
-                    Row(
-                      children: [
-                        KText(
-                          text: "To",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14.sp,
-                          // color: AppColors.titleColor,
-                        ),
-                        SizedBox(width: 24.w),
-                        CircleAvatar(
-                          radius: 16.r,
-                          backgroundColor: theme.textTheme.bodyLarge?.color
-                              ?.withValues(
-                                alpha: 0.3,
-                              ), //AppColors.greyColor,,//Colors.grey.shade300,
-                          backgroundImage: profilePhoto.isNotEmpty
-                              ? NetworkImage(profilePhoto)
-                              : null,
-                          child: profilePhoto.isEmpty
-                              ? Icon(
-                                  Icons.person,
-                                  size: 16.r,
-                                  color: theme.textTheme.bodyLarge?.color
-                                      ?.withValues(
-                                        alpha: 0.6,
-                                      ), //AppColors.greyColor, ,//Colors.grey.shade600,
-                                )
-                              : null,
-                        ),
-                        SizedBox(width: 8.w),
-                        KText(
-                          text: "Pristia Candra",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14.sp,
-                          //  color: AppColors.titleColor,
-                        ),
-                        Spacer(),
-                        KText(
-                          text: "Nov12,2:55",
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: theme
-                              .textTheme
-                              .bodyLarge
-                              ?.color, //AppColors.greyColor,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16.h),
-                    Divider(
-                      color: theme.textTheme.bodyLarge?.color?.withValues(
-                        alpha: 0.2,
-                      ),
-                      thickness: 1,
-                    ),
-                    SizedBox(height: 16.h),
-                    // Subject
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        KText(
-                          text: "Subject :",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14.sp,
-                          //color: AppColors.titleColor,
-                        ),
-                        SizedBox(width: 8.w),
-                        Expanded(
-                          child: KText(
-                            text:
-                                "Thank you for your application at Pixel Office",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14.sp,
-                            //color: AppColors.titleColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16.h),
-                    Divider(
-                      color: theme.textTheme.bodyLarge?.color?.withValues(
-                        alpha: 0.2,
-                      ),
-                      thickness: 1,
-                    ),
-                    SizedBox(height: 16.h),
-                    // Message body
-                    KText(
-                      text: "Hi Cecilia,",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14.sp,
-                      //color: AppColors.titleColor,
-                    ),
-                    SizedBox(height: 12.h),
-                    KText(
-                      text:
-                          "The main duties of a Senior Product Designer include conducting user research and testing, creating wireframes and prototypes, developing design systems, collaborating with cross-functional teams (such as developers, product managers, and other designers),",
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14.sp,
-                      // color: AppColors.titleColor,
-                      //    height: 1.5,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+                SizedBox(height: 16.h),
+                // Email To Card
+                email_To_Card(theme, profilePhoto, width),
+                SizedBox(height: 16.h),
+
+                //Email From Card
+                email_From_Card(theme, profilePhoto, width),
+              ],
+            ),
           ),
         ),
       ),
@@ -404,13 +304,16 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
             width: double.infinity,
             text: "Send Message",
             fontSize: 12.sp,
+            icon: Icon(
+              Icons.mail_outline_outlined,
+              color: theme.secondaryHeaderColor,
+            ),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
                 useSafeArea: true,
-                backgroundColor:
-                    theme.secondaryHeaderColor, //AppColors.secondaryColor
+                backgroundColor: theme.secondaryHeaderColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(16.r),
@@ -418,38 +321,40 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
                 ),
                 builder: (context) {
                   return DraggableScrollableSheet(
-                    expand: true,
+                    expand: false,
                     initialChildSize: 0.9,
-                    // covers ~90% of the screen
                     minChildSize: 0.5,
                     maxChildSize: 0.95,
                     builder: (context, scrollController) {
-                      return SingleChildScrollView(
-                        controller: scrollController,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: 20.w,
-                            right: 20.w,
-                            bottom:
-                                MediaQuery.of(context).viewInsets.bottom + 20.h,
-                            top: 10.h,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // ===== Top handle =====
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 8),
-                                width: 50,
-                                height: 3,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[400],
-                                  borderRadius: BorderRadius.circular(2.5),
-                                ),
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          left: 20.w,
+                          right: 20.w,
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                          top: 10.h,
+                        ),
+                        child: Column(
+                          children: [
+                            /// Top drag handle
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 8),
+                              width: 50,
+                              height: 3,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[400],
+                                borderRadius: BorderRadius.circular(2.5),
                               ),
-                              const ComposeEmailScreen(),
-                            ],
-                          ), // ✅ Embedded here
+                            ),
+
+                            /// Main scrollable content connected to scrollController
+                            Expanded(
+                              child: SingleChildScrollView(
+                                controller: scrollController,
+                                physics: const BouncingScrollPhysics(),
+                                child: const ComposeEmailScreen(),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -459,6 +364,266 @@ class _AtsIndexMailScreenState extends State<AtsIndexMailScreen> {
             },
           ),
         ),
+      ),
+    );
+  }
+
+  //Email to Card
+  Container email_To_Card(ThemeData theme, profilePhoto, double width) {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1.w,
+          color:
+              theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.2) ??
+              AppColors.greyColor.withValues(alpha: 0.2), //AppColors.greyColor,
+        ),
+        borderRadius: BorderRadius.circular(8.r),
+        color: theme.secondaryHeaderColor, //AppColors.secondaryColor
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // To section
+          Row(
+            children: [
+              KText(
+                text: "To",
+                fontWeight: FontWeight.w500,
+                fontSize: 14.sp,
+                // color: AppColors.titleColor,
+              ),
+              SizedBox(width: 10.w),
+              CircleAvatar(
+                radius: 20.r,
+                backgroundColor: theme.textTheme.bodyLarge?.color?.withValues(
+                  alpha: 0.3,
+                ), //AppColors.greyColor,,//Colors.grey.shade300,
+                backgroundImage: profilePhoto.isNotEmpty
+                    ? NetworkImage(profilePhoto)
+                    : null,
+                child: profilePhoto.isEmpty
+                    ? KText(
+                        text: "PC",
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.035,
+                        color: AppColors.checkInColor,
+                      )
+                    : null,
+              ),
+              SizedBox(width: 8.w),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  KText(
+                    text: "Pristia Candra",
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.sp,
+                    //  color: AppColors.titleColor,
+                  ),
+                  KText(
+                    text: "debra.holt@example.com",
+                    fontWeight: FontWeight.w500,
+                    fontSize: 10.sp,
+                    color:
+                        theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
+                  ),
+                ],
+              ),
+              Spacer(),
+              KText(
+                text: "Nov12,2:55",
+                fontWeight: FontWeight.w400,
+                fontSize: 10.sp,
+                color: theme.textTheme.bodyLarge?.color, //AppColors.greyColor,
+              ),
+              Container(),
+            ],
+          ),
+          SizedBox(height: 16.h),
+          Divider(
+            color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.2),
+            thickness: 1,
+          ),
+          SizedBox(height: 16.h),
+          // Subject
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              KText(
+                text: "Subject :",
+                fontWeight: FontWeight.w500,
+                fontSize: 14.sp,
+                //color: AppColors.titleColor,
+              ),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: KText(
+                  text: "Thank you for your application at Pixel Office",
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12.sp,
+                  //color: AppColors.titleColor,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.h),
+          Divider(
+            color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.2),
+            thickness: 1,
+          ),
+          SizedBox(height: 16.h),
+          // Message body
+          KText(
+            text: "Hi Cecilia,",
+            fontWeight: FontWeight.w600,
+            fontSize: 12.sp,
+            //color: AppColors.titleColor,
+          ),
+          SizedBox(height: 12.h),
+          KText(
+            text:
+                "The main duties of a Senior Product Designer include conducting user research and testing, creating wireframes and prototypes, developing design systems, collaborating with cross-functional teams (such as developers, product managers, and other designers),",
+            fontWeight: FontWeight.w400,
+            fontSize: 12.sp,
+            // color: AppColors.titleColor,
+            //    height: 1.5,
+          ),
+        ],
+      ),
+    );
+  }
+
+  //Email From Card
+  Container email_From_Card(ThemeData theme, profilePhoto, double width) {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1.w,
+          color:
+              theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.2) ??
+              AppColors.greyColor.withValues(alpha: 0.2), //AppColors.greyColor,
+        ),
+        borderRadius: BorderRadius.circular(8.r),
+        color: theme.secondaryHeaderColor, //AppColors.secondaryColor
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // To section
+          Row(
+            children: [
+              KText(text: "From", fontWeight: FontWeight.w500, fontSize: 14.sp),
+              SizedBox(width: 3.w),
+
+              CircleAvatar(
+                radius: 20.r,
+                backgroundColor: theme.textTheme.bodyLarge?.color?.withValues(
+                  alpha: 0.3,
+                ),
+                backgroundImage: profilePhoto.isNotEmpty
+                    ? NetworkImage(profilePhoto)
+                    : null,
+                child: profilePhoto.isEmpty
+                    ? KText(
+                        text: "PC",
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.035,
+                        color: AppColors.checkInColor,
+                      )
+                    : null,
+              ),
+              SizedBox(width: 3.w),
+
+              // Middle section without Expanded
+              SizedBox(
+                width: 150,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    KText(
+                      text: "Pristia Candra",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    KText(
+                      text: "debra.holt@example.com",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10.sp,
+                      color: theme.textTheme.bodyLarge?.color,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+
+              /// ⬇️ Push date to the right — always visible
+              Spacer(),
+
+              KText(
+                text: "Nov 12, 2:55",
+                fontWeight: FontWeight.w400,
+                fontSize: 10.sp,
+                color: theme.textTheme.bodyLarge?.color,
+              ),
+            ],
+          ),
+
+          SizedBox(height: 16.h),
+          Divider(
+            color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.2),
+            thickness: 1,
+          ),
+          SizedBox(height: 16.h),
+          // Subject
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              KText(
+                text: "Subject :",
+                fontWeight: FontWeight.w500,
+                fontSize: 14.sp,
+                //color: AppColors.titleColor,
+              ),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: KText(
+                  text: "Thank you for your application at Pixel Office",
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12.sp,
+                  //color: AppColors.titleColor,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.h),
+          Divider(
+            color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.2),
+            thickness: 1,
+          ),
+          SizedBox(height: 16.h),
+          // Message body
+          KText(
+            text: "Hi Cecilia,",
+            fontWeight: FontWeight.w600,
+            fontSize: 12.sp,
+            //color: AppColors.titleColor,
+          ),
+          SizedBox(height: 12.h),
+          KText(
+            text:
+                "The main duties of a Senior Product Designer include conducting user research and testing, creating wireframes and prototypes, developing design systems, collaborating with cross-functional teams (such as developers, product managers, and other designers),",
+            fontWeight: FontWeight.w400,
+            fontSize: 12.sp,
+            // color: AppColors.titleColor,
+            //    height: 1.5,
+          ),
+        ],
       ),
     );
   }

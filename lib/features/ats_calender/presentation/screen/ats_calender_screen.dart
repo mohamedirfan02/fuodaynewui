@@ -214,6 +214,10 @@ class _CalendarScreen2State extends State<CalendarScreen2> {
                           width: 100,
                           text: "Cancel",
                           onPressed: () => Navigator.pop(context),
+                          backgroundColor: theme.secondaryHeaderColor,
+                          textColor:
+                              theme.textTheme.headlineLarge?.color ??
+                              AppColors.titleColor, //AppColors.titleColor,,
                         ),
                         KAtsGlowButton(
                           width: 170,
