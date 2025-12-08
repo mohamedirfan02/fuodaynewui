@@ -14,6 +14,8 @@ class KAuthPasswordTextField extends StatefulWidget {
   final Color? labelColor;
   final double? labelFontSize;
   final FontWeight? labelFontWeight;
+  final ValueChanged<String>? onFieldSubmitted; // ✅ Added
+  final FocusNode? focusNode; // ✅ Added
 
   const KAuthPasswordTextField({
     super.key,
@@ -23,11 +25,12 @@ class KAuthPasswordTextField extends StatefulWidget {
     this.validator,
     this.onTap,
     this.isReadOnly = false,
-    this.floatingLabel =
-        false, // true for floating label, false for above label
+    this.floatingLabel = false,
     this.labelColor,
     this.labelFontSize,
     this.labelFontWeight,
+    this.onFieldSubmitted, // ✅ Added
+    this.focusNode, // ✅ Added
   });
 
   @override
@@ -59,8 +62,8 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
               fontSize: widget.labelFontSize ?? 12.sp,
               fontWeight: widget.labelFontWeight ?? FontWeight.w600,
               color:
-                  widget.labelColor ??
-                  theme.textTheme.headlineLarge?.color, //AppColors.titleColor,,
+              widget.labelColor ??
+                  theme.textTheme.headlineLarge?.color,
             ),
           ),
           SizedBox(height: 6.h),
@@ -71,36 +74,36 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
           onTap: widget.onTap,
           readOnly: widget.isReadOnly,
           validator: widget.validator,
+          focusNode: widget.focusNode, // ✅ Added
+          textInputAction: TextInputAction.done, // ✅ Added
+          onFieldSubmitted: widget.onFieldSubmitted, // ✅ Added
           cursorColor: theme.primaryColor,
           style: GoogleFonts.sora(
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
-            color:
-                theme.textTheme.headlineLarge?.color, //AppColors.titleColor,,
+            color: theme.textTheme.headlineLarge?.color,
           ),
           controller: widget.controller,
           obscureText: _obscureText,
           keyboardType: TextInputType.visiblePassword,
           decoration: InputDecoration(
             hintText: widget.hintText ?? 'Password',
-            // hintStyle: TextStyle(color: theme.textTheme.headlineLarge?.color),
             labelText: widget.floatingLabel ? widget.label : null,
-            // floating label
             labelStyle: widget.floatingLabel
                 ? GoogleFonts.sora(
-                    fontSize: widget.labelFontSize ?? 12.sp,
-                    fontWeight: widget.labelFontWeight ?? FontWeight.w500,
-                    color:
-                        widget.labelColor ??
-                        theme.textTheme.headlineLarge?.color?.withOpacity(0.7),
-                  )
+              fontSize: widget.labelFontSize ?? 12.sp,
+              fontWeight: widget.labelFontWeight ?? FontWeight.w500,
+              color:
+              widget.labelColor ??
+                  theme.textTheme.headlineLarge?.color?.withOpacity(0.7),
+            )
                 : null,
             floatingLabelStyle: widget.floatingLabel
                 ? GoogleFonts.sora(
-                    fontSize: (widget.labelFontSize ?? 12.sp) + 1,
-                    fontWeight: widget.labelFontWeight ?? FontWeight.w600,
-                    color: widget.labelColor ?? theme.primaryColor,
-                  )
+              fontSize: (widget.labelFontSize ?? 12.sp) + 1,
+              fontWeight: widget.labelFontWeight ?? FontWeight.w600,
+              color: widget.labelColor ?? theme.primaryColor,
+            )
                 : null,
             suffixIcon: IconButton(
               onPressed: _togglePasswordVisibility,
@@ -115,11 +118,11 @@ class _KAuthPasswordTextFieldState extends State<KAuthPasswordTextField> {
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color:
-                    theme
-                        .inputDecorationTheme
-                        .enabledBorder
-                        ?.borderSide
-                        .color ??
+                theme
+                    .inputDecorationTheme
+                    .enabledBorder
+                    ?.borderSide
+                    .color ??
                     AppColors.authUnderlineBorderColor,
               ),
             ),

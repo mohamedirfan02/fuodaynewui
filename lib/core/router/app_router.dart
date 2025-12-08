@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fuoday/common_main.dart';
 import 'package:fuoday/core/constants/router/app_route_constants.dart';
 import 'package:fuoday/core/di/injection.dart';
 import 'package:fuoday/core/models/file_preview_data.dart';
@@ -28,7 +29,9 @@ import 'package:fuoday/features/attendance/presentation/screens/total_attendance
 import 'package:fuoday/features/auth/presentation/screens/auth_forget_password_screen.dart';
 import 'package:fuoday/features/auth/presentation/screens/auth_login_screen.dart';
 import 'package:fuoday/features/auth/presentation/screens/auth_otp_screen.dart';
+import 'package:fuoday/features/auth/presentation/screens/privacy_policy_screen.dart';
 import 'package:fuoday/features/auth/presentation/screens/reset_password_screen.dart';
+import 'package:fuoday/features/auth/presentation/screens/terms_of_service_screen.dart';
 import 'package:fuoday/features/bottom_nav/presentation/employee_bottom_nav.dart';
 import 'package:fuoday/features/bottom_nav/presentation/recruiter_bottom_nav.dart';
 import 'package:fuoday/features/calendar/presentation/screens/calendar_screen.dart';
@@ -245,6 +248,9 @@ Widget _slideUp(
 
 /// App Router with improved transitions
 final GoRouter appRouter = GoRouter(
+
+  navigatorKey: navigatorKey,
+
   initialLocation: "/splash",
   routes: [
     GoRoute(
@@ -271,6 +277,23 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) => _buildPageWithTransition(
         state: state,
         child: AuthLoginScreen(),
+        transition: _slideFromRight,
+      ),
+    ),
+    GoRoute(
+      path: "/privacyPolicy",
+      name: AppRouteConstants.privacyPolicy,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: PrivacyPolicyScreen(),
+        transition: _slideFromRight,
+      ),
+    ), GoRoute(
+      path: "/termsOfService",
+      name: AppRouteConstants.termsOfService,
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        state: state,
+        child: TermsOfServiceScreen(),
         transition: _slideFromRight,
       ),
     ),

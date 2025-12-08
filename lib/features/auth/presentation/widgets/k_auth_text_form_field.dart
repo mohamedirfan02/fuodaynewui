@@ -19,8 +19,10 @@ class KAuthTextFormField extends StatelessWidget {
   final Color? labelColor;
   final double? labelFontSize;
   final FontWeight? labelFontWeight;
-  final ValueChanged<String>? onChanged; // 👈 add this
+  final ValueChanged<String>? onChanged;
   final bool isRequiredStar;
+  final ValueChanged<String>? onFieldSubmitted; // ✅ Added
+  final FocusNode? focusNode; // ✅ Added
   final IconData? prefixIcon;
 
   const KAuthTextFormField({
@@ -35,14 +37,15 @@ class KAuthTextFormField extends StatelessWidget {
     this.onTap,
     this.maxLines,
     this.isReadOnly = false,
-    this.floatingLabel =
-        false, // true for floating label, false for above label
+    this.floatingLabel = false,
     this.labelColor,
     this.labelFontSize,
     this.labelFontWeight,
     this.onChanged,
     this.isRequiredStar = false,
     this.prefixIcon,
+    this.onFieldSubmitted, // ✅ Added
+    this.focusNode, // ✅ Added
   });
 
   @override
@@ -83,6 +86,9 @@ class KAuthTextFormField extends StatelessWidget {
           readOnly: isReadOnly,
           maxLines: maxLines ?? 1,
           validator: validator,
+          focusNode: focusNode, // ✅ Added
+          textInputAction: TextInputAction.next, // ✅ Added
+          onFieldSubmitted: onFieldSubmitted, // ✅ Added
           onChanged: onChanged,
           style: GoogleFonts.sora(
             fontSize: 12.sp,
@@ -95,25 +101,26 @@ class KAuthTextFormField extends StatelessWidget {
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hintText,
-            labelText: floatingLabel ? label : null, // floating label
+            labelText: floatingLabel ? label : null,
             labelStyle: floatingLabel
                 ? GoogleFonts.sora(
-                    fontSize: labelFontSize ?? 12.sp,
-                    fontWeight: labelFontWeight ?? FontWeight.w500,
-                    color:
-                        labelColor ??
-                        theme.textTheme.headlineLarge?.color?.withValues(
-                          alpha: 0.7,
-                        ),
-                  )
+              fontSize: labelFontSize ?? 12.sp,
+              fontWeight: labelFontWeight ?? FontWeight.w500,
+              color:
+              labelColor ??
+                  theme.textTheme.headlineLarge?.color?.withValues(
+                    alpha: 0.7,
+                  ),
+            )
                 : null,
             floatingLabelStyle: floatingLabel
                 ? GoogleFonts.sora(
-                    fontSize: (labelFontSize ?? 12.sp) + 1,
-                    fontWeight: labelFontWeight ?? FontWeight.w600,
-                    color: labelColor ?? theme.primaryColor,
-                  )
-                : null,
+              fontSize: (labelFontSize ?? 12.sp) + 1,
+              fontWeight: labelFontWeight ?? FontWeight.w600,
+              color: labelColor ?? theme.primaryColor,
+            )
+
+   : null,
             prefixIcon: prefixIcon != null
                 ? Icon(
                     prefixIcon,
@@ -124,21 +131,21 @@ class KAuthTextFormField extends StatelessWidget {
                 : null,
             suffixIcon: suffixIcon != null
                 ? Icon(
-                    suffixIcon,
-                    color: theme.textTheme.bodyLarge?.color?.withValues(
-                      alpha: 0.7,
-                    ),
-                  )
+              suffixIcon,
+              color: theme.textTheme.bodyLarge?.color?.withValues(
+                alpha: 0.7,
+              ),
+            )
                 : null,
             border: const OutlineInputBorder(),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color:
-                    theme
-                        .inputDecorationTheme
-                        .enabledBorder
-                        ?.borderSide
-                        .color ??
+                theme
+                    .inputDecorationTheme
+                    .enabledBorder
+                    ?.borderSide
+                    .color ??
                     AppColors.authUnderlineBorderColor,
               ),
             ),
@@ -169,7 +176,7 @@ class KAuthTextFormField extends StatelessWidget {
             ),
           ),
         ),
-      ],
+          ],
     );
   }
 }

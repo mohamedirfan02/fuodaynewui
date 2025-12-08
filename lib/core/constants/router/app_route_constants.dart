@@ -5,6 +5,12 @@ class AppRouteConstants {
   // Login Screen
   static const String login = "login";
 
+  // privacy policy screen
+  static const String privacyPolicy = "privacyPolicy";
+
+  // Terms of service screen
+  static const String termsOfService = "termsOfService";
+
   // Forget Password Screen
   static const String forgetPassword = "forgetPassword";
 

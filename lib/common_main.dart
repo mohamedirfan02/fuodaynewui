@@ -83,6 +83,10 @@ import 'features/performance/presentation/providers/audit_reporting_team_provide
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+
 void commonMain() async {
   WidgetsFlutterBinding.ensureInitialized();
 
