@@ -534,6 +534,10 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                         context,
                                         "Fit check with AI tapped",
                                       );
+                                      GoRouter.of(context).pushNamed(
+                                        AppRouteConstants
+                                            .atsCandidateApplicationViewScreen,
+                                      );
                                     },
                                     child: Image.asset(
                                       AppAssetsConstants.aiFitCheckPng,

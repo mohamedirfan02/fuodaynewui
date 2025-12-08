@@ -21,6 +21,7 @@ class KAuthTextFormField extends StatelessWidget {
   final FontWeight? labelFontWeight;
   final ValueChanged<String>? onChanged; // 👈 add this
   final bool isRequiredStar;
+  final IconData? prefixIcon;
 
   const KAuthTextFormField({
     super.key,
@@ -41,6 +42,7 @@ class KAuthTextFormField extends StatelessWidget {
     this.labelFontWeight,
     this.onChanged,
     this.isRequiredStar = false,
+    this.prefixIcon,
   });
 
   @override
@@ -81,6 +83,7 @@ class KAuthTextFormField extends StatelessWidget {
           readOnly: isReadOnly,
           maxLines: maxLines ?? 1,
           validator: validator,
+          onChanged: onChanged,
           style: GoogleFonts.sora(
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
@@ -109,6 +112,14 @@ class KAuthTextFormField extends StatelessWidget {
                     fontSize: (labelFontSize ?? 12.sp) + 1,
                     fontWeight: labelFontWeight ?? FontWeight.w600,
                     color: labelColor ?? theme.primaryColor,
+                  )
+                : null,
+            prefixIcon: prefixIcon != null
+                ? Icon(
+                    prefixIcon,
+                    color: theme.textTheme.bodyLarge?.color?.withValues(
+                      alpha: 0.7,
+                    ),
                   )
                 : null,
             suffixIcon: suffixIcon != null

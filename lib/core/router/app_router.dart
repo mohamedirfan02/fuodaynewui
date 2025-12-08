@@ -6,6 +6,7 @@ import 'package:fuoday/core/service/hive_storage_service.dart';
 import 'package:fuoday/features/approval/presentation/screens/approval_screen.dart';
 import 'package:fuoday/features/ats_admin_tab/presentation/screens/ats_admin_tabs_screen.dart';
 import 'package:fuoday/features/ats_calender/presentation/screen/ats_calender_screen.dart';
+import 'package:fuoday/features/ats_candidate/presentation/screens/ats_candidates_application_view_screen.dart';
 import 'package:fuoday/features/ats_candidate/presentation/screens/ats_schedule_interview_screen.dart';
 import 'package:fuoday/features/ats_candidate/presentation/screens/candidate_screen.dart';
 import 'package:fuoday/features/ats_candidate/presentation/screens/ats_draft_screen.dart';
@@ -481,11 +482,11 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
     GoRoute(
-      path: "/atsJobInformationScreen",
-      name: AppRouteConstants.atsJobInformationScreen,
+      path: "/atsCandidateApplicationViewScreen",
+      name: AppRouteConstants.atsCandidateApplicationViewScreen,
       pageBuilder: (context, state) => _buildPageWithTransition(
         state: state,
-        child: JobInformationScreen(),
+        child: CandidateApplicationViewScreen(),
         transition: _slideFromRight,
       ),
     ),

@@ -161,6 +161,9 @@ dependencies:
   timezone: ^0.10.0
   fluttertoast: ^8.2.1
 
+  #ATS Score
+  syncfusion_flutter_gauges: ^30.2.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

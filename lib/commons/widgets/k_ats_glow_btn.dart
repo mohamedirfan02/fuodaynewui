@@ -5,7 +5,7 @@ class KAtsGlowButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final bool isLoading;
-  final double width;
+  final double? width;
   final double height;
   final Color backgroundColor;
   final Color textColor;
@@ -20,7 +20,7 @@ class KAtsGlowButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isLoading = false,
-    this.width = 140,
+    this.width,
     this.height = 44,
     this.backgroundColor = const Color(0xFF9258BC),
     this.textColor = Colors.white,

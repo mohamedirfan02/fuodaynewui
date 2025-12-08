@@ -64,6 +64,7 @@ class AppAssetsConstants {
   static const String beatsIcon = "assets/icons/beatsIcon.svg";
   static const String conversionIcon = "assets/icons/conversionIcon.svg";
   static const String timerIcon = "assets/icons/timerIcon.svg";
+  static const String forwardIcon = "assets/icons/forward.svg";
 
   static const String notificationIcon = "assets/icons/notification.svg";
 
