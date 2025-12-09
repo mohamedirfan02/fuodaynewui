@@ -46,19 +46,19 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
 
   final List<Map<String, dynamic>> gridAttendanceData = [
     {
-      'icon': AppAssetsConstants.atsUserIcon,
+      'icon': AppAssetsConstants.jobCreatedIcon,
       'title': 'Total Job Created',
       'numberOfCount': "23",
     },
     {
       'title': 'Hired through Linkedin',
       'numberOfCount': "123",
-      'icon': AppAssetsConstants.atsUserIcon,
+      'icon': AppAssetsConstants.addCardIcon,
     },
     {
       'title': 'Hired through Indeed',
       'numberOfCount': "245",
-      'icon': AppAssetsConstants.atsUserIcon,
+      'icon': AppAssetsConstants.indeedIcon,
     },
     {
       'title': 'Hired through Naukri',
@@ -183,6 +183,7 @@ class _AtsJobPortalScreenState extends State<AtsJobPortalScreen>
                               text: "Create Post",
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
+                              gradientColors: AppColors.atsButtonGradientColor,
                               textColor: theme.secondaryHeaderColor,
                               icon: SvgPicture.asset(
                                 AppAssetsConstants.addIcon,

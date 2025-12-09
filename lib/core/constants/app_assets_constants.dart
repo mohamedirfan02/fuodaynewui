@@ -7,8 +7,7 @@ class AppAssetsConstants {
   static const String employeeBgGradient =
       "assets/images/png/employee-bg-gradient.png";
 
-  static const String loginBgGradient =
-      "assets/images/png/loginpng.png";
+  static const String loginBgGradient = "assets/images/png/loginpng.png";
   static const String otpImg = "assets/images/svg/otp.svg";
   static const String personPlaceHolderImg =
       "assets/images/jpg/person-placeholder-img.jpeg";
@@ -57,16 +56,30 @@ class AppAssetsConstants {
   static const String eyeIcon = "assets/icons/eye.svg";
 
   static const String drawerIcon = "assets/icons/drawer.svg";
+
   static const String noteIcon = "assets/icons/note.svg";
+
   static const String singleNoteIcon = "assets/icons/singleNoteIcon.svg";
+
   static const String cupIconIcon = "assets/icons/cupIcon.svg";
+
   static const String webIcon = "assets/icons/webIcon.svg";
+
   static const String addCardIcon = "assets/icons/addCardIcon.svg";
+  static const String indeedIcon = "assets/icons/indeedIcon.svg";
+  static const String linkedinIcon = "assets/icons/linkedinIcon.svg";
+  static const String jobCreatedIcon = "assets/icons/jobCreatedIcon.svg";
+
   static const String personCardIcon = "assets/icons/personCardIcon.svg";
+
   static const String pointIcon = "assets/icons/point.svg";
+
   static const String beatsIcon = "assets/icons/beatsIcon.svg";
+
   static const String conversionIcon = "assets/icons/conversionIcon.svg";
+
   static const String timerIcon = "assets/icons/timerIcon.svg";
+
   static const String forwardIcon = "assets/icons/forward.svg";
 
   static const String notificationIcon = "assets/icons/notification.svg";

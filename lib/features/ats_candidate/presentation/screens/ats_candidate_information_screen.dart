@@ -120,11 +120,11 @@ class _CandidateInformationScreenState
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final hiveService = getIt<HiveStorageService>();
-    final employeeDetails = hiveService.employeeDetails;
-    final name = employeeDetails?['name'] ?? "No Name";
-    final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
-    final email = employeeDetails?['email'] ?? "No Email";
+    // final hiveService = getIt<HiveStorageService>();
+    // final employeeDetails = hiveService.employeeDetails;
+    // final name = employeeDetails?['name'] ?? "No Name";
+    // final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
+    // final email = employeeDetails?['email'] ?? "No Email";
 
     // Helper local variables for dropdown values (read from provider)
     final dd = context.dropDownProviderRead;
