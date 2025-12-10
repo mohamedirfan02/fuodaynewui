@@ -739,7 +739,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                               // Badge
                                               Positioned(
                                                 top: -14, // adjust as needed
-                                                right: 10, // adjust as needed
+                                                right: -1, // adjust as needed
                                                 child: Container(
                                                   padding: EdgeInsets.all(4),
                                                   decoration: BoxDecoration(

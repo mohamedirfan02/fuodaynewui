@@ -25,7 +25,7 @@ class KAtsGlowButton extends StatelessWidget {
     this.backgroundColor = const Color(0xFF9258BC),
     this.textColor = Colors.white,
     this.fontSize = 14,
-    this.fontWeight = FontWeight.w600,
+    this.fontWeight = FontWeight.w700,
     this.borderRadius = const BorderRadius.all(Radius.circular(8)),
     this.icon, // 👈 added
     this.gradientColors,
@@ -34,8 +34,8 @@ class KAtsGlowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //App Theme Data
-    // final theme = Theme.of(context);
-    //final isDark = theme.brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return InkWell(
       borderRadius: borderRadius,
       onTap: isLoading
@@ -51,7 +51,7 @@ class KAtsGlowButton extends StatelessWidget {
         decoration: BoxDecoration(
           // color: backgroundColor,
           borderRadius: borderRadius,
-          border: Border.all(color: backgroundColor, width: 1),
+          // border: Border.all(color: backgroundColor, width: 1),
           gradient: gradientColors != null
               ? LinearGradient(
                   colors: gradientColors!,
@@ -60,9 +60,11 @@ class KAtsGlowButton extends StatelessWidget {
                 )
               : null,
           color: gradientColors == null ? backgroundColor : null,
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Color(0xFFEBF2FF),
+              color: isDark
+                  ? theme.textTheme.bodyLarge?.color ?? Color(0xFFEBF2FF)
+                  : Color(0xFFEBF2FF),
               spreadRadius: 4,
               blurRadius: 0,
               offset: Offset(0, 0),
@@ -143,6 +145,9 @@ class KAtsGlowSearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       width: width,
       height: height,
@@ -158,9 +163,11 @@ class KAtsGlowSearchField extends StatelessWidget {
               )
             : null,
         color: gradientColors == null ? backgroundColor : null,
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color(0xFFEBF2FF),
+            color: isDark
+                ? theme.textTheme.bodyLarge?.color ?? Color(0xFFEBF2FF)
+                : Color(0xFFEBF2FF),
             spreadRadius: 4,
             blurRadius: 0,
             offset: Offset(0, 0),

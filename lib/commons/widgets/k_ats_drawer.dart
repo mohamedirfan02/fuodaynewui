@@ -48,8 +48,8 @@ class KAtsDrawer extends StatelessWidget {
                 bottom: BorderSide(
                   color:
                       theme.inputDecorationTheme.focusedBorder?.borderSide.color
-                          .withOpacity(0.1) ??
-                      AppColors.subTitleColor.withOpacity(0.1),
+                          .withValues(alpha: 0.1) ??
+                      AppColors.subTitleColor.withValues(alpha: 0.1),
                   width: 1,
                 ),
               ),

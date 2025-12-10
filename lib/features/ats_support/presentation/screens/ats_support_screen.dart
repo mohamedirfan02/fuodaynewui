@@ -13,17 +13,36 @@ import 'SupportAllTicketScreenTab.dart';
 import 'support_myticket_screen_tab.dart';
 
 class AtsSupportScreen extends StatefulWidget {
-  const AtsSupportScreen({super.key});
+  final int? initialTabIndex;
+  const AtsSupportScreen({super.key, this.initialTabIndex});
 
   @override
   State<AtsSupportScreen> createState() => _AtsSupportScreenState();
 }
 
-class _AtsSupportScreenState extends State<AtsSupportScreen> {
+class _AtsSupportScreenState extends State<AtsSupportScreen>
+    with SingleTickerProviderStateMixin {
   // Scaffold Key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+  late TabController _tabController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(
+      length: 2,
+      vsync: this,
+      initialIndex: widget.initialTabIndex ?? 0, // Default to first tab
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose(); // Don't forget to dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +116,7 @@ class _AtsSupportScreenState extends State<AtsSupportScreen> {
                             bottom: 10.h,
                           ),
                           child: TabBar(
+                            controller: _tabController,
                             isScrollable: true,
                             tabAlignment: TabAlignment.start,
                             // left align
@@ -143,6 +163,7 @@ class _AtsSupportScreenState extends State<AtsSupportScreen> {
                         ),
                         Expanded(
                           child: TabBarView(
+                            controller: _tabController,
                             children: [
                               SupportAllTicketTab(),
                               SupportMyTicketTab(),

@@ -680,6 +680,7 @@ class _CandidateInformationScreenState
                 backgroundColor: theme.secondaryHeaderColor,
               ),
               KAtsGlowButton(
+                width: 130,
                 text: "Save",
                 fontWeight: FontWeight.w600,
                 fontSize: 13,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/constants/app_route_constants.dart';
+import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/k_my_ticket_card.dart';
 import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
@@ -136,14 +138,15 @@ class _SupportMyTicketTabState extends State<SupportMyTicketTab> {
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         margin: EdgeInsets.symmetric(vertical: 10.h),
         child: Center(
-          child: KAuthFilledBtn(
-            backgroundColor: theme.primaryColor,
-            height: AppResponsive.responsiveBtnHeight(context),
-            width: double.infinity,
+          child: KAtsGlowButton(
+            //height: AppResponsive.responsiveBtnHeight(context),
+            text: "New Ticket",
+            fontWeight: FontWeight.w600,
+            fontSize: 13,
             icon: SvgPicture.asset(
               AppAssetsConstants.addIcon,
-              height: 16,
-              width: 16,
+              height: 15,
+              width: 15,
               fit: BoxFit.contain,
               //SVG IMAGE COLOR
               colorFilter: ColorFilter.mode(
@@ -151,9 +154,9 @@ class _SupportMyTicketTabState extends State<SupportMyTicketTab> {
                 BlendMode.srcIn,
               ),
             ),
-            text: "New Ticket",
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
+            textColor: theme.secondaryHeaderColor,
+            gradientColors: AppColors.atsButtonGradientColor,
+            // backgroundColor: theme.secondaryHeaderColor,
             onPressed: () {
               GoRouter.of(
                 context,

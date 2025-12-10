@@ -179,6 +179,8 @@ class AppRouteConstants {
 
   static const String atsSupportScreen = "atsSupportScreen";
 
+  static const String atsSupportMyTicketTab = "atsSupportMyTicketTab";
+
   static const String atsHelpCenterScreen = "atsHelpCenterScreen";
 
   static const String atsSettingsScreen = "atsSettingsScreen";
