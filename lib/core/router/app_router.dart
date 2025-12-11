@@ -18,6 +18,7 @@ import 'package:fuoday/features/ats_job_portal/presentation/screen/ats_job_porta
 import 'package:fuoday/features/ats_settings/presentation/screens/ats_settings_screen.dart';
 import 'package:fuoday/features/ats_support/presentation/screens/ats_support_screen.dart';
 import 'package:fuoday/features/ats_support/presentation/screens/new_ticket_screen.dart';
+import 'package:fuoday/features/ats_support/presentation/screens/support_myticket_screen_tab.dart';
 import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_interview.dart';
 import 'package:fuoday/features/ats_tracker/presentation/screens/ats_tracker_screen.dart';
 import 'package:fuoday/features/attendance/presentation/screens/attendance_absent_days_details_screen.dart';
@@ -248,7 +249,6 @@ Widget _slideUp(
 
 /// App Router with improved transitions
 final GoRouter appRouter = GoRouter(
-
   navigatorKey: navigatorKey,
 
   initialLocation: "/splash",
@@ -288,7 +288,8 @@ final GoRouter appRouter = GoRouter(
         child: PrivacyPolicyScreen(),
         transition: _slideFromRight,
       ),
-    ), GoRoute(
+    ),
+    GoRoute(
       path: "/termsOfService",
       name: AppRouteConstants.termsOfService,
       pageBuilder: (context, state) => _buildPageWithTransition(
@@ -579,12 +580,17 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: "/atsSupportScreen",
       name: AppRouteConstants.atsSupportScreen,
-      pageBuilder: (context, state) => _buildPageWithTransition(
-        state: state,
-        child: AtsSupportScreen(),
-        transition: _slideFromRight,
-      ),
+      pageBuilder: (context, state) {
+        final tabIndex = state.extra as int?;
+
+        return _buildPageWithTransition(
+          state: state,
+          child: AtsSupportScreen(initialTabIndex: tabIndex),
+          transition: _slideFromRight,
+        );
+      },
     ),
+
     GoRoute(
       path: "/atsMyTicketViewScreen",
       name: AppRouteConstants.atsMyTicketViewScreen,

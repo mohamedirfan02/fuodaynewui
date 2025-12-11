@@ -86,7 +86,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-
 void commonMain() async {
   WidgetsFlutterBinding.ensureInitialized();
 

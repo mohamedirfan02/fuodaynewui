@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/commons/widgets/k_app_new_data_table.dart';
+import 'package:fuoday/commons/widgets/k_text.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:fuoday/features/ats_candidate/presentation/provider/draft_provider.dart';
@@ -110,11 +111,26 @@ class _DraftScreenState extends State<DraftScreen> {
     _drafts = draftProvider.draftList;
 
     if (_drafts.isEmpty) {
-      return const Scaffold(body: Center(child: Text("No draft available")));
+      return Scaffold(
+        appBar: AppBar(
+          title: KText(
+            text: "Saved Drafts",
+            fontWeight: FontWeight.w500,
+            fontSize: 14.sp,
+          ),
+        ),
+        body: Center(child: Text("No draft available")),
+      );
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Saved Drafts")),
+      appBar: AppBar(
+        title: KText(
+          text: "Saved Drafts",
+          fontWeight: FontWeight.w500,
+          fontSize: 14.sp,
+        ),
+      ),
       body: ReusableDataGrid(
         title: 'Draft Candidates',
         columns: _buildColumns(context),

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
-import 'k_text.dart';
+import 'package:fuoday/commons/widgets/k_text.dart';
 
 import 'package:syncfusion_flutter_core/theme.dart'; // 🔹 Add this import
 

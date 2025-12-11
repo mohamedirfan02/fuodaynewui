@@ -30,6 +30,8 @@ class AppAssetsConstants {
   static const String atsHomeCardImg5 = "assets/images/png/atshomecard-V.png";
   static const String atsHomeCardImg6 = "assets/images/png/atshomecard-VI.png";
 
+  static const String atsIllustrationImg = "assets/images/png/Illustration.png";
+
   //HRMS Home Cards
   static const String homeCard1 = "assets/images/png/Card1.png";
   static const String homeCard2 = "assets/images/png/Card2.png";

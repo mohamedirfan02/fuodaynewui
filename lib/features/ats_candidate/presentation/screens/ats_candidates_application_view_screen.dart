@@ -645,12 +645,14 @@ class ScoreGauge extends StatelessWidget {
         ? [
             Color(0xffFF5722), // darker red for dark theme
             Color(0xffffc107), // amber/yellow
+            Color(0xffFFE620),
             Color(0xff8bc34a), // light green
           ]
         : [
-            Color(0xffFF3D00), // red
-            Color(0xffFFB300), // yellow
-            Color(0xff64DD17), // green
+            Color(0xffFA114F), // red #FA114F
+            Color(0xffFFB300), // yellow#FFE620
+            Color(0xffFFE620), // yellow
+            Color(0xff04DE71), // green#04DE71
           ];
     return SfRadialGauge(
       axes: [
@@ -671,7 +673,7 @@ class ScoreGauge extends StatelessWidget {
               endWidth: 25,
               gradient: SweepGradient(
                 colors: gradientColors,
-                stops: [0.0, 0.5, 1.0],
+                stops: [0.0, 0.33, 0.66, 1.0],
               ),
             ),
           ],
