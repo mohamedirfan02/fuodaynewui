@@ -38,6 +38,12 @@ class AppColors {
     Color(0xCC4D0CC5),
   ];
 
+  //ATS Drwaer and Appbar bg
+  static const List<Color> atsDrawerGradientColor = [
+    Color(0xCC830DF1),
+    Color(0xCC4D0CC5),
+  ];
+
   static const List<Color> cardGradientColor = [
     Color(0xFF8B5CB7),
     Color(0xFFEFF1F7),

@@ -530,10 +530,6 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                   alignment: Alignment.center,
                                   child: GestureDetector(
                                     onTap: () {
-                                      KSnackBar.success(
-                                        context,
-                                        "Fit check with AI tapped",
-                                      );
                                       GoRouter.of(context).pushNamed(
                                         AppRouteConstants
                                             .atsCandidateApplicationViewScreen,

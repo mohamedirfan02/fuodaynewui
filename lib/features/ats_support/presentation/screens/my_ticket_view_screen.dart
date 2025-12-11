@@ -31,6 +31,17 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
     return Scaffold(
       backgroundColor: theme.cardColor, //ATS Background Color
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: AppColors.atsDrawerGradientColor,
+              begin: Alignment.centerLeft, // LEFT → RIGHT
+              end: Alignment.centerRight,
+              stops: const [0.0, 1.0],
+            ),
+          ),
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -39,9 +50,7 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
-                color:
-                    theme.textTheme.headlineLarge?.color ??
-                    AppColors.titleColor,
+                color: theme.secondaryHeaderColor,
               ),
             ),
             Text(
@@ -49,13 +58,13 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                color: theme.textTheme.bodyLarge?.color ?? Colors.grey,
+                color: theme.secondaryHeaderColor,
               ),
             ),
           ],
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: theme.secondaryHeaderColor),
           onPressed: () => Navigator.pop(context),
         ),
         /*actions: [
@@ -76,7 +85,7 @@ class _MyTicketViewScreenState extends State<MyTicketViewScreen> {
             ),
           ),
         ],*/
-        backgroundColor: theme.secondaryHeaderColor, //AppColors.secondaryColor,
+        // backgroundColor: theme.secondaryHeaderColor, //AppColors.secondaryColor,
         elevation: 0,
       ),
       body: SingleChildScrollView(

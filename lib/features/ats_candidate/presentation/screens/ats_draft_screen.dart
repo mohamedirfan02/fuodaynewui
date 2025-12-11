@@ -107,16 +107,34 @@ class _DraftScreenState extends State<DraftScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //App Theme Data
+    final theme = Theme.of(context);
+    //  final isDark = theme.brightness == Brightness.dark;
     final draftProvider = context.watch<DraftProvider>();
     _drafts = draftProvider.draftList;
 
     if (_drafts.isEmpty) {
       return Scaffold(
         appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: AppColors.atsDrawerGradientColor,
+                begin: Alignment.centerLeft, // LEFT → RIGHT
+                end: Alignment.centerRight,
+                stops: const [0.0, 1.0],
+              ),
+            ),
+          ),
           title: KText(
             text: "Saved Drafts",
             fontWeight: FontWeight.w500,
             fontSize: 14.sp,
+            color: theme.secondaryHeaderColor,
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: theme.secondaryHeaderColor),
+            onPressed: () => Navigator.pop(context),
           ),
         ),
         body: Center(child: Text("No draft available")),
@@ -125,10 +143,25 @@ class _DraftScreenState extends State<DraftScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.secondaryHeaderColor),
+          onPressed: () => Navigator.pop(context),
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: AppColors.atsDrawerGradientColor,
+              begin: Alignment.centerLeft, // LEFT → RIGHT
+              end: Alignment.centerRight,
+              stops: const [0.0, 1.0],
+            ),
+          ),
+        ),
         title: KText(
           text: "Saved Drafts",
           fontWeight: FontWeight.w500,
           fontSize: 14.sp,
+          color: theme.secondaryHeaderColor,
         ),
       ),
       body: ReusableDataGrid(

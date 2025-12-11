@@ -39,9 +39,9 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
   final TextEditingController subjectController = TextEditingController();
   final TextEditingController issueController = TextEditingController();
 
-  File? _pickedImageFile;
+  //File? _pickedImageFile;
 
-  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+  // void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
 
   @override
   void dispose() {
@@ -56,22 +56,37 @@ class _NewTicketScreenState extends State<NewTicketScreen> {
     //App Theme Data
     final theme = Theme.of(context);
     //final isDark = theme.brightness == Brightness.dark;
-    final hiveService = getIt<HiveStorageService>();
-    final employeeDetails = hiveService.employeeDetails;
-    final name = employeeDetails?['name'] ?? "No Name";
-    final email = employeeDetails?['email'] ?? "No Email";
-    final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
-    final currentRoute = AppRouteConstants.atsCandidateInformationScreen;
+    // final hiveService = getIt<HiveStorageService>();
+    // final employeeDetails = hiveService.employeeDetails;
+    // final name = employeeDetails?['name'] ?? "No Name";
+    // final email = employeeDetails?['email'] ?? "No Email";
+    // final profilePhoto = employeeDetails?['profilePhoto'] ?? "";
+    // final currentRoute = AppRouteConstants.atsCandidateInformationScreen;
 
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: theme.cardColor, //ATS Background Color
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: AppColors.atsDrawerGradientColor,
+              begin: Alignment.centerLeft, // LEFT → RIGHT
+              end: Alignment.centerRight,
+              stops: const [0.0, 1.0],
+            ),
+          ),
+        ),
         title: KText(
           text: "New Ticket",
           fontWeight: FontWeight.w600,
-          fontSize: 16.sp,
-          //color: AppColors.titleColor,
+          fontSize: 14.sp,
+          color: theme.secondaryHeaderColor,
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.secondaryHeaderColor),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(

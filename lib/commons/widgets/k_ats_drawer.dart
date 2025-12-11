@@ -43,7 +43,7 @@ class KAtsDrawer extends StatelessWidget {
                   .h, // 10.5 + 35 (logo height) + 7 (gap) - creating proper spacing
             ),
             decoration: BoxDecoration(
-              color: theme.secondaryHeaderColor,
+              color: Color(0xCC830DF1),
               border: Border(
                 bottom: BorderSide(
                   color:
@@ -67,167 +67,185 @@ class KAtsDrawer extends StatelessWidget {
 
           // Menu Items
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                SizedBox(height: 10.h),
-
-                // Home
-                KAtsDrawerListTile(
-                  drawerTitle: "Home",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(context, AppRouteConstants.homeRecruiter);
-                  },
-                  drawerLeadingIcon: Icons.home_outlined,
-                  isSelected: currentRoute == AppRouteConstants.homeRecruiter,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: AppColors
+                      .atsDrawerGradientColor, // must contain exactly 2 colors
+                  stops: const [0.0, 1.0],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomCenter,
                 ),
+              ),
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  SizedBox(height: 10.h),
 
-                // Candidates
-                KAtsDrawerListTile(
-                  drawerTitle: "Candidates",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(context, AppRouteConstants.atsCandidate);
-                  },
-                  drawerLeadingIcon: Icons.group_outlined,
-                  isSelected: currentRoute == AppRouteConstants.atsCandidate,
-                ),
+                  // Home
+                  KAtsDrawerListTile(
+                    drawerTitle: "Home",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(
+                        context,
+                        AppRouteConstants.homeRecruiter,
+                      );
+                    },
+                    drawerLeadingIcon: Icons.home_outlined,
+                    isSelected: currentRoute == AppRouteConstants.homeRecruiter,
+                  ),
 
-                // ATS Tracker
-                KAtsDrawerListTile(
-                  drawerTitle: "ATS Tracker",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(
-                      context,
-                      AppRouteConstants.atsTrackerScreen,
-                    );
-                  },
-                  drawerLeadingIcon: Icons.track_changes_outlined,
-                  isSelected:
-                      currentRoute == AppRouteConstants.atsTrackerScreen,
-                ),
+                  // Candidates
+                  KAtsDrawerListTile(
+                    drawerTitle: "Candidates",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(context, AppRouteConstants.atsCandidate);
+                    },
+                    drawerLeadingIcon: Icons.group_outlined,
+                    isSelected: currentRoute == AppRouteConstants.atsCandidate,
+                  ),
 
-                // Hiring
-                KAtsDrawerListTile(
-                  drawerTitle: "Hiring",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(context, AppRouteConstants.hiringScreen);
-                  },
-                  drawerLeadingIcon: Icons.business_center_outlined,
-                  isSelected: currentRoute == AppRouteConstants.hiringScreen,
-                ),
+                  // ATS Tracker
+                  KAtsDrawerListTile(
+                    drawerTitle: "ATS Tracker",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(
+                        context,
+                        AppRouteConstants.atsTrackerScreen,
+                      );
+                    },
+                    drawerLeadingIcon: Icons.track_changes_outlined,
+                    isSelected:
+                        currentRoute == AppRouteConstants.atsTrackerScreen,
+                  ),
 
-                // Calendar
-                KAtsDrawerListTile(
-                  drawerTitle: "Calendar",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(
-                      context,
-                      AppRouteConstants.atsCalendarScreen,
-                    );
-                  },
-                  drawerLeadingIcon: Icons.calendar_today_outlined,
-                  isSelected:
-                      currentRoute == AppRouteConstants.atsCalendarScreen,
-                ),
+                  // Hiring
+                  KAtsDrawerListTile(
+                    drawerTitle: "Hiring",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(context, AppRouteConstants.hiringScreen);
+                    },
+                    drawerLeadingIcon: Icons.business_center_outlined,
+                    isSelected: currentRoute == AppRouteConstants.hiringScreen,
+                  ),
 
-                // Index
-                KAtsDrawerListTile(
-                  drawerTitle: "Index",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(context, AppRouteConstants.atsIndexScreen);
-                  },
-                  drawerLeadingIcon: Icons.list_alt_outlined,
-                  isSelected: currentRoute == AppRouteConstants.atsIndexScreen,
-                ),
+                  // Calendar
+                  KAtsDrawerListTile(
+                    drawerTitle: "Calendar",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(
+                        context,
+                        AppRouteConstants.atsCalendarScreen,
+                      );
+                    },
+                    drawerLeadingIcon: Icons.calendar_today_outlined,
+                    isSelected:
+                        currentRoute == AppRouteConstants.atsCalendarScreen,
+                  ),
 
-                // Job Portal
-                KAtsDrawerListTile(
-                  drawerTitle: "Job Portal",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(
-                      context,
-                      AppRouteConstants.atsJobPortalScreen,
-                    );
-                  },
-                  drawerLeadingIcon: Icons.work_outline,
-                  isSelected:
-                      currentRoute == AppRouteConstants.atsJobPortalScreen,
-                ),
+                  // Index
+                  KAtsDrawerListTile(
+                    drawerTitle: "Index",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(
+                        context,
+                        AppRouteConstants.atsIndexScreen,
+                      );
+                    },
+                    drawerLeadingIcon: Icons.list_alt_outlined,
+                    isSelected:
+                        currentRoute == AppRouteConstants.atsIndexScreen,
+                  ),
 
-                // Admin Tab
-                KAtsDrawerListTile(
-                  drawerTitle: "Admin Tab",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(
-                      context,
-                      AppRouteConstants.atsAdminTabScreen,
-                    );
-                  },
-                  drawerLeadingIcon: Icons.admin_panel_settings_outlined,
-                  isSelected:
-                      currentRoute == AppRouteConstants.atsAdminTabScreen,
-                ),
+                  // Job Portal
+                  KAtsDrawerListTile(
+                    drawerTitle: "Job Portal",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(
+                        context,
+                        AppRouteConstants.atsJobPortalScreen,
+                      );
+                    },
+                    drawerLeadingIcon: Icons.work_outline,
+                    isSelected:
+                        currentRoute == AppRouteConstants.atsJobPortalScreen,
+                  ),
 
-                // Support
-                KAtsDrawerListTile(
-                  drawerTitle: "Support",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(
-                      context,
-                      AppRouteConstants.atsSupportScreen,
-                    );
-                  },
-                  drawerLeadingIcon: Icons.support_agent_outlined,
-                  isSelected:
-                      currentRoute == AppRouteConstants.atsSupportScreen,
-                ),
+                  // Admin Tab
+                  KAtsDrawerListTile(
+                    drawerTitle: "Admin Tab",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(
+                        context,
+                        AppRouteConstants.atsAdminTabScreen,
+                      );
+                    },
+                    drawerLeadingIcon: Icons.admin_panel_settings_outlined,
+                    isSelected:
+                        currentRoute == AppRouteConstants.atsAdminTabScreen,
+                  ),
 
-                // Spacer to push Help Center and Settings to bottom
-                SizedBox(height: 60.h),
+                  // Support
+                  KAtsDrawerListTile(
+                    drawerTitle: "Support",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(
+                        context,
+                        AppRouteConstants.atsSupportScreen,
+                      );
+                    },
+                    drawerLeadingIcon: Icons.support_agent_outlined,
+                    isSelected:
+                        currentRoute == AppRouteConstants.atsSupportScreen,
+                  ),
 
-                // Help Center (with notification badge as shown in Figma)
-                KAtsDrawerListTile(
-                  drawerTitle: "Help Center",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(
-                      context,
-                      AppRouteConstants.atsHelpCenterScreen,
-                    );
-                  },
-                  drawerLeadingIcon: Icons.help_outline,
-                  isSelected:
-                      currentRoute == AppRouteConstants.atsHelpCenterScreen,
-                  //   hasNotificationBadge: true, // You'll need to add this property to your KAtsDrawerListTile
-                ),
+                  // Spacer to push Help Center and Settings to bottom
+                  SizedBox(height: 60.h),
 
-                // Setting
-                KAtsDrawerListTile(
-                  drawerTitle: "Setting",
-                  drawerListTileOnTap: () {
-                    _navigateToRoute(
-                      context,
-                      AppRouteConstants.atsSettingsScreen,
-                    ); //AppRouteConstants
-                  },
-                  drawerLeadingIcon: Icons.settings_outlined,
-                  isSelected:
-                      currentRoute == AppRouteConstants.atsSettingsScreen,
-                ),
+                  // Help Center (with notification badge as shown in Figma)
+                  KAtsDrawerListTile(
+                    drawerTitle: "Help Center",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(
+                        context,
+                        AppRouteConstants.atsHelpCenterScreen,
+                      );
+                    },
+                    drawerLeadingIcon: Icons.help_outline,
+                    isSelected:
+                        currentRoute == AppRouteConstants.atsHelpCenterScreen,
+                    //   hasNotificationBadge: true, // You'll need to add this property to your KAtsDrawerListTile
+                  ),
 
-                SizedBox(height: 20.h),
+                  // Setting
+                  KAtsDrawerListTile(
+                    drawerTitle: "Setting",
+                    drawerListTileOnTap: () {
+                      _navigateToRoute(
+                        context,
+                        AppRouteConstants.atsSettingsScreen,
+                      ); //AppRouteConstants
+                    },
+                    drawerLeadingIcon: Icons.settings_outlined,
+                    isSelected:
+                        currentRoute == AppRouteConstants.atsSettingsScreen,
+                  ),
 
-                // Logout
-                KAtsDrawerListTile(
-                  drawerTitle: "Logout",
-                  drawerListTileOnTap: () {
-                    _showLogoutDialog(context);
-                  },
-                  drawerLeadingIcon: Icons.logout_outlined,
-                  isSelected: false,
-                ),
+                  SizedBox(height: 20.h),
 
-                SizedBox(height: 20.h),
-              ],
+                  // Logout
+                  KAtsDrawerListTile(
+                    drawerTitle: "Logout",
+                    drawerListTileOnTap: () {
+                      _showLogoutDialog(context);
+                    },
+                    drawerLeadingIcon: Icons.logout_outlined,
+                    isSelected: false,
+                  ),
+
+                  SizedBox(height: 20.h),
+                ],
+              ),
             ),
           ),
         ],

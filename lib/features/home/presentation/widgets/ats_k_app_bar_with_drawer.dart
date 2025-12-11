@@ -36,7 +36,17 @@ class AtsKAppBarWithDrawer extends StatelessWidget
     final theme = Theme.of(context);
     return AppBar(
       centerTitle: !showUserInfo,
-      backgroundColor: theme.secondaryHeaderColor, //AppColors.secondaryColor,
+      backgroundColor: Colors.transparent, //AppColors.secondaryColor,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: AppColors.atsDrawerGradientColor,
+            begin: Alignment.centerLeft, // LEFT → RIGHT
+            end: Alignment.centerRight,
+            stops: const [0.0, 1.0],
+          ),
+        ),
+      ),
       leading: IconButton(
         onPressed: onDrawerPressed ?? () {},
         icon: SvgPicture.asset(
@@ -46,7 +56,8 @@ class AtsKAppBarWithDrawer extends StatelessWidget
           fit: BoxFit.contain,
           //SVG IMAGE COLOR
           colorFilter: ColorFilter.mode(
-            theme.textTheme.headlineLarge?.color ?? Colors.black,
+            //theme.textTheme.headlineLarge?.color ?? Colors.black,
+            theme.secondaryHeaderColor,
             BlendMode.srcIn,
           ),
         ),
@@ -60,13 +71,13 @@ class AtsKAppBarWithDrawer extends StatelessWidget
                   text: userName,
                   fontWeight: FontWeight.w600,
                   fontSize: 12.sp,
-                  //color: AppColors.secondaryColor,
+                  color: theme.secondaryHeaderColor,
                 ),
                 KText(
                   text: userDesignation,
                   fontWeight: FontWeight.w500,
                   fontSize: 10.sp,
-                  // color: AppColors.secondaryColor,
+                  color: theme.secondaryHeaderColor,
                 ),
               ],
             )
@@ -92,7 +103,8 @@ class AtsKAppBarWithDrawer extends StatelessWidget
               fit: BoxFit.contain,
               //SVG IMAGE COLOR
               colorFilter: ColorFilter.mode(
-                theme.textTheme.headlineLarge?.color ?? Colors.black,
+                // theme.textTheme.headlineLarge?.color ?? Colors.black,
+                theme.secondaryHeaderColor,
                 BlendMode.srcIn,
               ),
             ),

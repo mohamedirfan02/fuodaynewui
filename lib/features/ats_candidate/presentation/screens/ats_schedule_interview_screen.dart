@@ -47,13 +47,28 @@ class _ScheduleInterviewScreenState extends State<ScheduleInterviewScreen> {
   Widget build(BuildContext context) {
     //App Theme Data
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    //final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: AppColors.atsDrawerGradientColor,
+              begin: Alignment.centerLeft, // LEFT → RIGHT
+              end: Alignment.centerRight,
+              stops: const [0.0, 1.0],
+            ),
+          ),
+        ),
         title: KText(
           text: "Schedule Interview",
           fontSize: 14.sp,
           fontWeight: FontWeight.w600,
+          color: theme.secondaryHeaderColor,
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.secondaryHeaderColor),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(

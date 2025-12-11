@@ -60,6 +60,16 @@ class _CandidateApplicationViewScreenState
 
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: AppColors.atsDrawerGradientColor,
+              begin: Alignment.centerLeft, // LEFT → RIGHT
+              end: Alignment.centerRight,
+              stops: const [0.0, 1.0],
+            ),
+          ),
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -67,16 +77,21 @@ class _CandidateApplicationViewScreenState
               text: "Candidates",
               fontWeight: FontWeight.w600,
               fontSize: 14.sp,
+              color: theme.secondaryHeaderColor,
             ),
             KText(
               text: "Manage your Candidates",
               fontWeight: FontWeight.w500,
               fontSize: 12.sp,
-              color: theme.textTheme.bodyLarge?.color,
+              color: theme.secondaryHeaderColor,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.secondaryHeaderColor),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
 
