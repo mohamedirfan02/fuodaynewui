@@ -133,466 +133,487 @@ class _CandidateInformationScreenState
       key: _scaffoldKey,
       backgroundColor: theme.cardColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        //
+        // backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: AppColors.atsDrawerGradientColor,
+              begin: Alignment.centerLeft, // LEFT → RIGHT
+              end: Alignment.centerRight,
+              stops: const [0.0, 1.0],
+            ),
+          ),
+        ),
         elevation: 0,
         automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: theme.secondaryHeaderColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: KText(
           text: "Candidate Information",
           fontSize: 14.sp,
           fontWeight: FontWeight.w600,
+          color: theme.secondaryHeaderColor,
         ),
       ),
 
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-        child: Form(
-          key: formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //  KVerticalSpacer(height: 12.h),
-              //   File Upload Section
-              KAtsUploadPickerTile(
-                backgroundcolor: theme.cardColor, //ATS Background Color
-                showOnlyView: context.filePickerProviderWatch.isPicked(
-                  "resume",
-                ),
-                onViewTap: () {
-                  final pickedFile = context.filePickerProviderRead.getFile(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          child: Form(
+            key: formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //  KVerticalSpacer(height: 12.h),
+                //   File Upload Section
+                KAtsUploadPickerTile(
+                  backgroundcolor: theme.cardColor, //ATS Background Color
+                  showOnlyView: context.filePickerProviderWatch.isPicked(
                     "resume",
-                  );
-                  if (pickedFile == null) return;
-                  final filePath = pickedFile.path;
-                  final fileName = pickedFile.name.toLowerCase();
-
-                  if (fileName.endsWith('.pdf')) {
-                    GoRouter.of(context).pushNamed(
-                      AppRouteConstants.pdfPreview,
-                      extra: FilePreviewData(
-                        filePath: filePath!,
-                        fileName: fileName,
-                      ),
+                  ),
+                  onViewTap: () {
+                    final pickedFile = context.filePickerProviderRead.getFile(
+                      "resume",
                     );
-                  } else if (fileName.endsWith('.png') ||
-                      fileName.endsWith('.jpg') ||
-                      fileName.endsWith('.jpeg') ||
-                      fileName.endsWith('.webp')) {
-                    GoRouter.of(context).pushNamed(
-                      AppRouteConstants.imagePreview,
-                      extra: FilePreviewData(
-                        filePath: filePath!,
-                        fileName: fileName,
-                      ),
-                    );
-                  } else if (fileName.endsWith('.doc') ||
-                      fileName.endsWith('.docx')) {
-                    KSnackBar.success(
-                      context,
-                      "Word file selected: ${pickedFile.name}",
-                    );
-                  } else {
-                    KSnackBar.failure(context, "Unsupported file type");
-                  }
-                },
-                showCancel: context.filePickerProviderWatch.isPicked("resume"),
-                onCancelTap: () {
-                  context.filePickerProviderRead.removeFile("resume");
-                  KSnackBar.success(context, "File removed successfully");
-                },
-                uploadOnTap: () async {
-                  final key = "resume";
-                  final filePicker = context.filePickerProviderRead;
-                  await filePicker.pickFile(key);
-                  final pickedFile = filePicker.getFile(key);
+                    if (pickedFile == null) return;
+                    final filePath = pickedFile.path;
+                    final fileName = pickedFile.name.toLowerCase();
 
-                  if (filePicker.isPicked(key)) {
-                    AppLoggerHelper.logInfo('Picked file: ${pickedFile!.name}');
-                    KSnackBar.success(
-                      context,
-                      'Picked file: ${pickedFile.name}',
-                    );
-                  } else {
-                    AppLoggerHelper.logError('No file selected.');
-                    KSnackBar.failure(context, 'No file selected.');
-                  }
-                },
-                uploadPickerTitle: "",
-                uploadPickerIcon:
-                    context.filePickerProviderWatch.isPicked("resume")
-                    ? Icons.check_circle
-                    : Icons.cloud_upload_outlined,
-                description:
-                    context.filePickerProviderWatch.getFile("resume") != null
-                    ? "Selected File: ${context.filePickerProviderWatch.getFile("resume")!.name}"
-                    : "Browse file to upload\nSupports .pdf, .doc, .docx",
-              ),
-              KVerticalSpacer(height: 12.h),
+                    if (fileName.endsWith('.pdf')) {
+                      GoRouter.of(context).pushNamed(
+                        AppRouteConstants.pdfPreview,
+                        extra: FilePreviewData(
+                          filePath: filePath!,
+                          fileName: fileName,
+                        ),
+                      );
+                    } else if (fileName.endsWith('.png') ||
+                        fileName.endsWith('.jpg') ||
+                        fileName.endsWith('.jpeg') ||
+                        fileName.endsWith('.webp')) {
+                      GoRouter.of(context).pushNamed(
+                        AppRouteConstants.imagePreview,
+                        extra: FilePreviewData(
+                          filePath: filePath!,
+                          fileName: fileName,
+                        ),
+                      );
+                    } else if (fileName.endsWith('.doc') ||
+                        fileName.endsWith('.docx')) {
+                      KSnackBar.success(
+                        context,
+                        "Word file selected: ${pickedFile.name}",
+                      );
+                    } else {
+                      KSnackBar.failure(context, "Unsupported file type");
+                    }
+                  },
+                  showCancel: context.filePickerProviderWatch.isPicked(
+                    "resume",
+                  ),
+                  onCancelTap: () {
+                    context.filePickerProviderRead.removeFile("resume");
+                    KSnackBar.success(context, "File removed successfully");
+                  },
+                  uploadOnTap: () async {
+                    final key = "resume";
+                    final filePicker = context.filePickerProviderRead;
+                    await filePicker.pickFile(key);
+                    final pickedFile = filePicker.getFile(key);
 
-              // 1. Candidate Name
-              KAuthTextFormField(
-                label: "Candidate Name",
-                controller: candidateNameController,
-                hintText: "Enter candidate name",
-                isRequiredStar: true,
-                validator: (v) =>
-                    v == null || v.trim().isEmpty ? "Please enter name" : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                    if (filePicker.isPicked(key)) {
+                      AppLoggerHelper.logInfo(
+                        'Picked file: ${pickedFile!.name}',
+                      );
+                      KSnackBar.success(
+                        context,
+                        'Picked file: ${pickedFile.name}',
+                      );
+                    } else {
+                      AppLoggerHelper.logError('No file selected.');
+                      KSnackBar.failure(context, 'No file selected.');
+                    }
+                  },
+                  uploadPickerTitle: "",
+                  uploadPickerIcon:
+                      context.filePickerProviderWatch.isPicked("resume")
+                      ? Icons.check_circle
+                      : Icons.cloud_upload_outlined,
+                  description:
+                      context.filePickerProviderWatch.getFile("resume") != null
+                      ? "Selected File: ${context.filePickerProviderWatch.getFile("resume")!.name}"
+                      : "Browse file to upload\nSupports .pdf, .doc, .docx",
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 2. Date (with picker)
-              KAuthTextFormField(
-                label: "Date",
-                controller: dateController,
-                hintText: "dd/mm/yyyy",
-                isRequiredStar: true,
-                onTap: () => pickDate(dateController),
-                validator: (v) =>
-                    v == null || v.trim().isEmpty ? "Please select date" : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 1. Candidate Name
+                KAuthTextFormField(
+                  label: "Candidate Name",
+                  controller: candidateNameController,
+                  hintText: "Enter candidate name",
+                  isRequiredStar: true,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please enter name"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 3. Job Title
-              KAuthTextFormField(
-                label: "Job Title",
-                controller: jobTitleController,
-                hintText: "Enter job title",
-                isRequiredStar: true,
-                validator: (v) => v == null || v.trim().isEmpty
-                    ? "Please enter job title"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 2. Date (with picker)
+                KAuthTextFormField(
+                  label: "Date",
+                  controller: dateController,
+                  hintText: "dd/mm/yyyy",
+                  isRequiredStar: true,
+                  onTap: () => pickDate(dateController),
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please select date"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 4. Job ID
-              KAuthTextFormField(
-                label: "Job ID",
-                controller: jobIdController,
-                hintText: "Enter job id",
-                isRequiredStar: true,
-                validator: (v) => v == null || v.trim().isEmpty
-                    ? "Please enter job id"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 3. Job Title
+                KAuthTextFormField(
+                  label: "Job Title",
+                  controller: jobTitleController,
+                  hintText: "Enter job title",
+                  isRequiredStar: true,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please enter job title"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 5. Mobile Number
-              KAuthTextFormField(
-                label: "Mobile Number",
-                controller: mobileController,
-                hintText: "Enter mobile number",
-                keyboardType: TextInputType.phone,
-                isRequiredStar: true,
-                validator: (v) {
-                  if (v == null || v.trim().isEmpty)
-                    return "Please enter mobile";
-                  if (v.trim().length < 10) return "Enter valid mobile number";
-                  return null;
-                },
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 4. Job ID
+                KAuthTextFormField(
+                  label: "Job ID",
+                  controller: jobIdController,
+                  hintText: "Enter job id",
+                  isRequiredStar: true,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please enter job id"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 6. Email ID
-              KAuthTextFormField(
-                label: "Email ID",
-                controller: emailController,
-                hintText: "Enter email",
-                keyboardType: TextInputType.emailAddress,
-                isRequiredStar: true,
-                validator: (v) {
-                  if (v == null || v.trim().isEmpty)
-                    return "Please enter email";
-                  final pattern = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                  if (!pattern.hasMatch(v.trim())) return "Enter valid email";
-                  return null;
-                },
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 5. Mobile Number
+                KAuthTextFormField(
+                  label: "Mobile Number",
+                  controller: mobileController,
+                  hintText: "Enter mobile number",
+                  keyboardType: TextInputType.phone,
+                  isRequiredStar: true,
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty)
+                      return "Please enter mobile";
+                    if (v.trim().length < 10)
+                      return "Enter valid mobile number";
+                    return null;
+                  },
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 7. Total Experience (DROPDOWN)
-              const KTitleText(title: "Total Experience"),
-              KVerticalSpacer(height: 6.h),
-              KDropdownTextFormField<String>(
-                hintText: "Select Total Experience",
-                items: ["0-1", "1-3", "3-5", "5-8", "8+"],
-                value: dd.getValue("TotalExperience"),
-                onChanged: (v) => dd.setValue("TotalExperience", v),
-                validator: (v) => v == null || v.isEmpty
-                    ? "Please select total experience"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 6. Email ID
+                KAuthTextFormField(
+                  label: "Email ID",
+                  controller: emailController,
+                  hintText: "Enter email",
+                  keyboardType: TextInputType.emailAddress,
+                  isRequiredStar: true,
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty)
+                      return "Please enter email";
+                    final pattern = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                    if (!pattern.hasMatch(v.trim())) return "Enter valid email";
+                    return null;
+                  },
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 8. Relevant Experience (DROPDOWN)
-              const KTitleText(title: "Relevant Experience"),
-              KVerticalSpacer(height: 6.h),
-              KDropdownTextFormField<String>(
-                hintText: "Select Relevant Experience",
-                items: ["0-1", "1-3", "3-5", "5+"],
-                value: dd.getValue("RelevantExperience"),
-                onChanged: (v) => dd.setValue("RelevantExperience", v),
-                validator: (v) => v == null || v.isEmpty
-                    ? "Please select relevant experience"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 7. Total Experience (DROPDOWN)
+                const KTitleText(title: "Total Experience"),
+                KVerticalSpacer(height: 6.h),
+                KDropdownTextFormField<String>(
+                  hintText: "Select Total Experience",
+                  items: ["0-1", "1-3", "3-5", "5-8", "8+"],
+                  value: dd.getValue("TotalExperience"),
+                  onChanged: (v) => dd.setValue("TotalExperience", v),
+                  validator: (v) => v == null || v.isEmpty
+                      ? "Please select total experience"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 9. Present Organization (text)
-              KAuthTextFormField(
-                label: "Present Organization",
-                controller: presentOrgController,
-                hintText: "Enter present organization",
-                isRequiredStar: true,
-                validator: (v) => v == null || v.trim().isEmpty
-                    ? "Please enter organization"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 8. Relevant Experience (DROPDOWN)
+                const KTitleText(title: "Relevant Experience"),
+                KVerticalSpacer(height: 6.h),
+                KDropdownTextFormField<String>(
+                  hintText: "Select Relevant Experience",
+                  items: ["0-1", "1-3", "3-5", "5+"],
+                  value: dd.getValue("RelevantExperience"),
+                  onChanged: (v) => dd.setValue("RelevantExperience", v),
+                  validator: (v) => v == null || v.isEmpty
+                      ? "Please select relevant experience"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 10. Organization Type (DROPDOWN)
-              const KTitleText(title: "Organization Type"),
-              KVerticalSpacer(height: 6.h),
-              KDropdownTextFormField<String>(
-                hintText: "Select Organization Type",
-                items: ["Startup", "MNC", "Corporate", "Consulting", "Other"],
-                value: dd.getValue("OrganizationType"),
-                onChanged: (v) => dd.setValue("OrganizationType", v),
-                validator: (v) => v == null || v.isEmpty
-                    ? "Please select organization type"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 9. Present Organization (text)
+                KAuthTextFormField(
+                  label: "Present Organization",
+                  controller: presentOrgController,
+                  hintText: "Enter present organization",
+                  isRequiredStar: true,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please enter organization"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 11. Current location
-              KAuthTextFormField(
-                label: "Current Location",
-                controller: currentLocController,
-                hintText: "Enter current location",
-                isRequiredStar: true,
-                validator: (v) => v == null || v.trim().isEmpty
-                    ? "Please enter current location"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 10. Organization Type (DROPDOWN)
+                const KTitleText(title: "Organization Type"),
+                KVerticalSpacer(height: 6.h),
+                KDropdownTextFormField<String>(
+                  hintText: "Select Organization Type",
+                  items: ["Startup", "MNC", "Corporate", "Consulting", "Other"],
+                  value: dd.getValue("OrganizationType"),
+                  onChanged: (v) => dd.setValue("OrganizationType", v),
+                  validator: (v) => v == null || v.isEmpty
+                      ? "Please select organization type"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 12. Preferred Location
-              KAuthTextFormField(
-                label: "Preferred Location",
-                controller: prefLocController,
-                hintText: "Enter preferred location",
-                isRequiredStar: true,
-                validator: (v) => v == null || v.trim().isEmpty
-                    ? "Please enter preferred location"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 11. Current location
+                KAuthTextFormField(
+                  label: "Current Location",
+                  controller: currentLocController,
+                  hintText: "Enter current location",
+                  isRequiredStar: true,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please enter current location"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 13. Notice Period (DROPDOWN)
-              const KTitleText(title: "Notice Period"),
-              KVerticalSpacer(height: 6.h),
-              KDropdownTextFormField<String>(
-                hintText: "Select Notice Period",
-                items: [
-                  "Immediate",
-                  "15 Days",
-                  "30 Days",
-                  "45 Days",
-                  "60 Days",
-                  "90 Days",
-                ],
-                value: dd.getValue("NoticePeriod"),
-                onChanged: (v) => dd.setValue("NoticePeriod", v),
-                validator: (v) => v == null || v.isEmpty
-                    ? "Please select notice period"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 12. Preferred Location
+                KAuthTextFormField(
+                  label: "Preferred Location",
+                  controller: prefLocController,
+                  hintText: "Enter preferred location",
+                  isRequiredStar: true,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please enter preferred location"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 14. Offer in Hand
-              KAuthTextFormField(
-                label: "Offer in Hand",
-                controller: offerInHandController,
-                hintText: "Enter offer in hand (if any)",
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 13. Notice Period (DROPDOWN)
+                const KTitleText(title: "Notice Period"),
+                KVerticalSpacer(height: 6.h),
+                KDropdownTextFormField<String>(
+                  hintText: "Select Notice Period",
+                  items: [
+                    "Immediate",
+                    "15 Days",
+                    "30 Days",
+                    "45 Days",
+                    "60 Days",
+                    "90 Days",
+                  ],
+                  value: dd.getValue("NoticePeriod"),
+                  onChanged: (v) => dd.setValue("NoticePeriod", v),
+                  validator: (v) => v == null || v.isEmpty
+                      ? "Please select notice period"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 15. Last CTC
-              KAuthTextFormField(
-                label: "Last CTC",
-                controller: lastCTCController,
-                hintText: "Enter last CTC",
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 14. Offer in Hand
+                KAuthTextFormField(
+                  label: "Offer in Hand",
+                  controller: offerInHandController,
+                  hintText: "Enter offer in hand (if any)",
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 16. Exp CTC
-              KAuthTextFormField(
-                label: "Expected CTC",
-                controller: expCTCController,
-                hintText: "Enter expected CTC",
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 15. Last CTC
+                KAuthTextFormField(
+                  label: "Last CTC",
+                  controller: lastCTCController,
+                  hintText: "Enter last CTC",
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 17. Edu Qualification
-              KAuthTextFormField(
-                label: "Education Qualification",
-                controller: eduQualificationController,
-                hintText: "Enter qualification",
-                isRequiredStar: true,
-                validator: (v) => v == null || v.trim().isEmpty
-                    ? "Please enter qualification"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 16. Exp CTC
+                KAuthTextFormField(
+                  label: "Expected CTC",
+                  controller: expCTCController,
+                  hintText: "Enter expected CTC",
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 18. Acknowledgement (DROPDOWN)
-              const KTitleText(title: "Acknowledgement"),
-              KVerticalSpacer(height: 6.h),
-              KDropdownTextFormField<String>(
-                hintText: "Acknowledgement",
-                items: ["Yes", "No"],
-                value: dd.getValue("Acknowledgement"),
-                onChanged: (v) => dd.setValue("Acknowledgement", v),
-                validator: (v) => v == null || v.isEmpty
-                    ? "Please select acknowledgement"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 17. Edu Qualification
+                KAuthTextFormField(
+                  label: "Education Qualification",
+                  controller: eduQualificationController,
+                  hintText: "Enter qualification",
+                  isRequiredStar: true,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please enter qualification"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 19. Recruiter Name
-              KAuthTextFormField(
-                label: "Recruiter Name",
-                controller: recruiterNameController,
-                hintText: "Enter recruiter name",
-                isRequiredStar: true,
-                validator: (v) => v == null || v.trim().isEmpty
-                    ? "Please enter recruiter name"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 18. Acknowledgement (DROPDOWN)
+                const KTitleText(title: "Acknowledgement"),
+                KVerticalSpacer(height: 6.h),
+                KDropdownTextFormField<String>(
+                  hintText: "Acknowledgement",
+                  items: ["Yes", "No"],
+                  value: dd.getValue("Acknowledgement"),
+                  onChanged: (v) => dd.setValue("Acknowledgement", v),
+                  validator: (v) => v == null || v.isEmpty
+                      ? "Please select acknowledgement"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 20. Disposition
-              KAuthTextFormField(
-                label: "Disposition",
-                controller: dispositionController,
-                hintText: "Enter disposition",
-                isRequiredStar: true,
-                validator: (v) => v == null || v.trim().isEmpty
-                    ? "Please enter disposition"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 19. Recruiter Name
+                KAuthTextFormField(
+                  label: "Recruiter Name",
+                  controller: recruiterNameController,
+                  hintText: "Enter recruiter name",
+                  isRequiredStar: true,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please enter recruiter name"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 21. Process (DROPDOWN)
-              const KTitleText(title: "Process"),
-              KVerticalSpacer(height: 6.h),
-              KDropdownTextFormField<String>(
-                hintText: "Process",
-                items: [
-                  "Screening",
-                  "Shortlisted",
-                  "Interviewing",
-                  "Offered",
-                  "Rejected",
-                ],
-                value: dd.getValue("Process"),
-                onChanged: (v) => dd.setValue("Process", v),
-                validator: (v) =>
-                    v == null || v.isEmpty ? "Please select process" : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 20. Disposition
+                KAuthTextFormField(
+                  label: "Disposition",
+                  controller: dispositionController,
+                  hintText: "Enter disposition",
+                  isRequiredStar: true,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please enter disposition"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 22. Email status (DROPDOWN)
-              const KTitleText(title: "Email Status"),
-              KVerticalSpacer(height: 6.h),
-              KDropdownTextFormField<String>(
-                hintText: "Email Status",
-                items: ["Sent", "Not Sent", "Failed"],
-                value: dd.getValue("EmailStatus"),
-                onChanged: (v) => dd.setValue("EmailStatus", v),
-                validator: (v) => v == null || v.isEmpty
-                    ? "Please select email status"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 21. Process (DROPDOWN)
+                const KTitleText(title: "Process"),
+                KVerticalSpacer(height: 6.h),
+                KDropdownTextFormField<String>(
+                  hintText: "Process",
+                  items: [
+                    "Screening",
+                    "Shortlisted",
+                    "Interviewing",
+                    "Offered",
+                    "Rejected",
+                  ],
+                  value: dd.getValue("Process"),
+                  onChanged: (v) => dd.setValue("Process", v),
+                  validator: (v) =>
+                      v == null || v.isEmpty ? "Please select process" : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 23. Candidate Status (DROPDOWN)
-              const KTitleText(title: "Candidate Status"),
-              KVerticalSpacer(height: 6.h),
-              KDropdownTextFormField<String>(
-                hintText: "Candidate Status",
-                items: ["Active", "Selected", "Rejected", "On Hold"],
-                value: dd.getValue("CandidateStatus"),
-                onChanged: (v) => dd.setValue("CandidateStatus", v),
-                validator: (v) => v == null || v.isEmpty
-                    ? "Please select candidate status"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 22. Email status (DROPDOWN)
+                const KTitleText(title: "Email Status"),
+                KVerticalSpacer(height: 6.h),
+                KDropdownTextFormField<String>(
+                  hintText: "Email Status",
+                  items: ["Sent", "Not Sent", "Failed"],
+                  value: dd.getValue("EmailStatus"),
+                  onChanged: (v) => dd.setValue("EmailStatus", v),
+                  validator: (v) => v == null || v.isEmpty
+                      ? "Please select email status"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 24. DV By (DROPDOWN)
-              const KTitleText(title: "DV By"),
-              KVerticalSpacer(height: 6.h),
-              KDropdownTextFormField<String>(
-                hintText: "DV By",
-                items: ["Recruiter", "Lead", "Client"],
-                value: dd.getValue("DVBy"),
-                onChanged: (v) => dd.setValue("DVBy", v),
-                validator: (v) =>
-                    v == null || v.isEmpty ? "Please select DV By" : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 23. Candidate Status (DROPDOWN)
+                const KTitleText(title: "Candidate Status"),
+                KVerticalSpacer(height: 6.h),
+                KDropdownTextFormField<String>(
+                  hintText: "Candidate Status",
+                  items: ["Active", "Selected", "Rejected", "On Hold"],
+                  value: dd.getValue("CandidateStatus"),
+                  onChanged: (v) => dd.setValue("CandidateStatus", v),
+                  validator: (v) => v == null || v.isEmpty
+                      ? "Please select candidate status"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 25. Interview Date (picker text)
-              KAuthTextFormField(
-                label: "Interview Date",
-                controller: interviewDateController,
-                hintText: "dd/mm/yyyy",
-                onTap: () => pickDate(interviewDateController),
-                isRequiredStar: true,
-                validator: (v) => v == null || v.trim().isEmpty
-                    ? "Please select interview date"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 24. DV By (DROPDOWN)
+                const KTitleText(title: "DV By"),
+                KVerticalSpacer(height: 6.h),
+                KDropdownTextFormField<String>(
+                  hintText: "DV By",
+                  items: ["Recruiter", "Lead", "Client"],
+                  value: dd.getValue("DVBy"),
+                  onChanged: (v) => dd.setValue("DVBy", v),
+                  validator: (v) =>
+                      v == null || v.isEmpty ? "Please select DV By" : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 26. Interview Status (DROPDOWN)
-              const KTitleText(title: "Interview Status"),
-              KVerticalSpacer(height: 6.h),
-              KDropdownTextFormField<String>(
-                hintText: "Interview Status",
-                items: ["Scheduled", "Cleared", "Rejected", "Pending"],
-                value: dd.getValue("InterviewStatus"),
-                onChanged: (v) => dd.setValue("InterviewStatus", v),
-                validator: (v) => v == null || v.isEmpty
-                    ? "Please select interview status"
-                    : null,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 25. Interview Date (picker text)
+                KAuthTextFormField(
+                  label: "Interview Date",
+                  controller: interviewDateController,
+                  hintText: "dd/mm/yyyy",
+                  onTap: () => pickDate(interviewDateController),
+                  isRequiredStar: true,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? "Please select interview date"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 27. Recruiter Score
-              KAuthTextFormField(
-                label: "Recruiter Score",
-                controller: recruiterScoreController,
-                hintText: "Enter score (e.g., 1-10)",
-                keyboardType: TextInputType.number,
-              ),
-              KVerticalSpacer(height: 12.h),
+                // 26. Interview Status (DROPDOWN)
+                const KTitleText(title: "Interview Status"),
+                KVerticalSpacer(height: 6.h),
+                KDropdownTextFormField<String>(
+                  hintText: "Interview Status",
+                  items: ["Scheduled", "Cleared", "Rejected", "Pending"],
+                  value: dd.getValue("InterviewStatus"),
+                  onChanged: (v) => dd.setValue("InterviewStatus", v),
+                  validator: (v) => v == null || v.isEmpty
+                      ? "Please select interview status"
+                      : null,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              // 28. Feedback
-              KAuthTextFormField(
-                label: "Feedback",
-                controller: feedbackController,
-                hintText: "Enter feedback",
-                maxLines: 3,
-              ),
+                // 27. Recruiter Score
+                KAuthTextFormField(
+                  label: "Recruiter Score",
+                  controller: recruiterScoreController,
+                  hintText: "Enter score (e.g., 1-10)",
+                  keyboardType: TextInputType.number,
+                ),
+                KVerticalSpacer(height: 12.h),
 
-              KVerticalSpacer(height: 20.h),
-            ],
+                // 28. Feedback
+                KAuthTextFormField(
+                  label: "Feedback",
+                  controller: feedbackController,
+                  hintText: "Enter feedback",
+                  maxLines: 3,
+                ),
+
+                KVerticalSpacer(height: 20.h),
+              ],
+            ),
           ),
         ),
       ),
