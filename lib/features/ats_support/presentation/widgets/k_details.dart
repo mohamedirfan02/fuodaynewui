@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fuoday/core/themes/app_colors.dart';
 
 class TicketDetailInfo extends StatelessWidget {
   final String user;

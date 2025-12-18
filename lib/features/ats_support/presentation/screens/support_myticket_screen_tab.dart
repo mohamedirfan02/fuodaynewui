@@ -5,9 +5,7 @@ import 'package:fuoday/commons/widgets/k_ats_glow_btn.dart';
 import 'package:fuoday/core/constants/app_assets_constants.dart';
 import 'package:fuoday/core/constants/app_route_constants.dart';
 import 'package:fuoday/core/themes/app_colors.dart';
-import 'package:fuoday/core/utils/app_responsive.dart';
 import 'package:fuoday/features/ats_support/presentation/widgets/k_my_ticket_card.dart';
-import 'package:fuoday/features/auth/presentation/widgets/k_auth_filled_btn.dart';
 import 'package:go_router/go_router.dart';
 
 class SupportMyTicketTab extends StatefulWidget {
